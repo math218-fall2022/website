@@ -24,7 +24,7 @@ lessons:
     title: "NO CLASS - Martin Luther King, Jr. Day"
    # reading: "reading-01.html"
   # slides: "lec-slides/02a-fund-data-viz.html"
-  - date: "Wed, Jan 22"
+  - date: "Wed, Jan 23"
     title: "Tidy data & data wrangling"
   #  slides: "lec-slides/02b-tidy-data-wrangle.html"
   - date: "Thur, Jan 24"
