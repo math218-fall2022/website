@@ -37,7 +37,7 @@ TAs               | Max Bartlett | <a href="mailto:maxwell.bartlett@duke.edu" ti
 
 ### Texts
 
-All texts are freely available online:
+All texts are freely available online. Hardcopies are also available for purchase.
 
 {.table .table-condensed .table-striped .text-left}
  <span></span>     | <span></span> | <span></span> 
