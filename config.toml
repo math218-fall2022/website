@@ -47,13 +47,13 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   weight = 3
   identifier = "policies"
   name = "Policies"
-  pre = "<i class=\"material-icons\">gavel</i>"
+  pre = "<i class=\"material-icons\">dashboard</i>"
   url = "/policies.html"
 [[menu.main]]
   weight = 4
   identifier = "rstudio"
   name = "RStudio"
-  pre = "<i class=\"material-icons\">cloud_queue</i>"
+  pre = "<i class=\"material-icons\">cloud</i>"
   url = "https://rstudio.cloud"
 [[menu.main]]
   weight = 5
