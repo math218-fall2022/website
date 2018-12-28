@@ -8,17 +8,17 @@ markup: "mmark"
 
 #### Lectures
 
-<font color="#7A4183"><i class="fas fa-university fa-lg"></i></font> &nbsp; Soc Sci 136 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-calendar-alt fa-lg"></i></font> &nbsp; Mon and Wed 3:05p - 4:20p
+<font color="#7A4183"><i class="fas fa-university"></i></font> &nbsp; Soc Sci 136 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-calendar"></i></font> &nbsp; Mon and Wed 3:05p - 4:20p
 <br>
 <br>
 
 #### Labs
 
-Lab 01 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-university fa-lg"></i></font> &nbsp; Link Classroom 2 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-calendar-alt fa-lg"></i></font> &nbsp; Thur 1:25p - 2:40p
+Lab 01 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-university"></i></font> &nbsp; Link Classroom 2 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-calendar"></i></font> &nbsp; Thur 1:25p - 2:40p
 
-Lab 02  &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-university fa-lg"></i></font> &nbsp; Link Classroom 5 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-calendar-alt fa-lg"></i></font> &nbsp; Thur 3:05p - 4:20p
+Lab 02  &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-university"></i></font> &nbsp; Link Classroom 5 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-calendar"></i></font> &nbsp; Thur 3:05p - 4:20p
 
-Lab 03 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-university fa-lg"></i></font> &nbsp; Link Classroom 5 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-calendar-alt fa-lg"></i></font> &nbsp; Thur 4:40p - 5:55p
+Lab 03 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-university"></i></font> &nbsp; Link Classroom 5 &nbsp;&nbsp; <font color="#7A4183"><i class="fas fa-calendar"></i></font> &nbsp; Thur 4:40p - 5:55p
 <br>
 <br>
 
