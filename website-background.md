@@ -45,7 +45,7 @@ A few notes about the plots:
 
 -   The plots used in this background are scatterplot, density plot, contour plot, linear smoothing, side-by-side boxplots, and area plots. See the [ggplot2 cheat sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf) for details and more plot options.
 
--   The titles, axes, and legend have been removed for each plot. These elements can be easily added by removing the `theme()` modifier.
+-   The titles, axes, and legend have been removed for each plot. These elements can be easily added by removing the `theme` and modifiers.
 
 ``` r
 alpha.level = 0.5 
@@ -53,56 +53,33 @@ alpha.level = 0.5
 p1 <- ggplot(data=bikeshare,aes(x=atemp,y=cnt,color=season)) +
   geom_point(alpha=alpha.level) +
   theme_void() +
-  theme(legend.position="none",
-        axis.title=element_blank(),
-        axis.text.x=element_blank(),
-        axis.text.y=element_blank()
-      )
+  theme(legend.position="none")
 
 p2 <- ggplot(data=bikeshare,aes(x=cnt,fill=season)) +
   geom_density(alpha=alpha.level) +
   theme_void() +
-  theme(legend.position="none",
-        axis.title=element_blank(),
-        axis.text.x=element_blank(),
-        axis.text.y=element_blank()
-      )
+  theme(legend.position="none")
 
 p3 <- ggplot(data=bikeshare,aes(x=cnt,y=atemp,color=season)) +
   geom_density2d() +
   theme_void() +
-  theme(legend.position="none",
-        axis.title=element_blank(),
-        axis.text.x=element_blank(),
-        axis.text.y=element_blank()
-      )
+  theme(legend.position="none")
 
 p4 <- ggplot(data=bikeshare,aes(x=atemp,y=cnt,color=season)) +
   geom_smooth(se=FALSE) +
   theme_void() +
-  theme(legend.position="none",
-        axis.title=element_blank(),
-        axis.text.x=element_blank(),
-        axis.text.y=element_blank()
-      )
+  theme(legend.position="none")
 
 p5 <- ggplot(data=bikeshare,aes(x=season,y=cnt,fill=season)) +
   geom_boxplot(alpha=alpha.level) +
   theme_void() +
-  theme(legend.position="none",
-        axis.title=element_blank(),
-        axis.text.x=element_blank(),
-        axis.text.y=element_blank()
-      )
+  theme(legend.position="none")
 
 p6 <- ggplot(data=bikeshare,aes(x=cnt,fill=season)) +
   geom_area(stat="bin",alpha=alpha.level,color="black") +
   theme_void() +
-  theme(legend.position="none",
-        axis.title=element_blank(),
-        axis.text.x=element_blank(),
-        axis.text.y=element_blank()
-      )
+  theme(legend.position="none")
+
 plot_grid(p1,p2,p3,p4,p5,p6,ncol=3)
 ```
 
