@@ -18,7 +18,7 @@ In homework, you will apply what you've learned during lecture and lab to comple
 
 #### Labs (15%)
 
-In labs, you will apply the concepts discussed in lecture to various data analyis scenarios, with a focus on the computation. You will work on lab assignemnts in teams, and all team members are expected to contribute equally to the completion of each assignment. You are expected to use the team's Git repository on the course's GitHub page as as the central platform for collaboration. Commits to this repository will be used as a metric of each team member's relative contribution for each lab. You will also be asked to evaluate your team members' performance periodically during the semester. 
+In labs, you will apply the concepts discussed in lecture to various data analysis scenarios, with a focus on the computation. You will work on lab assignments in teams, and all team members are expected to contribute equally to the completion of each assignment. You are expected to use the team's Git repository on the course's GitHub page as as the central platform for collaboration. Commits to this repository will be used as a metric of each team member's relative contribution for each lab. You will also be asked to evaluate your team members' performance periodically during the semester. 
 
 *The lowest lab grade will be dropped at the end of the semester.*
 <br> 
@@ -26,7 +26,7 @@ In labs, you will apply the concepts discussed in lecture to various data analyi
 
 #### Exams (Exam I: 17.5%, Exam II: 17.5%)
 
-The exams are an opportunity to assess the knowledge and skills you’ve learned. Both exams will be take-home assingments that you are expected to complete individually.  Each exam will include small analysis and computational tasks related to the content discussed in lectures, application exercises, homeworks assginments, and labs. More details about the content and structure of the exams will be discussed during the semester.
+The exams are an opportunity to assess the knowledge and skills you’ve learned. Both exams will be take-home assignments that you are expected to complete individually.  Each exam will include small analysis and computational tasks related to the content discussed in lectures, application exercises, homework assignments, and labs. More details about the content and structure of the exams will be discussed during the semester.
 <br> 
 <br>
 
@@ -65,9 +65,9 @@ Teamwork | 5%
 
 If you have a cumulative numerical average of 90 - 100, you are guaranteed at least an A-, 80 - 89 at least a B-, and 70 - 79 at least a C-. The exact ranges for letter grades will be determined after Exam 2.
 
-### Policies & Additional Information
+<!-- ## Policies & Additional Information -->
 
-#### Inclusion & Accessibility
+### Inclusion & Accessibility
 
 This course is designed to be welcoming and accessible to all students. If there is some aspect of class that is not welcoming or accessible to you, please let me know immediately. Additionally, if you are experiencing something outside of class that is affecting your performance in the course, please feel free to talk with me or your academic dean. 
 
@@ -75,14 +75,14 @@ If you have any needs that require accommodation, please let me know as soon as 
 <br> 
 <br>
 
-#### Where to find help
+### Where to find help
 
 - General questions about course content or assignments should be posted on Piazza, since there are likely other students in the class with similar questions. Questions about grades or personal matters should be emailed directly to Professor Tackett. 
 - The teaching team is here to help you be successful in the course. You are encouraged to attend any of the office hours posted on the home page for help with the course content and/or assignments.
 <br> 
 <br>
 
-#### Where to find course materials</h3>
+### Where to find course materials</h3>
 
 All assignments and course materials may be found on the course website and GitHub page. There is also an up-to-date course schedule where you can find the lecture notes discussed in each class meeting, assignment deadlines, and reading assignments to help you prepare for each class.
 
@@ -90,7 +90,7 @@ Announcements may also be sent to the class by email, so please check your email
 <br> 
 <br>
 
-#### Excused Absences &amp; Make-up Policy</h3> 
+### Make-up Policy
 
 Students who miss a class due to a scheduled varsity trip, religious holiday, or short-term illness should fill out an online [NOVAP](https://trinity.duke.edu/undergraduate/academic-policies/athletic-varsity-participation), [Religious Observance Notification](https://trinity.duke.edu/undergraduate/academic-policies/religious-holidays), or [STINF](http://trinity.duke.edu/undergraduate/academic-policies/illness), respectively. These excused absences do not excuse you from assigned homework. It will still be your responsibility to submit relevant assignments in accordance with the deadline.
 
@@ -102,7 +102,7 @@ The final project presentations will  be during the university scheduled exam pe
 <br> 
 <br>
 
-#### Late Work
+### Late Work
 
 Homework or lab assignments submitted late but within 24 hours of the deadline may be accepted with a 20% penalty. Homework or lab assignments submitted any later will not be accepted.
 
@@ -110,24 +110,26 @@ Homework or lab assignments submitted late but within 24 hours of the deadline m
 <br> 
 <br>
 
-#### Regrade Requests
 
-Requests for a regrade must be made within three days of when the assignment is returned. The request should be sumitted through the [online form](https://forms.office.com/Pages/ResponsePage.aspx?id=TsVyyzFKnk2xSh6jbfrJTBw0r2_bKCVMs9lST1_-2sxUMlcwUDJTOUlNOUdWUkJBQk5ZNk80SEVMWC4u). Regrade requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. No grades will be changed after the final project presentations.<i>Note: Grades can only be changed by the Professor Tackett. Teaching Assistants cannot change grades on returned assignments.</i>
-<br> 
-<br>
 
-#### Academic Honesty
+### Academic Honesty
 
 By enrolling in this course, you have agreed to abide by and uphold the provisions of the  [Duke Community Standard](https://studentaffairs.duke.edu/conduct/about-us/duke-community-standard) as well as the policies specific to this course. Any violations will automatically result in a grade of 0 on the  assignment and will be reported to [Office of Student Conduct](https://studentaffairs.duke.edu/conduct) for further action.
 
 - You may not discuss or otherwise work with others on the exams. Unauthorized collaboration or using unauthorized materials will be considered a violation for all students involved. More details will be given closer to the exam date.
 - **Reusing code**: Unless explicitly stated otherwise, you may make use of online resources (e.g. StackOverflow) for coding examples on assignments. If you directly use code from an outside source (or use it as inspiration), you must or explicitly cite where you obtained the code. Any recycled code that is discovered and is not explicitly cited will be treated as plagiarism. 
 
-On individual assignments, you may not directly share code or write up with other students. On team assignemnts, you may not directly share code or write up with another team. Unauthorized sharing of the code or write up will be considered a violation for all students involved.
+On individual assignments, you may not directly share code or write up with other students. On team assignments, you may not directly share code or write up with another team. Unauthorized sharing of the code or write up will be considered a violation for all students involved.
 <br> 
 <br>
 
-#### Technology
+### Regrade Requests
+
+Requests for a regrade must be made within three days of when the assignment is returned. The request should be submitted through the [online form](https://forms.office.com/Pages/ResponsePage.aspx?id=TsVyyzFKnk2xSh6jbfrJTBw0r2_bKCVMs9lST1_-2sxUMlcwUDJTOUlNOUdWUkJBQk5ZNk80SEVMWC4u). Regrade requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. No grades will be changed after the final project presentations.<i>Note: Grades can only be changed by the Professor Tackett. Teaching Assistants cannot change grades on returned assignments.</i>
+<br> 
+<br>
+
+### Technology
 
 Cell phones and other electronic devices should be turned off or put on silent during class. When you use a laptop (or if you use a tablet), please ensure that the volume set to mute and the device is only used for class purposes. In general, you should focus on the class discussion/activity at hand and refrain from engaging in other work or outside activities. 
 
