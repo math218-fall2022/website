@@ -24,7 +24,7 @@ In labs, you will apply the concepts discussed in lecture to various data analys
 <br> 
 <br>
 
-#### Exams (Exam I: 17.5%, Exam II: 17.5%)
+#### Exams (Exam 1: 17.5%, Exam 2: 17.5%)
 
 The exams are an opportunity to assess the knowledge and skills you’ve learned. Both exams will be take-home assignments that you are expected to complete individually.  Each exam will include small analysis and computational tasks related to the content discussed in lectures, application exercises, homework assignments, and labs. More details about the content and structure of the exams will be discussed during the semester.
 <br> 
