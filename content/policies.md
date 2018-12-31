@@ -7,6 +7,8 @@ This page is under construction and will be updated soon.
 
 ### Activities & Assessments
 The following activities and assessments will help you successfully achieve the course learning objectives. By experiencing the course content in different ways, you will not only gain a more basic understanding of the subject, but you will gain experiences that can guide you as you apply what you've learned to the final project and future research.
+<br> 
+<br>
 
 #### Homework (20%)
 
@@ -71,20 +73,23 @@ If you have a cumulative numerical average of 90 - 100, you are guaranteed at le
 This course is designed to be welcoming and accessible to all students. If there is some aspect of class that is not welcoming or accessible to you, please let me know immediately. Additionally, if you are experiencing something outside of class that is affecting your performance in the course, please feel free to talk with me or your academic dean. 
 
 If you have any needs that require accommodation, please let me know as soon as possible and register with the [Student Disability Access Office (SDAO)](http://access.duke.edu).
-
+<br> 
+<br>
 
 #### Where to find help
 
 - General questions about course content or assignments should be posted on Piazza, since there are likely other students in the class with similar questions. Questions about grades or personal matters should be emailed directly to Professor Tackett. 
 - The teaching team is here to help you be successful in the course. You are encouraged to attend any of the office hours posted on the home page for help with the course content and/or assignments.
-
+<br> 
+<br>
 
 #### Where to find course materials</h3>
 
 All assignments and course materials may be found on the course website and GitHub page. There is also an up-to-date course schedule where you can find the lecture notes discussed in each class meeting, assignment deadlines, and reading assignments to help you prepare for each class.
 
 Announcements may also be sent to the class by email, so please check your email regularly.
-
+<br> 
+<br>
 
 #### Excused Absences &amp; Make-up Policy</h3> 
 
@@ -95,23 +100,28 @@ If you have a personal or family emergency or health condition that affects your
 **Exam dates cannot be changed and no make-up exams will be given.** If you must miss an exam, your absence must be officially excused before the exam date. If your absence is excused, the missing exam grade will be imputed at the end of the semester based on your performance on other relevant course assignments.
 
 The final project presentations will  be during the university scheduled exam period, Monday, April 29, 2p - 5p. **You must complete the final project and present your work during the exam period in order to pass the course.**
-
+<br> 
+<br>
 
 #### Late Work
 
 Homework assignments submitted late but within 24 hours of the deadline may be accepted with a 20% penalty. Homework assignments submitted any later will not be accepted.
 
 **Late work will not be accepted for the exams or the final project.**
-
+<br> 
+<br>
 
 #### Regrade Requests
 
 Requests for a regrade must be made within three days of when the assignment is returned. The request should be sumitted through the [online form](https://forms.office.com/Pages/ResponsePage.aspx?id=TsVyyzFKnk2xSh6jbfrJTBw0r2_bKCVMs9lST1_-2sxUMlcwUDJTOUlNOUdWUkJBQk5ZNk80SEVMWC4u). Regrade requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. No grades will be changed after the final project presentations.<i>Note: Grades can only be changed by the Professor Tackett. Teaching Assistants cannot change grades on returned assignments.</i>
-
+<br> 
+<br>
 
 #### Academic Honesty
 
 I trust every student in this course to fully comply with all of the provisions of the [Duke Community Standard](https://studentaffairs.duke.edu/conduct/about-us/duke-community-standard). By enrolling in this course, you have agreed to abide by and uphold the Standard as well as the policies specific to this course. Any violations of the Standard will result in a grade of 0 on the relevant assignment and will be reported to Office of Student Conduct. 
+<br> 
+<br>
 
 #### Technology
 
