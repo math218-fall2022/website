@@ -12,6 +12,15 @@
     
     <item>
       <title></title>
+      <link>/policies.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/policies.html</guid>
+      <description>Course Policies       code{white-space: pre;} pre:not([class]) { background-color: white; }  if (window.hljs) { hljs.configure({languages: []}); hljs.initHighlightingOnLoad(); if (document.readyState &amp;&amp; document.readyState === &#34;complete&#34;) { window.setTimeout(function() { hljs.initHighlighting(); }, 0); } }  h1 { font-size: 34px; } h1.title { font-size: 38px; } h2 { font-size: 30px; } h3 { font-size: 24px; } h4 { font-size: 18px; } h5 { font-size: 16px; } h6 { font-size: 12px; } .</description>
+    </item>
+    
+    <item>
+      <title></title>
       <link>/schedule.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -29,13 +38,14 @@
     </item>
     
     <item>
-      <title>Policies</title>
+      <title>Course Policies</title>
       <link>/policies.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/policies.html</guid>
       <description>This page is under construction and will be updated soon.
-To uphold the Duke Community Standard:  - I will not lie, cheat, or steal in my academic endeavors;  - I will conduct myself honorably in all my endeavors; and  - I will act if the Standard is compromised. Cheating on exams or plagiarism on homework assignments, lying about an illness or absence and other forms of academic dishonesty are a breach of trust with classmates and faculty, violate the Duke Community Standard, and will not be tolerated.</description>
+Activities &amp;amp; Assessments The following activities and assessments will help you successfully achieve the course learning objectives. By experiencing the course content in different ways, you will not only gain a more basic understanding of the subject, but you will gain experiences that can guide you as you apply what you&#39;ve learned to the final project and future research.
+Homework (20%) Homework assignments give you an opportunity to apply the concepts discussed during lectures and labs.</description>
     </item>
     
   </channel>
