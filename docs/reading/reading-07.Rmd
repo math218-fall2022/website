@@ -1,5 +1,5 @@
 ---
-title: "Reading 07"
+title: "Reading 07: Central Limit Theorem"
 output: 
   html_document: 
     theme: yeti

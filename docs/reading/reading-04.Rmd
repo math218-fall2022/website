@@ -1,5 +1,5 @@
 ---
-title: "Reading 04"
+title: "Reading 04: Regression"
 output: 
   html_document: 
     theme: yeti

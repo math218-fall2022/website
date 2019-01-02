@@ -1,5 +1,5 @@
 ---
-title: "Reading 05"
+title: "Reading 05: Model Validation"
 output: 
   html_document: 
     theme: yeti
