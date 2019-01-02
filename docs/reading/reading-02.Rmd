@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - [What's so hard about histograms?](http://tinlizzie.org/histograms/)
 
--*R for Data Science*: [Data Visualization](http://r4ds.had.co.nz/data-visualisation.html)
+- *R for Data Science*: [Data Visualization](http://r4ds.had.co.nz/data-visualisation.html)
 
 <br>
 <br>
