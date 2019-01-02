@@ -1,0 +1,26 @@
+---
+title: "Readings"
+author: ""
+date: ""
+output: 
+  html_document:
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- [Reading 01: Reproducibility](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-01.html)
+
+- [Reading 02: Data Exploration](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-02.html)
+
+- [Reading 03: Data Collection](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-03.html)
+
+- [Reading 04: Regression](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-04.html)
+
+- [Reading 05: Model Validation ](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-05.html)
+
+- [Reading 06: Randomization & Bootstrapping](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-06.html)
+
+- [Reading 07: Central Limit Theorem](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-07.html)

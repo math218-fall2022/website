@@ -9,7 +9,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Due
+To be updated. 
+
+<br>
+<br>
+
+[All STA 199 Readings](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/readings.html)
+
+<!-- ## Due
 
 Wednesday, Mar 28
 
@@ -20,4 +27,5 @@ Wednesday, Mar 28
     - 2.6 Normal distribution
     - 2.7 Applying the normal model
     - 2.8 Confidence intervals
+-->
     

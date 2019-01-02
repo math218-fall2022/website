@@ -5,6 +5,13 @@ output:
     theme: yeti
 ---
 
+To be updated. 
+<br>
+<br>
+
+[All STA 199 Readings](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/readings.html)
+
+<!--
 ## Due
 
 Monday, Apr 2
@@ -16,3 +23,4 @@ Monday, Apr 2
 - [NY Times: If Census Asks About Citizenship, Some Already Have an Answer: No Comment](https://www.nytimes.com/2018/03/27/us/census-undocumented-immigrants.html)
 
 - [NY Times: Here’s Why an Accurate Census Count Is So Important](https://www.nytimes.com/2018/03/27/us/politics/census-citizenship-question.html)
+-->
