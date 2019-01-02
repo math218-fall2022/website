@@ -1,15 +1,10 @@
 ---
 title: "Readings"
-author: ""
-date: ""
 output: 
-  html_document:
+  html_document: 
     theme: yeti
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 - [Reading 01: Reproducibility](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-01.html)
 
