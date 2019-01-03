@@ -42,9 +42,10 @@ A multinomial logistic regression model is used to create the main plot. The res
 
 ``` r
 p <- ggplot(data=bikeshare,aes(x=cnt,fill=season)) +
-  geom_density(alpha=0.5) +
+  geom_density(alpha=0.7) +
+  scale_fill_manual( values = c("#F8766D","#7CAE00","#C77CFF","#00BFC4")) +
   theme_void() +
-  theme(legend.position="none")
+  theme(legend.position="none") 
 ```
 
 Make Sticker
@@ -57,9 +58,7 @@ font_add_google("Open Sans", "open")
 
 ``` r
 # create and save sticker
-sticker(p, package="STA 199",p_color="#7A4183", p_family="open", p_size=7.5, p_y=0.6, s_x=1, s_y=1.3, s_width=1.2, s_height=1, h_fill = "#FFFFFF", 
-        h_color="#7A4183", h_size =0.8,
-        filename="static/img/sta199_sticker.png")
+sticker(p, package="STA 199",p_color="#7A4183", p_family="open", p_size=7.5, p_y=0.55, s_x=1, s_y=1.25, s_width=1.3, s_height=1, h_fill = "#FFFFFF", h_color="#7A4183", h_size =0.8, filename="static/img/sta199_sticker.png")
 ```
 
 ``` r
