@@ -36,9 +36,15 @@ The purpose of the project is to apply what you’ve learned throughout the seme
 <br> 
 <br>
 
-#### Application Exercises (10%)
+#### Participation & Application Exercises (5%)
 
 Application exercises give you an opportunity to practice using the statistical concepts and/or code discussed in lecture on short data analyses. They will typically be started during class and may be assigned to be completed by the next class meeting. In general, these assignments are shorter than homework assignments and will be completed in teams. 
+<br> 
+<br>
+
+#### Writing Exercises (5%)
+
+There will be several writing exercises throughout the semester. Each exercise will include a writing prompt related to the content discussed in class along with peer review. More details will be provided before the first exercise.
 <br> 
 <br>
 
@@ -60,8 +66,11 @@ Labs | 15%
 Exam 1 | 17.5%
 Exam 2 | 17.5%
 Final Project | 15%
-Participation & Application Exercises | 10% 
+Participation & Application Exercises | 5%
+Writing Exercises | 5%
 Teamwork | 5%
+
+Class attendance in lecture and lab is a firm expectation; frequent absences or tardiness will be considered a legitimate cause for grade reduction.
 
 If you have a cumulative numerical average of 90 - 100, you are guaranteed at least an A-, 80 - 89 at least a B-, and 70 - 79 at least a C-. The exact ranges for letter grades will be determined after Exam 2.
 
