@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Intro to Data Science</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Dr. Maria Tackett" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Welcome to Intro to Data Science
+### Dr. Maria Tackett
+### 01.09.19
+
+---
+
+
+
+
+
+
+class: center, middle
+
+# Welcome!
+
+---
+
+## What is Data Science?
+
+&lt;!--"In statistical modeling, regression analysis is a set of statistical processes for estimating the relationships among variables. It includes many techniques for modeling and analyzing several variables, when &lt;font class="vocab"&gt;**the focus is on the relationship between a dependent variable and one or more independent variables (or 'predictors')**&lt;/font&gt;. More specifically, regression analysis helps one understand how the typical value of the dependent variable (or 'criterion variable') changes when any one of the independent variables is varied, while the other independent variables are held fixed."
+
+.pull-right[
+[- Wikipedia](https://en.wikipedia.org/wiki/Regression_analysis)
+]
+--&gt;
+
+---
+
+class: regular
+
+## Instructor
+
+[Prof. Maria Tackett](https://www2.stat.duke.edu/~mt324/)
+
+&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[maria.tackett@duke.edu](mailto:maria.tackett@duke.edu)&lt;br&gt;
+&lt;i class="material-icons"&gt;work_outline&lt;/i&gt; &amp;nbsp;Old Chem 118B&lt;br&gt;
+&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp; TBD
+
+--
+
+.pull-left[
+&lt;img src="img/00/capital-one-logo.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+.pull-right[
+&lt;img src="img/00/fbi-fingerprint.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+]
+---
+
+## Teaching Assistants
+&lt;small&gt;
+.pull-left[
+[Alexandra DiGiacomo](https://www.linkedin.com/in/alexandra-digiacomo-390b7a166/)
+
+&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[alexandra.digiacomo@duke.edu](mailto:alexandra.digiacomo@duke.edu)&lt;br&gt;
+&lt;i class="material-icons"&gt;work_outline&lt;/i&gt; &amp;nbsp;Old Chem 203B&lt;br&gt;
+&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp; TBD 
+
+&lt;br&gt;&lt;br&gt;
+
+[Walker Harrison](https://www.walker-harrison.com/)
+
+&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[walker.harrison@duke.edu](mailto:walker.harrison@duke.edu)&lt;br&gt;
+&lt;i class="material-icons"&gt;work_outline&lt;/i&gt; &amp;nbsp;Old Chem 203B&lt;br&gt;
+&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp; TBD
+]
+
+.pull-right[
+[Abhi Jadhav](https://www.linkedin.com/in/ajadhav0517)
+
+&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[abhishek.jadhav@duke.edu](mailto:abhishek.jadhav@duke.edu)&lt;br&gt;
+&lt;i class="material-icons"&gt;work_outline&lt;/i&gt; &amp;nbsp;Old Chem 203B&lt;br&gt;
+&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp; TBD 
+
+&lt;br&gt;&lt;br&gt;
+
+[Jose San Martin](https://www.linkedin.com/in/jose-san-martin-454471144/)
+
+&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[jose.san.martin@duke.edu](mailto:jose.san.martin@duke.edu)&lt;br&gt;
+&lt;i class="material-icons"&gt;work_outline&lt;/i&gt; &amp;nbsp;Old Chem 203B&lt;br&gt;
+&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp; TBD
+]
+&lt;/small&gt;
+---
+
+## Teaching Assistants
+
+&lt;small&gt;
+
+.pull-left[
+[Max Bartlett](https://www.linkedin.com/in/maxbartlett/)
+
+&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[maxwell.bartlett@duke.edu](mailto:maxwell.bartlett@duke.edu)&lt;br&gt;
+&lt;i class="material-icons"&gt;work_outline&lt;/i&gt; &amp;nbsp;Old Chem 203B&lt;br&gt;
+&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp; TBD 
+]
+
+.pull-right[
+[Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/)
+
+&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[rosvid.herrera.tenorio@duke.edu](mailto:rosvid.herrera.tenorio@duke.edu)&lt;br&gt;
+&lt;i class="material-icons"&gt;work_outline&lt;/i&gt; &amp;nbsp;Old Chem 203B&lt;br&gt;
+&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp; TBD 
+]
+
+&lt;/small&gt;
+
+---
+
+## Where to find information
+
+- [STA199 Course Website](https://www2.stat.duke.edu/courses/Spring19/sta199.001/)
+- [STA199GitHub Site](https://github.com/STA199-Sp19)
+
+
+---
+
+## Course Objectives
+
+- UPDATE
+
+---
+
+class: middle, center
+
+## Examples of Data Science
+
+---
+
+## Fingerprint Analysis
+
+.pull-left[
+&lt;img src="img/00/fingerprints.png" width="100%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+*We use &lt;font class="vocab"&gt;**Analysis of Variance (ANOVA) decomposition**&lt;/font&gt; to help determine whether the differences in fingerprints are circumstantial or because the prints were produced by different sources.* 
+]
+&lt;br&gt;
+&lt;br&gt;
+
+&lt;small&gt;Tackett, M., 2018. *Creating Fingerprint Databases and a Bayesian Approach to Quantify Dependencies in Evidence*. PhD dissertation, University of Virginia.&lt;/small&gt;
+
+---
+
+## Example 2
+
+---
+
+### FiveThirtyEight Example
+
+---
+
+class: middle, center
+
+## Let's Practice!
+
+---
+
+## Create a GitHub account
+
+- Go to https://github.com/, and create an account (unless you already have one). 
+
+- See the next slide for tips on creating a GitHub username. 
+&lt;br&gt;&lt;br&gt;
+
+.instructions[
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+]
+
+---
+
+### Tips for creating GitHub username
+
+Below are tips for creating a username from [Happy git with R](http://happygitwithr.com/github-acct.html#username-advice).
+
+- Incorporate your actual name!
+- Reuse your username from other contexts if you can, e.g., Twitter or Slack.
+- Pick a username you will be comfortable revealing to your future boss.
+- Shorter is better than longer.
+- Be as unique as possible in as few characters as possible.
+- Make it timeless. Don’t highlight your current university, employer, or place of residence.
+- Avoid words laden with special meaning in programming, like `NA`.
+
+---
+
+## Join RStudio.cloud - UPDATE
+
+- Go to [bit.ly/sta199-f18-rstudio-join](http://bit.ly/sta199-f18-rstudio-join), and log in with your GitHub credentials.
+
+- You should see a project called UN Votes, fork it by clicking on the &lt;i class="fa fa-fork"&gt;&lt;/i&gt; icon. This will create your copy of the project and launch it.
+&lt;br&gt;&lt;br&gt;
+
+.instructions[
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+]
+
+---
+
+## Analysis! - UPDATE`
+
+- In the Files pane in the bottom right corner, spot the file called `unvotes.Rmd`. Open it, and then click on the "Knit" button.
+- Go back to the file and change your name on top (in the `yaml` -- we'll talk about what this means later) and knit again.
+- Then change the country names to those you're interested in. Your spelling and capitalization should match the data so take a peek at the Appendix to see how the country names are spelled. Knit again. And voila, your first data visualization!
+
+.instructions[
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+]
+
+---
+
+## Discussion
+
+Find a partner and discuss the following: 
+
+- Name
+- Major / academic interest
+
+- Question 1 from analysis
+- Question 2 from analysis 
+
+---
+
+class: middle, center
+
+## Course Policies
+
+---
+
+## Class Meetings 
+
+--
+
+&lt;font class="vocab"&gt;Lecture&lt;/font&gt; 
+- Focus on concepts of regression analysis
+- Interactive lecture that includes examples and hands-on exercises
+- Bring fully-charged laptop to every lecture
+
+--
+
+&lt;font class="vocab"&gt;Lab&lt;/font&gt;
+- Focus on computing using R `tidyverse` syntax
+- Apply concepts from lecture to case study scenarios
+- Work on labs in teams of 3 - 4
+
+---
+
+## Textbooks
+
+- [OpenIntro Statistics](https://www.openintro.org/stat/textbook.php?stat_book=os)
+    - Free PDF available. Hard copy available for purchase.
+    - Assigned readings about statistical content
+  
+- [R for Data Science](http://r4ds.had.co.nz/)
+    - Free online version. Hard copy available for purchase.
+    - Assigned readings and resource for R coding using `tidyverse` syntax.
+
+---
+
+## Activities &amp; Assessments
+
+- &lt;font class="vocab"&gt;Homework&lt;/font&gt;: Individual assignments combining conceptual and computational skills. *Lowest score dropped.*
+
+--
+
+- &lt;font class="vocab"&gt;Labs&lt;/font&gt;: Team assignments focusing on computational skills. *Lowest score will be dropped.*
+
+--
+
+- &lt;font class="vocab"&gt;Exams&lt;/font&gt;: Two take-home exams.
+
+--
+
+- &lt;font class="vocab"&gt;Final Project&lt;/font&gt;: Team project presented during the final exam period, **April 29, 2p - 5p**. You must complete the project and present in class to pass the course.
+
+---
+
+## Activities &amp; Assessments
+--
+
+- &lt;font class="vocab"&gt;Application Exercises&lt;/font&gt;: Exercises usually started in class and completed in teams by the next class. Check/no check grade.
+
+--
+
+- &lt;font class="vocab"&gt;Writing Exercises&lt;/font&gt;: Short writing prompts completed individually along with peer reviews. 
+
+--
+
+- &lt;font class="vocab"&gt;Teamwork&lt;/font&gt;: Teams of 3-4 based on survey and pretest results. Consistent throughout the semester. Periodic peer evaluations.
+
+---
+
+## Grade Calculation
+
+| Component | Weight |
+|---------------|--------|
+| Homework | 20%|
+| Labs | 15% |
+| Exam 1 | 17.5% |
+| Exam 2 | 17.5% |
+| Final Project | 15% |
+| Participation &amp; Application Exercises | 5% |
+| Writing Exercises | 5%|
+| Teamwork | 5%|
+
+--
+
+- You are expected to attend lectures and labs. Excessive absences or tardiness can impact your final course grade.
+- Exact grade cut-offs will be determined after Exam 2.
+
+---
+
+## Excused Absences
+
+- Students who miss a class due to a scheduled varsity trip, religious holiday, or short-term illness should fill out the respective form.
+     - These excused absences do not excuse you from assigned work. 
+--
+- If you have a personal or family emergency or chronic health condition that affects your ability to participate in class, please contact your academic dean’s office.
+--
+
+- Exam dates cannot be changed and no make-up exams will be given. 
+
+---
+
+## Late Work &amp;amp; Regrade Requests
+
+- Homework assignments: 
+    - Late but within 24 hours of deadline: 20% penalty
+    - Not accepted if submitted any later
+    
+- Late work will not be accepted for the take-home exams or final project. 
+
+- Regrade requests must be submitted within a week of when the assignment is returned using the link posted in the course syllabus
+
+---
+
+## Academic Honesty
+
+All work for this class should be done in accordance with the Duke Community Standard. 
+
+&gt; To uphold the Duke Community Standard:
+&gt; - I will not lie, cheat, or steal in my academic endeavors;
+&gt; - I will conduct myself honorably in all my endeavors; and
+&gt; - I will act if the Standard is compromised.
+
+Any violations will automatically result in a grade of 0 on the assignment and will be reported to [Office of Student Conduct](https://studentaffairs.duke.edu/conduct) for further action.
+
+---
+
+## Reusing Code
+
+- Unless explicitly stated otherwise, you may make use of online resources (e.g. StackOverflow) for coding examples on assignments. If you directly use code from an outside source (or use it as inspiration), you must or explicitly cite where you obtained the code. Any recycled code that is discovered and is not explicitly cited will be treated as plagiarism.
+
+- On individual assignments, you may discuss the assignment with one another; however, you may not directly share code or write up with other students. 
+
+- On team assignments, you may not directly share code or write up with another team. Unauthorized sharing of the code or write up will be considered a violation for all students involved. 
+
+---
+
+## Where to find help
+
+- I encourage you to attend office hours! It is often easier to discuss the course content in-person than online.
+
+- Use Piazza for general questions about course content and/or assignments, since other students may benefit from the response.
+
+- Use email for questions regarding personal matters and/or grades.
+
+---
+
+## Technology 
+
+- You should bring a laptop to every lecture and lab session. 
+    - Outlets are limited, so make sure it is fully-charged.
+
+- Ensure the volume on all devices is set to mute/vibrate.
+
+- Refrain from engaging in activities not related to the class dicussion / activity. 
+    - Browsing the web/social media, excessive messaging, playing games, etc. is not only distracting for you but also disctracting for everyone around you.
+
+---
+
+## Inclusion
+
+This course is designed to be welcoming and accessible to all students. If there is some aspect of class that is not welcoming or accessible to you, please let me know immediately. Additionally, if you are experiencing something outside of class that is affecting your performance in the course, please feel free to talk with me or your academic dean.
+
+---
+
+class: center, middle
+
+## Questions? 
+
+---
+
+## Announcements
+
+- This week's office hours: 
+    - TBD  Old Chem 118B (Prof. Tackett)
+
+- TA office hours start next week
+  
+- Labs start on Thursday. Please bring fully-charged laptop.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
