@@ -207,10 +207,23 @@ class: middle, center
 
 ## Create a GitHub account
 
-- Go to https://github.com/, and create an account (unless you already have one). 
+.instructions[
+Go to https://github.com/, and create an account (unless you already have one)
+]
 
-- See the next slide for tips on creating a GitHub username. 
-<br><br>
+Tips for creating a username from [Happy git with R](http://happygitwithr.com/github-acct.html#username-advice).
+
+<small>
+- Incorporate your actual name!
+- Reuse your username from other contexts if you can, e.g., Twitter or Slack.
+- Pick a username you will be comfortable revealing to your future boss.
+- Shorter is better than longer.
+- Be as unique as possible in as few characters as possible.
+- Make it timeless. Don’t highlight your current university, employer, or place of residence.
+- Avoid words laden with special meaning in programming, like `NA`.
+</small>
+
+<!-- - See the next slide for tips on creating a GitHub username. -->
 
 .instructions[
 Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
@@ -232,24 +245,13 @@ Below are tips for creating a username from [Happy git with R](http://happygitwi
 
 ---
 
-## Join RStudio.cloud - UPDATE
+## Join RStudio.cloud 
 
-- Go to [bit.ly/sta199-f18-rstudio-join](http://bit.ly/sta199-f18-rstudio-join), and log in with your GitHub credentials.
+- Go to [http://bit.ly/sta199-sp19-join](http://bit.ly/sta199-sp19-join), and log in with your GitHub credentials.
 
-- You should see a project called UN Votes, fork it by clicking on the <i class="fa fa-fork"></i> icon. This will create your copy of the project and launch it.
-<br><br>
+- You should see a project called *UN Votes*. Click on the project name; this will create your copy of the project and launch it.
 
-.instructions[
-Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
-]
-
----
-
-## Analysis! - UPDATE`
-
-- In the Files pane in the bottom right corner, spot the file called `unvotes.Rmd`. Open it, and then click on the "Knit" button.
-- Go back to the file and change your name on top (in the `yaml` -- we'll talk about what this means later) and knit again.
-- Then change the country names to those you're interested in. Your spelling and capitalization should match the data so take a peek at the Appendix to see how the country names are spelled. Knit again. And voila, your first data visualization!
+- Click "Save a Permanent Copy" to save a copy of project in your workspace.
 
 .instructions[
 Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
@@ -257,15 +259,30 @@ Once done, place a green sticky on your laptop. If you have questions, place a p
 
 ---
 
-## Discussion
+## UN Votes Analysis
 
-Find a partner and discuss the following: 
+- In the Files pane in the bottom right corner, spot the file called `00-unvotes.Rmd`. Open it, and then click on the "Knit" button.
+- Go back to the file and change "author" to your name (in the  `yaml` -- we will discuss what this is at a later date). Knit again.
+- Change the country names in parts 1 and 2 to countries that interest you. The spelling and capitalization must match what's in the data, so you can use the [Appendix](#appendix) to see the correct spelling and capitalization. Knit again.
 
-- Name
-- Major / academic interest
+You have made your first data visualizaiton!
 
-- Question 1 from analysis
-- Question 2 from analysis 
+.instructions[
+Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
+]
+
+---
+
+## Discussion Questions
+
+Discuss the following with a partner, 
+
+1. Consider the plot in Part 1. Describe how the voting behaviors of the four countries have changed over time.
+
+2. Consider the plot in Part 2. 
+    - On which issues have the two countries voted most similarly in recent years?  
+    - On which issues have they voted most differently in recent years? 
+    - Has this changed over time?
 
 ---
 
