@@ -9,6 +9,8 @@ Website address: https://www2.stat.duke.edu/courses/Spring19/sta199.001/.
 
 - Code used to create background image: [website-graphics.md](website-background.md)
 
+- Lecture notes and assignments adapted from [Data Science in a Box](https://datasciencebox.org/)
+
 # Notes for building the website:
 
 - Colors: Pantone #7A4183
