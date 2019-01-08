@@ -6,7 +6,7 @@ output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     css: "sta199-slides.css"
-    logo: img/sta210-sticker-icon.png
+    logo: img/sta199-sticker-icon.png
     lib_dir: libs
     nature:
       highlightStyle: github
@@ -207,13 +207,14 @@ class: middle, center
 
 ## Create a GitHub account
 
+<small>
+
 .instructions[
 Go to https://github.com/, and create an account (unless you already have one)
 ]
 
 Tips for creating a username from [Happy git with R](http://happygitwithr.com/github-acct.html#username-advice).
 
-<small>
 - Incorporate your actual name!
 - Reuse your username from other contexts if you can, e.g., Twitter or Slack.
 - Pick a username you will be comfortable revealing to your future boss.
@@ -221,27 +222,12 @@ Tips for creating a username from [Happy git with R](http://happygitwithr.com/gi
 - Be as unique as possible in as few characters as possible.
 - Make it timeless. Don’t highlight your current university, employer, or place of residence.
 - Avoid words laden with special meaning in programming, like `NA`.
-</small>
-
-<!-- - See the next slide for tips on creating a GitHub username. -->
 
 .instructions[
 Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
 ]
 
----
-
-### Tips for creating GitHub username
-
-Below are tips for creating a username from [Happy git with R](http://happygitwithr.com/github-acct.html#username-advice).
-
-- Incorporate your actual name!
-- Reuse your username from other contexts if you can, e.g., Twitter or Slack.
-- Pick a username you will be comfortable revealing to your future boss.
-- Shorter is better than longer.
-- Be as unique as possible in as few characters as possible.
-- Make it timeless. Don’t highlight your current university, employer, or place of residence.
-- Avoid words laden with special meaning in programming, like `NA`.
+</small>
 
 ---
 
@@ -249,9 +235,8 @@ Below are tips for creating a username from [Happy git with R](http://happygitwi
 
 - Go to [http://bit.ly/sta199-sp19-join](http://bit.ly/sta199-sp19-join), and log in with your GitHub credentials.
 
-- You should see a project called *UN Votes*. Click on the project name; this will create your copy of the project and launch it.
-
-- Click "Save a Permanent Copy" to save a copy of project in your workspace.
+- You should see a project called *UN Votes*. Click "Copy"; this will create your copy of the project and launch it.
+<br><br>
 
 .instructions[
 Once done, place a green sticky on your laptop. If you have questions, place a pink sticky.
@@ -262,7 +247,7 @@ Once done, place a green sticky on your laptop. If you have questions, place a p
 ## UN Votes Analysis
 
 - In the Files pane in the bottom right corner, spot the file called `00-unvotes.Rmd`. Open it, and then click on the "Knit" button.
-- Go back to the file and change "author" to your name (in the  `yaml` -- we will discuss what this is at a later date). Knit again.
+- Go back to the file and put your name in the author field at the top of the file (in the  `yaml` -- we will discuss what this is at a later date). Knit again.
 - Change the country names in parts 1 and 2 to countries that interest you. The spelling and capitalization must match what's in the data, so you can use the [Appendix](#appendix) to see the correct spelling and capitalization. Knit again.
 
 You have made your first data visualizaiton!
@@ -313,7 +298,7 @@ class: middle, center
 ## Textbooks
 
 - [OpenIntro Statistics](https://www.openintro.org/stat/textbook.php?stat_book=os)
-    - Free PDF available. Hard copy available for purchase.
+    - Free PDF available online. Hard copy available for purchase.
     - Assigned readings about statistical content
   
 - [R for Data Science](http://r4ds.had.co.nz/)
@@ -461,5 +446,5 @@ class: center, middle
 
 - TA office hours start next week
   
-- Labs start on Thursday. Please bring fully-charged laptop.
+- Labs start on Thursday. Bring fully-charged laptop.
 
