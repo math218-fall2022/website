@@ -51,7 +51,7 @@ library(rvest)
 
 ---
 
-## TA Introduction!
+## Meet Your TA!
 
 ---
 
