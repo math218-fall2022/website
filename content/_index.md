@@ -1,6 +1,6 @@
 ---
 title: "STA 199: Intro to Data Science"
-description: "Intro to data science and statistical thinking. Learn to explore, visualize, and analyze data to understand natural phenomena, investigate patterns, model outcomes, and make predictions, and do so in a reproducible and shareable manner. Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, and data visualization, and effective communication of results. Work on problems and case studies inspired by and based on real-world questions and data. The course will focus on the R statistical computing language."
+description: "Intro to data science and statistical thinking. Learn to explore, visualize, and analyze data to understand natural phenomena, investigate patterns, model outcomes, and make predictions, and do so in a reproducible and shareable manner. Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, data visualization, and effectively communicating results. Work on problems and case studies inspired by and based on real-world questions and data. The course will focus on the R statistical computing language."
 markup: "mmark"
 ---
 
@@ -31,9 +31,9 @@ Instructor        | [Prof. Maria Tackett](http://stat.duke.edu/~mt324/) | <a hre
 TAs               | [Max Bartlett](https://www.linkedin.com/in/maxbartlett/) | <a href="mailto:maxwell.bartlett@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/MaxBartlett" title="GitHub"><i class="fa fa-github"></i></a> | TBD | Old Chem 203B
                   | [Alexandra DiGiacomo](https://www.linkedin.com/in/alexandra-digiacomo-390b7a166/)| <a href="mailto:alexandra.digiacomo@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/alexandradigiacomo" title="GitHub"><i class="fa fa-github"></i></a> | Sun 1p - 3p | Old Chem 203B
                   | [Walker Harrison](https://www.walker-harrison.com/) | <a href="mailto:walker.harrison@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/WalkerHarrison" title="GitHub"><i class="fa fa-github"></i></a> | Tues 12p - 2p | Old Chem 203B
-                  | [Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/) | <a href="mailto:rosvid.herrera.tenorio@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/stevenherrera24" title="GitHub"><i class="fa fa-github"></i></a>| Fri 2p - 4p | Old Chem 203B
+                  | [Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/) | <a href="mailto:rosvid.herrera.tenorio@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/stevenherrera24" title="GitHub"><i class="fa fa-github"></i></a>| Fri 1:30p - 3:30p | Old Chem 203B
                   | [Abhi Jadhav](https://www.linkedin.com/in/ajadhav0517) | <a href="mailto:abhishek.jadhav@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/a1pha" title="GitHub"><i class="fa fa-github"></i></a> | TBD | Old Chem 203B
-                  | [Jose San Martin](https://www.linkedin.com/in/jose-san-martin-454471144/) | <a href="mailto:jose.san.martin@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/DukeBlue" title="GitHub"><i class="fa fa-github"></i></a> | TBD | Old Chem 203B
+                  | [Jose San Martin](https://www.linkedin.com/in/jose-san-martin-454471144/) | <a href="mailto:jose.san.martin@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/DukeBlue" title="GitHub"><i class="fa fa-github"></i></a> | Sat 12p - 2p | Old Chem 203B
 
 ### Texts
 
