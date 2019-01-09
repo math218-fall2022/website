@@ -1,6 +1,6 @@
 ---
 title: "UN Votes"
-author: "Maria Tackett"
+author: "Maria Tackett (adapted from [UN Votes](https://github.com/rstudio-education/datascience-box/tree/master/appex/ae-01-un-votes))"
 date: "01.09.19"
 output: html_document
 ---
