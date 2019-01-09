@@ -7,7 +7,7 @@ output:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     css: "sta199-slides.css"
     logo: img/sta199-sticker-icon.png
-    lib_dir: libs
+    lib_dir: libs/font-awesome
     nature:
       highlightStyle: github
       highlightLines: true
@@ -57,12 +57,11 @@ class: center, middle
 
 ## What is Data Science?
 
-<!--"In statistical modeling, regression analysis is a set of statistical processes for estimating the relationships among variables. It includes many techniques for modeling and analyzing several variables, when <font class="vocab">**the focus is on the relationship between a dependent variable and one or more independent variables (or 'predictors')**</font>. More specifically, regression analysis helps one understand how the typical value of the dependent variable (or 'criterion variable') changes when any one of the independent variables is varied, while the other independent variables are held fixed."
+*"Data science is a concept to unify statistics, data analysis, machine learning and their related methods in order to understand and analyze actual phenomena with data. It employs techniques and theories drawn from many fields within the context of <font class="vocab">mathematics, statistics, information science, and computer science</font>."*
 
 .pull-right[
-[- Wikipedia](https://en.wikipedia.org/wiki/Regression_analysis)
+[-Wikipedia](https://en.wikipedia.org/wiki/Data_science)
 ]
--->
 
 ---
 
@@ -120,12 +119,13 @@ knitr::include_graphics("img/00/fbi-fingerprint.jpg")
 
 <br><br>
 
-[Jose San Martin](https://www.linkedin.com/in/jose-san-martin-454471144/)
+[Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/)
 
-<i class="material-icons">mail_outline</i> &nbsp;[jose.san.martin@duke.edu](mailto:jose.san.martin@duke.edu)<br>
+<i class="material-icons">mail_outline</i> &nbsp;[rosvid.herrera.tenorio@duke.edu](mailto:rosvid.herrera.tenorio@duke.edu)<br>
 <i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
-<i class="material-icons">calendar_today</i>&nbsp; TBD
+<i class="material-icons">calendar_today</i>&nbsp; Fri 1:30p - 3:30p
 ]
+
 </small>
 ---
 
@@ -142,11 +142,11 @@ knitr::include_graphics("img/00/fbi-fingerprint.jpg")
 ]
 
 .pull-right[
-[Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/)
+[Jose San Martin](https://www.linkedin.com/in/jose-san-martin-454471144/)
 
-<i class="material-icons">mail_outline</i> &nbsp;[rosvid.herrera.tenorio@duke.edu](mailto:rosvid.herrera.tenorio@duke.edu)<br>
+<i class="material-icons">mail_outline</i> &nbsp;[jose.san.martin@duke.edu](mailto:jose.san.martin@duke.edu)<br>
 <i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
-<i class="material-icons">calendar_today</i>&nbsp; TBD 
+<i class="material-icons">calendar_today</i>&nbsp; Sat 12p - 2p
 ]
 
 </small>
@@ -164,7 +164,13 @@ knitr::include_graphics("img/00/fbi-fingerprint.jpg")
 
 ## Course Objectives
 
-- UPDATE
+- Learn to explore, visualize, and analyze data in a reproducible and shareable manner
+
+- Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, and data visualization
+
+- Work on problems and case studies inspired by and based on real-world questions and data
+
+- Learn to effectively communicate results through written assignments and final project presentation
 
 ---
 
@@ -174,35 +180,27 @@ class: middle, center
 
 ---
 
-## Fingerprint Analysis
+## Billboard Hot 100 Analytics
 
-.pull-left[
-```{r, echo=FALSE,out.width = '100%'} 
-knitr::include_graphics("img/00/fingerprints.png")
-```
-]
-
-.pull-right[
-*We use <font class="vocab">**Analysis of Variance (ANOVA) decomposition**</font> to help determine whether the differences in fingerprints are circumstantial or because the prints were produced by different sources.* 
-]
-<br>
-<br>
-
-<small>Tackett, M., 2018. *Creating Fingerprint Databases and a Bayesian Approach to Quantify Dependencies in Evidence*. PhD dissertation, University of Virginia.</small>
+[https://towardsdatascience.com/billboard-hot-100-analytics-using-data-to-understand-the-shift-in-popular-music-in-the-last-60-ac3919d39b49](https://towardsdatascience.com/billboard-hot-100-analytics-using-data-to-understand-the-shift-in-popular-music-in-the-last-60-ac3919d39b49)
 
 ---
 
-## Example 2
+## Atlas of Redistricting
+
+[https://projects.fivethirtyeight.com/redistricting-maps/north-carolina/](https://projects.fivethirtyeight.com/redistricting-maps/north-carolina/)
 
 ---
 
-### FiveThirtyEight Example
+## A Year as Told by Fitbit
+
+[https://livefreeordichotomize.com/2017/12/27/a-year-as-told-by-fitbit/](https://livefreeordichotomize.com/2017/12/27/a-year-as-told-by-fitbit/)
 
 ---
 
 class: middle, center
 
-## Let's Practice!
+## Your Turn!
 
 ---
 
@@ -214,7 +212,7 @@ class: middle, center
 Go to https://github.com/, and create an account (unless you already have one)
 ]
 
-Tips for creating a username from [Happy git with R](http://happygitwithr.com/github-acct.html#username-advice).
+Tips for creating a username from [Happy Git with R](http://happygitwithr.com/github-acct.html#username-advice).
 
 - Incorporate your actual name!
 - Reuse your username from other contexts if you can, e.g., Twitter or Slack.
@@ -251,7 +249,7 @@ Once done, place a blue sticky note on your laptop. If you have questions, place
 - Go back to the file and put your name in the author field at the top of the file (in the  `yaml` -- we will discuss what this is at a later date). Knit again.
 - Change the country names in parts 1 and 2 to countries that interest you. The spelling and capitalization must match what's in the data, so you can use the [Appendix](#appendix) to see the correct spelling and capitalization. Knit again.
 
-You have made your first data visualizaiton!
+You have made your first data visualization!
 
 .instructions[
 Once done, place a blue sticky note on your laptop. If you have questions, place a yellow sticky note.
@@ -293,6 +291,7 @@ class: middle, center
 - Focus on computing using R `tidyverse` syntax
 - Apply concepts from lecture to case study scenarios
 - Work on labs in teams of 3 - 4
+- Bring fully-charged laptop to every lab
 
 ---
 
@@ -343,6 +342,8 @@ class: middle, center
 
 ## Grade Calculation
 
+<small>
+
 | Component | Weight |
 |---------------|--------|
 | Homework | 20%|
@@ -358,6 +359,8 @@ class: middle, center
 
 - You are expected to attend lectures and labs. Excessive absences or tardiness can impact your final course grade.
 - Exact grade cut-offs will be determined after Exam 2.
+
+</small>
 
 ---
 
@@ -381,7 +384,7 @@ class: middle, center
     
 - Late work will not be accepted for the take-home exams or final project. 
 
-- Regrade requests must be submitted within a week of when the assignment is returned using the link posted in the course syllabus
+- Regrade requests must be submitted within three days of when the assignment is returned using the link posted in the course syllabus
 
 ---
 
@@ -422,9 +425,9 @@ Any violations will automatically result in a grade of 0 on the assignment and w
 
 - You should bring a laptop to every lecture and lab session.  Outlets are limited, so make sure it is fully-charged.
 
-- Ensure the volume on all devices is set to mute/vibrate.
+- Ensure the volume on all devices is set to mute.
 
-- Refrain from engaging in activities not related to the class dicussion / activity. Browsing the web/social media, excessive messaging, playing games, etc. is not a distraction for you but is also a distraction for everyone around you.
+- Refrain from engaging in activities not related to the class discussion. Browsing the web and social media, excessive messaging, playing games, etc. is not only a distraction for you but is also a distraction for everyone around you.
 
 ---
 
@@ -442,10 +445,9 @@ class: center, middle
 
 ## Announcements
 
-- This week's office hours: 
-    - TBD  Old Chem 118B (Prof. Tackett)
-
-- TA office hours start next week
+- Office hours start next week. 
+    - See me after class or schedule an appointment to meet this week.
   
-- Labs start on Thursday. Bring fully-charged laptop.
+- Labs start on Thursday. Bring fully-charged laptop to lab.
+
 
