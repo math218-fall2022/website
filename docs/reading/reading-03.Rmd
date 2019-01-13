@@ -1,5 +1,5 @@
 ---
-title: "Reading 03: Data Collection"
+title: "Reading 03: Regression"
 output: 
   html_document: 
     theme: yeti
@@ -9,17 +9,17 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Due Wed, Feb 6
+## Due Wed, Feb 20
 
 ### Required:
 
 - [OpenIntro Statistics](https://drive.google.com/file/d/0B-DHaDEbiOGkc1RycUtIcUtIelE/view):
-    + Section 1.1 - Casestudy:using stents to prevent strokes
-    + Section 1.2 - Data basics
-    + Section 1.3 - Overview of data collection principles
-    + Section 1.4 - Observational studies and sampling strategies
-    + Section 1.5 - Experiments
-
+    + 7.1 Line fitting, residuals, and correlation
+    + 7.2 Fitting a line by least squares regression
+    + 7.3 Types of outliers in linear regression
+    + 8.1 Introduction to multiple regression
+    + 8.2 Model selection
+    
 <br>
 <br>
 

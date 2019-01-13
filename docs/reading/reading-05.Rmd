@@ -1,5 +1,5 @@
 ---
-title: "Reading 05: Model Validation"
+title: "Reading 05: Randomization & Bootstrapping"
 output: 
   html_document: 
     theme: yeti
@@ -9,15 +9,33 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Due Mon, Mar 4
+### Due Mon, Mar 18
 
 ### Required:
-     
-- Cross-Validation: [Introduction to Statistical Learning](https://www-bcf.usc.edu/~gareth/ISL/ISLR%20First%20Printing.pdf), pages 175 - 184 
-    
-- Watch: https://www.youtube.com/watch?v=TIgfjmp-4BA
+
+- [OpenIntro - Intro Stat with Randomization and Simulation](https://drive.google.com/file/d/0B-DHaDEbiOGkRHNndUlBaHVmaGM/view):
+    - 2.1 Randomization case study: gender discrimination
+    - 2.2 Randomization case study: opportunity cost
+    - 2.3 Hypothesis testing 
+    - 2.4 Simulation case studies
+    - 4.5 Bootstrapping to study the standard deviation (except for 4.5.3)
+
 
 <br>
 <br>
 
 [All STA 199 Readings](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/readings.html)
+
+<!-- ## Due
+
+Wednesday, Mar 28
+
+## Required:
+
+- [OpenIntro - Intro Stat with Randomization and Simulation](https://drive.google.com/file/d/0B-DHaDEbiOGkRHNndUlBaHVmaGM/view):
+    - 2.5 Central Limit Theorem
+    - 2.6 Normal distribution
+    - 2.7 Applying the normal model
+    - 2.8 Confidence intervals
+-->
+    
