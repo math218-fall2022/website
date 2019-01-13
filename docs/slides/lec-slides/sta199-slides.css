@@ -9,6 +9,7 @@ body {
   font-weight: 400;
   color: #333333;
 }
+
 h2 {
   font-family: 'Open Sans', sans-serif;
   font-weight: bold;
@@ -31,7 +32,7 @@ a, a > code {
   position: absolute;
   bottom: 3em;
   padding-right: 4em;
-  font-size: 90%;
+  font-size: 80%;
 }
 .remark-code, .remark-inline-code { 
   font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace; 
@@ -127,6 +128,10 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
     background-image: url("img/sta199-sticker-icon.png");
 }
 
+.remark-slide-number {
+  font-size: 12pt;
+}
+
 .element.style {
     position: absolute;
     left: 0px;
@@ -154,13 +159,13 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
 }
 
 .question {
-  border-left: solid 5px #1E5C65;
-  background-color: #1E5C6530;
-  padding: 10px 16px;
-  margin-top: 12px;
-  margin-bottom: 12px;
+  border-left: solid 5px #D8FCFF;
+  background-color: #D8FCFF;
+  padding: 5px 2px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   font-size: 90%;
-  color: #1E5C65;
+  /*color: #1E5C65;*/
 }
 .alert {
   border-right: solid 5px #A7D5E8;
@@ -184,3 +189,30 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
   display: inline-block; 
   margin-left: -1.5em
 }
+
+/* Footer */
+div.my-footer {
+    background-color: #ffffff;
+    border-top: 1px solid #7A4183;
+    position: absolute;
+    bottom: 0px;
+    left: 80px;
+    height: 35px;
+    width: 100%;
+}
+div.my-footer span {
+    font-size: 12pt;
+    position: absolute;
+    color: #C1C6C8;
+    left: 20px;
+    bottom: 10px;
+}
+div.my-footer a {
+    font-size: 12pt;
+    color: #C1C6C8;
+}
+
+/* Font sizes */
+.large { font-size: 130% }
+.midi { font-size: 90% }
+.small { font-size: 70% }
