@@ -340,7 +340,7 @@ knitr::include_graphics("img/01/phd_comics_vc.gif")
   - Making a change locally, committing, and pushing
   - Making a change on GitHub and pulling
   
-- There is just a bit more of GitHub that we'll use in this class, but this is enough for now
+- There is just a bit more of GitHub that we'll use in this class, but this is enough for today.
 
 ---
 
