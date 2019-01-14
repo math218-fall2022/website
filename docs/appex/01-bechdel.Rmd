@@ -25,19 +25,19 @@ bechdel90_13 <- bechdel %>%
   filter(between(year, 1990, 2013))
 ```
 
-There are ---- such movies.
+There are ____ such movies. 
 
 The financial variables we'll focus on are the following:
 
 - `budget_2013`: Budget in 2013 inflation adjusted dollars
-- `domgross_2013`: Domestic gross (US) in 2013 inflation adjusted dollars
-- `intgross_2013`: Total International (i.e., worldwide) gross in 2013 inflation adjusted dollars
+- `domgross_2013`: Domestic (US) gross revenue in 2013 inflation adjusted dollars
+- `intgross_2013`: Total interational (i.e., worldwide including US) gross revenue in 2013 inflation adjusted dollars
 
 And we'll also use the `binary` and `test_clean` variables for grouping.
 
 ## Analysis
 
-Let's take a look at how median budget and gross vary by whether the movie passed the Bechdel test.
+Let's take a look at how median budget and gross revenue vary by whether the movie passed the Bechdel test.
 
 ```{r}
 bechdel90_13 %>%
@@ -57,11 +57,11 @@ bechdel90_13 %>%
             med_intgross = median(intgross_2013, na.rm = TRUE))
 ```
 
-In order to evaluate how return on investment varies among movies that pass and fail the Bechdel test, we'll  first create a new variable called `roi` as the ratio of the gross to budget.
+In order to evaluate how return on investment varies among movies that pass and fail the Bechdel test, we'll  first create a new variable called `roi` as the ratio of the total international gross revenue to the budget.
 
 ```{r}
 bechdel90_13 <- bechdel90_13 %>%
-  mutate(roi = intgross_2013 / domgross_2013)
+  mutate(roi = intgross_2013 / budget_2013)
 ```
 
 Let's see which movies have the highest return on investment.
