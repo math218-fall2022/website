@@ -290,9 +290,13 @@ You can also use different figure sizes for differen figures. To do so click on 
 knitr::include_graphics("img/01-hello-r/theme-highlight.png")
 ```
 
+- **ADD INSTRUCTION ABOUT MAKING PLOTS SQUARE**
+
 - **Change the look of your report:** 
 
 Once again click on the gear icon in on top of the R Markdown document, and select "Output Options..." in the dropdown menu. In the General tab of the pop up dialogue box try out different Syntax highlighting and theme options. Hit OK and knit your document to see how it looks. Play around with these until you're happy with the look.
+
+**ADD INSTRUCTION: APPLY A THEME THAT IS NOT 'default'**
 
 <br>
 
