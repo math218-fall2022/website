@@ -12,6 +12,7 @@ lessons:
   - title: "Week 01"
   - date: "Mon, Jan 14"
     title: "Meet the Toolkit"
+    slides: "lec-slides/01-meet-toolkit.html"
   - date: "Wed, Jan 16"
     title: "Fundamentals of data & data visualization"
    # slides: "lec-slides/01-meet-toolkit.html"
