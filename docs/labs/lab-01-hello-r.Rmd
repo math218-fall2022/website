@@ -2,7 +2,7 @@
 title: "Lab 01 - Hello R!"
 output: 
   tufte::tufte_html:
-    css: ./lab.css
+    css: "./lab.css"
     tufte_variant: "envisioned"
     highlight: pygments
 link-citations: yes
@@ -98,7 +98,7 @@ git config --global user.email "your email"
 git config --global user.name "your name"
 ```
 
-For example, for me these are
+For example, 
 
 ```{bash eval=FALSE}
 git config --global user.email "mine@stat.duke.edu"
