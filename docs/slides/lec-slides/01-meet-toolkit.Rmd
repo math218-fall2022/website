@@ -363,5 +363,5 @@ Can you answer these questions?
 
 - If you have not already done so, 
     - complete "Getting to know you" survey on Sakai 
-    - complete Pretest
+    - complete Pretest ([test info & access codes](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lab-slides/00-lab-slides.html#9))
     
