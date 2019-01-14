@@ -7,15 +7,22 @@ output:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     css: "sta199-slides.css"
     logo: img/sta199-sticker-icon.png
-    lib_dir: libs/font-awesome
-    nature:
-      highlightStyle: github
+    lib_dir: libs
+    nature: 
       highlightLines: true
+      highlightStyle: github
       countIncrementalSlides: false
 ---
 
-```{r child = "./setup.Rmd"}
-```
+layout: true
+
+<div class="my-footer">
+<span>
+<a href="http://datasciencebox.org" target="_blank">datasciencebox.org</a>
+</span>
+</div> 
+
+---
 
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
