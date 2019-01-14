@@ -13,6 +13,7 @@ lessons:
   - date: "Mon, Jan 14"
     title: "Meet the Toolkit"
     slides: "lec-slides/01-meet-toolkit.html"
+    appex: "01-bechdel.html"
   - date: "Wed, Jan 16"
     title: "Fundamentals of data & data visualization"
    # slides: "lec-slides/01-meet-toolkit.html"
