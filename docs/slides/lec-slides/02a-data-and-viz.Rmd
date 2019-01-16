@@ -35,7 +35,7 @@ library(magick)
 
 - FILL IN AGENDA ITEMS
 
-- No Class Monday - MLK Holiday
+- No Class Monday - Martin Luther King, Jr. Holiday
 ---
 
 class: center, middle
@@ -462,7 +462,15 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 
 ## Starwars Application Exercise
 
-- **Insert instructions for getting exercise from GitHub**
+- Go to [https://github.com/STA199-Sp19](https://github.com/STA199-Sp19)
+
+- Click on the repo that begins with `ae-03-starwars-`. 
+
+- Click on **README.md** to see the instructions for this exercise. 
+
+--
+
+- You will work in groups of 2 - 3 for the remainder of the exercise. One team member will go through the steps on their computer. The other team member(s) will follow along and read the instructions aloud from the README file.
 
 ---
 
@@ -474,22 +482,23 @@ class: center, middle
 
 ## Number of variables involved
 
-- **Univariate data analysis**: distribution of single variable
+- .vocab[Univariate data analysis]: distribution of single variable
 
-- **Bivariate data analysis**: relationship between two variables
+- .vocab[Bivariate data analysis]: relationship between two variables
 
-- **Multivariate data analysis**: relationship between many variables at once, usually focusing on the relationship between two while conditioning for others
+- .vocab[Multivariate data analysis]: relationship between many variables at once, usually focusing on the relationship between two while conditioning for others
 
 ---
 
 ## Types of variables
 
-- **Numerical variables** can be classified as **continuous** or **discrete** based on whether or not the variable can take on an infinite number of values or only non-negative whole numbers, respectively.
+- .vocab[Numerical variables] can be classified as .vocab[continuous] or .vocab[discrete] based on whether or not the variable can take on an infinite number of values or only non-negative whole numbers, respectively.
     - *height* is continuous
     - *number of siblings* is discrete
+
 --
 
-- If the variable is **categorical**, we can determine if it is **ordinal** based on whether or not the levels have a natural ordering.
+- If the variable is .vocab[categorical], we can determine if it is .vocab[ordinal] based on whether or not the levels have a natural ordering.
     - *hair color* is unordered 
     - *year in school* is ordinal
 
@@ -501,7 +510,7 @@ class: center, middle
 
 ---
 
-## Describing shapes of numerical distributions
+### Describing shapes of numerical distributions
 
 - **shape:**
     - skewness: right-skewed, left-skewed, symmetric (skew is to the side of the longer tail)
@@ -511,7 +520,7 @@ class: center, middle
 
 - **spread:** range (`range`), standard deviation (`sd`), inter-quartile range (`IQR`)
 
-- **outliers**, i.e. unusual observations
+- **outliers**: observations outside of the usual pattern
 
 ---
 
@@ -565,7 +574,7 @@ ggplot(data = starwars, mapping = aes(x = gender)) +
 
 ---
 
-## Segmented bar plots, counts
+### Segmented bar plots, counts
 
 .small[
 ```{r fig.width = 7, fig.height=4, fig.align='center'}
@@ -576,12 +585,12 @@ ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
 
 ---
 
-## Segmented bar plots, proportions
+### Segmented bar plots, proportions
 
 .small[
 ```{r fig.width = 7, fig.height=4, fig.align='center'}
 ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
-  geom_bar(position = "fill") +
+  geom_bar(position = "fill") + #<<
   labs(y = "proportion")
 ```
 ]
