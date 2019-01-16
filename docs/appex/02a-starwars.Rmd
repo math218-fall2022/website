@@ -1,0 +1,76 @@
+---
+title: "Visualizing Starwars characters"
+author: "Your Name"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r load-packages, include=FALSE}
+library(tidyverse)
+```
+
+### Clone Assignment Repo
+
+- Go to the `ae-03-starwars-` repo on GitHub.  Click on this repo; it contains the start documents you need to complete the lab assignment. 
+
+- Click on the green **Clone or download** button, select **Use HTTPS** (this might already be selected by default, and if it is, you'll see the text **Clone with HTTPS** as in the image below). Click on the clipboard icon to copy the repo URL.
+
+```{r clone-repo-link, echo = FALSE, out.width="40%"}
+knitr::include_graphics("img/clone-repo-link.png")
+```
+
+
+- Go to RStudio Cloud and into the STA 199 course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
+
+```{r new-project-from-gh, echo = FALSE, out.width="40%"}
+knitr::include_graphics("img/new-project-from-gh.png")
+```
+
+- Copy and paste the URL of your assignment repo into the dialog box.
+
+```{r paste-gh-repo-url, echo = FALSE, out.width="40%"}
+knitr::include_graphics("img/paste-gh-repo-url.png")
+```
+
+- Click OK, and you should see the contents from your GitHub repo in the Files pane in RStudio. 
+
+### Configure git
+
+There is one more piece of housekeeping we need to take care of before we get started. Specifically,  we need to configure your git so that RStudio can communicate with GitHub. This requires two pieces of information: your email address and your name.
+
+Type the following lines of code in the **Console** in RStudio filling in your name and email address.
+
+```{r eval=FALSE}
+library(usethis)
+use_git_config(user.name="your name", user.email="your email")
+```
+
+For example, mine would be  
+
+```{r eval=FALSE}
+library(usethis)
+use_git_config(user.name="Maria Tackett", user.email="maria.tackett@duke.edu")
+``````
+
+**RStudio and GitHub can now commmunicate with each other and you are ready to do the exercise!**
+
+## Practice with ggplot
+
+1. Modify the following plot to change the color of all points to `"pink"`. Knit the document.
+
+```{r starwars-plot}
+ggplot(data = starwars, 
+       mapping = aes(x = height, y = mass, color = gender, size = birth_year)) +
+  geom_point(color = "#30509C") +
+  labs(title = "_____" , size = "_____", x = "_____", y = "_____")
+```
+
+2. Add labels for title, x and y axes, and size of points. Knit again.
+
+## Commit and push
+
+1. Commit the changes you made using an simple and informative message. You can find the Commit box in the Git tab in the top right pane.
+2. Use the **green arrow** to push your changes to your repo on GitHub.
+3. Check your repo on GitHub and see the updated files.
+
+**You will go over all of these steps again in tomorrow's lab, so it is OK if you didn't get it all now!**
