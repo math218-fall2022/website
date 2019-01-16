@@ -12,7 +12,7 @@ class: center, middle, inverse, title-slide
 
 # Data and Vizualization
 ### Dr. Maria Tackett
-### 01.14.19
+### 01.16.19
 
 ---
 
@@ -31,9 +31,8 @@ layout: true
 
 ## Agenda 
 
-- FILL IN AGENDA ITEMS
+- No class or office hours on Monday - Martin Luther King, Jr. Holiday
 
-- No Class Monday - Martin Luther King, Jr. Holiday
 ---
 
 class: center, middle
@@ -44,11 +43,11 @@ class: center, middle
 
 ## What is EDA?
 
-- **Exploratory data analysis (EDA)** is an approach to analyzing data sets to summarize its main characteristics.
+- .vocab[Exploratory data analysis (EDA)] is an approach to analyzing data sets to summarize the main characteristics.
 
 - Often, EDA is visual. That's what we're focusing on today.
 
-- We can also calculate summary statistics and perform data wrangling/manipulation/transformation at (or before) this stage of the analysis. That's what we're focusing in next class.
+- We can also calculate summary statistics and perform data wrangling/manipulation/transformation at (or before) this stage of the analysis. That's what we're focusing in the next class.
 
 ---
 
@@ -62,7 +61,7 @@ class: center, middle
 
 &gt; *"The simple graph has brought more information to the data analyst’s mind than any other device." — John Tukey*
 
-- **Data visualization** is the creation and study of the visual representation of data.
+- .vocab[Data visualization] is the creation and study of the visual representation of data.
 
 - There are many tools for visualizing data (R is one of them), and many approaches/systems within R for making data visualizations
     - **ggplot2** is the one we will use
@@ -232,8 +231,8 @@ starwars
 ```
 ]
 
-- Each row is an **observation**
-- Each column is a **variable**
+- Each row is an .vocab[observation]
+- Each column is a .vocab[variable]
 ---
 
 ## Luke Skywalker
@@ -244,7 +243,7 @@ starwars
 
 ## What's in the Star Wars data?
 
-Take a `glimpse` at the data: 
+Take a `glimpse` of the data: 
 
 ```r
 glimpse(starwars)
@@ -340,12 +339,6 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 ---
 
 ## Jabba!
-
-
-```
-## quartz_off_screen 
-##                 2
-```
 
 &lt;img src="img/02a/jabbaplot.png" style="display: block; margin: auto;" /&gt;
 
@@ -735,7 +728,7 @@ Which bar plot is a more useful representation for visualizing the relationship 
 
 ## Before next class
 
-- Accept the invite to join `STA199-Sp19` organization on GitHub
+- Make sure you are in the STA199-Sp19 organization and can see the `ae-03-starwars` repo!
 
 - Start Reading 01 posted on the course schedule - due Wed Jan 23
 
