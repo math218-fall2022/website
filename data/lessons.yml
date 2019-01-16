@@ -16,7 +16,7 @@ lessons:
     appex: "01-bechdel.html"
   - date: "Wed, Jan 16"
     title: "Fundamentals of data & data visualization"
-   # slides: "lec-slides/01-meet-toolkit.html"
+    slides: "lec-slides/02a-data-and-viz.html"
   - date: "Thur, Jan 17"
     title: "Lab 01: Hello R!"
    # slides: "lab-slides/01-lab-deck.html"
