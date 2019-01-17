@@ -16,7 +16,7 @@ R is the name of the programming language itself and RStudio is a convenient int
 The main goal of this lab is to introduce you to R and RStudio, which we will be using throughout the course both to learn the statistical concepts discussed in the course and to analyze real data and come to informed conclusions. 
 
 ```{marginfigure}
-git is a version control system (like "Track Changes" features from Microsoft Word on steroids) and GitHub is the home for your Git-based projects on the internet (like DropBox but much, much better).
+git is a version control system (like "Track Changes" features from Microsoft Word but more powerful) and GitHub is the home for your Git-based projects on the internet (like DropBox but much better).
 ```
 
 An additional goal is to introduce you to git and GitHub, which is the collaboration and version control system that we will be using throughout the course.
@@ -35,7 +35,7 @@ The following screencast also walks you through these steps:
 
 <div style="position:relative;height:0;padding-bottom:40%"><iframe width="600" height="320" src="https://www.youtube.com/embed/8Ta_SJq3MrU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
 
-- Go to the STA210-Sp19 organization on GitHub ([https://github.com/STA210-Sp19](https://github.com/STA210-Sp19)). Click on the repo with the prefix **lab-01-hello-r-**. It contains the starter documents you need to complete the lab.
+- Go to the STA199-Sp19 organization on GitHub ([https://github.com/STA199-Sp19](https://github.com/STA199-Sp19)). Click on the repo with the prefix **lab-01-hello-r-**. It contains the starter documents you need to complete the lab.
 
 ```{r clone-repo-link, fig.margin = TRUE, echo = FALSE, fig.width=3}
 knitr::include_graphics("img/01-hello-r/clone-repo-link.png")
@@ -74,7 +74,7 @@ library(usethis)
 use_git_config(user.name="your name", user.email="your email")
 ```
 
-For example, mine would be  
+For example, mine would be 
 
 ```{r eval=FALSE}
 library(usethis)
