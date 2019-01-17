@@ -1,7 +1,12 @@
 /* * Customizing tufte.css * */
-
+@import url'https://fonts.googleapis.com/css?family=Open+Sans';
 @import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700';
 @import 'https://fonts.googleapis.com/css?family=Source+Code+Pro';
+@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700';
+@import 'https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700';
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons)';
+@import 'https://fonts.googleapis.com/css?family=Inconsolata';
+
 
 @charset "UTF-8";
 
@@ -13,7 +18,7 @@ html {
 
 body {
 	font-family: 'Source Sans Pro', sans-serif;
-	font-weight: 300;
+	font-weight: 350;
 	background-color: #fefefe;
 	color: #222;
 	counter-reset: li;
