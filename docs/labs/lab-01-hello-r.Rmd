@@ -47,7 +47,7 @@ knitr::include_graphics("img/01-hello-r/clone-repo-link.png")
 knitr::include_graphics("img/01-hello-r/new-project-from-gh.png")
 ```
 
-- Go to RStudio Cloud and into the STA 210 course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
+- Go to RStudio Cloud and into the STA 199 course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
 
 ```{r paste-gh-repo-url, fig.margin = TRUE, echo = FALSE, fig.width=5}
 knitr::include_graphics("img/01-hello-r/paste-gh-repo-url.png")
