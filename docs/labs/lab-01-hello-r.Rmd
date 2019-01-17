@@ -3,7 +3,7 @@ title: "Lab 01 - Hello R!"
 subtitle: "due Mon, Jan 21 at 11:59p"
 output: 
   tufte::tufte_html:
-    css: "./lab.css"
+    css: "./sta199-labs.css"
     tufte_variant: "envisioned"
     highlight: pygments
 link-citations: yes
@@ -55,19 +55,19 @@ knitr::include_graphics("img/01-hello-r/paste-gh-repo-url.png")
 
 - Copy and paste the URL of your assignment repo into the dialog box.  Be sure "Add packages from the base project" is checked. 
 
-- Hit OK, and you should see the contents from your GitHub repo in the Files pane in RStudio. 
+- Click OK, and you should see the contents from your GitHub repo in the Files pane in RStudio. 
 
 ## Configure git
-
-```{marginfigure}
-Your email address is the address tied to your GitHub account and your name should be first and last name.
-```
 
 There is one more piece of housekeeping we need to take care of before we get started. Specifically,  we need to configure your git so that RStudio can communicate with GitHub. This requires two pieces of information: your email address and your name.
 
 To do so, you will use the `use_git_config()` function from the `usethis` package. 
 
-Type the following lines of code in the **Console** in RStudio filling in your name and email address.
+Type the following lines of code in the **console** in RStudio filling in your name and email address.
+
+```{marginfigure}
+Your email address is the address tied to your GitHub account and your name should be first and last name.
+```
 
 ```{r eval=FALSE}
 library(usethis)
@@ -87,7 +87,7 @@ If you get the error message
 Error in library(usethis) : there is no package called ‘usethis’
 ```
 
-then you need to install the `usethis` package. Run the following code in the console to install the package.
+then you need to install the `usethis` package. Run the following code in the **console** to install the package.
 
 ```{r eval=FALSE}
 install.package("usethis")
@@ -98,20 +98,20 @@ Once you run the code, your values for `user.name` and `user.email` will show in
 
 # Packages
 
-In this lab we will work with two packages: `datasauRus` which contains the dataset, and `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way.
+In this lab we will work with two packages: `datasauRus` which contains the dataset, and `tidyverse` which is a collection of packages for doing data analysis in a "tidy" way. 
 
-If you need to install the packages, you can run the code below in the console.  
+You can Knit your document and see the results.
+
+Note, if you need to install the packages, you can run the code below in the **console**.  
 
 ```{r eval = FALSE}
 install.packages("tidyverse")
 install.packages("datasauRus")
 ```
 
-Now you can Knit your document and see the results. 
-
 If you'd like to run your code in the console as well you'll also need to load the packages there. To do so, run the following in the console. 
 
-```{r eval = FALSE}
+```{r warning=FALSE, message=FALSE}
 library(tidyverse) 
 library(datasauRus)
 ```
@@ -146,9 +146,9 @@ knitr::include_graphics("img/01-hello-r/yaml-raw-to-rendered.png")
 
 ## Commiting changes:
 
-Then Go to the Git pane in your RStudio.
+Then go to the Git pane in your RStudio.
 
-If you have made changes to your Rmd file, you should see it listed here. Click on it to select it in this list and then click on **Diff**. This shows you the *diff*erence between the last committed state of the document and its current state that includes your changes. If you're happy with these changes, write "Update author name" in the **Commit message** box and hit **Commit**.
+If you have made changes to your Rmd file, you should see it listed here. Click on it to select it in this list and then click on **Diff**. This shows you the *diff*erence between the last committed state of the document and its current state that includes your changes. If you're happy with these changes, write "Update author name" in the **Commit message** box and click **Commit**.
 
 ```{r update-author-name-commit, fig.fullwidth=TRUE, echo = FALSE}
 knitr::include_graphics("img/01-hello-r/update-author-name-commit.png")
@@ -162,16 +162,6 @@ Now that you have made an update and committed this change, it's time to push th
 
 In order to push your changes to GitHub, click on **Push**. This will prompt a dialogue box where you first need to enter your user name, and then your password. This might feel cumbersome. Bear with me... We *will* teach you how to save your password so you don't have to enter it every time. But for this one assignment you'll have to manually enter each time you push in order to gain some experience with it.
 
-# Packages
-
-In this lab we will use the `tidyverse` and `datasauRus` packages. We can load 
-them using the following:
-
-```{r load-packages}
-library(tidyverse)
-library(datasauRus)
-```
-
 # Data
 
 ```{marginfigure}
@@ -180,7 +170,12 @@ If it's confusing that the data frame is called `datasaurus_dozen` when it conta
 
 The data frame we will be working with today is called `datasaurus_dozen` and it's in the `datasauRus` package. Actually, this single data frame contains 13 datasets, designed to show us  why data visualization is important and how summary statistics alone can be misleading. The different datasets are marked by the `dataset` variable.
 
-To find out more about the dataset, type the following in your Console: `?datasaurus_dozen`. A question mark before the name of an object will always bring up its help file. This command must be ran in the Console.
+To find out more about the dataset, type the following in your **console**.
+```{r eval=FALSE}
+?datasaurus_dozen
+```
+
+A question mark before the name of an object will always bring up its help file. This command must be ran in the **console**.
 
 1. Based on the help file, how many rows and how many columns does the `datasaurus_dozen` file have? What are the variables included in the data frame? Add your responses to your lab report. When you're done, commit your changes with the commit message "Added answer for Ex 1", and push.
 
@@ -278,7 +273,7 @@ knitr::include_graphics("img/01-hello-r/fig-resize-global.png")
 
 ## Resize your figures
 
-Click on the gear icon in on top of the R Markdown document, and select "Output Options..." in the dropdown menu. In the pop up dialogue box go to the Figures tab and change the height and width of the figures, and hit OK when done. Then, knit your document and see how you like the new sizes. Change and knit again and again until you're happy with the figure sizes. Note that these values get saved in the YAML.
+Click on the gear icon in on top of the R Markdown document, and select "Output Options..." in the dropdown menu. In the pop up dialogue box go to the Figures tab and change the height and width of the figures, and click OK when done. Then, knit your document and see how you like the new sizes. Change and knit again and again until you're happy with the figure sizes. Note that these values get saved in the YAML.
 
 ```{r fig-resize-local, fig.margin = TRUE, echo = FALSE, fig.width=3}
 knitr::include_graphics("img/01-hello-r/fig-resize-local.png")
@@ -290,11 +285,13 @@ You can also use different figure sizes for different figures. To do so click on
 knitr::include_graphics("img/01-hello-r/theme-highlight.png")
 ```
 
-6. Resize the figures in exercises 2, 3, 4 to make them square. 
+6. Resize your figures. Use the same value for `fig.width` and `fig.height`, so that your plots are square. Knit your document. 
+
+Notice that the size of the figures in Exercises 3, 4 and 5 changed, but the size of the figure in Exercise 2 didn't change. Look at the header of the R chunk for Exercise 2; the values for `fig.height` and `fig.width` have been set. In general, we can customize the output from a particular R chunk by including options in the header that will override any global settings.
 
 ## Change the look of your report
 
-Once again click on the gear icon in on top of the R Markdown document, and select "Output Options..." in the dropdown menu. In the General tab of the pop up dialogue box try out different Syntax highlighting and theme options. Hit OK and knit your document to see how it looks. Play around with these until you're happy with the look.
+Once again click on the gear icon in on top of the R Markdown document, and select "Output Options..." in the dropdown menu. In the General tab of the pop up dialogue box try out different Syntax highlighting and theme options. Click OK and knit your document to see how it looks. Play around with these until you're happy with the look.
 
 7. Set the theme to something something other than "default". Knit your document again to see the new theme applied.
 
