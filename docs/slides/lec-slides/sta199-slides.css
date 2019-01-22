@@ -8,6 +8,7 @@ body {
   font-family: 'Open Sans'; sans-serif;
   font-weight: 400;
   color: #333333;
+  font-size: 14pt;
 }
 
 h2 {
@@ -36,6 +37,8 @@ a, a > code {
 }
 .remark-code, .remark-inline-code { 
   font-family: 'Source Code Pro', 'Lucida Console', Monaco, monospace; 
+  color: #505759;
+  
 }
 .remark-code-line-highlighted     { background-color: #ffff88; }
 
@@ -81,10 +84,14 @@ ul {
 }
 li{
   margin: 10px 0;
+  font-size: 16pt;
+  
 }
 .large { font-size: 130% }
 .midi { font-size: 90% }
-.small { font-size: 70% }
+.small { font-size: 60% }
+.tiny {font-size: 40%;}
+
 img, video, iframe {
   max-width: 100%;
 }
@@ -98,7 +105,10 @@ table {
   border-bottom: 1px solid #666;
 }
 table thead th { border-bottom: 1px solid #ddd; }
-th, td { padding: 5px; }
+th, td { 
+  padding: 5px; 
+  font-size: 14pt;
+}
 thead, tfoot, tr:nth-child(even) { background: #eee }
 
 @page { margin: 0; }
@@ -212,7 +222,3 @@ div.my-footer a {
     color: #C1C6C8;
 }
 
-/* Font sizes */
-.large { font-size: 130% }
-.midi { font-size: 90% }
-.small { font-size: 70% }
