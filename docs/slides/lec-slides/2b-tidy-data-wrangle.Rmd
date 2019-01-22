@@ -601,9 +601,14 @@ ncbikecrash %>%
 
 ## AE 04 - NC bike crashes
 
-- Go to the course GitHub organization and clone the repo for this application exercise
+- Copy the NC Bike Crashes project on RStudio Cloud
+
 - For each question you work on, set the `eval` chunk option to `TRUE` and knit
 
 ---
 
 ## Before next class
+
+- Writing exercise
+
+
