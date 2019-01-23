@@ -24,6 +24,14 @@ layout: true
 
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      dpi=300,
+                      fig.height = 3,
+                      fig.width = 5
+)
+```
+
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
 library(emo)
 library(tidyverse)
