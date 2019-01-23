@@ -363,6 +363,21 @@ glimpse(ncbikecrash)
 - `select`: pick columns by name
 - `pull`: grab a column as a vector
 - `arrange`: reorder rows
+]
+]
+
+---
+
+### A Grammar of Data Manipulation
+
+**dplyr** is based on the concepts of functions as verbs that manipulate data frames.
+
+.pull-left[
+![](img/02b/dplyr-part-of-tidyverse.png)
+]
+
+.pull-right[
+.tiny[
 - `mutate`: add new variables
 - `distinct`: filter for unique rows
 - `sample_n` / `sample_frac`: randomly sample rows
@@ -394,7 +409,7 @@ glimpse(ncbikecrash)
 
 ---
 
-## `filter` to select a subset of rows
+### `filter` to select a subset of rows
 
 for crashes in Durham County
 
@@ -560,6 +575,7 @@ ncbikecrash %>%
 
 ### `mutate` to add new variables
 
+.small[
 ```{r eval=FALSE}
 ncbikecrash %>%
   mutate(driver_alcohol_drugs_simplified = case_when(
@@ -568,7 +584,7 @@ ncbikecrash %>%
     TRUE                                    ~ "No"
   ))
 ```
-
+]
 ---
 
 ### "Save" when you `mutate`
@@ -605,10 +621,11 @@ ncbikecrash %>%
 
 - For each question you work on, set the `eval` chunk option to `TRUE` and knit
 
+
 ---
 
 ## Before next class
 
-- Writing exercise
+- You will get your teams in lab tomorrow!
 
 

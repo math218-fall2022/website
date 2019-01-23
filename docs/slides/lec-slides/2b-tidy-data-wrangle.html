@@ -510,6 +510,21 @@ glimpse(ncbikecrash)
 - `select`: pick columns by name
 - `pull`: grab a column as a vector
 - `arrange`: reorder rows
+]
+]
+
+---
+
+### A Grammar of Data Manipulation
+
+**dplyr** is based on the concepts of functions as verbs that manipulate data frames.
+
+.pull-left[
+![](img/02b/dplyr-part-of-tidyverse.png)
+]
+
+.pull-right[
+.tiny[
 - `mutate`: add new variables
 - `distinct`: filter for unique rows
 - `sample_n` / `sample_frac`: randomly sample rows
@@ -541,7 +556,7 @@ glimpse(ncbikecrash)
 
 ---
 
-## `filter` to select a subset of rows
+### `filter` to select a subset of rows
 
 for crashes in Durham County
 
@@ -983,6 +998,7 @@ ncbikecrash %&gt;%
 
 ### `mutate` to add new variables
 
+.small[
 
 ```r
 ncbikecrash %&gt;%
@@ -992,7 +1008,7 @@ ncbikecrash %&gt;%
     TRUE                                    ~ "No"
   ))
 ```
-
+]
 ---
 
 ### "Save" when you `mutate`
@@ -1054,11 +1070,12 @@ ncbikecrash %&gt;%
 
 - For each question you work on, set the `eval` chunk option to `TRUE` and knit
 
+
 ---
 
 ## Before next class
 
--
+- You will get your teams in lab tomorrow!
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
