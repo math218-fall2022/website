@@ -31,6 +31,7 @@ lessons:
     title: "Tidy data & data wrangling"
     reading: "reading-01.html"
     slides: "lec-slides/2b-tidy-data-wrangle.html"
+    appex: "02b-nc-bike-crashes.html"
   - date: "Thur, Jan 24"
     title: "Lab 02: Data wrangling & visualization"
    # lab: "lab-02-data-wrangle-visualize.html"
