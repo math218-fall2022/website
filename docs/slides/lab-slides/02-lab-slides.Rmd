@@ -80,7 +80,7 @@ class: center, middle
 
 ---
 
-## Writing Exercise #1
+## Writing Exercise 1
 
 - The first writing exercise is about data visualization and wrangling. 
     - Response to the prompt - due tonight at 11:59p
