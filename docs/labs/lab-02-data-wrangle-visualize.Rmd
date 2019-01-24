@@ -418,3 +418,28 @@ median earning is on top.
 
 10. Create a scatterplot of median income vs. proportion of 
 women in that major, colored by whether the major is in a STEM field or not. Describe the association between these three variables.
+
+
+## Writing Task 1
+
+There will be periodic writing exercises this semester to give you an opportunity to practice...
+
+- communicating statistical ideas in writing
+- giving and receiving constructive feedback to help refine your writing skills
+
+Each writing exercise will consist of three parts (about 15 minutes each): 
+
+- Respond to a prompt about a statistical concept and/or code 
+- Provide constructive feedback for classmates
+- Revise your response based on the peer feedback
+
+
+Go to [https://app.elireview.com](https://app.elireview.com) to complete the first writing exercise. The schedule for this exercise is as follows:
+
+- Response to the prompt - due **Jan 24 at 11:59p**
+- Peer review - due **Jan 26 11:59p** (check your email on Friday, Jan 25 for instructions)
+- Final draft - due **Jan 28 11:59p** (check your email on Sunday, Jan 27 for instructions)
+
+
+*If you did not sign up for Eli review in class, follow the [instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/2b-tidy-data-wrangle.html#2) to sign up.*
+
