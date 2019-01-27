@@ -40,8 +40,6 @@ library(magick)
 library(dsbox)
 ```
 
----
-
 ## Announcements
 
 - Writing Ex 1 Revision - due **today at 11:59p**
@@ -79,13 +77,11 @@ ncbikecrash
 ]
 
 .pull-right[
-.tiny[
 - `filter`: pick rows matching criteria
 - `slice`: pick rows using index(es)
 - `select`: pick columns by name
 - `pull`: grab a column as a vector
 - `arrange`: reorder rows
-]
 ]
 
 ---
@@ -99,13 +95,11 @@ ncbikecrash
 ]
 
 .pull-right[
-.tiny[
 - `mutate`: add new variables
 - `distinct`: filter for unique rows
 - `sample_n` / `sample_frac`: randomly sample rows
 - `summarise`: reduce variables to values
 - ... (many more)
-]
 ]
 
 ---
@@ -124,7 +118,7 @@ ncbikecrash
 
 ### `filter` to select rows
 
-- One condition: 
+- **One condition**
     - for crashes in Durham County
 
 ```{r eval=FALSE}
@@ -132,7 +126,9 @@ ncbikecrash %>%
   filter(county == "Durham") 
 ```
 
-- Many conditions: 
+--
+
+- **Many conditions**
     - for crashes in Durham County where biker was 0-5 years old
 
 ```{r eval=FALSE}
@@ -152,12 +148,16 @@ ncbikecrash %>%
   select(locality, speed_limit)
 ```
 
+--
+
 - exclude variables 
 
 ```{r eval=FALSE}
 ncbikecrash %>%
   select(-object_id)
 ```
+
+--
 
 - range of variables 
 
@@ -172,15 +172,16 @@ ncbikecrash %>%
 
 - First five
 
-```{r}
+```{r eval=FALSE}
 ncbikecrash %>%
   slice(1:5)
 ```
 
+--
 
 - Last five
 
-```{r}
+```{r eval=FALSE}
 last_row <- nrow(ncbikecrash)
 ncbikecrash %>%
   slice((last_row - 4):last_row)
@@ -292,6 +293,7 @@ ncbikecrash %>%
 
 Most often when you define a new variable with `mutate` you'll also want to save the resulting data frame, often by writing over the original data frame.
 
+.small[
 ```{r}
 ncbikecrash <- ncbikecrash %>%
   mutate(driver_alcohol_drugs_simplified = case_when(
@@ -299,21 +301,24 @@ ncbikecrash <- ncbikecrash %>%
     TRUE                                    ~ driver_alcohol_drugs
   ))
 ```
-
+]
 ---
 
 ### Check before you move on
 
+.small[
 ```{r}
 ncbikecrash %>% 
   count(driver_alcohol_drugs, driver_alcohol_drugs_simplified)
 ```
+]
 
+.small[
 ```{r}
 ncbikecrash %>% 
   count(driver_alcohol_drugs_simplified)
 ```
-
+]
 ---
 
 ## AE 04 - NC bike crashes
@@ -328,12 +333,11 @@ class: middle, center
 
 ## Merge Conflicts
 
+---
 
---- 
+class: middle, center
 
-class: center, middle
-
-# What is a merge conflict?
+## What is a merge conflict?
 
 ---
 
@@ -342,16 +346,15 @@ class: center, middle
 When two collaborators make changes to a file and push the file to their repo, 
 git merges these two files.
 
-```{r echo=FALSE, out.width=400, fig.align="center"}
+```{r echo=FALSE, out.width=300, fig.align="center"}
 knitr::include_graphics("img/02c/merge-no-conflict.png")
 ```
 
 --
 
-If these two files have conflicting content on the same line, git will produce a 
-**merge conflict**.
+If these two files have conflicting content on the same line, git will produce a <font class="vocab">merge conflict</font>.
 
-```{r echo=FALSE, out.width=400, fig.align="center"}
+```{r echo=FALSE, out.width=300, fig.align="center"}
 knitr::include_graphics("img/02c/merge-conflict.png")
 ```
 
@@ -379,26 +382,19 @@ class: center, middle
 
 ---
 
-## <i class="fas fa-laptop"></i> AE 06 - Merge conflics
+## AE 05 - Merge Conflicts 
 
-- Clone your assignment repo in RStudio Cloud (`ae-06-merge-conflicts-TEAMNAME`), 
+**Sit with your team**
+
+**Once you're with your team:**
+
+- Clone your assignment repo in RStudio Cloud (`ae-05-merge-conflicts-TEAMNAME`), 
 and open the R Markdown file.
+
 - Assign the numbers 1, 2, 3, and 4 to each of the team members.
-- Take turns in completing the exercise, only one member at a time:
-.midi[
-- Member 1: Change the team name to your team name, knit, commit, push.
-- Member 2: Change the team name to something else, knit, commit, push. You 
-will get an error. Pull. Review the document with the merge conflict. Resolve 
-the conflict with the preferred change. Commit and push.
-- Member 3: Create a plot displaying the relationship between `price` and `carat`, 
-controlling for `cut` of the diamonds (see next slide for the plot). Knit, 
-commit, push. You will get an error, read it, and pull. No merge conflicts should 
-occur. Now push.
-- Member 4: Set the `alpha` level to `0.5`. Knit, commit, push. You will get 
-an error. Pull. Review the document with the merge conflict. Clear the 
-merge conflict by choosing the correct/preferred change. Commit, and push.
-- All members: Pull, and observe the changes in your document.
-]
+    - If you have 3 team members, make one person **Member 2** and **Member 4**.
+
+- Walk through the steps exactly as written.
 
 ---
 
@@ -475,4 +471,13 @@ knitr::include_graphics("img/02c/merge-made.png")
 - Always pull first before you start working.
 - Commit, and push, often to minimize merge conflicts and/or to make merge conflicts easier to resolve.
 - If you find yourself in a situation that is difficult to resolve, ask questions asap, don't let it linger and get bigger.
+
+
+--- 
+
+## Before next class
+
+- Sit with your team on Wednesday 
+
+
 
