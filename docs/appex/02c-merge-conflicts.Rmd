@@ -10,15 +10,14 @@ output:
 
 ```{r load-packages, include=FALSE}
 library(tidyverse)
-library(dsbox)
 ```
 
-<font size="4">
+<font size="3">
 1. Clone your assignment repo in RStudio Cloud (`ae-05-merge-conflicts-TEAMNAME`), 
 and open the R Markdown file.
 
 2. Assign the numbers 1, 2, 3, and 4 to each of the team members.
-    - If you have 3 team members, make one person can be *Member 2* and *Member 4*.
+    - If you have 3 team members, make one person *Member 2* and *Member 4*.
 
 3. Take turns in completing the steps below exactly as written, only <u>one member</u> at a time:
 
@@ -29,7 +28,7 @@ will get an error. Pull. Review the document with the merge conflict. Resolve
 the conflict with the preferred change. Commit and push.
 
     - **Member 3**: Create a plot displaying the relationship between `price` and `carat`, 
-controlling for `cut` of the diamonds (see next slide for the plot). Knit, 
+controlling for `cut` of the diamonds (see below for the plot). Knit, 
 commit, push. You will get an error, read it, and pull. No merge conflicts should 
 occur. Now push.
 
@@ -38,3 +37,11 @@ controlling for `cut` of the diamonds. Set `alpha = 0.5` in `geom_point()`. Knit
 
 4. **All members:** Pull, and observe the changes in your document.
 </font>
+<br><br>
+
+### Plot for Member 3 to create
+
+```{r echo=FALSE}
+ggplot(data = diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point()
+```
