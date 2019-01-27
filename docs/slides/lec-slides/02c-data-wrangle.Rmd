@@ -1,5 +1,5 @@
 ---
-title: "Data Wrangling & Merge Conflicts"
+title: "Data Wrangling"
 author: "Dr. Maria Tackett"
 date: "01.28.19"
 output:
