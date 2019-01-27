@@ -1,6 +1,6 @@
 ---
-title: "Lab 03 - LaQuinta is Spanish for *Next* to Dennys"
-subtitle: "Visualizing Spatial Data"
+title: "Lab 03 - Visualizing Spatial Data"
+subtitle: "Are LaQunitas always next to Denny's?"
 date: "due Mon, Feb 4 at 11:59p"
 output: 
   tufte::tufte_html:

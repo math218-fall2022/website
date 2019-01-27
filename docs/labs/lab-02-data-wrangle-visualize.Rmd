@@ -1,6 +1,6 @@
 ---
-title: "Lab 02 - What should I major in?"
-subtitle: "Data wrangling and visualization"
+title: "Lab 02 - Data wrangling and visualization"
+subtitle: "What should I major in?"
 date: "due Wed, Jan 30 at 11:59p"
 output: 
   tufte::tufte_html:
