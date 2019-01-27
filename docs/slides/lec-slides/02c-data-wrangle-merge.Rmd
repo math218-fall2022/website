@@ -394,21 +394,7 @@ and open the R Markdown file.
 - Assign the numbers 1, 2, 3, and 4 to each of the team members.
     - If you have 3 team members, make one person **Member 2** and **Member 4**.
 
-- Walk through the steps exactly as written.
-
----
-
-class: middle
-
-Plot for Member 3 to recreate (the others can help of course!):
-
-- data: `diamonds`
-- variables: `carat`, `price`, `cut`
-
-```{r echo=FALSE}
-ggplot(data = diamonds, aes(x = carat, y = price, color = cut)) +
-  geom_point()
-```
+- Follow the [application exercise instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/appex/02c-merge-conflicts.html) exactly.
 
 ---
 
