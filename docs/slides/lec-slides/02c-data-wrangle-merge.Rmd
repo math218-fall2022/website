@@ -1,7 +1,7 @@
 ---
-title: "Tidy data and data wrangling"
+title: "Data Wrangling & Merge Conflicts"
 author: "Dr. Maria Tackett"
-date: "01.23.19"
+date: "01.28.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -40,295 +40,19 @@ library(magick)
 library(dsbox)
 ```
 
-
-## Eli Review Signup: 
-
-1. Go to [https://app.elireview.com](https://app.elireview.com). 
-2. Click the “New to Eli Review? Sign up!” button to create your account. 
-    - Be sure to choose the “Student” option. 
-    - Consider using your school email, but any address will work.
-    
-Join our course: In the box labeled “Ready to join a course?” enter this course code: **hyper425bend**
-
 ---
 
-## Check in
+## Announcements
 
-- Any questions on material from last time?
+- Writing Ex 1 Revision - due **today at 11:59p**
 
-- Any questions on the lab?
-
-- Any questions on workflow / course structure?
+- Think of team name if you haven't already
 
 ---
 
 class: center, middle
 
-# Identifying variables
-
----
-
-## Number of variables involved
-
-- .vocab[Univariate data analysis]: distribution of single variable
-
-- .vocab[Bivariate data analysis]: relationship between two variables
-
-- .vocab[Multivariate data analysis]: relationship between many variables at once, usually focusing on the relationship between two while conditioning for others
-
----
-
-## Types of variables
-
-- .vocab[Numerical variables] can be classified as .vocab[continuous] or .vocab[discrete] based on whether or not the variable can take on an infinite number of values or only non-negative whole numbers, respectively.
-    - *height* is continuous
-    - *number of siblings* is discrete
-
---
-
-- If the variable is .vocab[categorical], we can determine if it is .vocab[ordinal] based on whether or not the levels have a natural ordering.
-    - *hair color* is unordered 
-    - *year in school* is ordinal
-
----
-
-class: center, middle
-
-# Visualizing numerical data
-
----
-
-### Describing shapes of numerical distributions
-
-- **shape:**
-    - skewness: right-skewed, left-skewed, symmetric (skew is to the side of the longer tail)
-    - modality: unimodal, bimodal, multimodal, uniform
-    
-- **center:** mean (**`mean`**), median (**`median`**), mode (not always useful)
-
-- **spread:** range (**`range`**), standard deviation (**`sd`**), inter-quartile range (**`IQR`**)
-
-- **outliers**: observations outside of the usual pattern
-
----
-
-## Histograms
-
-.small[
-```{r fig.width = 7, fig.height = 4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = height)) +
-  geom_histogram(binwidth = 10)
-```
-]
-
----
-
-## Density plots
-
-.small[
-```{r fig.width = 7, fig.height=4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = height)) +
-  geom_density()
-```
-]
-
----
-
-## Side-by-side box plots
-
-.small[
-```{r fig.width = 7, fig.height=4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(y = height, x = gender)) +
-  geom_boxplot()
-```
-]
-
----
-
-class: center, middle
-
-## Visualizing categorical data
-
----
-
-## Bar plots
-
-.small[
-```{r fig.width = 7, fig.height=4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = gender)) +
-  geom_bar()
-```
-]
-
----
-
-### Segmented bar plots, counts
-
-.small[
-```{r fig.width = 7, fig.height=4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
-  geom_bar()
-```
-]
-
----
-
-### Segmented bar plots, proportions
-
-.small[
-```{r fig.width = 7, fig.height=4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
-  geom_bar(position = "fill") + #<<
-  labs(y = "proportion")
-```
-]
-
----
-
-.question[
-Which bar plot is a more useful representation for visualizing the relationship between gender and hair color? Why?
-]
-
-.pull-left[
-
-```{r echo=FALSE,fig.height=6, fig.width=6}
-starwars <- starwars %>%
-  mutate(hair_color2 = fct_other(hair_color, 
-                                 keep = c("black", "brown", "brown", "blond")))
-
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color2)) +
-  geom_bar()
-```
-]
-
-.pull-right[
-
-```{r echo=FALSE, fig.height=6, fig.width=6}
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color2)) +
-  geom_bar(position = "fill") +
-  labs(y = "proportion")
-```
-
-]
-
----
-
-class: center, middle
-
-# Tidy data
-
----
-
-## Tidy data
-
->Happy families are all alike; every unhappy family is unhappy in its own way. 
->
->Leo Tolstoy
-
---
-
-.pull-left[
-**Characteristics of tidy data:**
-
-- Each variable forms a column.
-- Each observation forms a row.
-- Each type of observational unit forms a table.
-]
-
-.pull-right[
-**Characteristics of untidy data:**
-
-!@#$%^&*()
-]
-
----
-
-## Summary tables 
-
-.question[
-Is each of the following a dataset or a summary table?
-]
-
-.small[
-.pull-left[
-```{r echo=FALSE}
-starwars %>%
-  select(name, height, mass)
-```
-]
-
-.pull-right[
-```{r echo=FALSE}
-starwars %>%
-  group_by(gender) %>%
-  summarize(avg_height = round(mean(height, na.rm = TRUE), 2))
-```
-]
-]
-
----
-
-class: center, middle
-
-# Pipes
-
----
-
-## Where does the name come from?
-
-The pipe operator is implemented in the package **magrittr**, it's pronounced 
-"and then".
-
-.pull-left[
-![pipe](img/02b/magritte.jpg)
-]
-.pull-right[
-![magrittr](img/02b/magrittr.jpg)
-]
-
-.small[
-[https://en.wikipedia.org/wiki/The_Treachery_of_Images](https://en.wikipedia.org/wiki/The_Treachery_of_Images)
-]  
-
----
-
-## Review: How does a pipe work?
-
-- You can think about the following sequence of actions - find key, 
-unlock car, start car, drive to school, park.
-- Expressed as a set of nested functions in R pseudocode this would look like:
-```{r eval=FALSE}
-park(drive(start_car(find("keys")), to = "campus"))
-```
-
---
-
-- Writing it out using pipes give it a more natural (and easier to read) 
-structure:
-```{r eval=FALSE}
-find("keys") %>%
-  start_car() %>%
-  drive(to = "campus") %>%
-  park()
-```
-
----
-
-## What about other arguments?
-
-To send results to a function argument other than first one or to use the previous result for multiple arguments, use "`.`"
-
-```{r fig.height=1.8, fig.width = 3.75}
-starwars %>%
-  filter(species == "Human") %>%
-  lm(mass ~ height, data = .)
-```
-
----
-
-class: center, middle
-
-# Data wrangling
+# Data Wrangling
 
 ---
 
@@ -343,32 +67,6 @@ ncbikecrash
 
 - The dataset contains all North Carolina bike crash data from 2007-2014. 
 - Data downloaded on Sep 6, 2018.
-
----
-
-## Variables
-
-View the names of variables via
-
-.tiny[
-```{r}
-names(ncbikecrash)
-```
-]
-
-and see detailed descriptions with `?ncbikecrash`.
-
----
-
-## Viewing your data
-
-- In the Environment, after loading with `data(ncbikecrash)`, and click on the 
-name of the data frame to view it in the data viewer
-- Use the `glimpse` function to take a peek
-
-```{r}
-glimpse(ncbikecrash)
-```
 
 ---
 
@@ -424,73 +122,46 @@ glimpse(ncbikecrash)
 
 ---
 
-## A note on piping and layering
+### `filter` to select rows
 
-- The `%>%` operator in **dplyr** functions is called the pipe operator. This means you "pipe" the output of the previous line of code as the first input of the next line of code.
-<br> 
+- One condition: 
+    - for crashes in Durham County
 
-- The `+` operator in **ggplot2** functions is used for "layering". This means you create the plot in layers, separated by `+`.
-
----
-
-### `filter` to select a subset of rows
-
-for crashes in Durham County
-
-```{r}
+```{r eval=FALSE}
 ncbikecrash %>%
-  filter(county == "Durham") #<<
+  filter(county == "Durham") 
 ```
 
----
+- Many conditions: 
+    - for crashes in Durham County where biker was 0-5 years old
 
-### `filter` for many conditions at once
-
-for crashes in Durham County where biker was 0-5 years old
-
-```{r}
+```{r eval=FALSE}
 ncbikecrash %>%
   filter(county == "Durham", bike_age_group == "0-5")
 ```
 
 ---
 
-### Logical operators in R
+### `select` to select or exclude variables
 
-operator    | definition                   || operator     | definition
-------------|------------------------------||--------------|----------------
-`<`         | less than                    ||`x`&nbsp;&#124;&nbsp;`y`     | `x` OR `y` 
-`<=`        |	less than or equal to        ||`is.na(x)`    | test if `x` is `NA`
-`>`         | greater than                 ||`!is.na(x)`   | test if `x` is not `NA`
-`>=`        |	greater than or equal to     ||`x %in% y`    | test if `x` is in `y`
-`==`        |	exactly equal to             ||`!(x %in% y)` | test if `x` is not in `y`
-`!=`        |	not equal to                 ||`!x`          | not `x`
-`x & y`     | `x` AND `y`                  ||              |
+- select variables (columns)
 
----
-
-### `select` to keep variables
-
-```{r}
+```{r eval=FALSE}
 ncbikecrash %>%
   filter(county == "Durham", bike_age_group == "0-5") %>%
   select(locality, speed_limit)
 ```
 
----
+- exclude variables 
 
-### `select` to exclude variables
-
-```{r}
+```{r eval=FALSE}
 ncbikecrash %>%
   select(-object_id)
 ```
 
----
+- range of variables 
 
-### `select` a range of variables
-
-```{r}
+```{r eval=FALSE}
 ncbikecrash %>%
   select(city:locality)
 ```
@@ -499,17 +170,16 @@ ncbikecrash %>%
 
 ### `slice` for certain row numbers
 
-First five
+- First five
+
 ```{r}
 ncbikecrash %>%
   slice(1:5)
 ```
 
----
 
-### `slice` for certain row numbers
+- Last five
 
-Last five
 ```{r}
 last_row <- nrow(ncbikecrash)
 ncbikecrash %>%
@@ -520,19 +190,23 @@ ncbikecrash %>%
 
 ### `pull` to extract a column as a vector
 
+.small[
 ```{r}
 ncbikecrash %>%
   slice(1:6) %>%
   pull(locality)
 ```
+]
 
 vs.
 
+.small[
 ```{r}
 ncbikecrash %>%
   slice(1:6) %>%
   select(locality)
 ```
+]
 
 ---
 
@@ -540,20 +214,23 @@ ncbikecrash %>%
 
 - `sample_n`: randomly sample 5 observations
 
+.small[
 ```{r}
 ncbikecrash_n5 <- ncbikecrash %>%
   sample_n(5, replace = FALSE)
 dim(ncbikecrash_n5)
 ```
+]
 
 - `sample_frac`: randomly sample 20% of observations
 
+.small[
 ```{r}
 ncbikecrash_perc20 <-ncbikecrash %>%
   sample_frac(0.2, replace = FALSE)
 dim(ncbikecrash_perc20)
 ```
-
+]
 ---
 
 ### `distinct` to filter for unique rows
@@ -645,11 +322,157 @@ ncbikecrash %>%
 
 - For each question you work on, set the `eval` chunk option to `TRUE` and knit
 
+---
+
+class: middle, center
+
+## Merge Conflicts
+
+
+--- 
+
+class: center, middle
+
+# What is a merge conflict?
 
 ---
 
-## Before next class
+## Merge conflicts
 
-- You will get your teams in lab tomorrow!
+When two collaborators make changes to a file and push the file to their repo, 
+git merges these two files.
 
+```{r echo=FALSE, out.width=400, fig.align="center"}
+knitr::include_graphics("img/02c/merge-no-conflict.png")
+```
+
+--
+
+If these two files have conflicting content on the same line, git will produce a 
+**merge conflict**.
+
+```{r echo=FALSE, out.width=400, fig.align="center"}
+knitr::include_graphics("img/02c/merge-conflict.png")
+```
+
+---
+
+## Resolving merge conflicts
+
+- Merge conflicts need to be resolved manually, as they require a human intervention
+
+```{r echo=FALSE, out.width=800, fig.align="center"}
+knitr::include_graphics("img/02c/merge-conflict-identifiers.png")
+```
+
+- To resolve the merge conflict
+  - decide if you want to keep only your text or the text on GitHub or 
+  incorporate changes from both texts
+  - delete the conflict markers `<<<<<<<`, `=======`, `>>>>>>>` and make the 
+  changes you want in the final merge
+
+---
+
+class: center, middle
+
+# Application exercise
+
+---
+
+## <i class="fas fa-laptop"></i> AE 06 - Merge conflics
+
+- Clone your assignment repo in RStudio Cloud (`ae-06-merge-conflicts-TEAMNAME`), 
+and open the R Markdown file.
+- Assign the numbers 1, 2, 3, and 4 to each of the team members.
+- Take turns in completing the exercise, only one member at a time:
+.midi[
+- Member 1: Change the team name to your team name, knit, commit, push.
+- Member 2: Change the team name to something else, knit, commit, push. You 
+will get an error. Pull. Review the document with the merge conflict. Resolve 
+the conflict with the preferred change. Commit and push.
+- Member 3: Create a plot displaying the relationship between `price` and `carat`, 
+controlling for `cut` of the diamonds (see next slide for the plot). Knit, 
+commit, push. You will get an error, read it, and pull. No merge conflicts should 
+occur. Now push.
+- Member 4: Set the `alpha` level to `0.5`. Knit, commit, push. You will get 
+an error. Pull. Review the document with the merge conflict. Clear the 
+merge conflict by choosing the correct/preferred change. Commit, and push.
+- All members: Pull, and observe the changes in your document.
+]
+
+---
+
+class: middle
+
+Plot for Member 3 to recreate (the others can help of course!):
+
+- data: `diamonds`
+- variables: `carat`, `price`, `cut`
+
+```{r echo=FALSE}
+ggplot(data = diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point()
+```
+
+---
+
+class: center, middle
+
+# Review
+
+---
+
+.question[
+What does the following message mean?
+]
+
+<br>
+
+```{r echo=FALSE, out.width=800, fig.align="center"}
+knitr::include_graphics("img/02c/merge-conflict-error.png")
+```
+
+---
+
+.question[
+What does the following message mean?
+]
+
+<br>
+
+```{r echo=FALSE, out.width=800, fig.align="center"}
+knitr::include_graphics("img/02c/merge-failed.png")
+```
+
+---
+
+.question[
+What does the following message mean?
+]
+
+<br>
+
+```{r echo=FALSE, out.width=800, fig.align="center"}
+knitr::include_graphics("img/02c/no-merge-conflict.png")
+```
+
+---
+
+.question[
+What does the following message mean?
+]
+
+<br>
+
+```{r echo=FALSE, out.width=800, fig.align="center"}
+knitr::include_graphics("img/02c/merge-made.png")
+```
+
+---
+
+## Tips for collaborating via GitHub
+
+- Always pull first before you start working.
+- Commit, and push, often to minimize merge conflicts and/or to make merge conflicts easier to resolve.
+- If you find yourself in a situation that is difficult to resolve, ask questions asap, don't let it linger and get bigger.
 

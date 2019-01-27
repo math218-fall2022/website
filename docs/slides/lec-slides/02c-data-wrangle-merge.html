@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data Wrangling &amp; Merge Conflicts</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Dr. Maria Tackett" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data Wrangling &amp; Merge Conflicts
+### Dr. Maria Tackett
+### 01.28.19
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="http://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+
+
+---
+
+## Announcements
+
+- Writing Ex 1 Revision - due **today at 11:59p**
+
+- Think of team name if you haven't already
+
+---
+
+class: center, middle
+
+# Data Wrangling
+
+---
+
+## Bike crashes in NC 2007 - 2014
+
+The dataset is in the **dsbox** package:
+
+
+```r
+library(dsbox)
+ncbikecrash
+```
+
+- The dataset contains all North Carolina bike crash data from 2007-2014. 
+- Data downloaded on Sep 6, 2018.
+
+---
+
+### A Grammar of Data Manipulation
+
+**dplyr** is based on the concepts of functions as verbs that manipulate data frames.
+
+.pull-left[
+![](img/02b/dplyr-part-of-tidyverse.png)
+]
+
+.pull-right[
+.tiny[
+- `filter`: pick rows matching criteria
+- `slice`: pick rows using index(es)
+- `select`: pick columns by name
+- `pull`: grab a column as a vector
+- `arrange`: reorder rows
+]
+]
+
+---
+
+### A Grammar of Data Manipulation
+
+**dplyr** is based on the concepts of functions as verbs that manipulate data frames.
+
+.pull-left[
+![](img/02b/dplyr-part-of-tidyverse.png)
+]
+
+.pull-right[
+.tiny[
+- `mutate`: add new variables
+- `distinct`: filter for unique rows
+- `sample_n` / `sample_frac`: randomly sample rows
+- `summarise`: reduce variables to values
+- ... (many more)
+]
+]
+
+---
+
+## **dplyr** rules for functions
+
+- First argument is *always* a data frame
+
+- Subsequent arguments say what to do with that data frame
+
+- Always return a data frame
+
+- Don't modify in place
+
+---
+
+### `filter` to select rows
+
+- One condition: 
+    - for crashes in Durham County
+
+
+```r
+ncbikecrash %&gt;%
+  filter(county == "Durham") 
+```
+
+- Many conditions: 
+    - for crashes in Durham County where biker was 0-5 years old
+
+
+```r
+ncbikecrash %&gt;%
+  filter(county == "Durham", bike_age_group == "0-5")
+```
+
+---
+
+### `select` to select or exclude variables
+
+- select variables (columns)
+
+
+```r
+ncbikecrash %&gt;%
+  filter(county == "Durham", bike_age_group == "0-5") %&gt;%
+  select(locality, speed_limit)
+```
+
+- exclude variables 
+
+
+```r
+ncbikecrash %&gt;%
+  select(-object_id)
+```
+
+- range of variables 
+
+
+```r
+ncbikecrash %&gt;%
+  select(city:locality)
+```
+
+---
+
+### `slice` for certain row numbers
+
+- First five
+
+
+```r
+ncbikecrash %&gt;%
+  slice(1:5)
+```
+
+```
+## # A tibble: 5 x 66
+##   object_id city  county region development locality on_road rural_urban
+##       &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
+## 1      1686 None… Wayne  Coast… Farms, Woo… Rural (… SR 1915 Rural      
+## 2      1674 Hend… Vance  Piedm… Residential Mixed (… NICHOL… Urban      
+## 3      1673 None… Linco… Piedm… Farms, Woo… Rural (… US 321  Rural      
+## 4      1687 Whit… Colum… Coast… Commercial  Urban (… W BURK… Urban      
+## 5      1653 Wilm… New H… Coast… Residential Urban (… RACINE… Urban      
+## # … with 58 more variables: speed_limit &lt;chr&gt;, traffic_control &lt;chr&gt;,
+## #   weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;, bike_age_group &lt;chr&gt;,
+## #   bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;, bike_direction &lt;chr&gt;,
+## #   bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;, bike_race &lt;chr&gt;,
+## #   bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;, driver_age_group &lt;chr&gt;,
+## #   driver_alcohol &lt;chr&gt;, driver_alcohol_drugs &lt;chr&gt;,
+## #   driver_est_speed &lt;chr&gt;, driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;,
+## #   driver_sex &lt;chr&gt;, driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;,
+## #   crash_date &lt;chr&gt;, crash_day &lt;chr&gt;, crash_group &lt;chr&gt;,
+## #   crash_hour &lt;int&gt;, crash_location &lt;chr&gt;, crash_month &lt;chr&gt;,
+## #   crash_severity &lt;chr&gt;, crash_time &lt;time&gt;, crash_type &lt;chr&gt;,
+## #   crash_year &lt;int&gt;, ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;,
+## #   light_condition &lt;chr&gt;, road_character &lt;chr&gt;, road_class &lt;chr&gt;,
+## #   road_condition &lt;chr&gt;, road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;,
+## #   road_feature &lt;chr&gt;, road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;,
+## #   num_bikes_bi &lt;int&gt;, num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;,
+## #   num_bikes_no &lt;int&gt;, num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;,
+## #   num_lanes &lt;chr&gt;, num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;,
+## #   frm_road &lt;chr&gt;, rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;,
+## #   geo_shape &lt;chr&gt;
+```
+
+
+- Last five
+
+
+```r
+last_row &lt;- nrow(ncbikecrash)
+ncbikecrash %&gt;%
+  slice((last_row - 4):last_row)
+```
+
+```
+## # A tibble: 5 x 66
+##   object_id city  county region development locality on_road rural_urban
+##       &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
+## 1      6989 High… Guilf… Piedm… Residential Urban (… &lt;NA&gt;    Urban      
+## 2      6991 Wilm… New H… Coast… Residential Urban (… &lt;NA&gt;    Urban      
+## 3      6995 Kins… Lenoir Coast… Commercial  Urban (… &lt;NA&gt;    Urban      
+## 4      6998 Faye… Cumbe… Coast… Residential Urban (… &lt;NA&gt;    Urban      
+## 5      7000 None… Onslow Coast… Farms, Woo… Rural (… &lt;NA&gt;    Rural      
+## # … with 58 more variables: speed_limit &lt;chr&gt;, traffic_control &lt;chr&gt;,
+## #   weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;, bike_age_group &lt;chr&gt;,
+## #   bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;, bike_direction &lt;chr&gt;,
+## #   bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;, bike_race &lt;chr&gt;,
+## #   bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;, driver_age_group &lt;chr&gt;,
+## #   driver_alcohol &lt;chr&gt;, driver_alcohol_drugs &lt;chr&gt;,
+## #   driver_est_speed &lt;chr&gt;, driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;,
+## #   driver_sex &lt;chr&gt;, driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;,
+## #   crash_date &lt;chr&gt;, crash_day &lt;chr&gt;, crash_group &lt;chr&gt;,
+## #   crash_hour &lt;int&gt;, crash_location &lt;chr&gt;, crash_month &lt;chr&gt;,
+## #   crash_severity &lt;chr&gt;, crash_time &lt;time&gt;, crash_type &lt;chr&gt;,
+## #   crash_year &lt;int&gt;, ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;,
+## #   light_condition &lt;chr&gt;, road_character &lt;chr&gt;, road_class &lt;chr&gt;,
+## #   road_condition &lt;chr&gt;, road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;,
+## #   road_feature &lt;chr&gt;, road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;,
+## #   num_bikes_bi &lt;int&gt;, num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;,
+## #   num_bikes_no &lt;int&gt;, num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;,
+## #   num_lanes &lt;chr&gt;, num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;,
+## #   frm_road &lt;chr&gt;, rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;,
+## #   geo_shape &lt;chr&gt;
+```
+
+---
+
+### `pull` to extract a column as a vector
+
+.small[
+
+```r
+ncbikecrash %&gt;%
+  slice(1:6) %&gt;%
+  pull(locality)
+```
+
+```
+## [1] "Rural (&lt;30% Developed)"       "Mixed (30% To 70% Developed)"
+## [3] "Rural (&lt;30% Developed)"       "Urban (&gt;70% Developed)"      
+## [5] "Urban (&gt;70% Developed)"       "Rural (&lt;30% Developed)"
+```
+]
+
+vs.
+
+.small[
+
+```r
+ncbikecrash %&gt;%
+  slice(1:6) %&gt;%
+  select(locality)
+```
+
+```
+## # A tibble: 6 x 1
+##   locality                    
+##   &lt;chr&gt;                       
+## 1 Rural (&lt;30% Developed)      
+## 2 Mixed (30% To 70% Developed)
+## 3 Rural (&lt;30% Developed)      
+## 4 Urban (&gt;70% Developed)      
+## 5 Urban (&gt;70% Developed)      
+## 6 Rural (&lt;30% Developed)
+```
+]
+
+---
+
+### `sample_n` / `sample_frac` for a random sample
+
+- `sample_n`: randomly sample 5 observations
+
+.small[
+
+```r
+ncbikecrash_n5 &lt;- ncbikecrash %&gt;%
+  sample_n(5, replace = FALSE)
+dim(ncbikecrash_n5)
+```
+
+```
+## [1]  5 66
+```
+]
+
+- `sample_frac`: randomly sample 20% of observations
+
+.small[
+
+```r
+ncbikecrash_perc20 &lt;-ncbikecrash %&gt;%
+  sample_frac(0.2, replace = FALSE)
+dim(ncbikecrash_perc20)
+```
+
+```
+## [1] 1493   66
+```
+]
+---
+
+### `distinct` to filter for unique rows
+
+And `arrange` to order alphabetically
+
+
+```r
+ncbikecrash %&gt;% 
+  select(county, city) %&gt;% 
+  distinct() %&gt;% 
+  arrange(county, city)
+```
+
+```
+## # A tibble: 391 x 2
+##    county    city              
+##    &lt;chr&gt;     &lt;chr&gt;             
+##  1 Alamance  Alamance          
+##  2 Alamance  Burlington        
+##  3 Alamance  Elon              
+##  4 Alamance  Elon College      
+##  5 Alamance  Gibsonville       
+##  6 Alamance  Graham            
+##  7 Alamance  Green Level       
+##  8 Alamance  Mebane            
+##  9 Alamance  None - Rural Crash
+## 10 Alexander None - Rural Crash
+## # … with 381 more rows
+```
+
+---
+
+### `summarise` to reduce variables to values
+
+
+```r
+ncbikecrash %&gt;%
+  summarise(avg_hr = mean(crash_hour))
+```
+
+```
+## # A tibble: 1 x 1
+##   avg_hr
+##    &lt;dbl&gt;
+## 1   14.7
+```
+
+---
+
+### `group_by` to do calculations on groups
+
+
+```r
+ncbikecrash %&gt;%
+  group_by(hit_run) %&gt;%
+  summarise(avg_hr = mean(crash_hour))
+```
+
+```
+## # A tibble: 2 x 2
+##   hit_run avg_hr
+##   &lt;chr&gt;    &lt;dbl&gt;
+## 1 No        14.6
+## 2 Yes       15.0
+```
+
+---
+
+### `count` observations in groups
+
+
+```r
+ncbikecrash %&gt;%
+  count(driver_alcohol_drugs)
+```
+
+```
+## # A tibble: 6 x 2
+##   driver_alcohol_drugs                    n
+##   &lt;chr&gt;                               &lt;int&gt;
+## 1 Missing                                99
+## 2 No                                    695
+## 3 Yes-Alcohol,  impairment suspected     12
+## 4 Yes-Alcohol, no impairment detected     3
+## 5 Yes-Drugs, impairment suspected         4
+## 6 &lt;NA&gt;                                 6654
+```
+
+---
+
+### `mutate` to add new variables
+
+.small[
+
+```r
+ncbikecrash %&gt;%
+  mutate(driver_alcohol_drugs_simplified = case_when(
+    driver_alcohol_drugs == "Missing"       ~ NA,
+    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
+    TRUE                                    ~ "No"
+  ))
+```
+]
+---
+
+### "Save" when you `mutate`
+
+Most often when you define a new variable with `mutate` you'll also want to save the resulting data frame, often by writing over the original data frame.
+
+
+```r
+ncbikecrash &lt;- ncbikecrash %&gt;%
+  mutate(driver_alcohol_drugs_simplified = case_when(
+    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
+    TRUE                                    ~ driver_alcohol_drugs
+  ))
+```
+
+---
+
+### Check before you move on
+
+
+```r
+ncbikecrash %&gt;% 
+  count(driver_alcohol_drugs, driver_alcohol_drugs_simplified)
+```
+
+```
+## # A tibble: 6 x 3
+##   driver_alcohol_drugs                driver_alcohol_drugs_simplified     n
+##   &lt;chr&gt;                               &lt;chr&gt;                           &lt;int&gt;
+## 1 Missing                             Missing                            99
+## 2 No                                  No                                695
+## 3 Yes-Alcohol,  impairment suspected  Yes                                12
+## 4 Yes-Alcohol, no impairment detected Yes                                 3
+## 5 Yes-Drugs, impairment suspected     Yes                                 4
+## 6 &lt;NA&gt;                                &lt;NA&gt;                             6654
+```
+
+
+```r
+ncbikecrash %&gt;% 
+  count(driver_alcohol_drugs_simplified)
+```
+
+```
+## # A tibble: 4 x 2
+##   driver_alcohol_drugs_simplified     n
+##   &lt;chr&gt;                           &lt;int&gt;
+## 1 Missing                            99
+## 2 No                                695
+## 3 Yes                                19
+## 4 &lt;NA&gt;                             6654
+```
+
+---
+
+## AE 04 - NC bike crashes
+
+- Copy the NC Bike Crashes project on RStudio Cloud
+
+- For each question you work on, set the `eval` chunk option to `TRUE` and knit
+
+---
+
+class: middle, center
+
+## Merge Conflicts
+
+
+--- 
+
+class: center, middle
+
+# What is a merge conflict?
+
+---
+
+## Merge conflicts
+
+When two collaborators make changes to a file and push the file to their repo, 
+git merges these two files.
+
+&lt;img src="img/02c/merge-no-conflict.png" width="400" style="display: block; margin: auto;" /&gt;
+
+--
+
+If these two files have conflicting content on the same line, git will produce a 
+**merge conflict**.
+
+&lt;img src="img/02c/merge-conflict.png" width="400" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Resolving merge conflicts
+
+- Merge conflicts need to be resolved manually, as they require a human intervention
+
+&lt;img src="img/02c/merge-conflict-identifiers.png" width="800" style="display: block; margin: auto;" /&gt;
+
+- To resolve the merge conflict
+  - decide if you want to keep only your text or the text on GitHub or 
+  incorporate changes from both texts
+  - delete the conflict markers `&lt;&lt;&lt;&lt;&lt;&lt;&lt;`, `=======`, `&gt;&gt;&gt;&gt;&gt;&gt;&gt;` and make the 
+  changes you want in the final merge
+
+---
+
+class: center, middle
+
+# Application exercise
+
+---
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; AE 06 - Merge conflics
+
+- Clone your assignment repo in RStudio Cloud (`ae-06-merge-conflicts-TEAMNAME`), 
+and open the R Markdown file.
+- Assign the numbers 1, 2, 3, and 4 to each of the team members.
+- Take turns in completing the exercise, only one member at a time:
+.midi[
+- Member 1: Change the team name to your team name, knit, commit, push.
+- Member 2: Change the team name to something else, knit, commit, push. You 
+will get an error. Pull. Review the document with the merge conflict. Resolve 
+the conflict with the preferred change. Commit and push.
+- Member 3: Create a plot displaying the relationship between `price` and `carat`, 
+controlling for `cut` of the diamonds (see next slide for the plot). Knit, 
+commit, push. You will get an error, read it, and pull. No merge conflicts should 
+occur. Now push.
+- Member 4: Set the `alpha` level to `0.5`. Knit, commit, push. You will get 
+an error. Pull. Review the document with the merge conflict. Clear the 
+merge conflict by choosing the correct/preferred change. Commit, and push.
+- All members: Pull, and observe the changes in your document.
+]
+
+---
+
+class: middle
+
+Plot for Member 3 to recreate (the others can help of course!):
+
+- data: `diamonds`
+- variables: `carat`, `price`, `cut`
+
+![](02c-data-wrangle-merge_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+---
+
+class: center, middle
+
+# Review
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/02c/merge-conflict-error.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/02c/merge-failed.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/02c/no-merge-conflict.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/02c/merge-made.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Tips for collaborating via GitHub
+
+- Always pull first before you start working.
+- Commit, and push, often to minimize merge conflicts and/or to make merge conflicts easier to resolve.
+- If you find yourself in a situation that is difficult to resolve, ask questions asap, don't let it linger and get bigger.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

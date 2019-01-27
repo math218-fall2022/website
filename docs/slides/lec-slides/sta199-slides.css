@@ -8,7 +8,7 @@ body {
   font-family: 'Open Sans'; sans-serif;
   font-weight: 400;
   color: #333333;
-  font-size: 14pt;
+  font-size: 16pt;
 }
 
 h2 {
@@ -89,12 +89,12 @@ ul {
 }
 li{
   margin: 10px 0;
-  font-size: 16pt;
+  font-size: 14pt;
   
 }
-.large { font-size: 130% }
-.midi { font-size: 90% }
-.small { font-size: 60% }
+.large { font-size: 130%; }
+.midi { font-size: 90%; }
+.small { font-size: 60%; }
 .tiny {font-size: 40%;}
 
 img, video, iframe {
@@ -112,7 +112,7 @@ table {
 table thead th { border-bottom: 1px solid #ddd; }
 th, td { 
   padding: 5px; 
-  font-size: 14pt;
+  font-size: 16pt;
 }
 thead, tfoot, tr:nth-child(even) { background: #eee }
 
