@@ -129,8 +129,8 @@ ol>li {
 	width: 90%;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	padding-right: 0;
-	padding-left: 90px;
+	padding-right: 0px;
+	padding-left: 95px;
 }
 
 ol>li:before {
@@ -142,6 +142,7 @@ ol>li:before {
 	color: #7A4183;
 	left: -0.5px;
 	font-weight: bold;
+	margin-right: 10px;
 }
 
 ol ol {
