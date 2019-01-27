@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Merge Conflicts</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Dr. Maria Tackett" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Merge Conflicts
+### Dr. Maria Tackett
+### 01.28.19
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="http://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+
+
+class: middle, center
+
+## What is a merge conflict?
+
+---
+
+## Merge conflicts
+
+When two collaborators make changes to a file and push the file to their repo, 
+git merges these two files.
+
+&lt;img src="img/02c/merge-no-conflict.png" width="300" style="display: block; margin: auto;" /&gt;
+
+--
+
+If these two files have conflicting content on the same line, git will produce a &lt;font class="vocab"&gt;merge conflict&lt;/font&gt;.
+
+&lt;img src="img/02c/merge-conflict.png" width="300" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Resolving merge conflicts
+
+- Merge conflicts need to be resolved manually, as they require a human intervention
+
+&lt;img src="img/02c/merge-conflict-identifiers.png" width="800" style="display: block; margin: auto;" /&gt;
+
+- To resolve the merge conflict
+  - decide if you want to keep only your text or the text on GitHub or 
+  incorporate changes from both texts
+  - delete the conflict markers `&lt;&lt;&lt;&lt;&lt;&lt;&lt;`, `=======`, `&gt;&gt;&gt;&gt;&gt;&gt;&gt;` and make the 
+  changes you want in the final merge
+
+---
+
+class: center, middle
+
+# Application exercise
+
+---
+
+## AE 05 - Merge Conflicts 
+
+**Sit with your team**
+
+**Once you're with your team:**
+
+- Clone your assignment repo in RStudio Cloud (`ae-05-merge-conflicts-TEAMNAME`), 
+and open the R Markdown file.
+
+- Assign the numbers 1, 2, 3, and 4 to each of the team members.
+    - If you have 3 team members, make one person **Member 2** and **Member 4**.
+
+- Follow the [application exercise instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/appex/02c-merge-conflicts.html) exactly.
+
+---
+
+class: center, middle
+
+# Review
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/02c/merge-conflict-error.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/02c/merge-failed.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/02c/no-merge-conflict.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/02c/merge-made.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Tips for collaborating via GitHub
+
+- Always pull first before you start working.
+- Commit, and push, often to minimize merge conflicts and/or to make merge conflicts easier to resolve.
+- If you find yourself in a situation that is difficult to resolve, ask questions asap, don't let it linger and get bigger.
+
+---
+
+## Before next class
+
+- Sit with your team on Wednesday
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
