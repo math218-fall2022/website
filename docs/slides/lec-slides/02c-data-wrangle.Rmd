@@ -38,6 +38,7 @@ library(tidyverse)
 library(fontawesome)
 library(magick)
 library(dsbox)
+library(knitr)
 ```
 
 ## Announcements
@@ -283,7 +284,7 @@ ncbikecrash %>%
   mutate(driver_alcohol_drugs_simplified = case_when(
     driver_alcohol_drugs == "Missing"       ~ NA_character_,
     str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ "No"
+    TRUE                                    ~ driver_alcohol_drugs
   ))
 ```
 ]
@@ -293,16 +294,15 @@ ncbikecrash %>%
 
 Most often when you define a new variable with `mutate` you'll also want to save the resulting data frame, often by writing over the original data frame.
 
-.midi[
 ```{r}
 ncbikecrash <- ncbikecrash %>%
   mutate(driver_alcohol_drugs_simplified = case_when(
     driver_alcohol_drugs == "Missing"       ~ NA_character_,
     str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ "No"
+    TRUE                                    ~ driver_alcohol_drugs
   ))
 ```
-]
+
 ---
 
 ### Check before you move on
