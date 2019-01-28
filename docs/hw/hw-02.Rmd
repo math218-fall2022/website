@@ -1,0 +1,13 @@
+---
+title: "HW 02 - Gotta catch 'em all"
+date: "Due Mon, Feb 11 at 11:59p"
+output: 
+    html_document: 
+     css: "./sta199-hw.css"
+---
+
+## Assignment 
+
+This homework assignment will be available on Mon, Feb 4.
+
+
