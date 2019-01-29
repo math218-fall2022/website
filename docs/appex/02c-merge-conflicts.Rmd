@@ -35,7 +35,8 @@ occur. Now push.
     - **Member 4**: Create a plot displaying the relationship between `price` and `carat`, 
 controlling for `cut` of the diamonds. Set `alpha = 0.5` in `geom_point()`. Knit, commit, push. You will get an error. Pull. Review the document with the merge conflict. Clear the merge conflict by choosing the correct/preferred change. Commit, and push.
 
-4. **All members:** Pull, and observe the changes in your document.
+4.  **All members:** Pull, and observe the changes in your document.
+
 </font>
 <br><br>
 
