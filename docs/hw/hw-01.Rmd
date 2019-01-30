@@ -21,10 +21,15 @@ Use any software you like to improve the data visualization assigned to your lab
 - Lab 03L (4:40p - 5:55p): [NERRS Nutrient Data](https://prodduke-my.sharepoint.com/:x:/g/personal/mt324_duke_edu/EdpksWQFP9BIpFd798gbnvMBxyyK5elA365DJBjUNQgP9A?e=kUrtmk)
 
 
-## Help with ggplot2
+## Help
 
-- [https://ggplot2.tidyverse.org/reference/index.html](https://ggplot2.tidyverse.org/reference/index.html)
-- [ggplot2 Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf)
+
+- `gather` function to transform data from wide to long format: 
+    - [https://tidyr.tidyverse.org/reference/gather.html](https://tidyr.tidyverse.org/reference/gather.html)
+
+- `ggplot`
+    - [https://ggplot2.tidyverse.org/reference/index.html](https://ggplot2.tidyverse.org/reference/index.html)
+    - [ggplot2 Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf)
 
 
 ## Want to see more ugly charts?
