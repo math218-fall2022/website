@@ -30,7 +30,7 @@ Use any software you like to improve the data visualization assigned to your lab
 ## Want to see more ugly charts?
 
 - [Flowing Data - Ugly Charts](https://flowingdata.com/category/visualization/ugly-visualization/)
-- [Reddit - Data is ugly](https://www.reddit.com/r/dataisugly/)
+
 
 
 
