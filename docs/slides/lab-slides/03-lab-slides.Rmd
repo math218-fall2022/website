@@ -45,10 +45,19 @@ library(rvest)
 
 ## Agenda
 
-1. Merge conflicts
-2. Practice dealing with merge conflicts
-3. Lab introduction
-4. Starting a new project
+1. Team name
+2. What are merge conflicts?
+3. Practice dealing with merge conflicts
+4. Lab introduction
+5. Starting a new project & lab tips
+
+---
+
+## Team Name
+
+.middle[
+If you haven't already, please give me your team name by the end of today's lab.
+]
 
 ---
 
@@ -101,21 +110,23 @@ and open the R Markdown file.
 
 - Follow the [application exercise instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/appex/02c-merge-conflicts.html) exactly.
 
-- Raise your hands if you have any questions during the exercise. 
+- Raise your hand if you have any questions during the exercise. 
 
 ---
 
 ## Tips for collaborating via GitHub
 
 - Always pull first before you start working.
-- Commit, and push, often to minimize merge conflicts and/or to make merge conflicts easier to resolve.
+
+- Knit, commit, and push often to minimize merge conflicts and/or to make merge conflicts easier to resolve.
+
 - If you find yourself in a situation that is difficult to resolve, ask questions asap, don't let it linger and get bigger.
 
 ---
 
 ## Lab introduction
 
-The next two labs are m
+The next two labs are motivated by
 .pull-left[
 ```{r echo=FALSE, out.width="220px", fig.align="center"}
 knitr::include_graphics("img/03/Dennys.png")
@@ -166,4 +177,4 @@ use_git_config(user.name="your name", user.email="your email")
 
 - All R code chunks should be named. Do not put spaces in the code chunk names.
 
-- Check the .md file on GitHub to make sure it has all of your work, including outpt and graphs. 
+- Check the .md file on GitHub to make sure it has all of your work, including output and graphs. 
