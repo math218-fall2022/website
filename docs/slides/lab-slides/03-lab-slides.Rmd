@@ -100,7 +100,7 @@ knitr::include_graphics("img/03/merge-conflict-identifiers.png")
 
 ---
 
-## Practce dealing with merge conflicts
+### Practce dealing with merge conflicts
 
 - Clone the repo starting with **ae-05-** in RStudio Cloud (`ae-05-merge-conflicts-TEAMNAME`), 
 and open the R Markdown file.
@@ -111,6 +111,8 @@ and open the R Markdown file.
 - Follow the [application exercise instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/appex/02c-merge-conflicts.html) exactly.
 
 - Raise your hand if you have any questions during the exercise. 
+
+- Completing the exercise will be part of the Lab 03 grade.
 
 ---
 
