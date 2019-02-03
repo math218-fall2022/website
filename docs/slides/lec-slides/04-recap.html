@@ -1,40 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Recap</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Dr. Maria Tackett" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Recap
+### Dr. Maria Tackett
+### 02.04.19
+
 ---
-title: "Recap"
-author: "Dr. Maria Tackett"
-date: "02.04.19"
-output:
-  xaringan::moon_reader:
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    css: "sta199-slides.css"
-    logo: img/sta199-sticker-icon.png
-    lib_dir: libs
-    nature: 
-      highlightLines: true
-      highlightStyle: github
-      countIncrementalSlides: false
----
+
 
 layout: true
 
-<div class="my-footer">
-<span>
-<a href="http://datasciencebox.org" target="_blank">datasciencebox.org</a>
-</span>
-</div> 
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="http://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
 
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
-                      warning=FALSE,
-                      message=FALSE,
-                      fig.height = 2.65, 
-                      dpi = 300) 
-```
 
-```{r, echo=FALSE}
-library(tidyverse)
-```
+
+
 
 
 ## Announcements
@@ -109,51 +104,64 @@ Confused about merge conflicts? Most people are...
 
 ## Starting point
 
-```{r}
-starwars <- starwars %>%
-  filter(mass < 500)
+
+```r
+starwars &lt;- starwars %&gt;%
+  filter(mass &lt; 500)
 
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point()
 ```
 
+![](04-recap_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+
 ---
 
 ## Add title
 
-```{r}
+
+```r
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters")
 ```
 
+![](04-recap_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
 ---
 
 ## Add x and y labels
 
-```{r}
+
+```r
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters",
        x = "Height (in cm)", y = "Mass (in kg)")
 ```
 
+![](04-recap_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
 ---
 
 ## Change legend label
 
-```{r}
+
+```r
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters",
        x = "Height (in cm)", y = "Mass (in kg)", color = "Gender")
 ```
 
+![](04-recap_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
 ---
 
 ## Change zooming
 
-```{r}
+
+```r
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters",
@@ -162,22 +170,28 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   ylim(c(40, 120))
 ```
 
+![](04-recap_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
 ---
 
 ## Change transparency
 
-```{r}
+
+```r
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point(alpha = 0.3) +
   labs(title = "Mass vs. height of Star Wars characters",
        x = "Height (in cm)", y = "Mass (in kg)", color = "Gender")
 ```
 
+![](04-recap_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
 ---
 
 ## Change theme - `theme_dark()`
 
-```{r}
+
+```r
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters",
@@ -185,11 +199,14 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   theme_dark()
 ```
 
+![](04-recap_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
 ---
 
 ## 538 theme
 
-```{r}
+
+```r
 library(ggthemes)
 
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
@@ -198,6 +215,8 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
        x = "Height (in cm)", y = "Mass (in kg)", color = "Gender") +
   theme_fivethirtyeight()
 ```
+
+![](04-recap_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -225,7 +244,8 @@ Diamond prices are driven by 4Cs: carat, cut, color, and clarity. We'll explore 
 
 View the codebook: 
 
-```{r eval=FALSE}
+
+```r
 ?diamonds
 ```
 
@@ -265,9 +285,7 @@ or at [http://ggplot2.tidyverse.org/reference/diamonds.html](http://ggplot2.tidy
 
 What type of variable is price? Would you expect its distribution to be symmetric, right-skewed, or left-skewed? Why? Make a histogram of the distribution of diamond prices. Does the shape of the distribution match your expectation?
 
-```{r}
 
-```
 
 ---
 
@@ -275,9 +293,7 @@ What type of variable is price? Would you expect its distribution to be symmetri
 
 How many diamonds of each type of cut are there?
 
-```{r}
 
-```
 
 ---
 
@@ -285,9 +301,7 @@ How many diamonds of each type of cut are there?
 
 Calculate the relative frequency (proportion) of each clarity of diamonds.
 
-```{r}
 
-```
 
 ---
 
@@ -295,9 +309,7 @@ Calculate the relative frequency (proportion) of each clarity of diamonds.
 
 Calculate the relative frequency of each clarity of diamonds by cut.
 
-```{r}
 
-```
 
 ---
 
@@ -305,9 +317,7 @@ Calculate the relative frequency of each clarity of diamonds by cut.
 
 Plot the relationship between depth and price of only fair cut diamonds.
 
-```{r}
 
-```
 
 
 ---
@@ -316,9 +326,7 @@ Plot the relationship between depth and price of only fair cut diamonds.
 
 For each type of cut, calculate minimum (`min`), maximum (`max`), mean (`mean`), and median (`median`) price of diamonds of that type.
 
-```{r}
 
-```
 
 ---
 
@@ -331,3 +339,51 @@ For each type of cut, calculate minimum (`min`), maximum (`max`), mean (`mean`),
 - Only print output if counting, summarizing, etc.
 
 - Save output as the original data frame (or something else) if you want to use the updated data frame later in the analysis
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
