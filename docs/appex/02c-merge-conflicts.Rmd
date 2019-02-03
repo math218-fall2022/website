@@ -27,12 +27,12 @@ and open the R Markdown file.
 will get an error. Pull. Review the document with the merge conflict. Resolve 
 the conflict with the preferred change. Commit and push.
 
-    - **Member 3**: Create a plot displaying the relationship between `price` and `carat`, 
-controlling for `cut` of the diamonds (see below for the plot). Knit, 
+    - **Member 3**: Use the **diamonds** dataset to create a plot displaying the relationship between `price` and `carat`, 
+controlling for `cut` of the diamonds dataset (see below for the plot). Knit, 
 commit, push. You will get an error, read it, and pull. No merge conflicts should 
 occur. Now push.
 
-    - **Member 4**: Create a plot displaying the relationship between `price` and `carat`, 
+    - **Member 4**: Use the **diamonds**  dataset to create a plot displaying the relationship between `price` and `carat`, 
 controlling for `cut` of the diamonds. Set `alpha = 0.5` in `geom_point()`. Knit, commit, push. You will get an error. Pull. Review the document with the merge conflict. Clear the merge conflict by choosing the correct/preferred change. Commit, and push.
 
 4.  **All members:** Pull, and observe the changes in your document.
