@@ -1,0 +1,55 @@
+---
+title: "Recap: Diamonds"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(warning=FALSE,
+                      message=FALSE)
+
+```
+
+```{r load-packages}
+library(tidyverse)
+```
+
+- What type of variable is price? 
+
+- Would you expect its distribution to be symmetric, right-skewed, or left-skewed? Why? 
+
+- Make a histogram of the distribution of diamond prices. Does the shape of the distribution match your expectation?
+
+```{r}
+#add code here 
+```
+
+- How many diamonds of each type of cut are there?
+
+```{r}
+#add code here 
+```
+
+- Calculate the relative frequency (proportion) of each clarity of diamonds.
+
+```{r}
+#add code here 
+```
+
+- Calculate the relative frequency of each clarity of diamonds by cut.
+
+```{r}
+#add code here 
+```
+
+- Plot the relationship between depth and price of only fair cut diamonds.
+
+```{r}
+#add code here 
+```
+
+- For each type of cut, calculate minimum (`min`), maximum (`max`), mean (`mean`), and median (`median`) price of diamonds of that type.
+
+```{r}
+#add code here 
+```

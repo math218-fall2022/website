@@ -56,6 +56,7 @@ lessons:
     hw:    "hw-01.html"
   - title: "Recap"
     slides: "lec-slides/04-recap.html"
+    appex: "04-recap-diamonds.html"
   - date: "Wed, Feb 6"
     title: "Confounding variables & Simpson's paradox"
     reading: "reading-02.html"
