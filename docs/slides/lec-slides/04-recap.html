@@ -34,8 +34,12 @@ layout: true
 
 ## Announcements
 
-- Reading 02 due Wednesday 
-- HW 02 due Monday 
+- Lab 03 due today!
+    - Make sure .md file is updated on GitHub
+
+- Reading 02 due Wed, Feb 06
+
+- HW 02 due Mon, Feb 11
 
 ---
 
@@ -102,6 +106,12 @@ Confused about merge conflicts? Most people are...
 
 ---
 
+class: middle, center
+
+## Visualizing Star Wars
+
+---
+
 ## Starting point
 
 
@@ -123,7 +133,7 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
 ```r
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
-  labs(title = "Mass vs. height of Star Wars characters")
+* labs(title = "Mass vs. height of Star Wars characters")
 ```
 
 ![](04-recap_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
@@ -137,7 +147,7 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters",
-       x = "Height (in cm)", y = "Mass (in kg)")
+*      x = "Height (in cm)", y = "Mass (in kg)")
 ```
 
 ![](04-recap_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
@@ -151,7 +161,7 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters",
-       x = "Height (in cm)", y = "Mass (in kg)", color = "Gender")
+*      x = "Height (in cm)", y = "Mass (in kg)", color = "Gender")
 ```
 
 ![](04-recap_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
@@ -166,8 +176,8 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters",
        x = "Height (in cm)", y = "Mass (in kg)", color = "Gender") +
-  xlim(c(100, 200)) + 
-  ylim(c(40, 120))
+* xlim(c(100, 200)) +
+* ylim(c(40, 120))
 ```
 
 ![](04-recap_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
@@ -179,7 +189,7 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
 
 ```r
 ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
-  geom_point(alpha = 0.3) +
+* geom_point(alpha = 0.3) +
   labs(title = "Mass vs. height of Star Wars characters",
        x = "Height (in cm)", y = "Mass (in kg)", color = "Gender")
 ```
@@ -196,7 +206,7 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters",
        x = "Height (in cm)", y = "Mass (in kg)", color = "Gender") +
-  theme_dark()
+* theme_dark()
 ```
 
 ![](04-recap_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
@@ -213,7 +223,7 @@ ggplot(data = starwars, aes(x = height, y = mass, color = gender)) +
   geom_point() +
   labs(title = "Mass vs. height of Star Wars characters",
        x = "Height (in cm)", y = "Mass (in kg)", color = "Gender") +
-  theme_fivethirtyeight()
+* theme_fivethirtyeight()
 ```
 
 ![](04-recap_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
@@ -261,15 +271,11 @@ or at [http://ggplot2.tidyverse.org/reference/diamonds.html](http://ggplot2.tidy
 
 - **Color**:
 
-.center[
-![diamond_colors](img/04/diamond_colors.png)
-]
+&lt;img src="img/04/diamond_colors.png" width="40%" style="display: block; margin: auto;" /&gt;
 
 - **Clarity**:
 
-.center[
-![diamond_clarity](img/04/diamond_clarity.png)
-]
+&lt;img src="img/04/diamond_clarity.png" width="40%" style="display: block; margin: auto;" /&gt;
 
 ---
 
