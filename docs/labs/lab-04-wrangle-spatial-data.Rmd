@@ -22,8 +22,6 @@ options(
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-**Due:** 2018-02-15 at noon
-
 ## Introduction
 
 ```{r fig.margin=TRUE, eval=TRUE, echo=FALSE}
