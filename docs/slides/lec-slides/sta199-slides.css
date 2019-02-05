@@ -35,6 +35,7 @@ a, a > code {
   bottom: 3em;
   padding-right: 4em;
   font-size: 80%;
+  
 }
 
 .remark-code{
@@ -95,9 +96,10 @@ li{
   
 }
 .large { font-size: 130%; }
-.midi { font-size: 90%; }
+.midi { font-size: 75%; }
 .small { font-size: 60%; }
 .tiny {font-size: 40%;}
+
 
 img, video, iframe {
   max-width: 100%;
