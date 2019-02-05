@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Scientifc Studies, Confounding, and Simpson’s Paradox</title>
+    <title>Scientific studies, confounding, and Simpson’s paradox</title>
     <meta charset="utf-8">
     <meta name="author" content="Dr. Maria Tackett" />
     <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
@@ -10,7 +10,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Scientifc Studies, Confounding, and Simpson’s Paradox
+# Scientific studies, confounding, and Simpson’s paradox
 ### Dr. Maria Tackett
 ### 02.06.19
 
@@ -53,10 +53,10 @@ class: center, middle
 
 ## Scientific studies
 
-- Observational
+- &lt;font class="vocab"&gt;Observational&lt;/font&gt;
     - Collect data in a way that does not interfere with how the data arise ("observe")
     - Only establish an association
-- Experimental
+- &lt;font class="vocab"&gt;Experimental&lt;/font&gt;
     - Randomly assign subjects to treatments
     - Establish causal connections
 
@@ -66,28 +66,25 @@ Design a study comparing average energy levels of people who do and do not exerc
 
 ---
 
-## Study: Bfast cereal keeps girls slim
+### Study: "Cereal Keeps Girls Slim"
 
 .midi[
 Girls who ate breakfast of any type had a lower average body mass index, a common obesity gauge, than those who said they didn't. The index was even lower for girls who said they ate cereal for breakfast, according to findings of the study conducted by the Maryland Medical Research Institute with funding from the National Institutes of Health (NIH) and cereal-maker General Mills.
- 
-[...]
- 
-The results were gleaned from a larger NIH survey of 2,379 girls in California, Ohio, and Maryland who were tracked between the ages of 9 and 19.
- 
-[...]
- 
-As part of the survey, the girls were asked once a year what they had eaten during the previous three days.
- 
-[...]
-]
 
-.question[
-What is the explanatory and what is the response variable?
+[...]
+
+The results were gleaned from a larger NIH survey of 2,379 girls in California, Ohio, and Maryland who were tracked between the ages of 9 and 19.
+
+[...]
+
+As part of the survey, the girls were asked once a year what they had eaten during the previous three days.
+
+[...]
+
 ]
 
 .footnote[
-Souce: [Study: Cereal Keeps Girls Slim](https://www.cbsnews.com/news/study-cereal-keeps-girls-slim/), Retrieved Sep 13, 2018.
+Source: .midi[[Study: Cereal Keeps Girls Slim](https://www.cbsnews.com/news/study-cereal-keeps-girls-slim/)].
 ]
 
 ---
@@ -97,12 +94,42 @@ Souce: [Study: Cereal Keeps Girls Slim](https://www.cbsnews.com/news/study-cerea
 --
 
 - Eating breakfast causes girls to be slimmer 
+&lt;br&gt;
 
 --
+
 - Being slim causes girls to eat breakfast
+&lt;br&gt;
 
 --
-- A third variable is responsible for both -- a **confounding** variable: an extraneous variable that affects both the explanatory and the response variable, and that make it seem like there is a relationship between them
+
+- A third variable is responsible for both -- a confounding variable 
+
+--
+
+.alert[
+A &lt;font class="vocab"&gt;confounding&lt;/font&gt; variable is an an extraneous variable that affects both the explanatory and the response variable, and that make it seem like there is a relationship between them
+]
+
+---
+
+## Confounding variables
+
+**Identify the confounding variable in each of the following scenarios:**
+
+- As the amount of ice cream sales increases, the number of shark
+attacks also increases.
+
+--
+
+- As the number of firefighters at a fire increases, the amount of
+damage caused by the fire also increases.
+
+--
+
+- As the number of television stations available in a country increases,
+the life expectancy in that country also increases.
+
 
 ---
 
@@ -110,7 +137,7 @@ Souce: [Study: Cereal Keeps Girls Slim](https://www.cbsnews.com/news/study-cerea
 
 &lt;br&gt;&lt;br&gt;
 .center[
-![](img/xkcdcorrelation.png)
+![](img/05a/xkcdcorrelation.png)
 ]
 &lt;br&gt;&lt;br&gt;
 
@@ -122,7 +149,7 @@ Randall Munroe CC BY-NC 2.5 http://xkcd.com/552/
 
 ## Studies and conclusions
 
-![](img/random_sample_assign_grid.png)
+![](img/05a/random_sample_assign_grid.png)
 
 ---
 
@@ -134,17 +161,29 @@ class: center, middle
 
 ## Conditional probability
 
+.alert[
 **Notation**: `\(P(A | B)\)`: Probability of event A given event B
+]
 
-- What is the probability that it be unseasonably warm tomorrow?
-- What is the probability that it be unseasonably warm tomorrow, given that it it was unseasonably warm tomorrow?
+`\(A\)`: it will be unseasonably warm tomorrow
+
+`\(B\)`: it is unseasonably warm today
+
+- What is the probability that it will be unseasonably warm tomorrow? 
+    - What is `\(P(A)\)`? 
+
+
+--
+
+- What is the probability that it will be unseasonably warm tomorrow, given that is unseasonably warm today? 
+    - What is `\(P(A|B)\)`?
 
 ---
 
 .question[
 A January 2018 SurveyUSA poll asked 500 randomly selected Californians whether they are familiar with the DREAM act. The distribution of the responses by age category are shown below.
 
-What percent of **all respondents** are very familiar with the DREAM act?  
+What proportion of **&lt;u&gt;all respondents&lt;/u&gt;** are very familiar with the DREAM act?  
 ]
 &lt;br&gt;
 .pull-left[
@@ -156,13 +195,16 @@ What percent of **all respondents** are very familiar with the DREAM act?
 | Not at all | 36      | 24  | 60    |
 | Not sure   | 9       | 9   | 18    |
 | Total      | 316     | 184 | 500   |
-]
---
-.pull-right[
-`\(P(Very) = \frac{122}{500} = 0.244\)`
+
+&lt;br&gt;&lt;br&gt;
 ]
 
-&lt;br&gt;
+
+--
+.pull-right[
+`\(P(\text{Very}) = \frac{122}{500} = 0.244\)`
+]
+
 
 .footnote[
 Source: [SurveyUSA News Poll 23754](http://www.surveyusa.com/client/PollReport.aspx?g=783743b0-efc1-4b67-9201-58352a8f61f1)
@@ -173,7 +215,7 @@ Source: [SurveyUSA News Poll 23754](http://www.surveyusa.com/client/PollReport.a
 .question[
 A January 2018 SurveyUSA poll asked 500 randomly selected Californians whether they are familiar with the DREAM act. The distribution of the responses by age category are shown below.
 
-What percent of **respondents who are 18 - 49 years old** are very familiar with the DREAM act?
+What proportion of **&lt;u&gt;respondents who are 18 - 49 years old&lt;/u&gt;** are very familiar with the DREAM act?
 ]
 &lt;br&gt;
 .pull-left[
@@ -188,7 +230,7 @@ What percent of **respondents who are 18 - 49 years old** are very familiar with
 ]
 --
 .pull-right[
-`\(P(Very~|~18-49) = \frac{90}{316} = 0.285\)`
+`\(P(\text{Very}~|~18-49) = \frac{90}{316} = 0.285\)`
 ]
 
 ---
@@ -196,7 +238,7 @@ What percent of **respondents who are 18 - 49 years old** are very familiar with
 .question[
 A January 2018 SurveyUSA poll asked 500 randomly selected Californians whether they are familiar with the DREAM act. The distribution of the responses by age category are shown below.
 
-What percent of **respondents who are 50+ years old** are very familiar with the DREAM act?
+What proportion of **&lt;u&gt;respondents who are 50+ years old&lt;/u&gt;** are very familiar with the DREAM act?
 ]
 &lt;br&gt;
 .pull-left[
@@ -211,7 +253,7 @@ What percent of **respondents who are 50+ years old** are very familiar with the
 ]
 --
 .pull-right[
-`\(P(Very~|~50+) = \frac{32}{184} = 0.173\)`
+`\(P(\text{Very}~|~50+) = \frac{32}{184} = 0.173\)`
 ]
 
 ---
@@ -219,9 +261,11 @@ What percent of **respondents who are 50+ years old** are very familiar with the
 .question[
 Given that
 
-- `\(P(Very) = \frac{122}{500} = 0.244\)`
-- `\(P(Very~|~18-49) = \frac{90}{316} = 0.285\)`
-- `\(P(Very~|~50+) = \frac{32}{184} = 0.173\)`
+- `\(P(\text{Very}) = \frac{122}{500} = 0.244\)`
+
+- `\(P(\text{Very}~|~18-49) = \frac{90}{316} = 0.285\)`
+
+- `\(P(\text{Very}~|~50+) = \frac{32}{184} = 0.173\)`
 
 does there appear to be a relationship between age and familiarity with the DREAM act? Explain your reasoning.
 ]
@@ -252,17 +296,30 @@ class: center, middle
 
 ## Relationships between variables
 
-- Bivariate relationship: Fitness `\(\rightarrow\)` Heart health
-- Multivariate relationship: Calories + Age + Fitness `\(\rightarrow\)` Heart health
+- **Bivariate relationship**: Fitness `\(\rightarrow\)` Heart health
+
+- **Multivariate relationship**: Calories + Age + Fitness `\(\rightarrow\)` Heart health
 
 ---
 
 ## Simpson's paradox
 
-- Not considering an important variable when studying a relationship can result in what we call a **Simpson's paradox**, which illustrates the effect the omission of an explanatory variable can have on the measure of association between another explanatory variable and a response variable. 
+- Not considering an important variable when studying a relationship can result in &lt;font class="vocab"&gt;Simpson's paradox&lt;/font&gt;, a phenomenon in which the omission of one explanatory variable can affect the measure of association between another explanatory variable and a response variable. 
+
+
 - In other words, the inclusion of a third variable in the analysis can change the apparent relationship between the other two variables. 
 
-![](img/simpsons_paradox.jpeg)
+---
+
+## Simpson's paradox
+
+&lt;img src="05a-confounding_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Simpson's paradox 
+
+&lt;img src="05a-confounding_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -322,7 +379,7 @@ glimpse(ucb_admit)
 ## Overall gender distribution
 
 .question[
-What can you say about the overall gender distribution? Hint: Calculate the following probabilities: `\(P(Admit | Male)\)` and `\(P(Admit | Female)\)`.
+What can you say about the overall gender distribution? Hint: Calculate the following probabilities: `\(P(\text{Admit} | \text{Male})\)` and `\(P(\text{Admit} | \text{Female})\)`.
 ]
 
 
@@ -346,7 +403,7 @@ ucb_admit %&gt;%
 ## Overall gender distribution
 
 .question[
-What type of visualization would be appropriate for representing these data?
+What type of visualization would be appropriate for representing this data?
 ]
 
 
@@ -376,14 +433,14 @@ ucb_admit %&gt;%
 ```r
 ggplot(ucb_admit, mapping = aes(x = Gender, fill = Admit)) +
   geom_bar(position = "fill") + 
-  labs(y = "", title = "Admit by gender")
+  labs(y = "", title = "Admission by gender")
 ```
 
-![](05-confounding_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](05a-confounding_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
 
-## Gender distribution, by department
+### Gender distribution, by department
 
 .question[
 What can you say about the by department gender distribution?
@@ -419,7 +476,7 @@ ucb_admit %&gt;%
 ```r
 ucb_admit %&gt;%
   count(Dept, Gender, Admit) %&gt;%
-  print(n = 24)
+  print(n = 15)
 ```
 
 ```
@@ -441,21 +498,13 @@ ucb_admit %&gt;%
 ## 13 D     Female Admitted   131
 ## 14 D     Female Rejected   244
 ## 15 D     Male   Admitted   138
-## 16 D     Male   Rejected   279
-## 17 E     Female Admitted    94
-## 18 E     Female Rejected   299
-## 19 E     Male   Admitted    53
-## 20 E     Male   Rejected   138
-## 21 F     Female Admitted    24
-## 22 F     Female Rejected   317
-## 23 F     Male   Admitted    22
-## 24 F     Male   Rejected   351
+## # … with 9 more rows
 ```
 ]
 
 ---
 
-## Gender distribution, by department
+### Gender distribution, by department
 
 .question[
 What type of visualization would be appropriate for representing these data?
@@ -493,7 +542,7 @@ ucb_admit %&gt;%
 
 ---
 
-## Gender distribution, by department
+### Gender distribution, by department
 
 
 ```r
@@ -501,10 +550,21 @@ ggplot(ucb_admit, mapping = aes(x = Gender, fill = Admit)) +
   geom_bar(position = "fill") +
   facet_grid(. ~ Dept) +
   labs(x = "Gender", y = "", fill = "Admission",
-       title = "Admit by gender by department")
+       title = "Admission by gender by department")
 ```
 
-![](05-confounding_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](05a-confounding_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+
+### Gender distribution, by department
+
+![](05a-confounding_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+&lt;br&gt;
+
+.question[
+Why do you think Simpson's paradox occurred? In other words, why is the overall admissions much lower for females, even though the admissions rates are generally similar within each department?
+]
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
