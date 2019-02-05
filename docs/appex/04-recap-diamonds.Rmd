@@ -53,8 +53,8 @@ diamonds %>%
 
 ```{r}
 diamonds %>%
+  count(cut,clarity) %>%
   group_by(cut) %>%
-  count(clarity) %>%
   mutate(proportion = n /sum(n)) %>%
   datatable() #in the DT package
 ```
