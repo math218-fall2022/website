@@ -83,6 +83,8 @@ If you would like your git password cached for a week for this project, type the
 git config --global credential.helper 'cache --timeout 604800'
 ```
 
+You will need to enter your GitHub username and password one more time after caching the password. After that you won't need to enter your credentials for 604800 seconds = 7 days.
+
 ## Project name: 
 
 Currently your project is called *Untitled Project*. Update the name of your project to be "Lab 04 - Wrangling spatial data".
