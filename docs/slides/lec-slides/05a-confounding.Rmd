@@ -158,6 +158,21 @@ Randall Munroe CC BY-NC 2.5 http://xkcd.com/552/
 
 ---
 
+### Non-random samples: a cautionary tale
+
+In 2016, the Natural Environment Research Council in England
+started an online competition in an effort to name a polar research
+ship. People were invited to submit suggestions and/or cast a vote for
+their favorite choice.
+
+.question[
+What type of sampling design is this? 
+]
+
+[What happened?](https://www.cnn.com/2016/04/18/world/boaty-mcboatface-wins-vote/index.html)
+
+---
+
 class: center, middle
 
 # Conditional probability
