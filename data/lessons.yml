@@ -63,7 +63,7 @@ lessons:
     slides: "lec-slides/05a-confounding.html"
   - date: "Thur, Feb 7"
     title: "Lab 04: Wrangling spatial data"
-  - title: "Writing Prompt 02 assigned"
+  - title: "Writing Exercise 02 assigned"
     slides: "lab-slides/04-lab-slides.html"
     lab: "lab-04-wrangle-spatial-data.html"
   - title: "Week 05"
