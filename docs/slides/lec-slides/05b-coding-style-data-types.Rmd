@@ -70,13 +70,14 @@ class: center, middle
 
 - Style guide for this course is based on the Tidyverse style guide: [http://style.tidyverse.org/](http://style.tidyverse.org/)
 
-- There's more to it than what we'll cover today, but we'll mention more as we introduce more functionality, and do a recap later in the semester
+- There's more to it than what we'll cover today. We'll mention more as we introduce more functionality throughout the semester.
 
 ---
 
-## File names and code chunk labels
+### File names and code chunk labels
 
 - Do not use spaces in file names, use `-` or `_` to separate words
+
 - Use all lowercase letters
 
 ```{r eval = FALSE}
@@ -92,7 +93,9 @@ UCB Admit.csv
 ## Object names
 
 - Use `_` to separate words in object names
+
 - Use informative but short object names
+
 - Do not reuse object names within an analysis
 
 ```{r eval = FALSE}
@@ -111,6 +114,7 @@ acs_subsetted_for_males
 ## Spacing
 
 - Put a space before and after all infix operators (=, +, -, <-, etc.), and when naming arguments in function calls. 
+
 - Always put a space after a comma, and never before (just like in regular English).
 
 ```{r eval = FALSE}
@@ -126,6 +130,7 @@ average<-mean(feet/12+inches,na.rm=TRUE)
 ## ggplot
 
 - Always end a line with `+`
+
 - Always indent the next line
 
 ```{r eval = FALSE}
@@ -141,7 +146,7 @@ ggplot(diamonds,mapping=aes(x=price))+geom_histogram()
 
 ## Long lines
 
-- Limit your code to 80 characters per line. This fits comfortably on a printed page with a reasonably sized font.
+- Try to limit your code to 80 characters per line. This fits comfortably on a printed page with a reasonably sized font.
 
 - Take advantage of RStudio editor's auto formatting for indentation at line breaks.
 
@@ -149,7 +154,7 @@ ggplot(diamonds,mapping=aes(x=price))+geom_histogram()
 
 ## Assignment
 
-- Use `<-` not `=`
+- Use `<-`  not `=`
 
 ```{r eval = FALSE}
 # Good
@@ -202,17 +207,18 @@ class: center, middle
 
 ## Logical & character
 
-**logical** - boolean values `TRUE` and `FALSE`
+**logical** - Boolean values `TRUE` and `FALSE`
 
 ```{r}
 typeof(TRUE)
 ```
 
+--
+
 **character** - character strings
 
 ```{r}
 typeof("hello")
-typeof('world') # but remember, we use double quotations!
 ```
 
 ---
@@ -221,41 +227,48 @@ typeof('world') # but remember, we use double quotations!
 
 **double** - floating point numerical values (default numerical type)
 
+.midi[
 ```{r}
 typeof(1.335)
 typeof(7)
 ```
+]
+
+--
 
 **integer** - integer numerical values (indicated with an `L`)
 
+.midi[
 ```{r}
 typeof(7L)
 typeof(1:3)
+```
+]
+
+---
+
+## Lists
+
+- **Lists** are 1d objects that can contain any combination of R objects
+
+```{r}
+mylist <- list("A", 1:4, c(TRUE, FALSE), (1:4)/2)
+mylist
 ```
 
 ---
 
 ## Lists
 
-**Lists** are 1d objects that can contain any combination of R objects
-
-.small[
-```{r}
-mylist <- list("A", 1:4, c(TRUE, FALSE), (1:4)/2)
-mylist
-```
-
 ```{r}
 str(mylist)
 ```
-]
 
 ---
 
 ## Named lists
 
-Because of their more complex structure we often want to name the elements of a list (we 
-can also do this with vectors). This can make reading and accessing the list more 
+Because of their more complex structure we often want to name the elements of a list (we can also do this with vectors). This can make reading and accessing the list more 
 straight forward.
 
 .small[
@@ -283,8 +296,7 @@ c(1, c(2, c(3)))
 
 ## Coercion
 
-R is a dynamically typed language -- it will happily convert between the various types 
-without complaint.
+R is a dynamically typed language -- it will easily convert between various types
 
 ```{r}
 c(1, "Hello")
@@ -292,6 +304,8 @@ c(FALSE, 3L)
 c(1.2, 3L)
 ```
 
+
+In general, R will convert all values to the simplest type needed to represent all the information
 ---
 
 ## Missing Values
@@ -311,8 +325,6 @@ typeof(NA)
 `Inf` - Positive infinity
 
 `-Inf` - Negative infinity
-
-<br/>
 
 .pull-left[
 ```{r}
@@ -337,11 +349,11 @@ NaN * NA
 What is the type of the following vectors? Explain why they have that type.
 ]
 
-* `c(1, NA+1L, "C")`
-* `c(1L / 0, NA)`
-* `c(1:3, 5)`
-* `c(3L, NaN+1L)`
-* `c(NA, TRUE)`
+1. `c(1, NA+1L, "C")`
+2. `c(1L / 0, NA)`
+3. `c(1:3, 5)`
+4. `c(3L, NaN+1L)`
+5. `c(NA, TRUE)`
 
 ---
 
@@ -349,7 +361,6 @@ What is the type of the following vectors? Explain why they have that type.
 
 A survey asked respondents their name and number of cats. The instructions said to enter the number of cats as a numerical value.
 
-.small[
 ```{r message=FALSE}
 cat_lovers <- read_csv("data/cat-lovers.csv")
 ```
@@ -358,11 +369,10 @@ cat_lovers <- read_csv("data/cat-lovers.csv")
 cat_lovers %>%
   datatable()
 ```
-]
 
 ---
 
-## Oh why won't you work?!
+## Why isn't this working?!
 
 ```{r}
 cat_lovers %>%
@@ -371,7 +381,7 @@ cat_lovers %>%
 
 ---
 
-## Oh why won't you still work??!!
+## Why is this still not working??!!
 
 ```{r}
 cat_lovers %>%
@@ -380,7 +390,7 @@ cat_lovers %>%
 
 ---
 
-## Take a breath and look at your data
+## Let's look at the data...
 
 .question[
 What is the type of the `number_of_cats` variable?
@@ -403,7 +413,7 @@ cat_lovers %>%
 
 ---
 
-## Sometimes you need to babysit your respondents
+### Sometimes you have to fix data entry errors
 
 ```{r}
 cat_lovers %>%
@@ -417,7 +427,7 @@ cat_lovers %>%
 
 ---
 
-## Always you need to respect data types
+### You always need to respect data types
 
 ```{r}
 cat_lovers %>%
@@ -434,7 +444,7 @@ cat_lovers %>%
 
 ---
 
-## Now that we know what we're doing...
+### Now that we know what we're doing...
 
 ```{r}
 cat_lovers <- cat_lovers %>%
@@ -454,13 +464,15 @@ cat_lovers <- cat_lovers %>%
 
 - If your data does not behave how you expect it to, type coercion upon reading in the data might be the reason.
 
-- Go in and investigate your data, apply the fix, *save your data*, live happily ever after.
+
+- Go in and investigate your data, apply the fix, **save your data**, live happily ever after.
 
 ---
 
 ## Vectors vs. lists
 
 .pull-left[
+**Vectors**
 .small[
 ```{r, error=TRUE}
 x <- c(8,4,7)
@@ -479,6 +491,7 @@ x[[1]]
 ]
 --
 .pull-right[
+**Lists**
 .small[
 ```{r}
 y <- list(8,4,7)
@@ -498,8 +511,6 @@ y[[2]]
 
 --
 
-<br>
-
 **Note:** When using tidyverse code you'll rarely need to refer to elements using square brackets, but it's good to be aware of this syntax, especially since you might encounter it when searching for help online.
 
 ---
@@ -517,21 +528,23 @@ class: center, middle
 - A tidy data "set" can be one of the following types:
     + `tibble`
     + `data.frame`
+    
+---
 
-- We'll often work with `tibble`s:
-    + `readr` package (e.g. `read_csv` function) loads data as a `tibble` by default
-    + `tibble`s are part of the tidyverse, so they work well with other packages we are using
-    + they make minimal assumptions about your data, so are less likely to cause hard to track bugs in your code
+## Data frames & tibbles
+
+- A `data.frame` is the most commonly used data structure in R, they are just a list of equal length vectors. Each vector is treated as a column and elements of the vectors as rows.
+
+- A tibble is a type of data frame that ... makes the data analysis easier.
+
+- Most often a data frame will be constructed by reading in from a file, but we can also create them from scratch.
+    - `readr` package (e.g. `read_csv` function) loads data as a `tibble` by default
+    - `tibble`s are part of the tidyverse, so they work well with other packages we are using
+    - they make minimal assumptions about your data, so are less likely to cause hard to track bugs in your code
 
 ---
 
-## Data frames
-
-- A data frame is the most commonly used data structure in R, they are just a list of equal length vectors (usually atomic, but you can use generic as well). Each vector is treated as a column and elements of the vectors as rows.
-
-- A tibble is a type of data frame that ... makes your life (i.e. data analysis) easier.
-
-- Most often a data frame will be constructed by reading in from a file, but we can also create them from scratch.
+## Creating data frames
 
 ```{r}
 df <- tibble(x = 1:3, y = c("a", "b", "c"))
@@ -541,7 +554,7 @@ glimpse(df)
 
 ---
 
-## Data frames (cont.)
+## Features of data frames
 
 ```{r}
 attributes(df)
@@ -556,6 +569,8 @@ class(df$y)
 .question[
 How many respondents have below average number of cats?
 ]
+
+--
 
 ```{r}
 mean_cats <- cat_lovers %>%
@@ -581,7 +596,7 @@ class(mean_cats)
 
 ---
 
-## `pull()` can be your new best friend
+## `pull()` can be great
 
 But use it sparingly!
 
@@ -612,7 +627,7 @@ class: center, middle
 
 ## Factors
 
-Factor objects are how R stores data for categorical variables (fixed numbers of discrete values).
+**Factor** objects are what R uses to store data for categorical variables (fixed numbers of discrete values).
 
 ```{r}
 (x = factor(c("BS", "MS", "PhD", "MS")))
@@ -645,7 +660,7 @@ ggplot(cat_lovers, mapping = aes(x = handedness)) +
 
 ---
 
-## Use forcats to manipulate factors
+### Use forcats to manipulate factors
 
 ```{r}
 cat_lovers <- cat_lovers %>%
@@ -660,12 +675,9 @@ ggplot(cat_lovers, mapping = aes(x = handedness)) +
 
 ---
 
-## Come for the functionality
+## forcats
 
-.pull-left[
-... stay for the logo
-]
-.pull-right[
+.center[
 ![](img/05b/hex-forcats.png)
 ]
 
@@ -680,7 +692,7 @@ Source: [forcats.tidyverse.org](http://forcats.tidyverse.org/)
 ## Recap
 
 - Always best to think of data as part of a tibble
-    + This plays nicely with the `tidyverse` as well
+    + This works nicely with the `tidyverse` as well
     + Rows are observations, columns are variables
     
 - Be careful about data types / classes
@@ -692,16 +704,17 @@ Source: [forcats.tidyverse.org](http://forcats.tidyverse.org/)
     + If you are absolutely sure of a data class, over-write it in your
     tibble so that you don't need to keep having to keep track of it
         + `mutate` the variable with the correct class
-
-
 ---
 
-## Exam 01
+## Exam 01 
 
-- Midterm 01 due Friday at 11:59pm -- read the exam rules!
-    - Make sure to commit your Rmd and md documents
-- RStudio Cloud:
-    - Don't worry about the license expiring message
-    - Git window disappeared (probably after a crash?) - Relaunch the project by clicking on the `midterm-01.Rproj` file
-- Where do you find feedback on graded work?
+- Exam 01 due <font class="vocab">Friday at 11:59p </font>
 
+- Read the exam rules! 
+    - This is an **individual assignment** - you may not talk about the exam with anyone other than me or the TAs
+    - Make sure to knit, commit, and push your .Rmd and .md documents frequently
+
+- There is **no lecture on Wednesday** -- use this time to work on the exam 
+    - This will also be used for office hours - I will be in the classroom along with TAs to answer clarifying questions 
+    
+- There **is** lab on Thursday 
