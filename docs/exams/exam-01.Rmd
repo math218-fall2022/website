@@ -1,0 +1,14 @@
+---
+title: "Exam 01"
+subtitle: "due Friday, February 15 at 11:59p"
+output: 
+  tufte::tufte_html:
+    css: "../labs/sta199-labs.css"
+    tufte_variant: "envisioned"
+    highlight: pygments
+link-citations: yes
+---
+
+Please see your **exam-01** repo on GitHub for the exam instructions (in the README file) and starter docs. Please read the instructions and exam questions carefully. 
+
+Remember this is an **individual assignment**. You may not discuss the exam with anyone except Professor Tackett and the TAs for this course.
