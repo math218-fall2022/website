@@ -127,6 +127,8 @@ or at https://www.rdocumentation.org/packages/mosaicData/versions/0.14.0/topics/
 
 # Exercises
 
+**Write your R code using the [style guidelines discussed in class](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/05b-coding-style-data-types.html#1).**
+
 1. What type of study do you think these data come from: observational 
    or experiment? Why?
 
