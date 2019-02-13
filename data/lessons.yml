@@ -82,7 +82,7 @@ lessons:
    # lab: "lab-05-simpsons-paradox.html"
   - date: "Fri, Feb 15"
     title: "Exam 01 due at 11:59p"
-   # exam: "midterm-01-post.html"
+    exam: "exam-01.html"
   - date: "UNIT 2"
     title: "Making rigorous conclusions"
   - title: "Week 06"
