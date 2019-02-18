@@ -78,7 +78,7 @@ lessons:
    # slides: "lec-slides/05b-coding-style-data-types.html"
   - date: "Thur, Feb 14"
     title: "Lab 05: Simpson's Paradox"
-    lides: "lab-slides/05-lab-slides.html"
+    slides: "lab-slides/05-lab-slides.html"
     lab: "lab-05-simpsons-paradox.html"
   - date: "Fri, Feb 15"
     title: "Exam 01 due at 11:59p"

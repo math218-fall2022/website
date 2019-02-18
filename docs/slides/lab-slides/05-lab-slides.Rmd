@@ -23,7 +23,7 @@ options(
   )
 # Set dpi and height for images
 library(knitr)
-opts_chunk$set(dpi = 300, fig.align="center") 
+opts_chunk$set(fig.height = 2.65, dpi = 300) 
 # ggplot2 color palette with gray
 color_palette <- list(gray = "#999999", 
                       salmon = "#E69F00", 
@@ -51,11 +51,11 @@ library(rvest)
 
 ---
 
-## Midterm
+## Exam 01
 
 - Exam 01 is due tomorrow, Friday 2/15 at 11:59p
 
-- Late work **not** accepted for midterms
+- Late work **not** accepted for the exam
 
 - Can answer clarifying questions only **after** lab
 
@@ -71,8 +71,8 @@ library(rvest)
 
 ### Example  
 
-```{r echo=F, out.width = '90%'}
-knitr::include_graphics("img/05/overall.png")
+```{r echo=F, echo=FALSE, out.width="80%"}
+knitr::include_graphics("img/05/overall.PNG")
 ```
 ---
 
@@ -87,7 +87,7 @@ Is it possible that treatment A is the better treatment?
 **Small** cases are easier to treat than **Large** cases
 
 ```{r echo=F, out.width = '80%'}
-knitr::include_graphics("img/05/breakdown.png")
+knitr::include_graphics("img/05/breakdown.PNG")
 ```
 
 
@@ -96,7 +96,7 @@ knitr::include_graphics("img/05/breakdown.png")
 
 ### Frequencies by Groups
 
-![](img/05/twoways.png)
+![](img/05/twoways.PNG)
 
 ---
 
