@@ -272,10 +272,35 @@ Describe the distribution of prices of paintings.
 
 ```r
 ggplot(data = pp, aes(x = price)) +
-  geom_histogram(binwidth = 1000)
+  geom_histogram(binwidth = 1000) +
+  labs(title="Distribution of Price (in Livres)")
 ```
 
 ![](06a-language-of-models_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+
+## Height
+
+
+```r
+ggplot(data = pp, aes(x = Height_in)) +
+  geom_histogram()
+```
+
+![](06a-language-of-models_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+
+## Width
+
+
+```r
+ggplot(data = pp, aes(x = Width_in)) +
+  geom_histogram()
+```
+
+![](06a-language-of-models_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -303,7 +328,7 @@ ggplot(data = pp, aes(x = price)) +
 Describe the relationship between height and width of paintings.
 ]
 
-![](06a-language-of-models_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](06a-language-of-models_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -316,7 +341,7 @@ ggplot(data = pp, aes(x = Width_in, y = Height_in)) +
   geom_smooth(method = "lm") # lm for linear model
 ```
 
-![](06a-language-of-models_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](06a-language-of-models_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -331,7 +356,7 @@ ggplot(data = pp, aes(x = Width_in, y = Height_in)) +
   geom_smooth(method = "lm", se = FALSE) # lm for linear model
 ```
 
-![](06a-language-of-models_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](06a-language-of-models_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -348,7 +373,7 @@ ggplot(data = pp, aes(x = Width_in, y = Height_in)) +
               col = "pink", lty = 2,   lwd = 3) 
 ```
 
-![](06a-language-of-models_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+![](06a-language-of-models_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -381,7 +406,7 @@ What does a negative residual mean? Which paintings on the plot have have negati
 residuals, those below or above the line?
 ]
 
-![](06a-language-of-models_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+![](06a-language-of-models_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -389,7 +414,7 @@ residuals, those below or above the line?
 The plot below displays the relationship between height and width of paintings. It  uses a lower alpha level for the points than the previous plots we looked at. What feature is apparent in this plot that was not (as) apparent in the previous plots? What might be the reason for this feature?
 ]
 
-![](06a-language-of-models_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](06a-language-of-models_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -425,7 +450,7 @@ ggplot(data = pp, aes(x = Width_in, y = Height_in,
   labs(color = "landscape")
 ```
 
-![](06a-language-of-models_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](06a-language-of-models_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 ]
 ---
 
@@ -566,19 +591,19 @@ The regression line minimizes the sum of squared residuals.
 
 ## Visualizing residuals
 
-![](06a-language-of-models_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
-
----
-
-## Visualizing residuals (cont.)
-
-![](06a-language-of-models_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
-
----
-
-## Visualizing residuals (cont.)
-
 ![](06a-language-of-models_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+---
+
+## Visualizing residuals (cont.)
+
+![](06a-language-of-models_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+---
+
+## Visualizing residuals (cont.)
+
+![](06a-language-of-models_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 
 
 ---

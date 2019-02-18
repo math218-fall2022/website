@@ -203,7 +203,26 @@ Describe the distribution of prices of paintings.
 
 ```{r, fig.height=2.5}
 ggplot(data = pp, aes(x = price)) +
-  geom_histogram(binwidth = 1000)
+  geom_histogram(binwidth = 1000) +
+  labs(title="Distribution of Price (in Livres)")
+```
+
+---
+
+## Height
+
+```{r, fig.height=2.5}
+ggplot(data = pp, aes(x = Height_in)) +
+  geom_histogram()
+```
+
+---
+
+## Width
+
+```{r, fig.height=2.5}
+ggplot(data = pp, aes(x = Width_in)) +
+  geom_histogram()
 ```
 
 ---
