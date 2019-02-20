@@ -89,7 +89,7 @@ lessons:
   - date: "Mon, Feb 18"
     title: "The language of models"
     slides: "lec-slides/06a-language-of-models.html"
-    appex: "appex/06a-modeling-paris-paintings.html"
+    appex: "06a-modeling-paris-paintings.html"
   - date: "Wed, Feb 20"
     title: "Formalizing linear models"
     reading: "reading-03.html"
