@@ -40,3 +40,46 @@ m_ht_sch <- lm(Height_in ~ school_pntg, data = pp)
 tidy(m_ht_sch)
 ```
 
+## Back to m_ht_wt
+
+### Obtaining R-squared 
+
+```{r}
+glance(m_ht_wt)
+glance(m_ht_wt)$r.squared # extract R-squared
+```
+
+
+## Exploring linearity & transformations
+```{r}
+pp_wt_lt_100 <- pp %>% 
+  filter(Width_in < 100)
+```
+
+
+```{r}
+m_lprice_wt <- lm(log(price) ~ Width_in, data = pp_wt_lt_100)
+m_lprice_wt %>%
+  tidy() %>%
+  select(term, estimate) %>%
+  mutate(estimate = round(estimate, 3))
+```
+
+### Price vs. surface and living artist
+
+```{r}
+pp_Surf_lt_5000 <- pp %>%
+  filter(Surface < 5000)
+```
+
+```{r}
+m_main <- lm(log(price) ~ Surface + factor(artistliving), 
+             data = pp_Surf_lt_5000)
+m_main %>%
+  tidy() %>%
+  select(term, estimate) %>%
+  mutate(estimate = round(estimate, 5))
+```
+
+
+
