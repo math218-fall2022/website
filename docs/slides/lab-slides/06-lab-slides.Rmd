@@ -1,7 +1,7 @@
 ---
 title: "Lab 06: Modeling course evaluations"
 author: ""
-date: "02.22.19"
+date: "02.21.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
