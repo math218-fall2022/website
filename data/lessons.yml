@@ -117,7 +117,7 @@ lessons:
     title: "Prediction & model validation"
     reading: "reading-04.html"
    # slides: "lec-slides/08a-predict-validate.html"
-   # hw: "hw-03.html"
+    hw: "hw-03.html"
   - date: "Wed, Mar 6"
     title: "Estimation via bootstrapping"
    # slides: "lec-slides/08b-bootstrap.html"
