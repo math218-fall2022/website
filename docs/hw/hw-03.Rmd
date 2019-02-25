@@ -88,7 +88,7 @@ The codebook is below:
 
 5. Calculate raw temperature, feeling temperature, humidity, and windspeed as their values given in the dataset multiplied by the maximum raw values stated in the codebook for each variable. Instead of writing over the existing variables, create new ones with concise but informative names.
 
-6. Check that the sum of `casual` and `registered` adds up to `cnt` for each record.
+6. Check that the sum of `casual` and `registered` adds up to `cnt` for each record. (Only show output checking)
 
 ### Exploratory data analysis
 

@@ -1,94 +1,89 @@
 ---
-title: "Modeling nonlinear relationships"
-author: "Dr. Maria Tackett"
-date: "02.25.19"
+title: "Modelling nonlinear relationships"
+author: "Dr. Çetinkaya-Rundel"
+date: "2018-02-26"
 output:
   xaringan::moon_reader:
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    css: "sta199-slides.css"
-    logo: img/sta199-sticker-icon.png
+    css: "slides.css"
+    logo: img/sta199-logo-hex.png
     lib_dir: libs
-    nature: 
-      highlightLines: true
+    nature:
       highlightStyle: github
+      highlightLines: true
       countIncrementalSlides: false
----
-
-layout: true
-
-<div class="my-footer">
-<span>
-<a href="http://datasciencebox.org" target="_blank">datasciencebox.org</a>
-</span>
-</div> 
-
 ---
 
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
+library(broom)
 library(knitr)
-library(emo)
 library(DT)
+# For nonsese...
+library(emo)
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,
-                      warning=FALSE,
-                      message=FALSE,
-                      fig.height = 2.65, 
-                      dpi = 300) 
-# For nonsese...
+# R options
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE,     # for regression output
+  warm = 1
+  )
+# Set dpi and height for images
+opts_chunk$set(fig.height = 2.5, fig.width = 5, dpi = 300) 
+# ggplot2 color palette with gray
+color_palette <- list(gray = "#999999", 
+                      salmon = "#E69F00", 
+                      lightblue = "#56B4E9", 
+                      green = "#009E73", 
+                      yellow = "#F0E442", 
+                      darkblue = "#0072B2", 
+                      red = "#D55E00", 
+                      purple = "#CC79A7")
 htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 # For magick
 dev.off <- function(){
   invisible(grDevices::dev.off())
 }
+# For ggplot2
+ggplot2::theme_set(ggplot2::theme_bw())
 ```
 
-```{r include=F}
-library(tidyverse)
-library(broom)
-```
 
-## Exam 01
+## Exam debrief
 
-- Mean: 89.6, SD: 15.2
-
-- Median: 92.5, IQR: 7.5
-
+- Mean: 86.23, SD: 17.7
+- Median: 91, IQR: 14
+- Solutions will be posted tonight (I'll email), without the explanation of methods
 - Visit office hours with any questions
-
-- Joins
-
-- Long lines
+- For regrade requests, fill out the regrade request form, do not directly reach out to the TA who graded your work
+- Pay attention to organization and styling of your code
+- Use tidyverse syntax
 
 ---
 
 ## Announcements
 
-- Team Feedback 1 due today at 11:59p
-
-- Lab 06 due today at 11:59p 
-
-- HW 03 due Mon, Mar 4 at 11:59p
+- Office hours this week:
+  + Tuesday 1-3pm
+  + Thursday 10-11:30 (as usual)
+- HW 03 posted tonight, due next Monday
 
 ---
 
-## Want to follow along?
+## Follow along
 
-Go to RStudio Cloud -> make a copy of "Modeling Paris Paintings"
+RStudio Cloud -> More Modelling Paris Paintings (make your own copy)
 
 ---
 
 class: center, middle
 
-## Tidy regression output
+# Tidy regression output
 
 ---
 
-## Height vs. Width
-
-Revisiting predicting painting heights using their widths
+Let's revisit the model predicting heights of paintings from their widths:
 
 ```{r message=FALSE}
 pp <- read_csv("data/paris_paintings.csv", 
@@ -103,9 +98,9 @@ m_ht_wt <- lm(Height_in ~ Width_in, data = pp)
 
 ## Not-so-tidy regression output
 
-- You might come across these when you google, but we'll try to stay away from them
+- You might come accross these in your googling adventures, but we'll try to stay away from them
 
-- Though they're not wrong, they don't format the results in tidy data frames
+- Not because they are wrong, but because they don't result in tidy data frames as results.
 
 ---
 
@@ -123,11 +118,10 @@ m_ht_wt
 
 Option 2:
 
-.small[
 ```{r}
 summary(m_ht_wt)
 ```
-]
+
 ---
 
 ## Review
@@ -148,35 +142,34 @@ What makes a data frame tidy?
 
 Achieved with functions from the broom package:
 
-- **`tidy`**: Constructs a data frame that summarizes the model's statistical findings: coefficient estimates, *standard errors, test statistics, p-values*.
+- `tidy`: Constructs a data frame that summarizes the model's statistical findings: coefficient estimates, *standard errors, test statistics, p-values*.
 
-- **`augment`**: Adds columns to the original data that was modeled. This includes predictions and residuals.
+- `augment`: Adds columns to the original data that was modeled. This includes predictions and residuals.
 
-- **`glance`**: Constructs a concise one-row summary of the model. This typically contains values such as $R^2$, adjusted $R^2$, *and residual standard error that are computed once for the entire model*.
+- `glance`: Constructs a concise one-row summary of the model. This typically contains values such as $R^2$, adjusted $R^2$, *and residual standard error that are computed once for the entire model*.
 
 ---
 
-### Tidy your model's statistical findings
+## Tidy your model's statistical findings
 
 ```{r}
 tidy(m_ht_wt)
 ```
 
---
-
 ```{r}
 tidy(m_ht_wt) %>%
-  select(term, estimate)
+  select(term, estimate) %>%
+  mutate(estimate = round(estimate, 3))
 ```
 
 ---
 
-### Augment data with model results
+## Augment data with model results
 
 New variables of note (for now):
 
-- **`.fitted`**: Predicted value of the response variable
-- **`.resid`**: Residuals
+- `.fitted`: Predicted value of the response variable
+- `.resid`: Residuals
 
 .small[
 ```{r}
@@ -195,13 +188,15 @@ Why might we be interested in these new variables?
 
 ## Residuals plot
 
-```{r}
+.small[
+```{r fig.height=2}
 m_ht_wt_aug <- augment(m_ht_wt)
 ggplot(m_ht_wt_aug, mapping = aes(x = .fitted, y = .resid)) +
   geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0, color = "blue", lty = 2) +
+  geom_hline(yintercept = 0, color = "gray", lty = 2) +
   labs(x = "Predicted height", y = "Residuals")
 ```
+]
 
 --
 
@@ -224,6 +219,10 @@ glance(m_ht_wt)$r.squared
 ```
 
 --
+
+```
+The $R^2$ is `r round(glance(m_ht_wt)$r.squared * 100, 2)`%.
+```
 
 The $R^2$ is `r round(glance(m_ht_wt)$r.squared * 100, 2)`%.
 
@@ -265,7 +264,7 @@ ggplot(data = pp, aes(x = Width_in, y = price)) +
 
 ---
 
-### Focus on paintings with `Width_in < 100`
+## Let's focus on paintings with `Width_in < 100`
 
 ```{r}
 pp_wt_lt_100 <- pp %>% 
@@ -387,24 +386,25 @@ How do we interpret the slope of this model?
 ```{r echo=FALSE}
 ggplot(data = pp_wt_lt_100, mapping = aes(x = Width_in, y = log(price))) +
   geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", color = color_palette$darkblue, se = FALSE) +
   labs(x = "Width (in)", y = "Log(price) (log livres)")
 ```
 
 ---
 
-### Interpret models with log transformation
+## Interpreting models with log transformation
 
 ```{r}
 m_lprice_wt <- lm(log(price) ~ Width_in, data = pp_wt_lt_100)
 m_lprice_wt %>%
   tidy() %>%
-  select(term, estimate)
+  select(term, estimate) %>%
+  mutate(estimate = round(estimate, 3))
 ```
 
 ---
 
-### Linear model with log transformation
+## Linear model with log transformation
 
 $$ \widehat{log(price)} = 4.67 + 0.02 Width $$
 
@@ -421,7 +421,7 @@ painting is expected to be higher, on average, by 0.02 livres.
 
 ## Working with logs
 
-- Subtraction and logs: $log(a) − log(b) = log\big(\frac{a}{b}\big)$
+- Subtraction and logs: $log(a) − log(b) = log(a / b)$
 
 --
 
@@ -433,43 +433,33 @@ painting is expected to be higher, on average, by 0.02 livres.
 
 ---
 
-### Interpret models w/ log transformation
+## Interpreting models with log transformation
 
-.midi[
 The slope coefficient for the log transformed model is 0.02, meaning the log 
 price difference between paintings whose widths are one inch apart is predicted 
 to be 0.02 log livres.
-]
 
 --
 
-.midi[
 $$ log(\text{price for width x+1}) - log(\text{price for width x}) = 0.02 $$
-]
 
 --
 
-.midi[
-$$ log\left(\frac{\text{price for width (x+1)}}{\text{price for width x}}\right) = 0.02 $$
-]
+$$ log\left(\frac{\text{price for width x+1}}{\text{price for width x}}\right) = 0.02 $$
 
 --
 
-.midi[
-$$ e^{log\left(\frac{\text{price for width (x+1)}}{\text{price for width x}}\right)} = e^{0.02} $$
-]
+$$ e^{log\left(\frac{\text{price for width x+1}}{\text{price for width x}}\right)} = e^{0.02} $$
 
 --
 
-.midi[
-$$ \frac{\text{price for width (x+1)}}{\text{price for width x}} \approx 1.02 $$
-]
+$$ \frac{\text{price for width x+1}}{\text{price for width x}} \approx 1.02 $$
+
 --
 
-.midi[
 For each additional inch the painting is wider, the price of the
 painting is expected to be higher, on average, by a factor of 1.02.
-]
+
 ---
 
 ## Shortcuts in R
@@ -477,16 +467,15 @@ painting is expected to be higher, on average, by a factor of 1.02.
 ```{r}
 m_lprice_wt %>%
   tidy() %>%
-  select(term, estimate)
+  select(term, estimate) %>%
+  mutate(estimate = round(estimate, 3))
 ```
-
---
 
 ```{r}
 m_lprice_wt %>%
   tidy() %>%
   select(term, estimate) %>%
-  mutate(estimate = exp(estimate))
+  mutate(estimate = round(exp(estimate), 3))
 ```
 
 ---
@@ -509,7 +498,7 @@ the log transform: $log(y)$, especially useful when the response variable is
 --
 
 - When using a log transformation on the response variable the interpretation of 
-the slope changes: *"For each unit increase in x, y is expected to multiply by a factor of $e^{b_1}$."*
+the slope changes: *"For each unit increase in x, y is expected on average to be higher/lower <br> by a factor of $e^{b_1}$."*
 
 --
 
@@ -547,11 +536,11 @@ log(0 + 0.00001)
 
 class: center, middle
 
-## The linear model with multiple predictors
+# The linear model with multiple predictors
 
 ---
 
-### Price, surface area, and living artist
+## Price, surface area, and living artist
 
 .question[
 What is the typical surface area for paintings?
@@ -570,11 +559,9 @@ Less than 1000 square inches (which is roughly a painting that is 31in x 31in). 
 
 ---
 
-### Price, surface area, and living artist
+## Price, surface area, and living artist
 
-.midi[
 For simplicity let's focus on the paintings with `Surface < 5000`:
-]
 
 ```{r echo=FALSE, warning=FALSE}
 pp_Surf_lt_5000 <- pp %>%
@@ -588,7 +575,7 @@ ggplot(data = pp_Surf_lt_5000,
 
 ---
 
-### Price vs. surface and living artist
+## Price vs. surface and living artist
 
 .question[
 Does the relationship between surface and logged price vary by whether or not
@@ -608,23 +595,23 @@ ggplot(data = pp_Surf_lt_5000,
 
 ---
 
-## Modeling with main effects 
+## Modelling with main effects 
 
 ```{r}
 m_main <- lm(log(price) ~ Surface + factor(artistliving), 
              data = pp_Surf_lt_5000)
 m_main %>%
   tidy() %>%
-  select(term, estimate)
+  select(term, estimate) %>%
+  mutate(estimate = round(estimate, 5))
 ```
 
 --
 
-.midi[
 Linear model:
 
 $$ \widehat{log(price)} = 4.88 + 0.00027~surface + 0.14~artistliving $$
-]
+
 --
 
 - Plug in 0 for `artistliving` to get the linear model for paintings by non-living
@@ -637,7 +624,8 @@ artists.
 
 ## Interpretation of main effects
 
-```{r echo = FALSE}
+.pull-left[
+```{r fig.height=4, echo = FALSE}
 ggplot(data = pp_Surf_lt_5000,
        aes(y = log(price), x = Surface, color = factor(artistliving))) +
   geom_point(alpha = 0.3) +
@@ -645,33 +633,20 @@ ggplot(data = pp_Surf_lt_5000,
   geom_abline(intercept = 5.02, slope = 0.00027, color = "#1FBEC3", lwd = 1) +
   labs(color = "Living artist")
 ```
-
-- Non-living artist: 
-$\widehat{log(price)} = 4.88 + 0.00027~surface + 0.14 \times 0$
-$= 4.88 + 0.00027~surface$
-
-- Living artist:
-$\widehat{log(price)} = 4.88 + 0.00027~surface + 0.14 \times 1$
-$= 5.02 + 0.00027~surface$
-
----
-
-.alert[
-- Non-living artist: 
-$\widehat{log(price)} = 4.88 + 0.00027~surface + 0.14 \times 0$
-$= 4.88 + 0.00027~surface$
 ]
 
-.alert[
+.pull-right[
+- Non-living artist: 
+$\widehat{log(price)} = 4.88 + 0.00027~surface + 0.14 \times 0$
+$= 4.88 + 0.00027~surface$
+
 - Living artist: 
 $\widehat{log(price)} = 4.88 + 0.00027~surface + 0.14 \times 1$
 $= 5.02 + 0.00027~surface$
 ]
 
-.midi[
 - Rate of change in price as the surface area of the painting increases does 
 not vary between paintings by living and non-living artists (same slope), 
 
 - Paintings by living artists are consistently more expensive than paintings by
 non-living artists (different intercept).
-]
