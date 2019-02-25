@@ -104,7 +104,7 @@ lessons:
   - date: "Mon, Feb 25"
     title: "Modeling nonlinear relations + Introducing multiple predictors"
    # reading: "reading-04.html"
-   # slides: "lec-slides/07a-model-nonlinear-intro-mlr.html"
+    slides: "lec-slides/07a-nonlinear-mlr-intro.html"
   - date: "Wed, Feb 27"
     title: "Multiple linear regression + Model selection"
    # slides: "lec-slides/07b-mlr-model-select.html"
