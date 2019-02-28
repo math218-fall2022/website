@@ -106,6 +106,7 @@ lessons:
    # reading: "reading-04.html"
     slides: "lec-slides/07a-nonlinear-mlr-intro.html"
   - date: "Wed, Feb 27"
+    slides: "lec-slides/07b-mlr-model-select.html"
     title: "Multiple linear regression + Model selection"
     appex: "07b-mlr-model-select.html"
    # slides: "lec-slides/07b-mlr-model-select.html"
