@@ -108,7 +108,7 @@ In this lab you will first download the data, then upload it to the `data/` fold
    
 3. Interpret the slope and intercept of `m_bty_gen` in context of the data.
 
-4. What percent of the variability in `score` is explained by the model `m_bty_gen`.
+4. What percent of the variability in `score` is explained by the model `m_bty_gen`?
 
 5.  What is the equation of the line corresponding to *just* male professors?
     
@@ -136,8 +136,8 @@ Going forward, only consider the following variables as potential predictors: `r
 `cls_level`, `cls_profs`, `cls_credits`, `bty_avg`.
 
 11. Which variable, on its own, would you expect to be the worst predictor of 
-    evaluation scores? Why? *Hint:* Think about which variable would you 
-    expect to not have any association with the professor's score.
+    evaluation scores? Why? *Hint: Think about which variable would you 
+    expect to not have any association with the professor's score.*
 
 12. Check your suspicions from the previous exercise. Include the model output
     for that variable in your response.

@@ -151,7 +151,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ol start="2" style="list-style-type: decimal">
 <li><p>Fit a linear model (one you have fit before): <code>m_bty_gen</code>, predicting average professor evaluation <code>score</code> based on average beauty rating (<code>bty_avg</code>) and <code>gender</code>. Write the linear model, and note the <span class="math inline">\(R^2\)</span> and the adjusted <span class="math inline">\(R^2\)</span>.</p></li>
 <li><p>Interpret the slope and intercept of <code>m_bty_gen</code> in context of the data.</p></li>
-<li><p>What percent of the variability in <code>score</code> is explained by the model <code>m_bty_gen</code>.</p></li>
+<li><p>What percent of the variability in <code>score</code> is explained by the model <code>m_bty_gen</code>?</p></li>
 <li><p>What is the equation of the line corresponding to <em>just</em> male professors?</p></li>
 <li><p>For two professors who received the same beauty rating, which gender tends to have the higher course evaluation score?</p></li>
 <li><p>How does the relationship between beauty and evaluation score vary between male and female professors?</p></li>
@@ -164,7 +164,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Part 3: The search for the best model</h2>
 <p>Going forward, only consider the following variables as potential predictors: <code>rank</code>, <code>ethnicity</code>, <code>gender</code>, <code>language</code>, <code>age</code>, <code>cls_perc_eval</code>, <code>cls_did_eval</code>, <code>cls_students</code>, <code>cls_level</code>, <code>cls_profs</code>, <code>cls_credits</code>, <code>bty_avg</code>.</p>
 <ol start="11" style="list-style-type: decimal">
-<li><p>Which variable, on its own, would you expect to be the worst predictor of evaluation scores? Why? <em>Hint:</em> Think about which variable would you expect to not have any association with the professor’s score.</p></li>
+<li><p>Which variable, on its own, would you expect to be the worst predictor of evaluation scores? Why? <em>Hint: Think about which variable would you expect to not have any association with the professor’s score.</em></p></li>
 <li><p>Check your suspicions from the previous exercise. Include the model output for that variable in your response.</p></li>
 <li><p>Suppose you wanted to fit a full model with the variables listed above. If you are already going to include <code>cls_perc_eval</code> and <code>cls_students</code>, which variable should you not include as an additional predictor? Why?</p></li>
 <li><p>Fit a full model with all predictors listed above (except for the one you decided to exclude) in the previous question.</p></li>
