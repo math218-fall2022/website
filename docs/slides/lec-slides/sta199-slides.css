@@ -5,17 +5,24 @@
 @import url('https://fonts.googleapis.com/css?family=Inconsolata');
 
 body { 
-  font-family: 'Open Sans'; sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   color: #333333;
-  font-size: 16pt;
+  font-size: 14pt;
 }
+
+p {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  color: #333333;
+  font-size: 14pt;
+}
+
 
 h2 {
   font-family: 'Open Sans', sans-serif;
   font-weight: bold;
   color: #7A4183;
-  font-size: 12px;
   margin: 0.25em 0 0.5em 0;
 }
 h1, h3 {
@@ -27,7 +34,7 @@ a, a > code {
   font-family: 'Open Sans', sans-serif;
   color: #006975;
   text-decoration: none;
-  font-size: 16pt;
+  font-size: 14pt;
 }
 
 .footnote {
@@ -39,7 +46,7 @@ a, a > code {
 }
 
 .remark-code{
-  font-size: 13pt;
+  font-size: 12pt;
 }
 
 .remark-code, .remark-inline-code { 
@@ -88,16 +95,16 @@ a, a > code {
 }
 ul {
   list-style-type: square;
-  font-size: 16pt;
+  font-size: 14pt;
 }
 li{
   margin: 10px 0;
-  font-size: 16pt;
+  font-size: 14pt;
   
 }
+.small { font-size: 50%;}
 .large { font-size: 130%; }
 .midi { font-size: 75%; }
-.small { font-size: 60%; }
 .tiny {font-size: 40%;}
 
 
@@ -162,19 +169,16 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
 .vocab {
   color: #1689AE;
   font-weight: bold;
-  font-size: 24px;
 }
 
 .vocab2 {
   color: #7A4183;
   font-weight: bold;
-  font-size: 24px;
 }
 
 .vocab3 {
   color: #022CFA;
   font-weight: bold;
-  font-size: 24px;
 }
 
 .question {
