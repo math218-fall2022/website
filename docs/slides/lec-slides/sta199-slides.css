@@ -102,10 +102,15 @@ li{
   font-size: 14pt;
   
 }
-.small { font-size: 50%;}
+.small { font-size: 50%; }
 .large { font-size: 130%; }
 .midi { font-size: 75%; }
 .tiny {font-size: 40%;}
+
+.really-small{
+  font-size: 5pt;
+}
+
 
 
 img, video, iframe {
@@ -123,7 +128,7 @@ table {
 table thead th { border-bottom: 1px solid #ddd; }
 th, td { 
   padding: 5px; 
-  font-size: 16pt;
+  font-size: 14pt;
 }
 thead, tfoot, tr:nth-child(even) { background: #eee }
 
@@ -136,10 +141,6 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
     top: 0 !important;
     left: 0 !important;
   }
-}
-
-.remark-slide-content{
-  font-size: 24px;
 }
 
 .remark-slide-content:after {
@@ -190,6 +191,14 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
   font-size: 90%;
   /*color: #1E5C65;*/
 }
+
+.question-slim{
+  border-left: solid 5px #D8FCFF;
+  background-color: #D8FCFF;
+  padding: 1px 4px;
+  font-size: 75%;
+}
+
 .alert {
   border-right: solid 5px #A7D5E8;
   background-color: #A7D5E830;

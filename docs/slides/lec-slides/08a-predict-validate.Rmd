@@ -188,13 +188,17 @@ glance(selected_model)$AIC
 
 ---
 
-## Parsimony
+## Parismony
 
+.pull-left[
 .question[
-Take a look at the variables in the full and the selected model. Can you guess
+Look at the variables in the full and the selected model. Can you guess
 why some of them may have been dropped? Remember: We like parsimonous models.
 ]
+]
 
+
+.pull-right[
 .midi[
 | variable     | selected    |
 | ------------ | :----------:|
@@ -210,6 +214,7 @@ why some of them may have been dropped? Remember: We like parsimonous models.
 | cls_profs    |             |
 | cls_credits  | x           |
 | bty_avg      | x           |
+]
 ]
 
 ---
@@ -253,7 +258,7 @@ Do you think we should prefer low or high RMSE?
 
 ---
 
-## Random sampling and reproducibility
+### Random sampling and reproducibility
 
 Gotta set a seed!
 ```{r}
@@ -467,6 +472,70 @@ rmse_evals %>%
 ```
 
 ---
+
+## `modelr` in tidyverse
+
+.pull-left[
+![](img/08a/modelr-part-of-tidyverse.png)
+]
+.pull-right[
+The **modelr** package provides functions that help you create pipelines when modeling.
+```{r}
+library(modelr)
+```
+]
+
+.footnote[
+[modelr.tidyverse.org](https://modelr.tidyverse.org)
+]
+
+---
+
+## Cross Validation - Faster
+
+- **`modelr::crossv_kfold`**: Partition data into k folds
+
+- **`purrr::map`**: Fit a model on each of the training sets
+
+- Calculate RMSEs for each of the models on the testing set
+
+---
+
+## Partition data into k folds.
+
+k = 5:
+
+```{r}
+evals_cv <- crossv_kfold(evals, 5)
+evals_cv
+```
+
+---
+
+## Fit model on each of training set
+
+```{r}
+models <- map(evals_cv$train, ~ 
+              lm(score ~ ethnicity + gender + language + 
+                         age + cls_perc_eval + cls_credits + 
+                         bty_avg, data = .))
+```
+
+---
+
+## Calculate RMSEs
+
+.question[
+Explain how `map2_dbl` works.
+]
+
+```{r}
+rmses <- map2_dbl(models, evals_cv$test, rmse)
+rmses
+```
+
+---
+
 
 class: center, middle
 
