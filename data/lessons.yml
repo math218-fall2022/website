@@ -122,7 +122,7 @@ lessons:
     hw: "hw-03.html"
   - date: "Wed, Mar 6"
     title: "Estimation via bootstrapping"
-   # slides: "lec-slides/08b-bootstrap.html"
+    slides: "lec-slides/08b-bootstrap.html"
   - date: "Thur, Mar 7"
     title: "Lab 08: Pulling yourself up by your bootstraps"
    # lab: "lab-08-bootstrap.html"
