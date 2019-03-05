@@ -48,12 +48,33 @@ layout: true
 
 - Lab 08 on Thursday - due the Monday after spring break
 
+--
+
+- Use **tidyverse** syntax! 
+    - Use the lecture slides or *R for Data Science* for code examples 
+    - Avoid Googling! 
+
+--
+
+- Working on labs: 
+    - Read **all** instructions and address **every** part of a question
+    - Work together on the lab! Lab (and HW) should be done sequentially, since the questions often build upon each other
+    - Check over your work when you're done!
+    
 ---
 
 class: center, middle
 
 # Model selection
 
+---
+
+## Data: Paris paintings
+
+- Take about 5 minutes to finish/review your model selection
+
+- Make sure all your work is in one RStudio Cloud project 
+    - Call that project **Paris paintings - Model Selection FINAL**
 ---
 
 ## Data: Course evals
@@ -116,10 +137,13 @@ $$ AIC = -2log(L) + 2k $$
 - `\(L\)`: likelihood	of the	model
     - Likelihood of seeing these data	given	the estimated model parameters
     - Won't go into calculating it in this course (but you will in future courses)
+    
 - Used for model selection, lower the better
     - Value is not informative on its own
+    
 - Applies	a	penalty	for	number of parameters in the	model, `\(k\)`
     - Different penalty than adjusted `\(R^2\)` but similar idea
+    
 - In R to get the AIC, use `AIC(model)`
 
 
@@ -317,7 +341,7 @@ set.seed(3518)
 
 ## Cross validation
 
-More specifically, &lt;font class="vocab"&gt;k-fold cross validation&lt;/font&gt;""
+More specifically, &lt;font class="vocab"&gt;k-fold cross validation&lt;/font&gt;"
 
 - Split your data into k folds.
 
@@ -719,7 +743,7 @@ class: center, middle
 To make a prediction for a new observation we need to create a data frame with that observation.
 
 &lt;div class="question"&gt;
-Suppose we want to make a prediction for a 35 year old white female professor who received her education at an English speaking country and who teaches a multi credit course. 80% of her classes tend to fill out evaluations, and she has an average beauty score beauty score (2.5).
+Suppose we want to make a prediction for a 35 year old white woman professor who received her education at an English speaking country and who teaches a multi credit course. 80% of her classes tend to fill out evaluations, and she has an average beauty score beauty score (2.5).
 &lt;br&gt;&lt;br&gt;
 The following won't work. Why? How would you correct it?
 &lt;/div&gt;
