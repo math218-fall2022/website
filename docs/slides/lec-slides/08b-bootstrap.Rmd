@@ -242,14 +242,6 @@ of the bootstrap distribution.
 
 ---
 
-## Let's bootstrap
-
-```{r echo=F, out.width="80%"}
-knitr::include_graphics("img/08b/bootstrap-by-hand.png")
-```
-
----
-
 class: center, middle
 
 # Bootstrapping in R

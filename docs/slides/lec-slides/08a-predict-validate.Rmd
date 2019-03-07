@@ -619,7 +619,7 @@ predict(selected_model, newdata = new_prof)
 predict(selected_model, newdata = new_prof, interval = "confidence")
 ```
 
-- Prediction interval around $\hat{y}$ for new data (average score for profs with given characteristics):
+- Prediction interval around $\hat{y}$ for new data (predicted score for an individual professor with the given characteristics):
 
 ```{r}
 predict(selected_model, newdata = new_prof, interval = "prediction")
