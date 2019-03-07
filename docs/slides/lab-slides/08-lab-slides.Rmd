@@ -79,6 +79,10 @@ library(rvest)
 
 - But before you get there, lots of data wrangling and organizing
 
+--
+
+**Use the [lecture notes](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/08b-bootstrap.html) for help with coding and interpretations.**
+
 ---
 
 ## Working with large data
