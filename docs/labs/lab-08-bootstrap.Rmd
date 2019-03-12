@@ -1,6 +1,6 @@
 ---
 title: "Lab 08 - Pull yourself up by your bootstraps"
-date: "due Mon, Mar 18 at 11:59p"
+date: "due Wed, Mar 20 at 11:59p"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
@@ -222,7 +222,7 @@ boot_diffeduc_born <- gss_educ %>%
   calculate(stat = "diff in means", order = c("Yes", "No"))
 ```
 
-13. Visualize the distribution of these bootstrap differences in medians. Find a 99% confidence interval for the difference between the population averages of number of years of education between those born and not born in the US and interpret this interval in context of the data.
+13. Visualize the distribution of these bootstrap differences in means. Find a 99% confidence interval for the difference between the population averages of number of years of education between those born and not born in the US and interpret this interval in context of the data.
 
 ## Part 4: 
 
