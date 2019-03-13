@@ -1,5 +1,5 @@
 ---
-title: "HW 06 - You gotta pick a package or two"
+title: "HW 06 - Pick a package or two"
 date: "Due: Wed, Apr 24 at 11:59p"
 output: 
     html_document: 
