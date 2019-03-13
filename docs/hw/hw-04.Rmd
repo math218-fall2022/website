@@ -9,13 +9,17 @@ output:
      fig_caption: false
 ---
 
+<br>
+
+**Instructions to come...**
+<!--
 ```{r include=FALSE}
 library(tidyverse)
 ```
 
 
 ```{r echo=FALSE, fig.align="right",out.width="50%", out.extra='style="float:right; padding:10px"'}
-knitr::include_graphics("img/hw-05-inference.jpg")
+knitr::include_graphics("img/hw-04-inference.jpg")
 ```
 
 ## Getting started
@@ -100,3 +104,4 @@ evaluated for
 This is an **individual** assignment. You are welcomed to exchange ideas with classmates and ask questions on the getting help channels discussed above however you may not share your text or code answers directly with classmates.
 
 The Duke Community Standard applies and course academic integrity policies apply. Please review them [here](http://www2.stat.duke.edu/courses/Spring18/Sta199/policies/#academic-integrity). Specifically, the note on sharing / reusing code.
+-->
