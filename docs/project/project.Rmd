@@ -152,7 +152,6 @@ choices you made, and why, and what you found.
 Your submission should include
 
 * RMarkdown file (formatted to clearly present all of your code and results) 
-* HTML file
 * md file (able to be viewed on GitHub, with all figures)
 * Dataset(s) (in csv or RData format, in a `/data` folder)
 * Presentation (if using Keynote/PowerPoint/Google Slides, export to PDF and put in repo, in a `/presentation` folder)
