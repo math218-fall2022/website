@@ -160,7 +160,9 @@ lessons:
     title: "Lab 09: Simulation based inference"
    # lab: "lab-09-sim-inference.html"
    # slides: "lab-slides/09-lab-deck.html"
-   # project: "project.html"
+  - date: "Fri, Mar 29"
+    title: Project proposal due
+    project: "project.html"
   - title: "Week 12"
   - date: "Mon, Apr 1"
     title: "Central limit theorem based inference"
@@ -213,4 +215,4 @@ lessons:
     hw: "hw-06.html"
   - date: "Mon, Apr 29"
     title: "Project presentations"
-   # project: "project.html"
+    project: "project.html"
