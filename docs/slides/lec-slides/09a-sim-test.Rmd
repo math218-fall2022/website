@@ -589,7 +589,13 @@ Do you think yawning is contagious?
 
 An experiment conducted by the MythBusters tested if a person can be subconsciously influenced into yawning if another person near them yawns.
 
-[https://www.youtube.com/watch?v=mrr_UjNLbhE](https://www.youtube.com/watch?v=mrr_UjNLbhE)
+[https://www.discovery.com/tv-shows/mythbusters/videos/is-yawning-contagious-2](https://www.discovery.com/tv-shows/mythbusters/videos/is-yawning-contagious-2)
+
+--
+
+.question[
+**Do we buy their conclusion?**
+]
 
 ---
 
@@ -697,80 +703,3 @@ Yawning and seeing someone yawn are <font class="vocab">dependent</font>, yawnin
 [1] http://www.dartmouth.edu/~chance/course/topics/winning_number.html
 ]
 
----
-
-## Checking for independence
-
-.question[
-Do the simulation results suggest that yawning 
-is contagious, i.e. does seeing someone yawn and yawning appear to be dependent?
-]
-
-.small[
-```{r}
-null_dist <- mb_yawn %>%
-  specify(outcome ~ group, success = "yawn") %>%
-  hypothesize(null = "independence") %>%
-  generate(100, type = "permute") %>%
-  calculate(stat = "diff in props", order = c("treatment", "control"))
-```
-]
-
----
-
-## Visualizing the null distribution
-
-.question[
-What would you expect the center of the 
-null distribution to be?
-]
-
---
-
-```{r}
-ggplot(data = null_dist, mapping = aes(x = stat)) +
-  geom_histogram(binwidth = 0.05) +
-  labs(title = "Null distribution")
-```
-
----
-
-## Calculating the p-value, visually
-
-.question[
-What is the p-value, i.e. in what % of the 
-simulations was the simulated difference in sample proportion at least as extreme 
-as the observed difference in sample proportions?
-]
-
-```{r echo=FALSE}
-ggplot(data = null_dist, mapping = aes(x = stat)) +
-  geom_histogram(binwidth = 0.05) +
-  labs(title = "Null distribution")
-```
-
----
-
-## Calculating the p-value, directly
-
-```{r}
-null_dist %>%
-  filter(stat >= 0.0441) %>%
-  summarise(p_value = n()/nrow(null_dist))
-```
-
----
-
-## Conclusion
-
-.question[
-What is the conclusion of the hypothesis test?
-]
-
-<br>
-
---
-
-.question[
-Do you "buy" this conclusion?
-]
