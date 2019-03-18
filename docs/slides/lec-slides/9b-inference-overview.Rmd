@@ -149,7 +149,8 @@ is contagious, i.e. does seeing someone yawn and yawning appear to be dependent?
 ]
 
 ```{r read-data, echo=F, message=F, warning=F}
-sim_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSr67_a59HXe7hqq3hZ6pxMwP7ky0SV944KxdNpciWyBMrVc9csc8ISTxNCHquqz6qiJcjYtJEQLnw6/pub?gid=1129452257&single=true&output=csv")
+sim_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSr67_a59HXe7hqq3hZ6pxMwP7ky0SV944KxdNpciWyBMrVc9csc8ISTxNCHquqz6qiJcjYtJEQLnw6/pub?gid=1129452257&single=true&output=csv") %>%
+  slice(-c(1,2))
 ```
 
 
