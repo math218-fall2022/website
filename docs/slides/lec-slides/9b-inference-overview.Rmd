@@ -69,15 +69,9 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 ---
 
-class: center, middle
+## Packages 
 
-# From last time
-
----
-
-## Packages
-
-```{r message=FALSE}
+```{r}
 library(tidyverse)
 library(infer)
 ```
@@ -85,17 +79,52 @@ library(infer)
 
 ---
 
-class: middle, center
+class: center, middle
 
-## From last time - Testing for independence
+## Testing for independence
 
 ---
 
-## Study results
+## Is yawning contagious?
+
+.question[
+Do you think yawning is contagious?
+]
+
+.pull-left[
+![empirical](img/09a/yawn1.png)
+]
+.pull-right[
+![empirical](img/09a/yawn2.png)
+]
+
+---
+
+## Is yawning contagious?
+
+An experiment conducted by the MythBusters tested if a person can be subconsciously influenced into yawning if another person near them yawns.
+
+[https://www.discovery.com/tv-shows/mythbusters/videos/is-yawning-contagious-2](https://www.discovery.com/tv-shows/mythbusters/videos/is-yawning-contagious-2)
+
+
+---
+
+## Study description
+
+In this study 50 people were randomly assigned to two groups: 34 to a group where a person near them yawned (treatment) and 16 to a control group where they didn't see someone yawn (control).
 
 ```{r message=FALSE}
 mb_yawn <- read_csv("data/mb-yawn.csv")
 ```
+
+```{r}
+mb_yawn %>%
+  count(group, outcome)
+```
+
+---
+
+## Proportion of yawners
 
 .small[
 ```{r}
@@ -106,19 +135,68 @@ mb_yawn %>%
 ```
 ]
 
-Difference in proportions of yawners: 
+- Proportion of yawners in the treatment group: $\frac{10}{34} = 0.2941$
+- Proportion of yawners in the control group: $\frac{4}{16} = 0.25$
+- Difference: $0.2941 - 0.25 = 0.0441$
 
-$$\hat{p}_{treatment} - \hat{p}_{control} = 0.2941 - 0.25 = 0.0441$$
+.question[
+The MythBusters team concluded that yawning is contagious. **Do we buy their conclusion?**
+]
+
+---
+
+## Independence?
+
+.question[
+Based on the proportions we calculated, 
+do you think yawning is really contagious, i.e. are seeing someone yawn 
+and yawning dependent?
+]
+
+```{r echo=FALSE}
+mb_yawn %>%
+  count(group, outcome) %>%
+  group_by(group) %>%
+  mutate(p_hat = n / sum(n))
+```
+
+---
+
+### Dependence, or another possible explanation?
+
+- The observed differences might suggest that yawning is contagious, i.e. seeing someone yawn 
+and yawning are dependent.
+
+- But the differences are small enough that we might wonder if they might simple be **due to chance**.
+
+- Perhaps if we were to repeat the experiment, we would see slightly different results.
+
+- So we will do just that - well, somewhat - and see what happens.
+
+- Instead of actually conducting the experiment many times, we will **simulate** our results.
 
 ---
 
 ## Two competing claims
 
 - "There is nothing going on." 
-Yawning and seeing someone yawn are **independent**, yawning is not contagious, observed difference in proportions is simply due to chance. $\rightarrow$ Null hypothesis
+Yawning and seeing someone yawn are <font class="vocab">independent</font>, yawning is not contagious, observed difference in proportions is simply due to chance. $\rightarrow$ <font class="vocab">Null hypothesis</font>
 
 - "There is something going on."
-Yawning and seeing someone yawn are **dependent**, yawning is contagious, observed difference in proportions is not due to chance. $\rightarrow$ Alternative hypothesis
+Yawning and seeing someone yawn are <font class="vocab">dependent</font>, yawning is contagious, observed difference in proportions is not due to chance. $\rightarrow$ <font class="vocab">Alternative hypothesis</font>
+
+---
+
+## Simulation setup
+
+1. A regular deck of cards is comprised of 52 cards: 4 aces, 4 of numbers 2-10, 4 jacks, 4 queens, and 4 kings.
+
+2. Take out two aces from the deck of cards and set them aside.
+    - Take out Jokers if you have them.
+
+3. The remaining 50 playing cards to represent each participant in the study:
+    - 14 face cards (including the 2 aces) represent the people who yawn.
+    - 36 non-face cards represent the people who don't yawn.
 
 ---
 
@@ -128,12 +206,11 @@ Yawning and seeing someone yawn are **dependent**, yawning is contagious, observ
 
 2. Count out the top 16 cards and set them aside. These cards represent the people in the control group.
 
-3. Out of the remaining 34 cards (treatment group) count the \red{number of face cards} (the number of people who yawned in the treatment group).
+3. Out of the remaining 34 cards (treatment group) count the <font color="red">number of face cards</font> (the number of people who yawned in the treatment group).
 
-4. Calculate the difference in proportions of yawners (treatment - control), and plot it 
-on the board.
+4. Calculate the difference in proportions of yawners (treatment - control). 
 
-5. Mark the difference you find on the dot plot on the board.
+5. Input the difference you find in [this form](https://goo.gl/forms/qiBKKJNXB4qjupOw2). 
 
 .footnote[
 [1] http://www.dartmouth.edu/~chance/course/topics/winning_number.html
@@ -141,7 +218,7 @@ on the board.
 
 ---
 
-## Simulation by hand
+## Simulation by hand - Your results
 
 .question[
 Do the simulation results suggest that yawning 
@@ -157,7 +234,7 @@ sim_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSr67_a59H
 ```{r echo=F}
 ggplot(data = sim_data, mapping = aes(x = prop_diff)) +
   geom_histogram(binwidth = 0.05) + 
-  labs(title = "Difference in Proportion of Yawners ")
+  labs(title = "Your Results: Difference in Proportion of Yawners ")
 ```
 
 ---
@@ -260,11 +337,10 @@ mb_yawn %>%
 - **Save the result**
 - Start with the data frame
 - Specify the variables
-    - Since the response variable is categorical, specify the level which should be considered as "success"
 - State the null hypothesis (yawning and whether or not you see someone yawn are independent)
 - Generate simulated differences via permutation
 - Calculate the sample statistic of interest (difference in proportions)
-    - Since the explanatory variable is categorical, specify the order in which the subtraction should occur for the calculation of the sample statistic, $(\hat{p}_{treatment} - \hat{p}_{control})$.
+]
     
 ```{r eval=FALSE}
 {{null_dist <- mb_yawn %>% }}
@@ -275,7 +351,6 @@ mb_yawn %>%
   calculate(stat = "diff in props", 
             order = c("treatment", "control"))
 ```
-]
 
 ---
 
@@ -328,13 +403,6 @@ null_dist %>%
 What is the conclusion of the hypothesis test?
 ]
 
-<br>
-
---
-
-.question[
-Do you "buy" this conclusion?
-]
 
 ---
 
@@ -378,26 +446,26 @@ class: center, middle
 
 ---
 
-## Confidence intervals exercises
+## Confidence intervals exercise
 
-.small[
 .question[
-Describe the simulation process for estimating the parameter assigned to your team.
 
-- Note any assumptions you make in terms of sample size, observed sample statistic, etc.
-- Imagine using index cards or chips to represent the data. 
-- Specify whether the simulation type would be bootstrap, simulate, or permute.
+.midi[Describe the simulation process for estimating the parameter assigned to your team.]
 
-> **M&Ms, stat stars, LAW students, paranormal distribution, WAMS:** single population median
+- .midi[Note any assumptions you make in terms of sample size, observed sample statistic, etc.]
+- .midi[Imagine using index cards or chips to represent the data.]
 
-> **Fantastic4, JJJB, zuck(R)berg, the 9 lives, BlueTurtle:** single population proportion
+> .midi[**M&Ms, stat stars, LAW students, paranormal distribution, WAMS:** single population median]
 
-> **EMS, Turquoise, ccbk, Baes 4 Bayes, ShiftHappens:** difference between two population means
+> .midi[**Fantastic4, JJJB, zuck(R)berg, the 9 lives, BlueTurtle:** single population proportion]
 
-> **Team Audit, PipeOperators, Stats Soulmates, Datan't You Know We're Team 1?, ACOJ:** difference between two population proportions
+> .midi[**EMS, Turquoise, ccbk, Baes 4 Bayes, ShiftHappens:** difference between two population] means
 
-> **significantly different, 16EYES, TwoSquared, Motivated Seniors:** single population standard deviation
-]]
+> .midi[**Team Audit, PipeOperators, Stats Soulmates, Datan't You Know We're Team 1?, ACOJ:** difference between two population proportions]
+
+> .midi[**significantly different, 16EYES, TwoSquared, Motivated Seniors:** single population standard deviation]
+
+]
 
 ---
 
@@ -496,8 +564,7 @@ class: center, middle
 - Make a conclusion, about the hypotheses, in context of the data and the research question.
 
 - `infer::hypothesize(null = "point")` and 
-`infer::generate(reps, type = "simulate")` or 
-`infer::generate(reps, type = "bootstrap")`
+`infer::generate(reps, type = "simulate")`
 
 - `infer::hypothesize(null = "independence")` and 
 `infer::generate(reps, type = "permute")`
@@ -506,26 +573,24 @@ class: center, middle
 
 ## Hypothesis testing exercises
 
-.small[
 .question[
-Describe the simulation process for testing for the parameter assigned to your team. 
 
-- Note any assumptions you make in terms of sample size, observed sample statistic, etc.
-- Imagine using index cards or chips to represent the data. 
-- Specify whether the null hypothesis would be independence or point.
-- Specify whether the simulation type would be bootstrap, simulate, or permute.
+.midi[Describe the simulation process for testing for the parameter assigned to your team.]
 
-> **M&Ms, stat stars, LAW students, paranormal distribution, WAMS:** single standard deviation
+- .midi[Note any assumptions you make in terms of sample size, observed sample statistic, etc.]
+- .midi[Imagine using index cards or chips to represent the data.]
+- .midi[Specify whether the null hypothesis would be independence or point.]
 
-> **Fantastic4, JJJB, zuck(R)berg, the 9 lives, BlueTurtle:** single population mean
+> .midi[**M&Ms, stat stars, LAW students, paranormal distribution, WAMS:** single standard deviation]
 
-> **EMS, Turquoise, ccbk, Baes 4 Bayes, ShiftHappens:** difference between two population proportions
+> .midi[**Fantastic4, JJJB, zuck(R)berg, the 9 lives, BlueTurtle:** single population mean]
 
-> **Team Audit, PipeOperators, Stats Soulmates, Datan't You Know We're Team 1?, ACOJ:** difference between two population medians
+> .midi[**EMS, Turquoise, ccbk, Baes 4 Bayes, ShiftHappens:** difference between two population proportions]
 
-> **significantly different, 16EYES, TwoSquared, Motivated Seniors:** single population medians
-]]
+> .midi[**Team Audit, PipeOperators, Stats Soulmates, Datan't You Know We're Team 1?, ACOJ:** difference between two population medians]
 
+> .midi[**significantly different, 16EYES, TwoSquared, Motivated Seniors:** single population medians]
+]
 ---
 
 ## Testing errors

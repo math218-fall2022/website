@@ -102,10 +102,22 @@ li{
   font-size: 14pt;
   
 }
-.small { font-size: 50%; }
-.large { font-size: 130%; }
-.midi { font-size: 75%; }
-.tiny {font-size: 40%;}
+.small {
+  font-size: 60%; 
+}
+.large {
+  font-size: 130%;
+  
+}
+.midi {
+  font-size: 90%;
+  
+}
+.tiny {
+  font-size: 5pt;
+  color: red;
+}
+
 
 .really-small{
   font-size: 5pt;
