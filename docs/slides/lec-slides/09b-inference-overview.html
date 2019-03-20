@@ -230,8 +230,52 @@ is contagious, i.e. does seeing someone yawn and yawning appear to be dependent?
 
 
 
+![](09b-inference-overview_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
-![](09b-inference-overview_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+---
+
+## Simulation by hard - Your results
+
+.pull-left[
+
+```
+## # A tibble: 11 x 1
+##    prop_diff
+##        &lt;dbl&gt;
+##  1   -0.232 
+##  2   -0.14  
+##  3   -0.14  
+##  4   -0.140 
+##  5   -0.107 
+##  6   -0.0478
+##  7   -0.0478
+##  8   -0.0478
+##  9   -0.008 
+## 10    0.008 
+## 11    0.0147
+```
+]
+
+
+.pull-right[
+
+```
+## # A tibble: 11 x 1
+##    prop_diff
+##        &lt;dbl&gt;
+##  1    0.0147
+##  2    0.015 
+##  3    0.04  
+##  4    0.0478
+##  5    0.0478
+##  6    0.13  
+##  7    0.136 
+##  8    0.136 
+##  9    0.136 
+## 10    0.194 
+## 11    0.32
+```
+]
 
 ---
 
@@ -372,7 +416,7 @@ ggplot(data = null_dist, mapping = aes(x = stat)) +
   labs(title = "Null distribution")
 ```
 
-![](09b-inference-overview_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](09b-inference-overview_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -384,7 +428,7 @@ simulations was the simulated difference in sample proportion at least as extrem
 as the observed difference in sample proportions?
 ]
 
-![](09b-inference-overview_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](09b-inference-overview_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -401,7 +445,7 @@ null_dist %&gt;%
 ## # A tibble: 1 x 1
 ##   p_value
 ##     &lt;dbl&gt;
-## 1    0.46
+## 1    0.54
 ```
 
 ---
@@ -412,7 +456,9 @@ null_dist %&gt;%
 What is the conclusion of the hypothesis test?
 ]
 
-
+.question[
+Do you buy this conclusion?
+]
 ---
 
 class: center, middle
@@ -490,7 +536,7 @@ Should we always prefer a confidence interval with a higher confidence level?
 
 ## Sample size and width of intervals
 
-![](09b-inference-overview_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](09b-inference-overview_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -501,7 +547,7 @@ Should we always prefer a confidence interval with a higher confidence level?
 
 - One sided alternative HT with `\(\alpha\)` `\(\rightarrow\)` `\(CL = 1 - (2 \times \alpha)\)`
 
-![](09b-inference-overview_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](09b-inference-overview_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 
 ---
 

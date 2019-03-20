@@ -40,7 +40,7 @@ options(
   warm = 1
   )
 # Set dpi and height for images
-opts_chunk$set(fig.height = 2.5, fig.width = 5, dpi = 300) 
+knitr::opts_chunk$set(fig.height = 2.5, fig.width = 5, dpi = 300) 
 # ggplot2 color palette with gray
 color_palette <- list(gray = "#999999", 
                       salmon = "#E69F00", 
@@ -76,7 +76,9 @@ library(tidyverse)
 library(infer)
 ```
 
-
+```{r echo=F}
+set.seed(03202019)
+```
 ---
 
 class: center, middle
@@ -230,12 +232,29 @@ sim_data <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vSr67_a59H
   slice(-c(1,2))
 ```
 
-
 ```{r echo=F}
 ggplot(data = sim_data, mapping = aes(x = prop_diff)) +
   geom_histogram(binwidth = 0.05) + 
   labs(title = "Your Results: Difference in Proportion of Yawners ")
 ```
+
+---
+
+## Simulation by hard - Your results
+
+.pull-left[
+```{r echo=F}
+
+sim_data %>% arrange(prop_diff) %>% slice(1:11) %>% select(prop_diff)
+```
+]
+
+
+.pull-right[
+```{r echo=F}
+sim_data %>% arrange(prop_diff) %>% slice(12:22) %>% select(prop_diff)
+```
+]
 
 ---
 
@@ -403,7 +422,9 @@ null_dist %>%
 What is the conclusion of the hypothesis test?
 ]
 
-
+.question[
+Do you buy this conclusion?
+]
 ---
 
 class: center, middle
