@@ -77,7 +77,7 @@ The dataset you will use is called `acs12` and it's in the `openintro` package.
 
 8. Construct a 90% confidence interval for the difference in the proportions of Americans who are citizens between those who speak English at home and those who do not. 
 
-9. Construct a 95% confidence interval for the difference for the difference in median incomes of employed Americans born in the first hal of the year vs. those born in the in the second half.
+9. Construct a 95% confidence interval for the difference for the difference in median incomes of employed Americans born in the first half of the year vs. those born in the in the second half.
 
 10. Pick your own: State a question you want to answer with these data and answer it using the appropriate inference method.
 
