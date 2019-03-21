@@ -585,11 +585,143 @@ class: center, middle
 - Make a conclusion, about the hypotheses, in context of the data and the research question.
 
 - `infer::hypothesize(null = "point")` and 
-`infer::generate(reps, type = "simulate")`
+`infer::generate(reps, type = "simulate")` or 
+`infer::generate(reps, type = "bootstrap")`
 
 - `infer::hypothesize(null = "independence")` and 
 `infer::generate(reps, type = "permute")`
+
+---
+
+## Hypothesis testing for a numeric variable
+
+Let's go back to the price to rent a one-bedroom apartment in Manhattan. 
+
+```{r message=FALSE}
+library(tidyverse)
+manhattan <- read_csv("data/manhattan.csv")
+```
+
+.small[
+.pull-left[
+```{r}
+manhattan %>% slice(1:10)
+```
+]
+.pull-right[
+```{r}
+manhattan %>% slice(11:20)
+```
+]
+]
+
+---
+
+### Rent in Manhattan LA
+
+```{r}
+manhattan %>% summarise(mean=mean(rent))
+```
+
+.question[
+According to the site Rent Jungle, the average price to rent an apartment in LA is around $2400. Is the average rent for a one-bedroom in Manhattan significantly different from $2400?
+]
+
+
+---
+
+### Simulation process
+
+We will use bootstrapping to generate a sampling distribution under the assumption of the null hypothesis being true. Then, calculate the p-value to make a decision on the hypotheses.
+
+1. Take a bootstrap sample - a random sample taken with replacement from the original sample, of the same size as the original sample.
+
+2. Calculate the mean of the bootstrap sample.
+
+3. Repeat steps (1) and (2) many times to create a bootstrap distribution - a distribution of bootstrap means.
+
+4. Shift the bootstrap distribution to be centered at the null value by subtracting/adding the difference between the center of the bootstrap distribution and the null value to each bootstrap mean.
+
+5. Calculate the p-value as the proportion of simulations that yield a sample mean at least as extreme as the observed sample mean.
+
+---
+
+### Part 1:  Take Bootstrap Sample
+
+Take a bootstrap sample - a random sample taken with replacement from the original sample, of the same size as the original sample
+
+.small[
+```{r}
+rent_bootstrap <- manhattan %>%
+  specify(response = "rent") %>%
+  generate(reps = 100, type = "bootstrap") %>%
+  calculate(stat = "mean")
+```
+]
+
+---
+
+### Part 1:  Take Bootstrap Sample
+
+```{r echo=F, warning = F, message = F, fig.height = 3}
+ggplot(data = rent_bootstrap, mapping = aes(x = stat)) +
+  geom_histogram() +
+  labs(title = "Bootstrap distribution")
+```
+
+.question[Where is the center of the distribution? What should it be under the null hypothesis?]
+
+---
+
+## Part 2: Shift Distribution 
+
+Shift the bootstrap distribution to be centered at the null value by subtracting/adding the difference between the center of the bootstrap distribution and the null value to each bootstrap mean.
+
+```{r}
+rent_boot_mean <- rent_bootstrap %>%
+  summarise(mean = mean(stat)) %>% pull()
+
   
+rent_bootstrap <- rent_bootstrap %>%
+  mutate(null_dist_stat = stat - (rent_boot_mean - 2400))
+```
+
+---
+
+## Part 2: Shift Distribution 
+
+```{r echo=F, warning = F, message = F, fig.height = 3}
+ggplot(data = rent_bootstrap, mapping = aes(x = null_dist_stat)) +
+  geom_histogram() +
+  labs(title = "Bootstrap distribution")
+```
+
+---
+
+### Part 3: Calculate P-value 
+
+.question[
+How should we calculate the p-value?
+]
+
+```{r echo=F, warning = F, message = F, fig.height = 3}
+ggplot(data = rent_bootstrap, mapping = aes(x = null_dist_stat)) +
+  geom_histogram() +
+  labs(title = "Bootstrap distribution")
+```
+
+---
+
+### Part 3: Calculate p-value 
+
+Use the results below  to calculate p-value: 
+
+```{r}
+rent_bootstrap %>%
+  count(null_dist_stat > 2625.8) 
+```
+
+
 ---
 
 ## Hypothesis testing exercises
@@ -610,7 +742,7 @@ class: center, middle
 
 > .midi[**Team Audit, PipeOperators, Stats Soulmates, Datan't You Know We're Team 1?, ACOJ:** difference between two population medians]
 
-> .midi[**significantly different, 16EYES, TwoSquared, Motivated Seniors:** single population medians]
+> .midi[**significantly different, 16EYES, TwoSquared, Motivated Seniors:** single population median]
 ]
 ---
 
