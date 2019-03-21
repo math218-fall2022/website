@@ -1,6 +1,6 @@
 ---
 title: "HW 04 - Simulate to infer"
-date: "due March 25 at 11:59p"
+date: "due Wed, Mar 27 at 11:59p"
 output: 
     html_document: 
      css: "./sta199-hw.css"
