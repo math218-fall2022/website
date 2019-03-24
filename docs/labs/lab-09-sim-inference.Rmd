@@ -138,6 +138,8 @@ Our alternative hypothesis should reflect the research question, i.e. some chang
 
 2. Create a filtered data frame called `ncbirths_white` that contain data only from white mothers. Then, calculate the mean of the weights of their babies.
 
+You will use `ncbirths_white` for Exercises 3 and 4.
+
 3. Are the conditions necessary for conducting simulation based inference satisfied? Explain your reasoning.
 
 Let's discuss how this test would work. Our goal is to simulate a null distribution of sample means that is centered at the null value of 7.43 pounds. In order to do so, we 
