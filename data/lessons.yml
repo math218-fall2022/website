@@ -156,7 +156,7 @@ lessons:
   - date: "Wed, Mar 27"
     title: "Central limit theorem"
     reading: "reading-06.html"
-   # slides: "lec-slides/10b-clt.html"
+    slides: "lec-slides/10-clt.html"
     hw: "hw-04.html"
   - date: "Thur, Mar 28"
     title: "Lab 09: Simulation based inference"
