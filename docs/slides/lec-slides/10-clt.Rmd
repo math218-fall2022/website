@@ -76,7 +76,45 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 - Midterm assigned on Monday, due Friday at 11:59p
     - Mostly modeling + inference
-    - But also some exploratory data analysis
+    - Some exploratory data analysis
+    
+---
+
+## Midsemester survey 
+
+- Labs
+
+- Due dates
+
+- Learn by doing! 80% said working on assignments contributed most to their learning
+
+---
+
+## HW 04 Question 1
+
+.question[
+Describe the simulation process for testing for a single population standard deviation. Suppose the research question is asking whether the standard deviation is less than 3, and the observed sample standard deviation is 2.
+]
+
+--
+
+1. How many variables?
+
+--
+
+2. What types of variable(s)?
+
+--
+
+3. What is the research question?
+
+--
+
+4. What are the null and alternative hypothesis?
+
+--
+
+5. What example in the notes can help me solve this question?
 
 ---
 
@@ -130,7 +168,7 @@ data, and construct sampling distributions, and examine their shapes, centers, a
 spreads
 
 .question[
-What is the difference between the sampling and bootstrap distribution?
+What is the difference between the sampling distribution and bootstrap distribution?
 ]
 
 ---
