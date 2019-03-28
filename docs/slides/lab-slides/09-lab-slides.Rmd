@@ -50,14 +50,16 @@ library(rvest)
 
 - Lab 09 overview
 
+- Writing Exercise 3 Peer Review (last 15 minutes of class)
+    - [https://app.elireview.com](https://app.elireview.com)
+
 ---
 
 ## Midterm 02
 
-- Assigned at after class on Monday, due Friday at 11:59p
+- Assigned after class on Monday, due Friday at 11:59p
 
 - On Monday: (at a minimum)
-    - create repo
     - clone repo to RStudio
     - read the questions
     - make a plan for when you'll work on the exam
@@ -97,8 +99,6 @@ library(rvest)
 
 - Part 2: Baby weight vs. smoking
 
-- Part 3: Baby weight vs. mother’s age
-
 Each part requires some data wrangling and visualization along with the inference component
 
 ---
@@ -106,7 +106,7 @@ Each part requires some data wrangling and visualization along with the inferenc
 ## Getting started with lab
 
 .small[
-- Go to the course GitHub organization and find the **lab-08** repo that has your team name on it.
+- Go to the course GitHub organization and find the **lab-09** repo that has your team name on it.
 
 - On GitHub, click on the green Clone or download button, select Use HTTPS. Click on the clipboard icon to copy the repo URL.
 

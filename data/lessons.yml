@@ -160,8 +160,8 @@ lessons:
     hw: "hw-04.html"
   - date: "Thur, Mar 28"
     title: "Lab 09: Simulation based inference"
-   # lab: "lab-09-sim-inference.html"
-   # slides: "lab-slides/09-lab-deck.html"
+    lab: "lab-09-sim-inference.html"
+    slides: "lab-slides/09-lab-slides.html"
   - date: "Fri, Mar 29"
     title: Project proposal due
     project: "project.html"
