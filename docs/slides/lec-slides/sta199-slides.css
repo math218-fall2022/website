@@ -8,14 +8,14 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   color: #333333;
-  font-size: 14pt;
+  font-size: 16pt;
 }
 
 p {
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   color: #333333;
-  font-size: 14pt;
+  font-size: 16pt;
 }
 
 
@@ -34,7 +34,7 @@ a, a > code {
   font-family: 'Open Sans', sans-serif;
   color: #006975;
   text-decoration: none;
-  font-size: 14pt;
+  font-size: 16pt;
 }
 
 .footnote {
@@ -95,11 +95,11 @@ a, a > code {
 }
 ul {
   list-style-type: square;
-  font-size: 14pt;
+  font-size: 16pt;
 }
 li{
   margin: 10px 0;
-  font-size: 14pt;
+  font-size: 16pt;
   
 }
 .small {
@@ -140,7 +140,7 @@ table {
 table thead th { border-bottom: 1px solid #ddd; }
 th, td { 
   padding: 5px; 
-  font-size: 14pt;
+  font-size: 16pt;
 }
 thead, tfoot, tr:nth-child(even) { background: #eee }
 
