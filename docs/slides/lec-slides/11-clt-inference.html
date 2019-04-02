@@ -39,6 +39,7 @@ layout: true
 - Midterm assigned after class, due Friday at 11:59p
     - Mostly modeling + inference
     - Some exploratory data analysis
+    - Use in-line code to write narrative
     
 - Team Feedback 2 due Friday at 11:59p 
 
@@ -251,6 +252,8 @@ The GSS asks "After an average work day, about how many
 hours do you have to relax or pursue activities that you enjoy?". Do these data provide convincing evidence that Americans, on average, spend more than 3 hours per day relaxing? Note that the variable of interest in the dataset is `hrsrelax`.
 ]
 
+--
+
 
 ```r
 gss = read_csv("data/gss2010.csv")
@@ -285,7 +288,7 @@ ggplot(data = gss, aes(x = hrsrelax)) +
 ## Hypotheses
 
 .question[
-What are the hypotheses for evaluation Americans, on average, spend more than 3 hours
+What are the hypotheses for evaluating if Americans, on average, spend more than 3 hours
 per day relaxing?
 ]
 
