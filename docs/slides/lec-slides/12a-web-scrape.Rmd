@@ -65,11 +65,11 @@ ggplot2::theme_set(ggplot2::theme_bw())
 
 ## Announcements
 
-- Extra credit due Mon, Apr 8 at 11:59p
+- Extra credit due Mon, Apr 15 at 11:59p
     - [http://bit.ly/sta199-sp19-posttest](http://bit.ly/sta199-sp19-posttest)
     - Access Code: SSD2484ZHY
     - Course: STA 199, Section: 1
-    - Must get at least 70% to receive any points
+    - Up to 5 points on Exam 02. Must get at least 70% to receive any points
 
 ---
 
