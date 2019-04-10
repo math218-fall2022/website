@@ -21,6 +21,7 @@ options(
 knitr::opts_chunk$set(eval = TRUE)
 ```
 
+
 ## Introduction
 
 In 2004, the state of North Carolina released a large data set containing 
