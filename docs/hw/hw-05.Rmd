@@ -10,9 +10,7 @@ output:
 ---
 
 <br>
-**Instructions to come...**
 
-<!--
 ```{r include=FALSE}
 library(tidyverse)
 ```
@@ -23,20 +21,22 @@ knitr::include_graphics("img/hw-05-rvest.png")
 
 ## Getting started
 
-- Start with an assignment link that creates a repo on GitHub with starter documents: https://classroom.github.com/a/RiATfkTW
-- Clone this repo in RStudio
+Here are the steps for getting started:
+
+- Find the **hw-05-** repo on GitHub
+- Clone this repo in RStudio Cloud
+- Configure git using the `use_git_config()` function
 - Make any changes needed as outlined by the tasks you need to complete for the assignment
-- Make sure all your code chunks are informatively named, and these labels re not repeated
+- Make sure all your code chunks are informatively named, there are no spaces in the labels, and these labels re not repeated
 - Periodically commit changes (the more often the better, for example, once per each new task)
 - Push all your changes back to your GitHub repo
 
 and voila, you're done! Once you push your changes back you do not need to do anything else to "submit" your work. And you can of course push multiple times throughout the assignment. At the time of the deadline we will take whatever is in your repo and consider it your final submission, and grade the state of your work at that time (which means even if you made mistakes before then, you wouldn't be penalized for them as long as the final state of your work is correct).
-
 ## Questions
 
 ### Part 1: Gender pay gap
 
-Go to https://en.wikipedia.org/wiki/Gender_pay_gap and scrape the table underneath the header "List by OECD 2015". Save your code in an R script called `paygap.R`, write the data frame out to a csv file called `paygap.csv` using the `write_csv` function. Store this file in the `data` folder.
+Go to https://en.wikipedia.org/wiki/Gender_pay_gap and scrape the table under the section "By Country". Save your code in an R script called `paygap.R`, write the data frame out to a csv file called `paygap.csv` using the `write_csv` function. Store this file in the `data` folder.
 
 For example, if your data frame is called `paygap`, you can use
 
@@ -46,7 +46,7 @@ write_csv(paygap, path = "data/paygap.csv")
 
 1. Load `paygap.csv` in your R Markdown file.
 
-2. Create a visualization similar to, though not necessarily exactly the same as, the one shown on the [Wikipedia page](https://en.wikipedia.org/wiki/Gender_pay_gap). Interpret what the plot. (*Hint:* You will need to also look up on the OECD page what these values mean.)
+2. Create a visualization similar to, though not necessarily exactly the same as, the one shown on the [Wikipedia page](https://en.wikipedia.org/wiki/Gender_pay_gap). Interpret what the plot.
 
 ### Part 2: Video games
 
@@ -88,5 +88,6 @@ evaluated for
 
 This is an **individual** assignment. You are welcomed to exchange ideas with classmates and ask questions on the getting help channels discussed above however you may not share your text or code answers directly with classmates.
 
-The Duke Community Standard applies and course academic integrity policies apply. Please review them [here](http://www2.stat.duke.edu/courses/Spring18/Sta199/policies/#academic-integrity). Specifically, the note on sharing / reusing code.
--->
+The Duke Community Standard applies and course academic integrity policies apply. Please review them [here](https://www2.stat.duke.edu/courses/Spring19/sta199.001/policies.html). Specifically, the note on sharing / reusing code.
+
+
