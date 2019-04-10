@@ -77,7 +77,7 @@ library(rvest)
 ## Getting started with lab
 
 .small[
-- Go to the course GitHub organization and find the **lab-09** repo that has your team name on it.
+- Go to the course GitHub organization and find the **lab-10** repo that has your team name on it.
 
 - On GitHub, click on the green Clone or download button, select Use HTTPS. Click on the clipboard icon to copy the repo URL.
 
