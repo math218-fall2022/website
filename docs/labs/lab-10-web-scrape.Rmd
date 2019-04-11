@@ -87,11 +87,11 @@ Next we get the cities. The paths for the cities on the active vs. closed page a
 cities <- c(active_cities, closed_cities)
 ```
 
-- Scrape brewery type, number of beers brewed at each brewery, year when brewery first opened ("est.")s. Save these as vectors called `types`, `counts`, `ests`,  `urls`, and `status` respectively.
+- Scrape brewery type, number of beers brewed at each brewery, year when brewery first opened ("est.")s, and URL. Save these as vectors called `types`, `counts`, `ests`,  and `urls`, respectively. Additionally, create a vector called `status` that indicates whether each brewery is active or closed.
 
 - Create a data frame (`tibble`) called `ncbreweries` with column names shown in the table above.
 
-- Save this data frame as `ncbreweries.csv` using the `write_csv` function into the `/data` folder: `write.csv(ncbreweries.csv, path = "data/ncbreweries.csv")`.
+- Save this data frame as `ncbreweries.csv` using the `write_csv` function into the `/data` folder: `write.csv(ncbreweries, path = "data/ncbreweries.csv")`.
 
 2. Load `ncbreweries.csv` in your Rmd.
 

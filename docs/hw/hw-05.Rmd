@@ -50,9 +50,9 @@ write_csv(paygap, path = "data/paygap.csv")
 
 ### Part 2: Video games
 
-Go to http://www.metacritic.com/browse/games/score/metascore/year/all/filtered and scrape the data for the all video games released in 2018. For each game grab the title, Metacritic and user score, release date, and URL to game's individual review page. (*Hint:* You will need to advance to the next page.) Save your code in an R script called `games.R`.
+Go to http://www.metacritic.com/browse/games/score/metascore/year/all/filtered and scrape the data for videos games in the **first three pages of games released in 2018**. For each game grab the title, Metacritic and user score, release date, and URL to game's individual review page. (*Hint:* You will need to advance to the next page.) Save your code in an R script called `games.R`.
 
-Next, write a function that scrapes the number of Metascore critics and user score ratings, genre(s), and rating for the video game from the video game's individual webpage. Then, apply this function to the second video game on the list. Finally, use mapping to get this information for all games released in 2018. (*Hint:* You might need to slow down your code with `Sys.sleep()`.)
+Next, write a function that scrapes the number of Metascore critics and user score ratings, genre(s), and rating for the video game from the video game's individual webpage. Then, apply this function to the second video game on the list. Finally, use mapping to get this information for the games in the **first three pages of games released in 2018**. (*Hint:* You might need to slow down your code with `Sys.sleep()`.)
 
 Write the resulting data frame containing all of the information you scraped to a file called `games.csv` in the `data` folder.
 
