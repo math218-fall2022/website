@@ -511,10 +511,58 @@ scrape_show_info(urls[3])
 
 ---
 
-class: middle, center
+class: middle
 
-## Oh no! We're repeating our code again!
+## Oh no! 
 
+### 1. We're not scraping genre for every TV show!
+### 2. We're repeating our code again!
+
+---
+
+## Update genre code
+
+.small[
+```{r}
+scrape_show_info <- function(x){
+  
+  y <- read_html(x) 
+
+  title <- y %>%
+    html_node("h1") %>%
+    html_text() %>%
+    str_trim()
+
+  runtime <- y %>%
+    html_node("time") %>%
+    html_text() %>%
+    str_replace("\\n", "") %>%
+    str_trim()
+
+  genres <- y %>%
+    html_nodes(".see-more.canwrap~ .canwrap a") %>% #<<
+    html_text() %>%
+    str_trim() %>%
+    paste(collapse = ", ")
+  
+  tibble(title = title, runtime = runtime, genres = genres)
+}
+```
+]
+
+---
+
+### Try again: go to each page, scrape show info 
+
+```{r}
+scrape_show_info(urls[1])
+scrape_show_info(urls[2])
+scrape_show_info(urls[3])
+```
+
+--
+
+**... but we're still repeating our code!**
 ---
 
 ## Automation 
@@ -607,3 +655,9 @@ scrape_show_info <- function(x){
 
 }
 ```
+
+
+---
+
+## Additional resource
+
