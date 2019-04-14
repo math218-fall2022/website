@@ -655,9 +655,3 @@ scrape_show_info <- function(x){
 
 }
 ```
-
-
----
-
-## Additional resource
-
