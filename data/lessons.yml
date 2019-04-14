@@ -201,7 +201,7 @@ lessons:
   - title: "Week 14"
   - date: "Mon, Apr 15"
     title: "Interactive data visualization and reporting, Part 1"
-   # slides: "lec-slides/13a-interactive-viz.pdf"
+    slides: "lec-slides/13a-interactive-viz.pdf"
   - date: "Wed, Apr 17"
     title: "Interactive data visualization and reporting, Part 2"
    # slides: "lec-slides/13b-interactive-viz-2.pdf"
