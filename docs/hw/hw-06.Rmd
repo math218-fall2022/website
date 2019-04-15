@@ -20,11 +20,7 @@ knitr::include_graphics("img/hw-06-pkg.png")
 
 <br>
 
-**Instructions to come...**
-
-<!--
-
-But really, one is enough. Pick a package from the list below, and use it to do something. If you want to use a package not on this list, that's also ok, but run it by me first (so that I can confirm it's not one we introduce in class so far, the goal is to work with a new package).
+But really, one is enough. Pick a package from the list below, and use it to do something. If you want to use a package not on this list, that's also ok, but run it by me first (so that I can confirm it's not one we introduced in class so far, since the goal is to work with a new package).
 
 ## Package list
 
@@ -117,10 +113,11 @@ The package manuals are linked below, however developers of the packages might h
 
 Here are the steps for getting started:
 
-- Start with an assignment link that creates a repo on GitHub with starter documents: https://classroom.github.com/a/QlPBWkcA
-- Clone this repo in RStudio
+- Find the **hw-06-** repo on GitHub
+- Clone this repo in RStudio Cloud
+- Configure git using the `use_git_config()` function
 - Make any changes needed as outlined by the tasks you need to complete for the assignment
-- Make sure all your code chunks are informatively named, and these labels re not repeated
+- Make sure all your code chunks are informatively named, there are no spaces in the labels, and these labels re not repeated
 - Periodically commit changes (the more often the better, for example, once per each new task)
 - Push all your changes back to your GitHub repo
 
@@ -143,15 +140,15 @@ Finally, do something with the package. It doesn't have to be complicated. In fa
 
 ## Getting help
 
-Ask your questions on the #questions channel on Slack. If your question is about an error you're getting, make sure to clearly explain what generated the error as well as what the error says.
+Use Piazza to ask questions about the assignment. 
 
 You are also welcomed to discuss the homework with each other broadly (no sharing code!) as well as ask questions at office hours.
+
 
 ## Academic integrity
 
 This is an **individual** assignment. You are welcomed to exchange ideas with classmates and ask questions on the getting help channels discussed above however you may not share your text or code answers directly with classmates.
 
-The Duke Community Standard applies and course academic integrity policies apply. Please review them [here](http://www2.stat.duke.edu/courses/Spring18/Sta199/policies/#academic-integrity). Specifically, the note on sharing / reusing code.
-
+The Duke Community Standard applies and course academic integrity policies apply. Please review them [here](https://www2.stat.duke.edu/courses/Spring19/sta199.001/policies.html). Specifically, the note on sharing / reusing code.
 
 -->
