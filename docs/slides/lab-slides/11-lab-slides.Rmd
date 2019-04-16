@@ -43,6 +43,13 @@ library(tidyverse)
 library(rvest)
 ```
 
+## Experiment Survey 
+
+Please take a few minutes to fill out the survey: 
+
+[https://duke.qualtrics.com/jfe/form/SV_6WfAY1m6YiHUmIl](https://duke.qualtrics.com/jfe/form/SV_6WfAY1m6YiHUmIl)
+
+---
 
 ## Tips
 
