@@ -43,7 +43,7 @@ library(tidyverse)
 library(rvest)
 ```
 
-## Experiment Survey 
+## Post-Study Survey
 
 Please take a few minutes to fill out the survey: 
 
@@ -53,7 +53,7 @@ Please take a few minutes to fill out the survey:
 
 ## Tips
 
-- Merge conflics will happen, issues will arise, and that’s fine! Commit and push often, and ask questions when stuck.
+- Merge conflicts will happen, issues will arise, and that’s fine! Commit and push often, and ask questions when stuck.
 
 - Review the grading guidelines on the project assignment and ask questions if any of the expectations are unclear.
 
@@ -68,7 +68,14 @@ Please take a few minutes to fill out the survey:
 
 ## Code in write up
 
-- In your write up your code should be hidden (`echo = FALSE`) so that your document is neat and easy to read. 
+- All code, R warnings, and R messages should be hidden so your document is neat and easy to read. At the top of your write up, include the following code: 
+```{r eval = F}
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  message = FALSE, 
+  warning = FALSE
+)
+```
 
 - However your document should include all your code such that if we re-knit your Rmd file we should be able to obtain the results you presented. 
 
@@ -90,4 +97,4 @@ Please take a few minutes to fill out the survey:
 
 - Please take a few minutes to go on DukeHub and evaluate the course.
 
-- You will receive a separate email about TA evaluations.
+- Extra credit: If we get 90% response rate on the course evaluation **and** post-study survey, everyone gets +5 points on their total (not average) HW score
