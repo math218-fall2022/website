@@ -46,7 +46,7 @@ write_csv(paygap, path = "data/paygap.csv")
 
 1. Load `paygap.csv` in your R Markdown file.
 
-2. Create a visualization similar to, though not necessarily exactly the same as, the one shown on the [Wikipedia page](https://en.wikipedia.org/wiki/Gender_pay_gap). Interpret what the plot.
+2. Create a visualization similar to, though not necessarily exactly the same as, the one shown on the [Wikipedia page](https://en.wikipedia.org/wiki/Gender_pay_gap). Interpret the plot.
 
 ### Part 2: Video games
 
