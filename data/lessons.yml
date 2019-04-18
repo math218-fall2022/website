@@ -208,7 +208,7 @@ lessons:
     hw: "hw-05.html"
   - date: "Thur, Apr 18"
     title: "Work on project"
-    # slides: "lab-slides/11-lab-deck.html"
+    slides: "lab-slides/11-lab-slides.html"
   - title: "Week 15"
   - date: "Mon, Apr 22"
     title: "Special Topic"
