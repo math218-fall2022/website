@@ -396,4 +396,10 @@ How do you train yourself to make the right decisions (or reduce the likelihood 
 
 - DataKind: https://www.datakind.org/
 
+---
+
+## Acknowledgement
+
+These slides were largely based on [*Data Science Ethics*](http://www2.stat.duke.edu/courses/Fall18/sta112.01/slides/u3_d01-ethics/u3_d01-ethics.html)
+
 
