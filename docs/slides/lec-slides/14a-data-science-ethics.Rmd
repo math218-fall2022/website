@@ -133,11 +133,12 @@ class: middle, center
 
 ## What is a p-value? 
 
-
+.center[
 <iframe src="https://fivethirtyeight.abcnews.go.com/video/embed/56150342" width="640" height="360" scrolling="no" style="border:none;" allowfullscreen></iframe>
 
 
 Source: ["Not Even Scientists Can Easily Explain p-values"](https://fivethirtyeight.com/features/not-even-scientists-can-easily-explain-p-values/)
+]
 
 ---
 
@@ -156,27 +157,31 @@ Source: ["Not Even Scientists Can Easily Explain p-values"](https://fivethirtyei
 
 ### Alternate ways to evaluate evidence
 
-- Concentrate on effect sizes (how big of a difference does an intervention make, and is it practically meaningful?)
+- Concentrate on effect sizes
+    - How big of a difference does an intervention make
+    - Is it practically meaningful?
 
 - Use confidence intervals to estimate effect size
 
---
-
 - Ask whether the result from a novel study or a replication (put some more weight into a theory many labs have looked into)
-
---
 
 - Ask whether underlying data is freely accessible (so anyone can check the math)
 
---
+<br><br><br>
+
+<small>Source: [800 scientists say it’s time to abandon “statistical significance”](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained) </small>  
+
+---
+
+### Alternate ways to evaluate evidence
 
 - Use alternative statistical techniques like likelihood ratios and Bayes factors
     - P-values ask the question “how rare are my results?” 
-    - Likelhood ratios and Bayes factors ask the question “what is the probability my hypothesis is the best explanation for the results we found?” 
- 
---
+    - Likelihood ratios and Bayes factors ask the question “what is the probability my hypothesis is the best explanation for the results we found?” 
+    
+<br><br><br><br><br><br><br><br>
 
-<small>Source: [800 scientists say it’s time to abandon “statistical significance”](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained) </small>    
+<small>Source: [800 scientists say it’s time to abandon “statistical significance”](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained) </small>   
 
 ---
 
@@ -192,7 +197,8 @@ class: middle, center
 - In 2016, researchers published data of 70,000 OkCupid users—including usernames, political leanings, drug usage, and intimate sexual details.
 
 >Some may object to the ethics of gathering and releasing this data. However, all the data found in the dataset are or were already publicly available, so releasing this dataset merely presents it in a more useful form.
-Researchers Emil Kirkegaard and Julius Daugbjerg Bjerrekær
+
+> Researchers Emil Kirkegaard and Julius Daugbjerg Bjerrekær
 
 - Although the researchers did not release the real names and pictures of the OkCupid users, critics noted that their identities could easily be uncovered from the details provided—such as from the usernames.
 
@@ -232,9 +238,47 @@ class: middle, center
 
 ## Machine Bias
 
-[http://www2.stat.duke.edu/courses/Fall18/sta112.01/slides/u3_d01-ethics/u3_d01-ethics.html#16]](http://www2.stat.duke.edu/courses/Fall18/sta112.01/slides/u3_d01-ethics/u3_d01-ethics.html#16)
+.center[
+![](img/14a/propublica-criminal-sentencing.png)
+]
 
+There’s software used across the country to predict future criminals. And it's biased...
 
+[Pro Publica, May 23, 2016](https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing)
+
+---
+
+class: middle
+
+>“Although these measures were crafted with the best of intentions, I am concerned that they inadvertently undermine our efforts to ensure individualized and equal justice,” he said, adding, “they may exacerbate unwarranted and unjust disparities that are already far too common in our criminal justice system and in our society.”
+
+> Then  U.S. Attorney General Eric Holder (2014)
+
+---
+
+## ProPublica analysis
+
+**Data:** Risk scores assigned to more than 7,000 people arrested in Broward County, Florida, in 2013 and 2014 + whether they were charged with new crimes over the next two years
+
+--
+  
+**Results:** 
+
+- 20% of those predicted to commit violent crimes actually did
+
+- Algorithm had higher accuracy (61%) when full range of crimes taken into account (e.g. misdemeanors)
+
+![](img/14a/propublica-results.png)
+
+- Algorithm was more likely to falsely flag African American defendants as future criminals, at almost twice the rate as Caucasian defendants
+
+---
+
+class: middle
+
+Read more at 
+
+[propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing](https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing).
 ---
 
 ### Amazon's Experimental Hiring Algorithm
@@ -245,7 +289,7 @@ class: middle, center
 
 - Amazon’s system taught itself that male candidates were preferable
 
->Gender bias was not the only issue. Problems with the data that underpinned the models’ judgments meant that unqualified candidates were often recommended for all manner of jobs, the people said. Source
+>"Gender bias was not the only issue. Problems with the data that underpinned the models’ judgments meant that unqualified candidates were often recommended for all manner of jobs, the people said."
 
 <small>Source: ["Amazon scraps secret AI recruiting tool that showed bias against women"](https://www.reuters.com/article/us-amazon-com-jobs-automation-insight/amazon-scraps-secret-ai-recruiting-tool-that-showed-bias-against-women-idUSKCN1MK08G)</small>
 
@@ -258,6 +302,17 @@ class: middle, center
 <iframe width="560" height="315" src="https://www.youtube.com/embed/UG_X_7g63rY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 ]
 
+---
+
+## Review
+
+.question[
+A company uses a machine learning algorithm to determine which job advertisement to display for users searching for technology jobs. Based on past results, the algorithm tends to display lower paying jobs for women than for men (after controlling for other characteristics than gender).
+
+What ethical considerations might be considered when reviewing this algorithm?
+]
+
+Source: *Modern Data Science with R*, by Baumer, Kaplan, and Horton
 ---
 
 class: center, middle
@@ -293,21 +348,6 @@ March 2019 issue of American Statistician
 by Mike Loukides, Hilary Mason, DJ Patil  
 
 (free Kindle download)
-]
-
----
-
-## Further reading
-
-.pull-left[
-![](img/14a/ethics-data-science.jpg)
-]
-.pull-right[
-[Ethics and Data Science](https://www.amazon.com/Ethics-Data-Science-Mike-Loukides-ebook/dp/B07GTC8ZN7)  
-
-by Mike Loukides, Hilary Mason, DJ Patil  
-
-(Free Kindle download)
 ]
 
 ---
@@ -351,7 +391,9 @@ How do you train yourself to make the right decisions (or reduce the likelihood 
 ## Do good with data
 
 - Data for democracy: https://www.datafordemocracy.org/
+
 - Data Science for Social Good: https://dssg.uchicago.edu/
+
 - DataKind: https://www.datakind.org/
-- Sign the Manifesto for Data Practices: https://datapractices.org/manifesto/
+
 
