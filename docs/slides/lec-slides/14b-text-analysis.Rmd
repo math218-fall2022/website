@@ -485,8 +485,10 @@ Get data from three artists:
 ```{r cache=TRUE}
 beyonce <- genius_album(artist = "Beyonce", album = "Lemonade") %>%
   mutate(artist = "Beyonce", album = "Lemonade")
+
 ariana <- genius_album(artist = "Ariana Grande", album = "thank you, next") %>%
   mutate(artist = "Ariana Grande", album = "thank you, next")
+
 tswift <- genius_album(artist = "Taylor Swift", album = "reputation") %>%
   mutate(artist = "Taylor Swift", album = "reputation")
 ```
@@ -593,6 +595,12 @@ See more at [Using R To Analyze The Redacted Mueller Report](https://www.jlukito
 
 ---
 
+## Extra practice
+
+Use the **tidytext** project in RStudio Cloud for additional practice with song lyrics and books.
+
+---
+
 ## Acknowledgements
 
 - Julia Silge: https://github.com/juliasilge/tidytext-tutorial
@@ -601,7 +609,11 @@ See more at [Using R To Analyze The Redacted Mueller Report](https://www.jlukito
 
 - Josiah Parry: https://github.com/JosiahParry/geniusR
 
+---
 
+class:  middle, center
+
+### Congrats on completing STA 199 `r emo::ji("tada")`
 
 
 
