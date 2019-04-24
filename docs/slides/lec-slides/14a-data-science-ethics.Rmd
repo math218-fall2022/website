@@ -155,6 +155,15 @@ Source: ["Not Even Scientists Can Easily Explain p-values"](https://fivethirtyei
 
 ---
 
+class: middle 
+
+### *Let’s repeat it: P-values don’t necessarily tell you if an experiment “worked” or not*
+
+from [800 scientists say it’s time to abandon “statistical significance”](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained)
+
+
+---
+
 ### Alternate ways to evaluate evidence
 
 - Concentrate on effect sizes
@@ -163,7 +172,7 @@ Source: ["Not Even Scientists Can Easily Explain p-values"](https://fivethirtyei
 
 - Use confidence intervals to estimate effect size
 
-- Ask whether the result from a novel study or a replication (put some more weight into a theory many labs have looked into)
+- Ask whether the result is from a novel study or a replication (put some more weight into a theory many labs have looked into)
 
 - Ask whether underlying data is freely accessible (so anyone can check the math)
 
@@ -178,6 +187,8 @@ Source: ["Not Even Scientists Can Easily Explain p-values"](https://fivethirtyei
 - Use alternative statistical techniques like likelihood ratios and Bayes factors
     - P-values ask the question “how rare are my results?” 
     - Likelihood ratios and Bayes factors ask the question “what is the probability my hypothesis is the best explanation for the results we found?” 
+    
+- You'll learn more about these in future statistics classes `r emo::ji("smile")`
     
 <br><br><br><br><br><br><br><br>
 
@@ -196,20 +207,29 @@ class: middle, center
 
 - In 2016, researchers published data of 70,000 OkCupid users—including usernames, political leanings, drug usage, and intimate sexual details.
 
->Some may object to the ethics of gathering and releasing this data. However, all the data found in the dataset are or were already publicly available, so releasing this dataset merely presents it in a more useful form.
+>"Some may object to the ethics of gathering and releasing this data. However, all the data found in the dataset are or were already publicly available, so releasing this dataset merely presents it in a more useful form.""
 
 > Researchers Emil Kirkegaard and Julius Daugbjerg Bjerrekær
 
 - Although the researchers did not release the real names and pictures of the OkCupid users, critics noted that their identities could easily be uncovered from the details provided—such as from the usernames.
 
+<br>
+
+<small>[*OKCupid Study Reveals the Perils of Big-Data Science*](https://www.wired.com/2016/05/okcupid-study-reveals-perils-big-data-science/)</small>
+
 ---
 
-class: middle, 
+class: middle
 
 .question[
-When analyzing social media data, how do you make sure you don't violate reasonable expectations of privacy?
+When collecting and analyzing social media data, how do you make sure you don't violate reasonable expectations of privacy?
 ]
 
+.center[
+
+![](img/14a/okcupid-tweet.png)
+
+]
 
 ---
 
@@ -307,7 +327,7 @@ Read more at
 ## Review
 
 .question[
-A company uses a machine learning algorithm to determine which job advertisement to display for users searching for technology jobs. Based on past results, the algorithm tends to display lower paying jobs for women than for men (after controlling for other characteristics than gender).
+A company uses a machine learning algorithm to determine which job advertisement to display for users searching for technology jobs. Based on past results, the algorithm tends to display lower paying jobs for women than for men (after controlling for other characteristics).
 
 What ethical considerations might be considered when reviewing this algorithm?
 ]
