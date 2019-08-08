@@ -1,7 +1,8 @@
 # Website
-Course website for Sta 199 - Intro to Data Science, Spring 2019 at Duke University
 
-Website address: https://www2.stat.duke.edu/courses/Spring19/sta199.001/.
+Course website for Sta 199 - Intro to Data Science, Fall 2019 at Duke University
+
+Website address: https://www2.stat.duke.edu/courses/Fall19/sta199.001/.
 
 # Attribution
 
@@ -13,5 +14,5 @@ Website address: https://www2.stat.duke.edu/courses/Spring19/sta199.001/.
 
 # Notes for building the website:
 
-- Colors: Pantone #7A4183
+- Colors: Pantone #924E8C
   - To change, search & replace in `themes/material/static/css/material-kit.css`
