@@ -1,9 +1,0 @@
-layout: true
-
-<div class="my-footer">
-<span>
-<a href="http://datasciencebox.org" target="_blank">datasciencebox.org</a>
-</span>
-</div> 
-
----
