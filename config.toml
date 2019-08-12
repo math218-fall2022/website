@@ -61,6 +61,14 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   name = "GitHub"
   pre = "<i class='fab fa-github fa-lg'></i>"
   url = "https://github.com/STA199-Sp19"
+  
+[[menu.main]]
+  weight = 5
+  identifier = "sakai"
+  name = "Sakai"
+  pre = "<i class=\"material-icons\">school</i>"
+  url = "http://sakai.duke.edu"
+
 [[menu.main]]
   weight = 6
   identifier = "help"
