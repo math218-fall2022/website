@@ -69,9 +69,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -96,22 +94,92 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
 });
 </script>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -126,12 +194,14 @@ $(document).ready(function () {
 
 
 <ul>
-<li><p><a href="https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-02.html">Reading 01: Data Exploration</a></p></li>
-<li><p><a href="https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-03.html">Reading 02: Data Collection</a></p></li>
-<li><p><a href="https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-04.html">Reading 03: Regression</a></p></li>
-<li><p><a href="https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-05.html">Reading 04: Model Validation</a></p></li>
-<li><p><a href="https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-06.html">Reading 05: Randomization &amp; Bootstrapping</a></p></li>
-<li><p><a href="https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/reading-07.html">Reading 06: Central Limit Theorem</a></p></li>
+<li><p><a href="./reading-01.html">Reading 01: Reproducibility</a>, due August 29</p></li>
+<li><p><a href="./reading-02.html">Reading 02: Data Visualization and Exploration</a>, due September 5</p></li>
+<li><p><a href="./reading-03.html">Reading 03: Data Collection</a>, due September 17</p></li>
+<li><p><a href="./reading-04.html">Reading 04: Data Science Ethics</a>, due October 1</p></li>
+<li><p><a href="./reading-05.html">Reading 05: Regression</a>, due October 15</p></li>
+<li><p><a href="./reading-06.html">Reading 06: Model Validation</a>, due October 24</p></li>
+<li><p><a href="./reading-07.html">Reading 07: Randomization &amp; Bootstrapping</a>, due November 5</p></li>
+<li><p><a href="./reading-08.html">Reading 08: Central Limit Theorem</a>, due November 12</p></li>
 </ul>
 
 
