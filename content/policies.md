@@ -3,14 +3,13 @@ title: "Course Policies"
 markup: "mmark"
 ---
 
-<!--
-
 ### Activities & Assessments
+
 The following activities and assessments will help you successfully achieve the course learning objectives. By experiencing the course content in different ways, you will not only gain a better understanding of data science, but you will also get experiences that can guide you as you apply what you've learned in future academic and professional projects.
 <br> 
 <br>
 
-#### Homework (20%)
+#### Homework 
 
 In homework, you will apply what you've learned during lecture and lab to complete data analysis tasks. You may discuss homework assignments with other students; however, homework should be completed and submitted individually. Homework must be typed up using R Markdown and submitted in the appropriate GitHub repository. 
 
@@ -18,7 +17,7 @@ In homework, you will apply what you've learned during lecture and lab to comple
 <br> 
 <br>
 
-#### Labs (15%)
+#### Labs 
 
 In labs, you will apply the concepts discussed in lecture to various data analysis scenarios, with a focus on the computation. You will work on lab assignments in teams, and all team members are expected to contribute equally to the completion of each assignment. You are expected to use the team's Git repository on the course's GitHub page as as the central platform for collaboration. Commits to this repository will be used as a metric of each team member's relative contribution for each lab. You will also be asked to evaluate your team members' performance periodically during the semester. 
 
@@ -26,31 +25,31 @@ In labs, you will apply the concepts discussed in lecture to various data analys
 <br> 
 <br>
 
-#### Exams (Exam 1: 17.5%, Exam 2: 17.5%)
+#### Exams 
 
 The exams are an opportunity to assess the knowledge and skills you’ve learned. Both exams will be take-home assignments that you are expected to complete individually.  Each exam will include small analysis and computational tasks related to the content discussed in lectures, application exercises, homework assignments, and labs. More details about the content and structure of the exams will be discussed during the semester.
 <br> 
 <br>
 
-#### Final Project (15%)
+#### Final Project 
 
 The purpose of the project is to apply what you’ve learned throughout the semester to analyze an interesting data-based research question. The project will be completed in teams, and each team will present their results during the final exam period, Monday, April 29, 2p - 5p. *You must complete the final project and present your work in class to pass the course.*
 <br> 
 <br>
 
-#### Participation & Application Exercises (5%)
+#### Participation & Application Exercises 
 
 Application exercises give you an opportunity to practice using the statistical concepts and/or code discussed in lecture on short data analyses. They will typically be started during class and may be assigned to be completed by the next class meeting. In general, these assignments are shorter than homework assignments and will be completed in teams. 
 <br> 
 <br>
 
-#### Writing Exercises (5%)
+#### Writing Exercises 
 
 There will be several writing exercises throughout the semester. Each exercise will include a writing prompt related to the content discussed in class along with peer review. More details will be provided before the first exercise.
 <br> 
 <br>
 
-#### Teamwork (5%)
+#### Teamwork 
 
 To construct functional and diverse teams, you will be asked to complete a short survey to gauge your previous exposure to programming topics. After completing the survey, you will be assigned to teams of 3-4 students; these teams will stay consistent throughout the semester (barring extraordinary circumstances). You will work in these teams during class, on application exercises, on labs, and on the final project.
 <br> 
@@ -60,6 +59,7 @@ To construct functional and diverse teams, you will be asked to complete a short
 
 The final grade will be calculated as follows:
  
+<!--
 {.table .table2 .table-condensed .table-striped .text-left}
  <span></span>     | <span></span>  
 -----------|---------------------------------
@@ -71,6 +71,7 @@ Final Project | 15%
 Participation & Application Exercises | 5%
 Writing Exercises | 5%
 Teamwork | 5%
+-->
 
 Class attendance in lecture and lab is a firm expectation; frequent absences or tardiness will be considered a legitimate cause for grade reduction.
 
@@ -95,7 +96,7 @@ If you have any needs that require accommodation, please let me know as soon as 
 
 ### Where to find course materials</h3>
 
-All assignments and course materials may be found on the course website and GitHub page. There is also an up-to-date course schedule where you can find the lecture notes discussed in each class meeting, assignment deadlines, and reading assignments to help you prepare for each class.
+All assignments and course materials may be found on the course website and [GitHub](www.github.com/sta199-fa19) page. There is also an up-to-date [course schedule](./schedule.html) where you can find the lecture notes discussed in each class meeting, assignment deadlines, and reading assignments to help you prepare for each class.
 
 Announcements may also be sent to the class by email, so please check your email regularly.
 <br> 
@@ -109,7 +110,7 @@ If you have a personal or family emergency or health condition that affects your
 
 **Exam dates cannot be changed and no make-up exams will be given.** If you must miss an exam, your absence must be officially excused before the exam due date. If your absence is excused, the missing exam grade will be imputed at the end of the semester based on your performance on other relevant course assignments.
 
-The final project presentations will  be during the university scheduled exam period, Monday, April 29, 2p - 5p. **You must complete the final project and present your work during the exam period in order to pass the course.**
+The final project presentations will be during the university scheduled exam period, Saturday, December 14, 7p - 10p. **You must complete the final project and present your work during the exam period in order to pass the course.**
 <br> 
 <br>
 
@@ -136,7 +137,7 @@ On individual assignments, you may not directly share code or write up with othe
 
 ### Regrade Requests
 
-Requests for a regrade must be made within three days of when the assignment is returned. The request should be submitted through the [online form](https://forms.office.com/Pages/ResponsePage.aspx?id=TsVyyzFKnk2xSh6jbfrJTBw0r2_bKCVMs9lST1_-2sxUMlcwUDJTOUlNOUdWUkJBQk5ZNk80SEVMWC4u). Regrade requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. No grades will be changed after the final project presentations.
+Requests for a regrade must be made within one week of when the assignment is returned. The request should be submitted through the [online form](https://forms.office.com/Pages/ResponsePage.aspx?id=TsVyyzFKnk2xSh6jbfrJTBw0r2_bKCVMs9lST1_-2sxUMlcwUDJTOUlNOUdWUkJBQk5ZNk80SEVMWC4u). Regrade requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. No grades will be changed after the final project presentations.
 
 *Note: Grades can only be changed by the Professor Tackett. Teaching Assistants cannot change grades on returned assignments.*
 <br> 
@@ -146,8 +147,6 @@ Requests for a regrade must be made within three days of when the assignment is 
 
 Cell phones and other electronic devices should be turned off or put on silent during class. When you use a laptop (or if you use a tablet), please ensure that the volume set to mute and the device is only used for class purposes. In general, you should focus on the class discussion/activity at hand and refrain from engaging in other work or outside activities. 
 
-
--->
 
 
 
