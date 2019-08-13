@@ -13,12 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Required:
 
-- [OpenIntro Statistics](https://drive.google.com/file/d/0B-DHaDEbiOGkc1RycUtIcUtIelE/view):
-    + 7.1 Line fitting, residuals, and correlation
-    + 7.2 Fitting a line by least squares regression
-    + 7.3 Types of outliers in linear regression
-    + 8.1 Introduction to multiple regression
-    + 8.2 Model selection
+- Read [What you can, can't, and shouldn't do with social media data](https://makingnoiseandhearingthings.com/2018/08/31/what-you-can-cant-and-shouldnt-do-with-social-media-data/) by Rachael Tatman
+- Watch [How I'm fighting bias in algorithms](https://www.ted.com/talks/joy_buolamwini_how_i_m_fighting_bias_in_algorithms) by Joy Buolamwini
     
 <br>
 <br>

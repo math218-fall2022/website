@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Required:
      
-- Cross-Validation: [Introduction to Statistical Learning](https://www-bcf.usc.edu/~gareth/ISL/ISLR%20First%20Printing.pdf), pages 175 - 184 
+- Cross-Validation: [Introduction to Statistical Learning](http://faculty.marshall.usc.edu/gareth-james/ISL/ISLR%20Seventh%20Printing.pdf), Sections 5.1.1 - 5.1.4, pages 175 - 184 
     
 - Watch: https://www.youtube.com/watch?v=TIgfjmp-4BA
 

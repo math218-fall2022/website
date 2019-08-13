@@ -13,12 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Required:
 
-- [OpenIntro Statistics](https://drive.google.com/file/d/0B-DHaDEbiOGkc1RycUtIcUtIelE/view):
-    + 7.1 Line fitting, residuals, and correlation
-    + 7.2 Fitting a line by least squares regression
-    + 7.3 Types of outliers in linear regression
-    + 8.1 Introduction to multiple regression
-    + 8.2 Model selection
+- [OpenIntro Statistics](https://www.openintro.org/redirect.php?go=os4_tablet&referrer=/stat/os4.php):
+    + 8.1 Fitting a line, residuals, and correlation
+    + 8.2 Least squares regression
+    + 8.3 Types of outliers in linear regression
+    + 9.1 Introduction to multiple regression
+    + 9.2 Model selection
     
 <br>
 <br>
