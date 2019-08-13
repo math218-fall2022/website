@@ -1,0 +1,11 @@
+---
+title: "HW 03"
+date: "due Thursday, October 31 at 11:59p"
+output: 
+    html_document: 
+     css: "./sta199-hw.css"
+     toc: true
+     toc_float: true
+     fig_caption: false
+---
+

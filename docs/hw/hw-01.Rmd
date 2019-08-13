@@ -1,0 +1,11 @@
+---
+title: "HW 01"
+date: ""
+output: 
+    html_document: 
+     css: "./sta199-hw.css"
+     toc: true
+     toc_float: true
+     fig_caption: false
+---
+
