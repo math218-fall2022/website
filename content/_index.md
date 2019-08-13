@@ -31,7 +31,7 @@ Instructor        | [Prof. Maria Tackett](http://stat.duke.edu/~mt324/) | <a hre
 TAs               | Meredith Brown | TBD | TBD | Old Chem 203B
                   | [Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/) | <a href="mailto:rosvid.herrera.tenorio@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/stevenherrera24" title="GitHub"><i class="fa fa-github"></i></a> | TBD | Old Chem 203B
                   | Jessie Ou | TBD | TBD | Old Chem 203B
-                  | Malavi Ravindran | TBD | TBD | Old Chem 203B
+                  | [Malavi Ravindran](www.linkedin.com/in/malavi-ravindran-332035175 )| <a href="mailto:malavi.ravindran@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/MalaviRavindran" title="GitHub"><i class="fa fa-github"></i></a> | TBD | Old Chem 203B
                   | Becky Tang | <a href="mailto:becky.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> | TBD | Old Chem 203B
 
 ### Texts
