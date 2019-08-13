@@ -1,35 +1,23 @@
 ---
-title: "Reading 06: Central Limit Theorem"
+title: "Reading 06: Model Validation"
 output: 
   html_document: 
     theme: yeti
 ---
 
-### Due Mon, Mar 27
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Due Thursday, October 24
 
 ### Required:
-
-- [OpenIntro - Intro Stat with Randomization and Simulation](https://drive.google.com/file/d/0B-DHaDEbiOGkRHNndUlBaHVmaGM/view):
-    - 2.5 Central Limit Theorem
-    - 2.6 Normal distribution
-    - 2.7 Applying the normal model
-    - 2.8 Confidence intervals
+     
+- Cross-Validation: [Introduction to Statistical Learning](https://www-bcf.usc.edu/~gareth/ISL/ISLR%20First%20Printing.pdf), pages 175 - 184 
     
+- Watch: https://www.youtube.com/watch?v=TIgfjmp-4BA
+
 <br>
 <br>
 
-[All STA 199 Readings](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/readings.html)
-
-<!--
-## Due
-
-Monday, Apr 2
-
-## Required:
-
-- [Hidden Figures: How Donald Trump Is Rigging the Census](https://www.motherjones.com/politics/2018/03/donald-trump-rigging-2020-census-undercounting-minorities-1/)
-
-- [NY Times: If Census Asks About Citizenship, Some Already Have an Answer: No Comment](https://www.nytimes.com/2018/03/27/us/census-undocumented-immigrants.html)
-
-- [NY Times: Here’s Why an Accurate Census Count Is So Important](https://www.nytimes.com/2018/03/27/us/politics/census-citizenship-question.html)
--->
+[All STA 199 Readings](./readings.html)

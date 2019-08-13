@@ -1,5 +1,5 @@
 ---
-title: "Reading 01: Data Exploration"
+title: "Reading 01: Reproducibility"
 output: 
   html_document: 
     theme: yeti
@@ -9,7 +9,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Due Wed, Jan 23
+### Due Thursday, August 29
 
 ### Required: 
 
@@ -24,4 +24,4 @@ knitr::opts_chunk$set(echo = TRUE)
 <br>
 <br>
 
-[All STA 199 Readings](https://www2.stat.duke.edu/courses/Spring19/sta199.001/reading/readings.html)
+[All STA 199 Readings](./readings.html)
