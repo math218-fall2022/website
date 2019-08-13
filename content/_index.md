@@ -27,12 +27,12 @@ Lab 03 &nbsp;&nbsp; <font color="#A277A6"><i class="fas fa-university"></i></fon
 {.table .table1 .table-condensed .table-striped .text-left}
 <span></span>     | <span></span>     | <span></span>    | <span></span>    |  <span></span>      
 ------------------|-------------------|------------------|------------------|------------------ 
-Instructor        | [Prof. Maria Tackett](http://stat.duke.edu/~mt324/) | <a href="mailto:maria.tackett@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/matackett" title="GitHub"><i class="fa fa-github"></i></a> | TBD | Old Chem 118B
-TAs               | TBD | TBD | TBD | Old Chem 203B
-                  | TBD | TBD | TBD | Old Chem 203B
-                  | TBD | TBD | TBD | Old Chem 203B
-                  | TBD | TBD | TBD | Old Chem 203B
-                  | TBD | TBD | TBD | Old Chem 203B
+Instructor        | [Prof. Maria Tackett](http://stat.duke.edu/~mt324/) | <a href="mailto:maria.tackett@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/matackett" title="GitHub"><i class="fa fa-github"></i></a> | Max Bartlett | Old Chem 118B
+TAs               | Meredith Brown | TBD | TBD | Old Chem 203B
+                  | [Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/) | <a href="mailto:rosvid.herrera.tenorio@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/stevenherrera24" title="GitHub"><i class="fa fa-github"></i></a> | TBD | Old Chem 203B
+                  | Jessie Ou | TBD | TBD | Old Chem 203B
+                  | Malavi Ravindran | TBD | TBD | Old Chem 203B
+                  | Becky Tang | <a href="mailto:becky.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> | TBD | Old Chem 203B
 
 ### Texts
 
