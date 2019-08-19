@@ -32,7 +32,8 @@ lessons:
  #reading: "reading-01.html"
  #slides: "lec-slides/02a-fund-data-viz.html"
  - date: "Th, Sep 12"
-   title: "Effective data visualization, Part 2"
+   title: "Confounding variables & Simpson's paradox"
+   
    hw: "hw-01.html"
  #reading: ""
  #slides: "lec-slides/02b-tidy-data-wrangle.html"
@@ -42,7 +43,7 @@ lessons:
  #slides: "lab-slides/02-lab-slides.html"
  - title: "Week 04"
  - date: "Tu, Sep 17"
-   title: "Confounding variables & Simpson's paradox"
+   title: "Effective data visualization, Part 2"
    reading: "reading-03.html"
  #slides: "lec-slides/02c-data-wrangle.html"
  #appex: "02b-nc-bike-crashes.html"
