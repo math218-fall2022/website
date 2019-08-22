@@ -48,7 +48,7 @@ All books are freely available online. Hardcopies are also available for purchas
 
 ### Materials
 
-You should bring a fully-charged laptop to every lecture and lab session.
+You should bring a fully-charged laptop, tablet with keyboard, or comparable device to every lecture and lab session.
 
 <br><br><br><br>
 
