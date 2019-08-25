@@ -8,17 +8,17 @@ markup: "mmark"
 
 #### Lectures
 
-<font color="#A277A6"><i class="fas fa-university"></i></font> &nbsp; Soc Sci 139 &nbsp;&nbsp; <font color="#A277A6"><i class="fas fa-calendar"></i></font> &nbsp; Tu and Th 10:05a - 11:20a
+<font color="#08989c"><i class="fas fa-university"></i></font> &nbsp; Soc Sci 139 &nbsp;&nbsp; <font color="#08989c"><i class="fas fa-calendar"></i></font> &nbsp; Tu and Th 10:05a - 11:20a
 <br>
 <br>
 
 #### Labs
 
-Lab 01 &nbsp;&nbsp; <font color="#A277A6"><i class="fas fa-university"></i></font> &nbsp; Old Chem 003 &nbsp;&nbsp;&nbsp; <font color="#A277A6"><i class="fas fa-calendar"></i></font> &nbsp; Fr 10:05a - 11:20p
+Lab 01 &nbsp;&nbsp; <font color="#08989c"><i class="fas fa-university"></i></font> &nbsp; Old Chem 003 &nbsp;&nbsp;&nbsp; <font color="#08989c"><i class="fas fa-calendar"></i></font> &nbsp; Fr 10:05a - 11:20p
 
-Lab 02  &nbsp;&nbsp; <font color="#A277A6"><i class="fas fa-university"></i></font> &nbsp; Soc Psych 127 &nbsp;&nbsp; <font color="#A277A6"><i class="fas fa-calendar"></i></font> &nbsp; Fr 11:45a - 1p
+Lab 02  &nbsp;&nbsp; <font color="#08989c"><i class="fas fa-university"></i></font> &nbsp; Soc Psych 127 &nbsp;&nbsp; <font color="#08989c"><i class="fas fa-calendar"></i></font> &nbsp; Fr 11:45a - 1p
 
-Lab 03 &nbsp;&nbsp; <font color="#A277A6"><i class="fas fa-university"></i></font> &nbsp; Old Chem 003 &nbsp;&nbsp;&nbsp; <font color="#A277A6"><i class="fas fa-calendar"></i></font> &nbsp; Fr 1:25p - 2:40p
+Lab 03 &nbsp;&nbsp; <font color="#08989c"><i class="fas fa-university"></i></font> &nbsp; Old Chem 003 &nbsp;&nbsp;&nbsp; <font color="#08989c"><i class="fas fa-calendar"></i></font> &nbsp; Fr 1:25p - 2:40p
 <br>
 <br>
 
@@ -31,7 +31,7 @@ Instructor        | [Prof. Maria Tackett](http://stat.duke.edu/~mt324/) | <a hre
 TAs               | [Max Bartlett](http://maxbartlett.com/) | <a href="mailto:maxwell.bartlett@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/MaxBartlett" title="GitHub"><i class="fa fa-github"></i></a> | Tu 6:30p - 8:30p| Old Chem 203B
                   | [Meredith Brown](https://www.linkedin.com/in/meredith-brown-807964172/) | <a href="mailto:meredith.brown@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/meredithb3" title="GitHub"><i class="fa fa-github"></i></a> | Mo 12:30p - 2:30p | Old Chem 203B
                   | [Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/) | <a href="mailto:rosvid.herrera.tenorio@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/stevenherrera24" title="GitHub"><i class="fa fa-github"></i></a> | Th 5:30p - 7:30p | Old Chem 203B
-                  | [Jessie Ou](https://www.linkedin.com/in/jessie-yc-ou/) | <a href="mailto:yanchen.ou@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/jessieou" title="GitHub"><i class="fa fa-github"></i></a> |  TBD | Old Chem 203B
+                  | [Jessie Ou](https://www.linkedin.com/in/jessie-yc-ou/) | <a href="mailto:yanchen.ou@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/jessieou" title="GitHub"><i class="fa fa-github"></i></a> | Su 12p - 2p | Old Chem 203B
                   | [Malavi Ravindran](https://www.linkedin.com/in/malavi-ravindran-332035175)| <a href="mailto:malavi.ravindran@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/MalaviRavindran" title="GitHub"><i class="fa fa-github"></i></a> | Mo 3p - 5p | Old Chem 203B
                   | [Becky Tang](https://beckytang.rbind.io/) | <a href="mailto:becky.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> | We 3p - 5p | Old Chem 203B
 
