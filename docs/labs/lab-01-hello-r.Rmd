@@ -1,6 +1,6 @@
 ---
 title: "Lab 01 - Hello R!"
-subtitle: "due Mon, Jan 21 at 11:59p"
+subtitle: "due Wednesday, September 4 at 11:59p"
 output: 
   tufte::tufte_html:
     css: "./sta199-labs.css"
@@ -35,7 +35,7 @@ The following screencast also walks you through these steps:
 
 <div style="position:relative;height:0;padding-bottom:40%"><iframe width="600" height="320" src="https://www.youtube.com/embed/8Ta_SJq3MrU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>
 
-- Go to the STA199-Sp19 organization on GitHub ([https://github.com/STA199-Sp19](https://github.com/STA199-Sp19)). Click on the repo with the prefix **lab-01-hello-r-**. It contains the starter documents you need to complete the lab.
+- Go to the sta199-fa19 organization on GitHub ([https://github.com/sta199-fa19](https://github.com/sta199-fa19)). Click on the repo with the prefix **lab-01-hello-r-**. It contains the starter documents you need to complete the lab.
 
 ```{r clone-repo-link, fig.margin = TRUE, echo = FALSE, fig.width=3}
 knitr::include_graphics("img/01-hello-r/clone-repo-link.png")
