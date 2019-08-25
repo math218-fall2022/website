@@ -33,7 +33,6 @@ lessons:
  #slides: "lec-slides/02a-fund-data-viz.html"
  - date: "Th, Sep 12"
    title: "Confounding variables & Simpson's paradox"
-   
    hw: "hw-01.html"
  #reading: ""
  #slides: "lec-slides/02b-tidy-data-wrangle.html"
