@@ -14,5 +14,5 @@ Website address: https://www2.stat.duke.edu/courses/Fall19/sta199.001/.
 
 # Notes for building the website:
 
-- Colors: #08989c
+- Colors: #875687
   - To change, search & replace in `themes/material/static/css/material-kit.css`
