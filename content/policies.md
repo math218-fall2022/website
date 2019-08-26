@@ -41,7 +41,7 @@ The exams are an opportunity to assess the knowledge and skills you’ve learned
 
 #### Final Project 
 
-The purpose of the project is to apply what you’ve learned throughout the semester to analyze an interesting data-based research question. The project will be completed in teams, and each team will present their results during the final exam period, Monday, April 29, 2p - 5p. *You must complete the final project and present your work in class to pass the course.*
+The purpose of the project is to apply what you’ve learned throughout the semester to analyze an interesting data-based research question. The project will be completed in teams, and each team will present their results during the final exam period, Saturday, December 14, 7p - 10p. *You must complete the final project and present your work in class to pass the course.*
 <br> 
 <br>
 
