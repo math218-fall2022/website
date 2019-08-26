@@ -2,6 +2,8 @@ lessons:
  - title: "Week 01"
  - date: "Tue, Aug 27"
    title: "Welcome to Data Science"
+   slides: "lec-slides/00-intro.html"
+   appex: "00-unvotes.html"
  - date: "Thu, Aug 29"
    title: "Meet the Toolkit"
    reading: "reading-01.html"

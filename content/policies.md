@@ -3,7 +3,7 @@ title: "Policies"
 markup: "mmark"
 ---
 
-### Course Objectives
+### Course Learning Objectives
 
 - Learn to explore, visualize, and analyze data in a reproducible and shareable manner
 - Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, and data visualization
@@ -67,7 +67,7 @@ To construct functional and diverse teams, you will be asked to complete a short
 
 The final grade will be calculated as follows:
  
-<!--
+
 {.table .table2 .table-condensed .table-striped .text-left}
  <span></span>     | <span></span>  
 -----------|---------------------------------
@@ -79,7 +79,7 @@ Final Project | 15%
 Participation & Application Exercises | 5%
 Writing Exercises | 5%
 Teamwork | 5%
--->
+
 
 Class attendance in lecture and lab is a firm expectation; frequent absences or tardiness will be considered a legitimate cause for grade reduction.
 
@@ -87,19 +87,28 @@ If you have a cumulative numerical average of 90 - 100, you are guaranteed at le
 
 <!-- ## Policies & Additional Information -->
 
-### Inclusion & Accessibility
+### Inclusion 
 
-This course is designed to be welcoming and accessible to all students. If there is some aspect of class that is not welcoming or accessible to you, please let me know immediately. Additionally, if you are experiencing something outside of class that is affecting your performance in the course, please feel free to talk with me or your academic dean. 
+In this course, we will strive to create a learning environment that is welcoming to all students and that is in alignment with [Duke’s Commitment to Diversity and Inclusion] (https://provost.duke.edu/initiatives/commitment-to-diversity-and-inclusion). If there is any aspect of the class that is not welcoming or accessible to you, please let me know immediately. Additionally, if you are experiencing something outside of class that is affecting your performance in the course, please feel free to talk with me and/or your academic dean. 
+<br>
+<br>
 
-If you have any needs that require accommodation, please let me know as soon as possible and register with the [Student Disability Access Office (SDAO)](http://access.duke.edu).
+### Accessibility 
+
+Duke University is committed to providing equal access to students with documented disabilities. Students with disabilities may contact the [Student Disability Access Office (SDAO)](https://access.duke.edu) to ensure your access to this course and to the program. There you can engage in a confidential conversation about the process for requesting reasonable accommodations both in the classroom and in clinical settings. Students are encouraged to register with the SDAO as soon as they begin the program. Please note that accommodations are not provided retroactively. More information can be found online at [access.duke.edu](https://access.duke.edu) or by contacting SDAO at 919-668-1267, <a href="mailto:sdao@duke.edu" title="email">SDAO@duke.edu</a>.
 <br> 
 <br>
 
 ### Where to find help
 
-- General questions about course content or assignments should be posted on Piazza, since there are likely other students in the class with similar questions. Questions about grades or personal matters should be emailed directly to Professor Tackett. 
-- The teaching team is here to help you be successful in the course. You are encouraged to attend any of the office hours posted on the home page for help with the course content and/or assignments.
-<br> 
+- If you have a question during lecture or lab, feel free to ask it! There are likely other students with the same question, so by asking you will create a learning opportunity for everyone. 
+- The teaching team is here to help you be successful in the course. You are encouraged to attend any of the office hours posted on the home page to ask questions as your study the course content and work through assignments. A lot of questions are most effectively answered in-person, so office hours are a valuable resource. Please use them!
+- Outside of class and office hours, any general questions about course content or assignments should be posted on Piazza since there are likely other students with the same questions. The questions you post will be visible to the entire class, so please email Professor Tackett directly with any specific questions about grades or personal matters. 
+
+Sometimes you may need help with the class that is beyond what can be provided by the teaching team. In that instance, I encourage you to visit the Academic Resource Center.  
+
+The [Academic Resource Center (ARC)](https://arc.duke.edu) offers free services to all students during their undergraduate careers at Duke.  Services include Learning Consultations, Peer Tutoring and Study Groups, ADHD/LD Coaching, Outreach Workshops, and more. Because learning is a process unique to every individual, they work with each student to discover and develop their own academic strategy for success at Duke. Contact the ARC to schedule an appointment. Undergraduates in any year, studying any discipline can benefit! Contact <a href="mailto:arc@duke.edu" title="email">ARC@duke.edu</a>, 919-684-5917, 211 Academic Advising Center Building, East Campus – behind Marketplace.
+<br>
 <br>
 
 ### Where to find course materials</h3>
@@ -145,7 +154,7 @@ On individual assignments, you may not directly share code or write up with othe
 
 ### Regrade Requests
 
-Requests for a regrade must be made within one week of when the assignment is returned. The request should be submitted through the [online form](https://forms.office.com/Pages/ResponsePage.aspx?id=TsVyyzFKnk2xSh6jbfrJTBw0r2_bKCVMs9lST1_-2sxUMlcwUDJTOUlNOUdWUkJBQk5ZNk80SEVMWC4u). Regrade requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. No grades will be changed after the final project presentations.
+Requests for a regrade must be made within one week of when the assignment is returned. The request should be submitted through the online form. Regrade requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. No grades will be changed after the final project presentations.
 
 *Note: Grades can only be changed by the Professor Tackett. Teaching Assistants cannot change grades on returned assignments.*
 <br> 
