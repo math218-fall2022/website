@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
     <title>Welcome to Intro to Data Science</title>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <meta name="author" content="Dr. Maria Tackett" />
     <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
   </head>
@@ -81,11 +81,11 @@ class: regular
 .pull-right[
 [Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/)
 
-&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[rosvid.herrera.tenorio@duke.edu](mailto:rosvid.herrera.tenorio@duke.edu)&lt;br&gt;
+&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp; &lt;small&gt;[rosvid.herrera.tenorio@duke.edu](mailto:rosvid.herrera.tenorio@duke.edu)&lt;/small&gt;&lt;br&gt;
 &lt;i class="material-icons"&gt;work_outline&lt;/i&gt; &amp;nbsp;Old Chem 203B&lt;br&gt;
 &lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp; Thu 5:30p - 7:30p
 
-&lt;br&gt;&lt;br&gt;
+&lt;br&gt;
 
 [Jessie Ou](https://www.linkedin.com/in/jessie-yc-ou/)
 
@@ -185,8 +185,10 @@ class: middle, center
 
 &lt;small&gt;
 
+&lt;small&gt;
+
 .instructions[
-Go to https://github.com/, and create an account (unless you already have one). After you create your account, click [here](https://forms.gle/dCG9yBgx2dzCk4Su5) and enter your GitHub username.
+Go to https://github.com/, and create an account (unless you already have one). After you create your account, click [here](https://forms.gle/xKD3bPtN6YA9MmZbA) and enter your GitHub username.
 ]
 
 Tips for creating a username from [Happy Git with R](http://happygitwithr.com/github-acct.html#username-advice).
@@ -199,11 +201,11 @@ Tips for creating a username from [Happy Git with R](http://happygitwithr.com/gi
 - Make it timeless. Don’t highlight your current university, employer, or place of residence.
 - Avoid words laden with special meaning in programming, like `NA`.
 
-.instructions[
-Raise your hand if you have any questions. 
-]
-
 &lt;/small&gt;
+
+.instructions[
+Raise your hand if you have any questions.
+]
 
 ---
 
@@ -222,11 +224,11 @@ Raise your hand if you have any questions.
 
 ## UN Votes Analysis
 
-1. In the Files pane in the bottom right corner, spot the file called `00-unvotes.Rmd`. Open it, and then click on the "Knit" button.
+1. In the Files pane in the bottom right corner, spot the file called `unvotes.Rmd`. Open it, and then click on the "Knit" button.
 
 2. Go back to the file and put your name in the author field at the top of the file (in the  `yaml` -- we will discuss what this is at a later date). Knit again.
 
-3. Change the country names in parts 1 and 2 to countries that interest you. The spelling and capitalization must match what's in the data, so you can use the [Appendix](#appendix) to see the correct spelling and capitalization. Knit again.
+3. Change the country names in parts 1 and 2 to countries that interest you. The spelling and capitalization must match what's in the data, so you can use the Appendix to see the correct spelling and capitalization. Knit again.
 
 You have made your first data visualization!
 
@@ -397,15 +399,15 @@ Any violations will automatically result in a grade of 0 on the assignment and w
 
 ## Where to find help
 
-- If you have a question during lecture or lab, feel free to ask it! There are likely other students with the same question, so by asking you will create a learning opportunity for everyone.
+- **If you have a question during lecture or lab, feel free to ask it!** There are likely other students with the same question, so by asking you will create a learning opportunity for everyone.
 
--- 
+--
 
-- Office Hours: A lot of questions are most effectively answered in-person, so office hours are a valuable resource. Please use them!
+- **Office Hours**: A lot of questions are most effectively answered in-person, so office hours are a valuable resource. Please use them!
 
--- 
+--
 
-Piazza: Outside of class and office hours, any general questions about course content or assignments should be posted on Piazza since there are likely other students with the same questions.
+- **Piazza**: Outside of class and office hours, any general questions about course content or assignments should be posted on Piazza since there are likely other students with the same questions.
 
 ---
 
@@ -458,10 +460,15 @@ class: center, middle
 
 - Fill out the **Getting To Know You Survey on Sakai** - due 9/3 at 11:59p
 
-- My office hours start this week: Th, 1p - 2:30p
+- My office hours start this week: Thu, 1p - 2:30p and by appointment
 
 - TA office hours start next week
+
+--
+
+- **Please see me if you are on the waiting list**
     </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
@@ -471,16 +478,57 @@ class: center, middle
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
 });
-(function() {
-  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
   if (!r) return;
   s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
   d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
 })();</script>
 
 <script>
 (function() {
-  var i, text, code, codes = document.getElementsByTagName('code');
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
   for (i = 0; i < codes.length;) {
     code = codes[i];
     if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
@@ -494,7 +542,8 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     i++;
   }
-})();
+};
+slideshow._releaseMath(document);
 </script>
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

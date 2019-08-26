@@ -105,7 +105,7 @@ knitr::include_graphics("img/00/fbi-fingerprint.jpg")
 
 [Meredith Brown](https://www.linkedin.com/in/meredith-brown-807964172/)
 
-<i class="material-icons">mail_outline</i> &nbsp;[meredith.brownduke.edu](mailto:meredith.brown@duke.edu)<br>
+<i class="material-icons">mail_outline</i> &nbsp;[meredith.brown@duke.edu](mailto:meredith.brown@duke.edu)<br>
 <i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
 <i class="material-icons">calendar_today</i>&nbsp; Mon 12:30p - 2:30p
 ]
@@ -113,11 +113,11 @@ knitr::include_graphics("img/00/fbi-fingerprint.jpg")
 .pull-right[
 [Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/)
 
-<i class="material-icons">mail_outline</i> &nbsp;[rosvid.herrera.tenorio@duke.edu](mailto:rosvid.herrera.tenorio@duke.edu)<br>
+<i class="material-icons">mail_outline</i> &nbsp; <small>[rosvid.herrera.tenorio@duke.edu](mailto:rosvid.herrera.tenorio@duke.edu)</small><br>
 <i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
 <i class="material-icons">calendar_today</i>&nbsp; Thu 5:30p - 7:30p
 
-<br><br>
+<br>
 
 [Jessie Ou](https://www.linkedin.com/in/jessie-yc-ou/)
 
@@ -217,8 +217,10 @@ class: middle, center
 
 <small>
 
+<small>
+
 .instructions[
-Go to https://github.com/, and create an account (unless you already have one). After you create your account, click [here](https://forms.gle/dCG9yBgx2dzCk4Su5) and enter your GitHub username.
+Go to https://github.com/, and create an account (unless you already have one). After you create your account, click [here](https://forms.gle/xKD3bPtN6YA9MmZbA) and enter your GitHub username.
 ]
 
 Tips for creating a username from [Happy Git with R](http://happygitwithr.com/github-acct.html#username-advice).
@@ -231,11 +233,11 @@ Tips for creating a username from [Happy Git with R](http://happygitwithr.com/gi
 - Make it timeless. Don’t highlight your current university, employer, or place of residence.
 - Avoid words laden with special meaning in programming, like `NA`.
 
-.instructions[
-Raise your hand if you have any questions. 
-]
-
 </small>
+
+.instructions[
+Raise your hand if you have any questions.
+]
 
 ---
 
@@ -254,11 +256,11 @@ Raise your hand if you have any questions.
 
 ## UN Votes Analysis
 
-1. In the Files pane in the bottom right corner, spot the file called `00-unvotes.Rmd`. Open it, and then click on the "Knit" button.
+1. In the Files pane in the bottom right corner, spot the file called `unvotes.Rmd`. Open it, and then click on the "Knit" button.
 
 2. Go back to the file and put your name in the author field at the top of the file (in the  `yaml` -- we will discuss what this is at a later date). Knit again.
 
-3. Change the country names in parts 1 and 2 to countries that interest you. The spelling and capitalization must match what's in the data, so you can use the [Appendix](#appendix) to see the correct spelling and capitalization. Knit again.
+3. Change the country names in parts 1 and 2 to countries that interest you. The spelling and capitalization must match what's in the data, so you can use the Appendix to see the correct spelling and capitalization. Knit again.
 
 You have made your first data visualization!
 
@@ -429,15 +431,15 @@ Any violations will automatically result in a grade of 0 on the assignment and w
 
 ## Where to find help
 
-- If you have a question during lecture or lab, feel free to ask it! There are likely other students with the same question, so by asking you will create a learning opportunity for everyone.
+- **If you have a question during lecture or lab, feel free to ask it!** There are likely other students with the same question, so by asking you will create a learning opportunity for everyone.
 
--- 
+--
 
-- Office Hours: A lot of questions are most effectively answered in-person, so office hours are a valuable resource. Please use them!
+- **Office Hours**: A lot of questions are most effectively answered in-person, so office hours are a valuable resource. Please use them!
 
--- 
+--
 
-Piazza: Outside of class and office hours, any general questions about course content or assignments should be posted on Piazza since there are likely other students with the same questions.
+- **Piazza**: Outside of class and office hours, any general questions about course content or assignments should be posted on Piazza since there are likely other students with the same questions.
 
 ---
 
@@ -490,7 +492,11 @@ class: center, middle
 
 - Fill out the **Getting To Know You Survey on Sakai** - due 9/3 at 11:59p
 
-- My office hours start this week: Th, 1p - 2:30p
+- My office hours start this week: Thu, 1p - 2:30p and by appointment
 
 - TA office hours start next week
+
+--
+
+- **Please see me if you are on the waiting list**
 
