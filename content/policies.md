@@ -1,7 +1,15 @@
 ---
-title: "Course Policies"
+title: "Policies"
 markup: "mmark"
 ---
+
+### Course Objectives
+
+- Learn to explore, visualize, and analyze data in a reproducible and shareable manner
+- Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, and data visualization
+- Work on problems and case studies inspired by and based on real-world questions and data
+- Learn to effectively communicate results through written assignments and final project presentation
+
 
 ### Activities & Assessments
 
