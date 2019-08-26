@@ -1,0 +1,83 @@
+---
+title: "Recap: Diamonds"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(warning=FALSE,
+                      message=FALSE)
+
+```
+
+```{r load-packages}
+library(tidyverse)
+library(DT) #to print nice tables
+```
+
+- What type of variable is price? 
+
+Price is a numerical variable. 
+
+- Would you expect its distribution to be symmetric, right-skewed, or left-skewed? Why? 
+
+- Make a histogram of the distribution of diamond prices. Does the shape of the distribution match your expectation?
+
+```{r}
+ggplot(data=diamonds, mapping=aes(x=price)) + 
+  geom_histogram() +
+  labs(title = "Distribution of Diamond Prices")
+```
+
+The distribution of `price` is skewed right. 
+<br>
+
+- How many diamonds of each type of cut are there?
+
+```{r}
+diamonds %>%
+  count(cut) 
+```
+<br>
+
+- Calculate the relative frequency (proportion) of each clarity of diamonds.
+
+```{r}
+diamonds %>%
+  count(clarity) %>%
+  mutate(proportion = n/nrow(diamonds))
+```
+<br>
+
+- Calculate the relative frequency of each clarity of diamonds by cut.
+
+```{r}
+diamonds %>%
+  count(cut,clarity) %>%
+  group_by(cut) %>%
+  mutate(proportion = n /sum(n)) %>%
+  datatable() #in the DT package
+```
+<br>
+
+- Plot the relationship between depth and price of only fair cut diamonds.
+
+```{r}
+diamonds %>%
+  filter(cut == "Fair") %>%
+  ggplot(mapping=aes(x=depth, y=price)) +
+  geom_point() +
+  labs(title="Price vs. Depth", subtitle="For Fair Cut Diamonds")
+```
+<br>
+
+- For each type of cut, calculate minimum (`min`), maximum (`max`), mean (`mean`), and median (`median`) price of diamonds of that type.
+
+```{r}
+diamonds %>%
+  group_by(cut) %>%
+  summarise(minimum = min(price), 
+            maximum = max(price),
+            mean = mean(price), 
+            median = median(price))
+```
