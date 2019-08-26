@@ -1,6 +1,6 @@
 ---
 title: "STA 199: Intro to Data Science"
-description: "Intro to data science and statistical thinking. Learn to explore, visualize, and analyze data to understand natural phenomena, investigate patterns, model outcomes, and make predictions, and do so in a reproducible and shareable manner. Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, data visualization, and effectively communicating results. Work on problems and case studies inspired by and based on real-world questions and data. The course will focus on the R statistical computing language."
+description: "Intro to data science and statistical thinking. Learn to explore, visualize,and analyze data to understand natural phenomena, investigate patterns, model outcomes,and make predictions, and do so in a reproducible and shareable manner. Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, data visualization, and effectively communicating results. Work on problems and case studies inspired by and based on real-world questions and data. The course will focus on the R statistical computing language."
 markup: "mmark"
 ---
 
@@ -57,4 +57,3 @@ You should bring a fully-charged laptop, tablet with keyboard, or comparable dev
 This course has achieved Duke’s Green Classroom Certification.  The certification indicates that the faculty member teaching this course has taken significant steps to green the delivery of this course.  Your faculty member has completed a checklist indicating their common practices in areas of this course that have an environmental impact, such as paper and energy consumption.  Some common practices implemented by faculty to reduce the environmental impact of their course include allowing electronic submission of assignments, providing online readings and turning off lights and electronics in the classroom when they are not in use.  The eco-friendly aspects of course delivery may vary by faculty, by course and throughout the semester. Learn more at
 https://sustainability.duke.edu/action/certification/classroom.
 </small>
-
