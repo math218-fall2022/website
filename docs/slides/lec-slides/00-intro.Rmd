@@ -499,4 +499,3 @@ class: center, middle
 --
 
 - **Please see me if you are on the waiting list**
-
