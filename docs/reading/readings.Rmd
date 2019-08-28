@@ -1,0 +1,22 @@
+---
+title: "Readings"
+output: 
+  html_document: 
+    theme: yeti
+---
+
+- [Reading 01: Reproducibility](./reading-01.html), due August 29
+
+- [Reading 02: Data Visualization and Exploration](./reading-02.html), due September 5
+
+- [Reading 03: Data Collection](./reading-03.html), due September 17
+
+- [Reading 04: Data Science Ethics](./reading-04.html), due October 1
+
+- [Reading 05: Regression](./reading-05.html), due October 15
+
+- [Reading 06: Model Validation ](./reading-06.html), due October 24
+
+- [Reading 07: Randomization & Bootstrapping](./reading-07.html), due November 5
+
+- [Reading 08: Central Limit Theorem](./reading-08.html), due November 12

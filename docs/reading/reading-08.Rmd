@@ -1,0 +1,21 @@
+---
+title: "Reading 08: Central Limit Theorem"
+output: 
+  html_document: 
+    theme: yeti
+---
+
+### Due Tuesday, November 12
+
+### Required:
+
+- [OpenIntro - Intro Stat with Randomization and Simulation](https://drive.google.com/file/d/0B-DHaDEbiOGkRHNndUlBaHVmaGM/view):
+    - 2.5 Central Limit Theorem
+    - 2.6 Normal distribution
+    - 2.7 Applying the normal model
+    - 2.8 Confidence intervals
+    
+<br>
+<br>
+
+[All STA 199 Readings](./readings.html)
