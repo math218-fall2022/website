@@ -1,6 +1,6 @@
 ---
 title: "Bechdel"
-date: "01.14.19"
+date: "08.29.19"
 output: 
   html_document: 
     fig_height: 4
