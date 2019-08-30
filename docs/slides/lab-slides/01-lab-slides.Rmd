@@ -104,8 +104,6 @@ Course website: [http://bit.ly/sta199-fa19](http://bit.ly/sta199-fa19)
 
 - Do not pressure each other to finish early; use the time wisely to really learn the material and produce a quality report.
 
-- When working in teams, do not split up the lab among the team members; work on it together in its entirety (more on this next week).
-
 ---
 
 class: center, middle
