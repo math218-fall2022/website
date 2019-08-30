@@ -43,7 +43,7 @@ library(dsbox)
 
 class: middle, center
 
-### [Click for PDF of slides](02a-data-and-viz.pdf)
+### [Click for PDF of slides](02b-tidy-data-wrangle.pdf)
 
 ---
 
