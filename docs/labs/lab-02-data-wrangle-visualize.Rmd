@@ -1,7 +1,7 @@
 ---
 title: "Lab 02 - Data wrangling and visualization"
 subtitle: "What should I major in?"
-date: "due Wed, Jan 30 at 11:59p"
+date: "due Tue, Sep 10 at 11:59p"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
@@ -16,8 +16,7 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ```{marginfigure}
 **A note on expectations: ** For each exercise and on your own question you 
-answer include any relevant output (tables, summary statistics, plots) in your 
-answer. Doing this is easy! Just place any relevant R code in a code chunk, 
+answer include any relevant output (tables, summary statistics, plots) in your answer. Doing this is easy! Just place any relevant R code in a code chunk, 
 and hit Knit HTML.
 ```
 
@@ -26,13 +25,9 @@ knowledge. The first step in that process is to summarize and describe the raw
 information - the data. In this lab we explore data on college majors and earnings,
 specifically the data behind the FiveThirtyEight story ["The Economic Guide To Picking A College Major"](https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/).
 
-These data originally come from the American Community Survey (ACS) 2010-2012 Public Use 
-Microdata Series. While this is outside the scope of this lab, if you are curious about how
-raw data from the ACS were cleaned and prepared, see [the code](https://github.com/fivethirtyeight/data/blob/master/college-majors/college-majors-rscript.R) FiveThirtyEight authors used.
+These data originally come from the American Community Survey (ACS) 2010-2012 Public Use Microdata Series. While this is outside the scope of this lab, if you are curious about how raw data from the ACS were cleaned and prepared, see [the code](https://github.com/fivethirtyeight/data/blob/master/college-majors/college-majors-rscript.R) FiveThirtyEight authors used.
 
-We should also note that there are many considerations that go into picking a major.
-Earnings potential and employment prospects are two of them, and they are important,
-but they don't tell the whole story. Keep this in mind as you analyze the data.
+We should also note that there are many considerations that go into picking a major.Earnings potential and employment prospects are two of them, and they are important, but they don't tell the whole story. Keep this in mind as you analyze the data.
 
 
 # Getting Started
@@ -41,7 +36,7 @@ Each of your assignments will begin with the following steps. You saw these once
 
 ## Clone Assignment Repo
 
-- Go to the STA199-Sp19 organization on GitHub ([https://github.com/STA199-Sp19](https://github.com/STA199-Sp19)). Click on the repo with the prefix **lab-02-**. It contains the starter documents you need to complete the lab.
+- Go to the sta199-fa19 organization on GitHub ([https://github.com/sta199-fa19](https://github.com/sta199-fa19)). Click on the repo with the prefix **lab-02-**. It contains the starter documents you need to complete the lab.
 
 - Click on the green **Clone or download** button, select **Use HTTPS** (this might already be selected by default, and if it is, you'll see the text **Clone with HTTPS** as in the image below). Click on the clipboard icon to copy the repo URL.
 
@@ -165,10 +160,7 @@ In the next section we aim to answer these questions.
 
 ## Which major has the lowest unemployment rate?
 
-In order to answer this question all we need to do is sort the data. We use the
-`arrange` function to do this, and sort it by the `unemployment_rate` variable. 
-By default `arrange` sorts in ascending order, which is what we want here -- 
-we're interested in the major with the *lowest* unemployment rate.
+In order to answer this question all we need to do is sort the data. We use the `arrange` function to do this, and sort it by the `unemployment_rate` variable. By default `arrange` sorts in ascending order, which is what we want here -- we're interested in the major with the *lowest* unemployment rate.
 
 ```{r lowest-unemp}
 college_recent_grads %>%
@@ -194,18 +186,14 @@ college_recent_grads %>%
   select(rank, major, unemployment_rate)
 ```
 
-Ok, this is looking better, but do we really need all those decimal places in the 
-unemployment variable? Not really!
+Ok, this is looking better, but do we really need all those decimal places in the unemployment variable? Not really!
 
 There are two ways we can address this problem. One would be to round the 
-`unemployment_rate` variable in the dataset or we can change the number of digits 
-displayed, without touching the input data.
+`unemployment_rate` variable in the dataset or we can change the number of digits displayed, without touching the input data.
 
 Below are instructions for how you would do both of these:
 
-- Round `unemployment_rate`: We create a new variable with the `mutate` function. 
-In this case, we're overwriting the existing `unemployment_rate` variable, by 
-`round`ing it to `4` decimal places.
+- Round `unemployment_rate`: We create a new variable with the `mutate` function. In this case, we're overwriting the existing `unemployment_rate` variable, by `round`ing it to `4` decimal places.
 
 ```{r}
 college_recent_grads %>%
@@ -214,30 +202,22 @@ college_recent_grads %>%
   mutate(unemployment_rate = round(unemployment_rate, digits = 4))
 ```
 
-- Change displayed number of digits without touching data: We can add an option to 
-our R Markdown document to change the displayed number of digits in the output. 
-To do so, add a new chunk, and set:
+- Change displayed number of digits without touching data: We can add an option to our R Markdown document to change the displayed number of digits in the output.To do so, add a new chunk, and set:
 
 ```{r}
 options(digits = 2)
 ```
 
-Note that the `digits` in `options` is scientific digits, and in `round` they are 
-decimal places. If you're thinking "Wouldn't it be nice if they were 
-consistent?", you're right...
+Note that the `digits` in `options` is scientific digits, and in `round` they are decimal places. If you're thinking "Wouldn't it be nice if they were consistent?", you're right...
 
-You don't need to do both of these, that would be redundant. The next exercise 
-asks you to choose one.
+You don't need to do both of these, that would be redundant. The next exercise asks you to choose one.
 
 1. Which of these options, changing the input data or altering the 
-number of digits displayed without touching the input data, is the better option? 
-Explain your reasoning. Then, implement the option you chose.
+number of digits displayed without touching the input data, is the better option? Explain your reasoning. Then, implement the option you chose.
 
 ## Which major has the highest percentage of women?
 
-To answer such a question we need to arrange the data in descending order. For 
-example, if earlier we were interested in the major with the highest unemployment 
-rate, we would use the following:
+To answer such a question we need to arrange the data in descending order. For example, if earlier we were interested in the major with the highest unemployment rate, we would use the following:
 
 ```{marginfigure}
 The `desc` function specifies that we want `unemployment_rate` in descending order.
@@ -250,8 +230,7 @@ college_recent_grads %>%
 ```
 
 2. Using what you've learned so far, arrange the data in descending order with respect to proportion of women in a major, and display only the major,
-the total number of people with major, and proportion of women. Show only the 
-top 3 majors by adding `head(3)` at the end of the pipeline.
+the total number of people with major, and proportion of women. Show only the top 3 majors by adding `head(3)` at the end of the pipeline.
 
 ## How do the distributions of median income compare across major categories?
 
@@ -259,23 +238,16 @@ top 3 majors by adding `head(3)` at the end of the pipeline.
 A percentile is a measure used in statistics indicating the value below which a given percentage of observations in a group of observations fall. For example, the 20th percentile is the value below which 20% of the observations may be found. (Source: [Wikipedia](https://en.wikipedia.org/wiki/Percentile)
 ```
 
-There are three types of incomes reported in this data frame: `p25th`, `median`, 
-and `p75th`. These correspond to the 25th, 50th, and 75th percentiles of the 
-income distribution of sampled individuals for a given major.
+There are three types of incomes reported in this data frame: `p25th`, `median`, and `p75th`. These correspond to the 25th, 50th, and 75th percentiles of the income distribution of sampled individuals for a given major.
 
 3. Why do we often choose the median, rather than the mean, to 
 describe the typical income of a group of people?
 
-The question we want to answer "How do the distributions of median income compare across major categories?". We need to do a few things to answer this question: First, we need to group the data by `major_category`. Then, we need a way to summarize the 
-distributions of median income within these groups. This decision will depend on the 
-shapes of these distributions. So first, we need to visualize the data.
+The question we want to answer "How do the distributions of median income compare across major categories?". We need to do a few things to answer this question: First, we need to group the data by `major_category`. Then, we need a way to summarize the distributions of median income within these groups. This decision will depend on the shapes of these distributions. So first, we need to visualize the data.
 
-We use the `ggplot` function to do this. The first argument is the data frame, and 
-the next argument gives the mapping of the variables of the data to the `aes`thetic 
-elements of the plot.
+We use the `ggplot` function to do this. The first argument is the data frame, and the next argument gives the mapping of the variables of the data to the `aes`thetic elements of the plot.
 
-Let's start simple and take a look at the distribution of all median incomes, 
-without considering the major categories.
+Let's start simple and take a look at the distribution of all median incomes, without considering the major categories.
 
 ```{r}
 ggplot(data = college_recent_grads, mapping = aes(x = median)) +
@@ -288,11 +260,7 @@ Along with the plot, we get a message:
 `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
 
-This is telling us that we might want to reconsider the binwidth we chose for our 
-histogram -- or more accurately, the binwidth we didn't specify. It's good practice 
-to always thing in the context of the data and try out a few binwidths before 
-settling on a binwidth. You might ask yourself: "What would be a meaningful 
-difference in median incomes?" $1 is obviously too little, $10000 might be too high.
+This is telling us that we might want to reconsider the binwidth we chose for our histogram -- or more accurately, the binwidth we didn't specify. It's good practice to always thing in the context of the data and try out a few binwidths before settling on a binwidth. You might ask yourself: "What would be a meaningful difference in median incomes?" $1 is obviously too little, $10000 might be too high.
 
 4. Try binwidths of $1000 and $5000 and choose one. Explain your reasoning for your choice. Note that the binwidth is an argument for the `geom_histogram` function. So to specify a binwidth of $1000, you would use 
 `geom_histogram(binwidth = 1000)`.
@@ -334,8 +302,7 @@ which summary statistic to use to quantify the typical median income.
 7. Which major category has the highest typical (you'll need 
 to decide what this means) median income? Use the partial code below, 
 filling it in with the appropriate statistic and function. Also note that we 
-are looking for the highest statistic, so make sure to arrange in the correct 
-direction. 
+are looking for the highest statistic, so make sure to arrange in the correct direction. 
 
 ```{r eval=FALSE}
 college_recent_grads %>%
@@ -437,9 +404,9 @@ Each writing exercise will consist of three parts (about 15 minutes each):
 
 Go to [https://app.elireview.com](https://app.elireview.com) to complete the first writing exercise. The schedule for this exercise is as follows:
 
-- Response to the prompt - due **Jan 24 at 11:59p**
-- Peer review - due **Jan 26 11:59p** (check your email on Friday, Jan 25 for instructions)
-- Final draft - due **Jan 28 11:59p** (check your email on Sunday, Jan 27 for instructions)
+- Response to the prompt - due **UPDATE**
+- Peer review - due **UPDATE** (check your email on for instructions)
+- Final draft - due **UPDATE** (check your email on for instructions)
 
 
 *If you did not sign up for Eli review in class, follow the [instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/2b-tidy-data-wrangle.html#2) to sign up.*
