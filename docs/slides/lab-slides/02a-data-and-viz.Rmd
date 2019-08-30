@@ -48,9 +48,13 @@ class: middle, center
 
 ---
 
-class: middle, center
+## Check in 
 
-### Questions from lab? 
+- Any questions on material from last time?
+
+- Any questions on the lab?
+
+- Any questions on workflow / course structure?
 
 ---
 
