@@ -41,6 +41,12 @@ a, a > code {
   font-size: 14pt;
 }
 
+h3 a {
+  font-family: 'Open-Sans', sans-serif;
+  font-weight: bold;
+  font-size: 115%;
+}
+
 .footnote {
   position: absolute;
   bottom: 3em;
