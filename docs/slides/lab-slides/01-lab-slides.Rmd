@@ -43,6 +43,14 @@ library(tidyverse)
 library(rvest)
 ```
 
+## Research study survey
+
+- Dr. Julie Reynolds, Associate Professor of the Practice in Biology: [julie.a.reynolds@duke.edu](mailto:julie.a.reynolds@duke.edu)
+
+- Survey & Consent: You should have received an email this morning with a link to the survey. If you did not receive the email, you may access the survey here: [https://duke.qualtrics.com/jfe/form/SV_eF07ubGm219RAoJ](https://duke.qualtrics.com/jfe/form/SV_eF07ubGm219RAoJ)
+
+---
+
 ## Meet Your TA!
 
 ---
@@ -59,8 +67,6 @@ library(rvest)
 
 ## Today's Agenda
 
-1. Research study survey
-
 2. Questions about course policies
 
 3. What to expect in lab
@@ -69,13 +75,6 @@ library(rvest)
 
 5. On your own: Work on the rest of the lab "on your own", but feel free to check in with classmates as much as you like.
 
----
-
-## Research study survey
-
-- Dr. Julie Reynolds, Associate Professor of the Practice in Biology: [julie.a.reynolds@duke.edu](mailto:julie.a.reynolds@duke.edu)
-
-- Survey & Consent: You should have received an email this morning with a link to the survey. If you did not receive the email, you may access the survey here: [https://duke.qualtrics.com/jfe/form/SV_eF07ubGm219RAoJ](https://duke.qualtrics.com/jfe/form/SV_eF07ubGm219RAoJ)
 
 ---
 
