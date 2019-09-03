@@ -1,5 +1,5 @@
 ---
-title: "Data and Vizualization"
+title: "Data and Visualization"
 author: "Dr. Maria Tackett"
 date: "09.03.19"
 output:
@@ -12,7 +12,7 @@ output:
       highlightLines: true
       highlightStyle: github
       countIncrementalSlides: false
-      slideNumberFormat: "%counter%"
+      slideNumberFormat: "%current%" 
 ---
 
 layout: true
@@ -22,6 +22,31 @@ layout: true
 <a href="http://datasciencebox.org" target="_blank">datasciencebox.org</a>
 </span>
 </div> 
+
+```{r setup, include=FALSE}
+# R options
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE,     # for regression output
+  warm = 1
+  )
+# Set dpi and height for images
+knitr::opts_chunk$set(fig.height = 2.65, dpi = 100) 
+# ggplot2 color palette with gray
+color_palette <- list(gray = "#999999", 
+                      salmon = "#E69F00", 
+                      lightblue = "#56B4E9", 
+                      green = "#009E73", 
+                      yellow = "#F0E442", 
+                      darkblue = "#0072B2", 
+                      red = "#D55E00", 
+                      purple = "#CC79A7")
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+# For magick
+dev.off <- function(){
+  invisible(grDevices::dev.off())
+}
+```
 
 ---
 
@@ -34,7 +59,7 @@ library(magick)
 
 class: middle, center
 
-### [Click for PDF of slides](02a-data-and-viz.pdf)
+## [Click for PDF of slides](02a-data-and-viz.pdf)
 
 ---
 
@@ -42,7 +67,7 @@ class: middle, center
 
 - Regular office hours start this week. Check the [course homepage](http://bit.ly/sta199-fa19) for the office hours schedule
 
-- Lab 01 - due TODAY at 11:59p. 
+- Lab 01 - due Thursday at 11:59p
 
 - Get to Know You Survey - due TODAY at 11:59p
 
@@ -118,7 +143,7 @@ Which variable is on the **x-axis**? Which variable is on the **y-axis**? What d
 the **warning** mean?
 ]
 
-```{r fig.width = 7, fig.height=3.5}
+```{r fig.width = 6, fig.height = 3, fig.align = 'center'}
 ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   geom_point() +
   labs(title = "Mass vs. height of Starwars characters",
@@ -131,7 +156,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 What does `geom_smooth()` do? In other words, what changed between the previous plot and this one?
 ]
 
-```{r fig.width = 7, fig.height=3.5, fig.align='center', warning=FALSE, message=FALSE}
+```{r fig.width = 6, fig.height= 3, fig.align='center', warning=FALSE, message=FALSE}
 ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   geom_point() +
   geom_smooth() + #<<
@@ -161,9 +186,7 @@ ggplot(data = [dataset], mapping = aes(x = [x-variable], y = [y-variable])) +
 ```
 ]
 
----
-
-## Hello ggplot2!
+--
 
 - To use ggplot2 functions, first load tidyverse
 ```{r}
@@ -233,7 +256,7 @@ Run the following **<u>in the Console</u>** to view the help
 ?starwars
 ```
 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.height = 4}
 knitr::include_graphics("img/02a/starwars-help.png")
 ```
 
@@ -241,7 +264,7 @@ knitr::include_graphics("img/02a/starwars-help.png")
 
 ## Mass vs. height
 
-```{r fig.width = 7, fig.height=3.5, fig.align='center'}
+```{r fig.width = 6, fig.height=3, fig.align='center'}
 ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   geom_point()
 ```
@@ -272,7 +295,7 @@ How would you describe this **relationship**? What other variables would help us
 ]
 
 .small[
-```{r fig.width = 7, fig.height=3.25, fig.align='center', warning=FALSE}
+```{r fig.width = 5, fig.height=2.5, fig.align='center', warning=FALSE}
 ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   geom_point() +
   labs(title = "Mass vs. height of Starwars characters", #<<
@@ -335,20 +358,20 @@ in the data are
 
 ---
 
-## Mass vs. height + gender
+### Mass vs. height + gender
 
-```{r fig.width = 8, fig.height = 4, fig.align='center', warning=FALSE}
+```{r fig.width = 7, fig.height = 3.5, fig.align='center', warning=FALSE}
 ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender)) +
   geom_point()
 ```
 
 ---
 
-## Mass vs. height + gender
+### Mass vs. height + gender
 
 Let's map `shape` and `color` to gender
 
-```{r fig.width = 8, fig.height = 4, fig.align='center', warning=FALSE}
+```{r fig.width = 7, fig.height = 3.5, fig.align='center', warning=FALSE}
 ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender,
                                       shape = gender #<<
                                       )) +
@@ -361,7 +384,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender,
 
 Let's map the size to birth_year:
 
-```{r fig.width = 8, fig.height = 4 , fig.align = 'center', warning=FALSE}
+```{r fig.width = 7, fig.height = 3.5 , fig.align = 'center', warning=FALSE}
 ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender, shape = gender, 
                                       size = birth_year #<<
                                       )) +
@@ -370,12 +393,12 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender, shap
 
 ---
 
-## Mass vs. height + gender 
+### Mass vs. height + gender 
 
 Let's increase the size of all points **<u>not</u>** based on the values of a 
 variable in the data:
 
-```{r fig.width = 8, fig.height=4, fig.align='center' , warning=FALSE}
+```{r fig.width =7, fig.height=3.5, fig.align='center' , warning=FALSE}
 ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender)) +
   geom_point(size = 3) #<<
 ```
@@ -413,7 +436,7 @@ class: center, middle
 - Useful for exploring conditional relationships and large data
 
 .small[
-```{r fig.height=3, fig.width=6, fig.align='center', warning=FALSE}
+```{r fig.height=2.75, fig.width=6, fig.align='center', warning=FALSE}
 ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   facet_grid(. ~ gender) + #<<
   geom_point() +
@@ -444,7 +467,7 @@ should always label your plots!
 
 ---
 
-```{r fig.height=6, fig.width=7, fig.align='center', warning=FALSE}
+```{r fig.height=5, fig.width=7, fig.align='center', warning=FALSE}
 ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   geom_point() +
   facet_grid(gender ~ .)
@@ -452,7 +475,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 
 ---
 
-```{r fig.height=6,fig.width=7,fig.align='center', warning=FALSE}
+```{r fig.height=5,fig.width=7,fig.align='center', warning=FALSE}
 ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   geom_point() +
   facet_grid(. ~ gender)
@@ -483,7 +506,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 
 ## Starwars Application Exercise
 
-- Go to [https://github.com/STA199-Sp19](https://github.com/STA199-Sp19)
+- Go to [https://github.com/sta199-fa19](https://github.com/sta199-fa19)
 
 - Click on the repo that begins with `ae-03-starwars-`. 
 
@@ -580,7 +603,7 @@ ggplot(data = starwars, mapping = aes(y = height, x = gender)) +
 
 class: center, middle
 
-# Visualizing categorical data
+## Visualizing categorical data
 
 ---
 
@@ -647,6 +670,6 @@ ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color2)) +
 
 - If you have not already done so, 
     - complete "Getting to know you" survey on Sakai - due TODAY at 11:59p!
-    - complete Lab 01 - due TODAY at 11:59p!
+    - complete Lab 01 - due Thursday at 11:59p!
 
     

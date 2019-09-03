@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Data and Vizualization</title>
+    <title>Data and Visualization</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr. Maria Tackett" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
     <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Data and Vizualization
+# Data and Visualization
 ### Dr. Maria Tackett
 ### 09.03.19
 
@@ -25,13 +27,15 @@ layout: true
 &lt;/span&gt;
 &lt;/div&gt; 
 
+
+
 ---
 
 
 
 class: middle, center
 
-### [Click for PDF of slides](02a-data-and-viz.pdf)
+## [Click for PDF of slides](02a-data-and-viz.pdf)
 
 ---
 
@@ -39,15 +43,19 @@ class: middle, center
 
 - Regular office hours start this week. Check the [course homepage](http://bit.ly/sta199-fa19) for the office hours schedule
 
-- Lab 01 - due TODAY at 11:59p. 
+- Lab 01 - due Thursday at 11:59p
 
 - Get to Know You Survey - due TODAY at 11:59p
 
 ---
 
-class: middle, center
+## Check in 
 
-### Questions from lab? 
+- Any questions on material from last time?
+
+- Any questions on the lab?
+
+- Any questions on workflow / course structure?
 
 ---
 
@@ -123,7 +131,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 ## Warning: Removed 28 rows containing missing values (geom_point).
 ```
 
-![](02a-data-and-viz_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+&lt;img src="02a-data-and-viz_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -166,9 +174,7 @@ ggplot(data = [dataset], mapping = aes(x = [x-variable], y = [y-variable])) +
 ```
 ]
 
----
-
-## Hello ggplot2!
+--
 
 - To use ggplot2 functions, first load tidyverse
 
@@ -297,7 +303,7 @@ Run the following **&lt;u&gt;in the Console&lt;/u&gt;** to view the help
 ?starwars
 ```
 
-&lt;img src="img/02a/starwars-help.png" width="405" /&gt;
+&lt;img src="img/02a/starwars-help.png" width="292" /&gt;
 
 ---
 
@@ -356,7 +362,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 
 ## Jabba!
 
-&lt;img src="img/02a/jabbaplot.png" width="3200" style="display: block; margin: auto;" /&gt;
+&lt;img src="img/02a/jabbaplot.png" width="2304" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -392,7 +398,7 @@ in the data are
 
 ---
 
-## Mass vs. height + gender
+### Mass vs. height + gender
 
 
 ```r
@@ -404,7 +410,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender)) +
 
 ---
 
-## Mass vs. height + gender
+### Mass vs. height + gender
 
 Let's map `shape` and `color` to gender
 
@@ -436,7 +442,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender, shap
 
 ---
 
-## Mass vs. height + gender 
+### Mass vs. height + gender 
 
 Let's increase the size of all points **&lt;u&gt;not&lt;/u&gt;** based on the values of a 
 variable in the data:
@@ -564,7 +570,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 
 ## Starwars Application Exercise
 
-- Go to [https://github.com/STA199-Sp19](https://github.com/STA199-Sp19)
+- Go to [https://github.com/sta199-fa19](https://github.com/sta199-fa19)
 
 - Click on the repo that begins with `ae-03-starwars-`. 
 
@@ -682,7 +688,7 @@ ggplot(data = starwars, mapping = aes(y = height, x = gender)) +
 
 class: center, middle
 
-# Visualizing categorical data
+## Visualizing categorical data
 
 ---
 
@@ -748,7 +754,7 @@ Which bar plot is a more useful representation for visualizing the relationship 
 
 - If you have not already done so, 
     - complete "Getting to know you" survey on Sakai - due TODAY at 11:59p!
-    - complete Lab 01 - due TODAY at 11:59p!
+    - complete Lab 01 - due Thursday at 11:59p!
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -756,7 +762,7 @@ Which bar plot is a more useful representation for visualizing the relationship 
 "highlightLines": true,
 "highlightStyle": "github",
 "countIncrementalSlides": false,
-"slideNumberFormat": "%counter%"
+"slideNumberFormat": "%current%"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
