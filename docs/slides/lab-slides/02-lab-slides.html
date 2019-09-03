@@ -1,47 +1,25 @@
----
-title: "Lab 02: Data wrangling and visualization"
-author: ""
-date: "09.06.19"
-output:
-  xaringan::moon_reader:
-    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
-    css: "sta199-slides.css"
-    logo: img/sta199-sticker-icon.png
-    lib_dir: libs
-    nature:
-      highlightStyle: github
-      highlightLines: true
-      countIncrementalSlides: false
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Lab 02: Data wrangling and visualization</title>
+    <meta charset="utf-8" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Lab 02: Data wrangling and visualization
+### 09.06.19
+
 ---
 
-```{r setup, include=FALSE}
-# R options
-options(
-  htmltools.dir.version = FALSE, # for blogdown
-  show.signif.stars = FALSE,     # for regression output
-  warm = 1
-  )
-# Set dpi and height for images
-library(knitr)
-opts_chunk$set(fig.height = 2.65, dpi = 300) 
-# ggplot2 color palette with gray
-color_palette <- list(gray = "#999999", 
-                      salmon = "#E69F00", 
-                      lightblue = "#56B4E9", 
-                      green = "#009E73", 
-                      yellow = "#F0E442", 
-                      darkblue = "#0072B2", 
-                      red = "#D55E00", 
-                      purple = "#CC79A7")
-# For nonsese...
-library(emo)
-htmltools::tagList(rmarkdown::html_dependency_font_awesome())
-```
 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-library(tidyverse)
-library(rvest)
-```
+
+
+
 
 class: center, middle
 
@@ -118,7 +96,7 @@ class: middle, center
 
 ## Lab introduction
 
-- Lab instructions posted on the course website under <i class="fa fa-file-code-o fa-lg"></i>
+- Lab instructions posted on the course website under &lt;i class="fa fa-file-code-o fa-lg"&gt;&lt;/i&gt;
     + Let's go find today's lab!
     
 - [The Economic Guide To Picking A College Major](https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/) by Ben Casselman
@@ -141,7 +119,8 @@ class: middle, center
 
 - Type the following lines of code in the console in RStudio filling in your name and email address.
 
-```{r}
+
+```r
 library(usethis)
 use_git_config(user.name="your name", user.email="your email")
 ```
@@ -168,9 +147,9 @@ I will now demonstrate the steps for updating the lab documents and sharing the 
 
 - **Every team member**: Click the **Pull** button in the Git pane. This brings the most updated files from GitHub to your RStudio project. 
 
-- **<u>ONE</u> team member**:
+- **&lt;u&gt;ONE&lt;/u&gt; team member**:
   - Knit the .Rmd file. 
-  - Click the box next to <u>every</u> file in the Git pane.
+  - Click the box next to &lt;u&gt;every&lt;/u&gt; file in the Git pane.
   - Write a short and informative commit message. 
   - Push the changes to GitHub.
 
@@ -198,7 +177,7 @@ I will now demonstrate the steps for updating the lab documents and sharing the 
 
 - Remember that your R Markdown file is not aware of your project's global environment and can only make use of variables, functions, etc. that you have loaded or defined in the document.
 
-- Remind yourself how the pipe operator (`%>%`) works.
+- Remind yourself how the pipe operator (`%&gt;%`) works.
 
 - If you're unsure how a function works or what its arguments are, simply type `?` in front of it and hit enter (`?read_csv` for instance). The "Help" tab will open and provide a summary of the function as well as some examples.
 
@@ -213,4 +192,94 @@ I will now demonstrate the steps for updating the lab documents and sharing the 
 - If you did not sign up for Eli review in class, follow the [instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/2b-tidy-data-wrangle.html#2) to sign up
 
 - Please check your email **UPDATE** for more instructions from Professor Tackett
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
 
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

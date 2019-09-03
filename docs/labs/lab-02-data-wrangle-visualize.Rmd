@@ -1,7 +1,7 @@
 ---
 title: "Lab 02 - Data wrangling and visualization"
 subtitle: "What should I major in?"
-date: "due Tue, Sep 10 at 11:59p"
+date: "due Wed, Sep 11 at 11:59p"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
