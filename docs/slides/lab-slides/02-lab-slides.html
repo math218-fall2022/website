@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Lab 02: Data wrangling and visualization</title>
+    <title>Lab 02</title>
     <meta charset="utf-8" />
     <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
     <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
@@ -11,7 +11,8 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Lab 02: Data wrangling and visualization
+# Lab 02
+## Data wrangling and visualization
 ### 09.06.19
 
 ---
@@ -29,67 +30,37 @@ class: center, middle
 
 ## Agenda
 
-1. **Writing Exercise #1**
+1. **Teams:** Find teammates.
 
-2. **Teams:** Find teammates.
+2. **Lab introduction:** FiveThirtyEight article on college majors.
 
-3. **Lab introduction:** FiveThirtyEight article on college majors.
+3. **Starting a new project:** Clone the repo into a new RStudio Cloud project.
 
-4. **Starting a new project:** Clone the repo into a new RStudio Cloud project.
+4. **Configure git**: Make sure your git config is set up
 
-5. **Configure git**: Make sure your git config is set up
-
-6. **Warm-up:** Make sure you know how to push and pull.
-
----
-
-## Writing Exercises
-
-- There will be periodic writing exercises this semester to give you an opportunity to practice...
-    - communicating statistical ideas in writing
-    - giving and receiving constructive feedback to help refine your writing skills
-
-- Each writing exercise will consist of three parts (about 15 minutes each): 
-    - Respond to a prompt about a statistical concept and/or code 
-    - Provide constructive feedback for classmates
-    - Revise your response based on the peer feedback
-
-- Writing exercises are 5% of the final course grade
-
----
-
-## Writing Exercise 1
-
-- The first writing exercise is about data visualization and wrangling. 
-    - Response to the prompt - due tonight at 11:59p
-    - Peer review - due Saturday at 11:59p
-    - Final draft - due Monday at 11:59p
-
-- You should wait to work on it after you've spent some time practicing data wrangling in today's lab. 
-
-- If you finish lab early, you can go ahead and work on the first writing exercise. Otherwise, I will let you know when there are 15 minutes left in lab, so you have an opportunity to work on it before you leave.
-
----
-
-class: middle, center
-
-## Today's Lab 
+5. **Warm-up:** Make sure you know how to push and pull.
 
 ---
     
 ## Teams
 
-- Find your teammates: [STA 199 Teams](https://prodduke-my.sharepoint.com/:x:/g/personal/mt324_duke_edu/ES7_pDh-O0dKp4gGq2FitB8B3NAMO291NTf_PaatJ1_WxQ?e=9N9oMH)
+- Find your teammates: [STA 199 Teams](https://prodduke-my.sharepoint.com/:x:/g/personal/mt324_duke_edu/EZJTwNddI9RMpQ8gYFNEpBEBC8mMM1PkqELEgLHcOJ8XnQ?e=S9Vlxw)
 
 - By the end of today's lab: 
-    - Come up with a **team name** and let me know the name.
-    - Find a **weekly 2-hour block between Friday and Wednesday** that the team can meet to finish lab. You may not need to use the time every week, but it will be helpful to already have a plan for the weeks that you do need extra time.
-    - [Click here] to enter your team name and weekly scheduled meeting time.
-    
+    - Come up with a **team name**
+    - Find a **weekly 2-hour block between Thursday and Tuesday** that the team can meet to finish lab. You may not need to use the time every week, but it will be helpful to already have a plan for the weeks that you do need extra time.
+    - Come up with away to communicate outside of labs and group meetings (email, text, Slack, etc.).
+    - [Click here](https://forms.gle/xQULNp4TGiZWkN2b9) to report your team name, weekly meeting time, and primary form of group communication
+
 ---
 
-## Working in teams
+## Working on a team
 
+- Do not pressure each other to finish early; use the time wisely to really learn the material and produce a quality report.
+
+- The labs are structured to help you learn the steps of a regression analysis. Do not split up the lab among the team members; work on it together in its entirety.
+
+- Everyone has something to contribute! Use the lab groups as an opportunity to share ideas and learn from each other.
 
 
 ---
@@ -135,8 +106,8 @@ use_git_config(user.name="your name", user.email="your email")
 
 - You and your teammates are working from the same lab-02 GitHub repo. This means you are all contributing to the same R Markdown document!
 
-- For today's lab, only **one person** on the team should be typing the code/narrative in the R Markdown document at a time. 
-    - Rotate who updates the document. Each team member should have at least one commit in the lab.
+- For today's lab, **&lt;i&gt;only one person should be typing the code/narrative in the R Markdown document at at time&lt;/i&gt;**. 
+    - Rotate who updates the document. **&lt;i&gt;Each team member should have at least one commit in the lab.&lt;/i&gt;**
     - When you're not typing, you should still be contributing to the discussion but do not actually touch the files on your computer.
 
 ---
@@ -148,6 +119,7 @@ I will now demonstrate the steps for updating the lab documents and sharing the 
 - **Every team member**: Click the **Pull** button in the Git pane. This brings the most updated files from GitHub to your RStudio project. 
 
 - **&lt;u&gt;ONE&lt;/u&gt; team member**:
+  - Update the .Rmd file.
   - Knit the .Rmd file. 
   - Click the box next to &lt;u&gt;every&lt;/u&gt; file in the Git pane.
   - Write a short and informative commit message. 
@@ -169,7 +141,7 @@ I will now demonstrate the steps for updating the lab documents and sharing the 
 
 ---
 
-## Tips
+## Lab Tips
 
 - Be ready to troubleshoot your document, since it will likely fail to knit on multiple occasions throughout the process. Read the error message carefully and take note of which line is preventing a successful knit.
 
@@ -180,18 +152,6 @@ I will now demonstrate the steps for updating the lab documents and sharing the 
 - Remind yourself how the pipe operator (`%&gt;%`) works.
 
 - If you're unsure how a function works or what its arguments are, simply type `?` in front of it and hit enter (`?read_csv` for instance). The "Help" tab will open and provide a summary of the function as well as some examples.
-
----
-
-## Writing Excerise 1
-
-- Due **today, Thurs Jan 24 at 11:59p**
-
-- You can find the prompt at [https://app.elireview.com](https://app.elireview.com)
-
-- If you did not sign up for Eli review in class, follow the [instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/2b-tidy-data-wrangle.html#2) to sign up
-
-- Please check your email **UPDATE** for more instructions from Professor Tackett
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
