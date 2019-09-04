@@ -1,7 +1,7 @@
 ---
 title: "Lab 02: Data wrangling and visualization"
 author: ""
-date: "09.06.19"
+date: "01.24.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -105,14 +105,7 @@ class: middle, center
 
 - By the end of today's lab: 
     - Come up with a **team name** and let me know the name.
-    - Find a **weekly 2-hour block between Friday and Wednesday** that the team can meet to finish lab. You may not need to use the time every week, but it will be helpful to already have a plan for the weeks that you do need extra time.
-    - [Click here] to enter your team name and weekly scheduled meeting time.
-    
----
-
-## Working in teams
-
-
+    - Find a **weekly 2-hour block between Thursday and Monday** that the team can meet to finish lab. You may not need to use the time every week, but it will be helpful to already have a plan for the weeks that you do need extra time.
 
 ---
 
@@ -212,5 +205,5 @@ I will now demonstrate the steps for updating the lab documents and sharing the 
 
 - If you did not sign up for Eli review in class, follow the [instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/2b-tidy-data-wrangle.html#2) to sign up
 
-- Please check your email **UPDATE** for more instructions from Professor Tackett
+- Please check your email on Friday for more instructions from Professor Tackett
 
