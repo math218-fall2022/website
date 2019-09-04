@@ -71,11 +71,12 @@ Currently your project is called *Untitled Project*. Update the name of your pro
 
 # Packages
 
-In this lab we will work with the `tidyverse` and `fivethirtyeight` packages. Load the packages into the **console**.
+In this lab we will work with the `tidyverse`,  `fivethirtyeight`, and `knitr` packages. Load the packages into the **console**.
 
 ```{r}
 library(tidyverse)
 library(fivethirtyeight)
+library(knitr)
 ```
 
 Note that these packages are also loaded in your R Markdown document.
@@ -202,13 +203,14 @@ college_recent_grads %>%
   mutate(unemployment_rate = round(unemployment_rate, digits = 4))
 ```
 
-- Change displayed number of digits without touching data: We can add an option to our R Markdown document to change the displayed number of digits in the output.To do so, add a new chunk, and set:
+- Change displayed number of digits without touching data: We can use the `kable` function in the knitr package to format the table output. With this option, we do not change the original data but rather change how many decimal places are printed in the Markdown document. 
 
 ```{r}
-options(digits = 2)
+college_recent_grads %>%
+  arrange(unemployment_rate) %>%
+  select(rank, major, unemployment_rate) %>%
+  kable(digits = 4)
 ```
-
-Note that the `digits` in `options` is scientific digits, and in `round` they are decimal places. If you're thinking "Wouldn't it be nice if they were consistent?", you're right...
 
 You don't need to do both of these, that would be redundant. The next exercise asks you to choose one.
 
@@ -387,7 +389,11 @@ median earning is on top.
 10. Create a scatterplot of median income vs. proportion of 
 women in that major, colored by whether the major is in a STEM field or not. Describe the association between these three variables.
 
+*You’re done! Knit, commit all remaining changes using the commit message “Done with Lab 2!”, and push. Before you wrap up the assignment, make sure the .Rmd and .md documents are updated in your GitHub repo.*
 
+
+
+<!--
 ## Writing Task 1
 
 There will be periodic writing exercises this semester to give you an opportunity to practice...
@@ -411,3 +417,4 @@ Go to [https://app.elireview.com](https://app.elireview.com) to complete the fir
 
 *If you did not sign up for Eli review in class, follow the [instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/2b-tidy-data-wrangle.html#2) to sign up.*
 
+-->
