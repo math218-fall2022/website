@@ -70,7 +70,7 @@ class: center, middle
 
 - By the end of today's lab: 
     - Come up with a **team name**
-    - Find a **weekly 2-hour block between Thursday and Tuesday** that the team can meet to finish lab. You may not need to use the time every week, but it will be helpful to already have a plan for the weeks that you do need extra time.
+    - Find a **weekly 2-hour block between Friday and Wednesday (outside of the lab sesssion) ** that the team can meet to finish lab. You may not need to use the time every week, but it will be helpful to already have a plan for the weeks that you do need extra time.
     - Come up with away to communicate outside of labs and group meetings (email, text, Slack, etc.).
     - [Click here](https://forms.gle/xQULNp4TGiZWkN2b9) to report your team name, weekly meeting time, and primary form of group communication
 
