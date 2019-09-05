@@ -37,14 +37,12 @@ class: middle, center
 
 ---
 
-## Eli Review Signup: 
+### Announcements
 
-1. Go to [https://app.elireview.com](https://app.elireview.com). 
-2. Click the “New to Eli Review? Sign up!” button to create your account. 
-    - Be sure to choose the “Student” option. 
-    - Consider using your school email, but any address will work.
-    
-Join our course: In the box labeled “Ready to join a course?” enter this course code: **hyper425bend**
+- Lab 01 due **TODAY at 11:59p**
+    - Your lab must be on GitHub! 
+
+- Reading 02 on the course schedule - due Thursday
 
 ---
 
@@ -144,8 +142,10 @@ ggplot(data = starwars, mapping = aes(x = height)) +
 
 .small[
 
+
+
 ```r
-ggplot(data = starwars, mapping = aes(y = height, x = gender)) +
+ggplot(data = starwars, mapping = aes(y = height, x = eye_color2)) +
   geom_boxplot()
 ```
 
@@ -153,7 +153,7 @@ ggplot(data = starwars, mapping = aes(y = height, x = gender)) +
 ## Warning: Removed 6 rows containing non-finite values (stat_boxplot).
 ```
 
-&lt;img src="02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -169,11 +169,11 @@ class: center, middle
 .small[
 
 ```r
-ggplot(data = starwars, mapping = aes(x = gender)) +
+ggplot(data = starwars, mapping = aes(x = eye_color2)) +
   geom_bar()
 ```
 
-&lt;img src="02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -183,11 +183,11 @@ ggplot(data = starwars, mapping = aes(x = gender)) +
 .small[
 
 ```r
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
+ggplot(data = starwars, mapping = aes(x = eye_color2, fill = hair_color2)) +
   geom_bar()
 ```
 
-&lt;img src="02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -197,28 +197,28 @@ ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
 .small[
 
 ```r
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
+ggplot(data = starwars, mapping = aes(x = eye_color2, fill = hair_color2)) +
 * geom_bar(position = "fill") +
   labs(y = "proportion")
 ```
 
-&lt;img src="02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 
 .question[
-Which bar plot is a more useful representation for visualizing the relationship between gender and hair color? Why?
+Which bar plot is a more useful representation for visualizing the relationship between eye color and hair color? Why?
 ]
 
 .pull-left[
 
-![](02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
 
-![](02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](02b-tidy-data-wrangle_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -257,7 +257,7 @@ class: center, middle
 ## Summary tables 
 
 .question[
-Is each of the following a dataset or a summary table?
+Is each of the following a dataset? Which is a summary table?
 ]
 
 .small[
@@ -284,14 +284,19 @@ Is each of the following a dataset or a summary table?
 .pull-right[
 
 ```
-## # A tibble: 5 x 2
-##   gender        avg_height
-##   &lt;chr&gt;              &lt;dbl&gt;
-## 1 &lt;NA&gt;                120 
-## 2 female              165.
-## 3 hermaphrodite       175 
-## 4 male                179.
-## 5 none                200
+## # A tibble: 10 x 2
+##    species   avg_height
+##    &lt;chr&gt;          &lt;dbl&gt;
+##  1 &lt;NA&gt;             160
+##  2 Aleena            79
+##  3 Besalisk         198
+##  4 Cerean           198
+##  5 Chagrian         196
+##  6 Clawdite         168
+##  7 Droid            140
+##  8 Dug              112
+##  9 Ewok              88
+## 10 Geonosian        183
 ```
 ]
 ]
@@ -304,10 +309,9 @@ class: center, middle
 
 ---
 
-## Where does the name come from?
+### Where does the name come from?
 
-The pipe operator is implemented in the package **magrittr**, it's pronounced 
-"and then".
+The pipe operator is implemented in the package **magrittr**, it's pronounced "and then".
 
 .pull-left[
 ![pipe](img/02b/magritte.jpg)
@@ -560,16 +564,15 @@ glimpse(ncbikecrash)
 
 - Subsequent arguments say what to do with that data frame
 
-- Always return a data frame
-
-- Don't modify in place
+- Always returns a data frame
 
 ---
 
 ## A note on piping and layering
 
-- The `%&gt;%` operator in **dplyr** functions is called the pipe operator. This means you "pipe" the output of the previous line of code as the first input of the next line of code.
-&lt;br&gt; 
+- The `%&gt;%` operator in **dplyr** functions is called the **pipe operator**. This means you "pipe" the output of the previous line of code as the first input of the next line of code.
+
+&lt;br&gt;
 
 - The `+` operator in **ggplot2** functions is used for "layering". This means you create the plot in layers, separated by `+`.
 
@@ -625,42 +628,48 @@ ncbikecrash %&gt;%
 
 ### `filter` for many conditions at once
 
-for crashes in Durham County where biker was 0-5 years old
+for crashes in Durham County where biker was 30-39 years old
 
 
 ```r
 ncbikecrash %&gt;%
-  filter(county == "Durham", bike_age_group == "0-5")
+* filter(county == "Durham", bike_age_group == "30-39")
 ```
 
 ```
-## # A tibble: 4 x 66
-##   object_id city  county region development locality on_road rural_urban
-##       &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
-## 1      4062 Durh… Durham Piedm… Residential Urban (… &lt;NA&gt;    Urban      
-## 2       414 Durh… Durham Piedm… Residential Urban (… PVA 90… Urban      
-## 3      3016 Durh… Durham Piedm… Residential Urban (… &lt;NA&gt;    Urban      
-## 4      1383 Durh… Durham Piedm… Residential Urban (… PVA 62… Urban      
-## # … with 58 more variables: speed_limit &lt;chr&gt;, traffic_control &lt;chr&gt;,
-## #   weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;, bike_age_group &lt;chr&gt;,
-## #   bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;, bike_direction &lt;chr&gt;,
-## #   bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;, bike_race &lt;chr&gt;,
-## #   bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;, driver_age_group &lt;chr&gt;,
-## #   driver_alcohol &lt;chr&gt;, driver_alcohol_drugs &lt;chr&gt;,
-## #   driver_est_speed &lt;chr&gt;, driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;,
-## #   driver_sex &lt;chr&gt;, driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;,
-## #   crash_date &lt;chr&gt;, crash_day &lt;chr&gt;, crash_group &lt;chr&gt;,
-## #   crash_hour &lt;int&gt;, crash_location &lt;chr&gt;, crash_month &lt;chr&gt;,
-## #   crash_severity &lt;chr&gt;, crash_time &lt;drtn&gt;, crash_type &lt;chr&gt;,
-## #   crash_year &lt;int&gt;, ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;,
-## #   light_condition &lt;chr&gt;, road_character &lt;chr&gt;, road_class &lt;chr&gt;,
-## #   road_condition &lt;chr&gt;, road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;,
-## #   road_feature &lt;chr&gt;, road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;,
-## #   num_bikes_bi &lt;int&gt;, num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;,
-## #   num_bikes_no &lt;int&gt;, num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;,
-## #   num_lanes &lt;chr&gt;, num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;,
-## #   frm_road &lt;chr&gt;, rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;,
-## #   geo_shape &lt;chr&gt;
+## # A tibble: 47 x 66
+##    object_id city  county region development locality on_road rural_urban
+##        &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
+##  1      1244 Durh… Durham Piedm… Residential Urban (… HILLAN… Urban      
+##  2      3227 Durh… Durham Piedm… Residential Urban (… &lt;NA&gt;    Urban      
+##  3      3449 Durh… Durham Piedm… Commercial  Urban (… &lt;NA&gt;    Urban      
+##  4      1138 Durh… Durham Piedm… Commercial  Urban (… CORNWA… Urban      
+##  5      1424 Durh… Durham Piedm… Commercial  Urban (… PVA 40… Urban      
+##  6       198 Durh… Durham Piedm… Commercial  Urban (… EAST C… Urban      
+##  7      4202 None… Durham Piedm… Farms, Woo… Rural (… &lt;NA&gt;    Rural      
+##  8      6464 Durh… Durham Piedm… Residential Urban (… &lt;NA&gt;    Urban      
+##  9      1869 Durh… Durham Piedm… Commercial  Urban (… &lt;NA&gt;    Urban      
+## 10      1044 Durh… Durham Piedm… Residential Urban (… W CLUB… Urban      
+## # … with 37 more rows, and 58 more variables: speed_limit &lt;chr&gt;,
+## #   traffic_control &lt;chr&gt;, weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;,
+## #   bike_age_group &lt;chr&gt;, bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;,
+## #   bike_direction &lt;chr&gt;, bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;,
+## #   bike_race &lt;chr&gt;, bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;,
+## #   driver_age_group &lt;chr&gt;, driver_alcohol &lt;chr&gt;,
+## #   driver_alcohol_drugs &lt;chr&gt;, driver_est_speed &lt;chr&gt;,
+## #   driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;, driver_sex &lt;chr&gt;,
+## #   driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;, crash_date &lt;chr&gt;,
+## #   crash_day &lt;chr&gt;, crash_group &lt;chr&gt;, crash_hour &lt;int&gt;,
+## #   crash_location &lt;chr&gt;, crash_month &lt;chr&gt;, crash_severity &lt;chr&gt;,
+## #   crash_time &lt;drtn&gt;, crash_type &lt;chr&gt;, crash_year &lt;int&gt;,
+## #   ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;, light_condition &lt;chr&gt;,
+## #   road_character &lt;chr&gt;, road_class &lt;chr&gt;, road_condition &lt;chr&gt;,
+## #   road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;, road_feature &lt;chr&gt;,
+## #   road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;, num_bikes_bi &lt;int&gt;,
+## #   num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;, num_bikes_no &lt;int&gt;,
+## #   num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;, num_lanes &lt;chr&gt;,
+## #   num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;, frm_road &lt;chr&gt;,
+## #   rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;, geo_shape &lt;chr&gt;
 ```
 
 ---
@@ -684,18 +693,25 @@ operator    | definition                   || operator     | definition
 
 ```r
 ncbikecrash %&gt;%
-  filter(county == "Durham", bike_age_group == "0-5") %&gt;%
-  select(locality, speed_limit)
+  filter(county == "Durham", bike_age_group == "30-39") %&gt;%
+* select(locality, speed_limit)
 ```
 
 ```
-## # A tibble: 4 x 2
-##   locality               speed_limit 
-##   &lt;chr&gt;                  &lt;chr&gt;       
-## 1 Urban (&gt;70% Developed) 30 - 35  MPH
-## 2 Urban (&gt;70% Developed) 5 - 15 MPH  
-## 3 Urban (&gt;70% Developed) 20 - 25  MPH
-## 4 Urban (&gt;70% Developed) 20 - 25  MPH
+## # A tibble: 47 x 2
+##    locality               speed_limit 
+##    &lt;chr&gt;                  &lt;chr&gt;       
+##  1 Urban (&gt;70% Developed) 30 - 35  MPH
+##  2 Urban (&gt;70% Developed) 40 - 45  MPH
+##  3 Urban (&gt;70% Developed) 30 - 35  MPH
+##  4 Urban (&gt;70% Developed) 30 - 35  MPH
+##  5 Urban (&gt;70% Developed) 5 - 15 MPH  
+##  6 Urban (&gt;70% Developed) 20 - 25  MPH
+##  7 Rural (&lt;30% Developed) 40 - 45  MPH
+##  8 Urban (&gt;70% Developed) 30 - 35  MPH
+##  9 Urban (&gt;70% Developed) 30 - 35  MPH
+## 10 Urban (&gt;70% Developed) 30 - 35  MPH
+## # … with 37 more rows
 ```
 
 ---
@@ -705,7 +721,7 @@ ncbikecrash %&gt;%
 
 ```r
 ncbikecrash %&gt;%
-  select(-object_id)
+* select(-object_id)
 ```
 
 ```
@@ -751,7 +767,7 @@ ncbikecrash %&gt;%
 
 ```r
 ncbikecrash %&gt;%
-  select(city:locality)
+* select(city:locality)
 ```
 
 ```
@@ -775,11 +791,12 @@ ncbikecrash %&gt;%
 
 ### `slice` for certain row numbers
 
-First five
+First five rows 
+
 
 ```r
 ncbikecrash %&gt;%
-  slice(1:5)
+* slice(1:5)
 ```
 
 ```
@@ -817,12 +834,13 @@ ncbikecrash %&gt;%
 
 ### `slice` for certain row numbers
 
-Last five
+Last five rows
+
 
 ```r
 last_row &lt;- nrow(ncbikecrash)
 ncbikecrash %&gt;%
-  slice((last_row - 4):last_row)
+* slice((last_row - 4):last_row)
 ```
 
 ```
@@ -864,7 +882,7 @@ ncbikecrash %&gt;%
 ```r
 ncbikecrash %&gt;%
   slice(1:6) %&gt;%
-  pull(locality)
+* pull(locality)
 ```
 
 ```
@@ -873,13 +891,15 @@ ncbikecrash %&gt;%
 ## [5] "Urban (&gt;70% Developed)"       "Rural (&lt;30% Developed)"
 ```
 
+--
+
 vs.
 
 
 ```r
 ncbikecrash %&gt;%
   slice(1:6) %&gt;%
-  select(locality)
+* select(locality)
 ```
 
 ```
@@ -903,7 +923,7 @@ ncbikecrash %&gt;%
 
 ```r
 ncbikecrash_n5 &lt;- ncbikecrash %&gt;%
-  sample_n(5, replace = FALSE)
+* sample_n(5, replace = FALSE)
 dim(ncbikecrash_n5)
 ```
 
@@ -911,12 +931,14 @@ dim(ncbikecrash_n5)
 ## [1]  5 66
 ```
 
+--
+
 - `sample_frac`: randomly sample 20% of observations
 
 
 ```r
 ncbikecrash_perc20 &lt;-ncbikecrash %&gt;%
-  sample_frac(0.2, replace = FALSE)
+* sample_frac(0.2, replace = FALSE)
 dim(ncbikecrash_perc20)
 ```
 
@@ -935,7 +957,7 @@ And `arrange` to order alphabetically
 ncbikecrash %&gt;% 
   select(county, city) %&gt;% 
   distinct() %&gt;% 
-  arrange(county, city)
+* arrange(county, city)
 ```
 
 ```
@@ -962,7 +984,7 @@ ncbikecrash %&gt;%
 
 ```r
 ncbikecrash %&gt;%
-  summarise(avg_hr = mean(crash_hour))
+* summarise(avg_hr = mean(crash_hour))
 ```
 
 ```
@@ -979,7 +1001,7 @@ ncbikecrash %&gt;%
 
 ```r
 ncbikecrash %&gt;%
-  group_by(hit_run) %&gt;%
+* group_by(hit_run) %&gt;%
   summarise(avg_hr = mean(crash_hour))
 ```
 
@@ -998,7 +1020,7 @@ ncbikecrash %&gt;%
 
 ```r
 ncbikecrash %&gt;%
-  count(driver_alcohol_drugs)
+* count(driver_alcohol_drugs)
 ```
 
 ```
@@ -1020,9 +1042,10 @@ ncbikecrash %&gt;%
 .small[
 
 ```r
-ncbikecrash %&gt;%
+ncbikecrash %&gt;% 
   mutate(driver_alcohol_drugs_simplified = case_when(
-    driver_alcohol_drugs == "Missing"       ~ NA,
+    is.na(driver_alcohol_drugs)             ~ driver_alcohol_drugs,
+    driver_alcohol_drugs == "Missing"       ~ NA_character_,
     str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
     TRUE                                    ~ "No"
   ))
@@ -1036,10 +1059,12 @@ Most often when you define a new variable with `mutate` you'll also want to save
 
 
 ```r
-ncbikecrash &lt;- ncbikecrash %&gt;%
+*ncbikecrash &lt;- ncbikecrash %&gt;%
   mutate(driver_alcohol_drugs_simplified = case_when(
+    is.na(driver_alcohol_drugs)             ~ driver_alcohol_drugs,
+    driver_alcohol_drugs == "Missing"       ~ NA_character_,
     str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ driver_alcohol_drugs
+    TRUE                                    ~ "No"
   ))
 ```
 
@@ -1058,7 +1083,7 @@ ncbikecrash %&gt;%
 ##   driver_alcohol_drugs                driver_alcohol_drugs_simplified     n
 ##   &lt;chr&gt;                               &lt;chr&gt;                           &lt;int&gt;
 ## 1 &lt;NA&gt;                                &lt;NA&gt;                             6654
-## 2 Missing                             Missing                            99
+## 2 Missing                             &lt;NA&gt;                               99
 ## 3 No                                  No                                695
 ## 4 Yes-Alcohol,  impairment suspected  Yes                                12
 ## 5 Yes-Alcohol, no impairment detected Yes                                 3
@@ -1072,13 +1097,12 @@ ncbikecrash %&gt;%
 ```
 
 ```
-## # A tibble: 4 x 2
+## # A tibble: 3 x 2
 ##   driver_alcohol_drugs_simplified     n
 ##   &lt;chr&gt;                           &lt;int&gt;
-## 1 &lt;NA&gt;                             6654
-## 2 Missing                            99
-## 3 No                                695
-## 4 Yes                                19
+## 1 &lt;NA&gt;                             6753
+## 2 No                                695
+## 3 Yes                                19
 ```
 
 ---
@@ -1102,7 +1126,7 @@ ncbikecrash %&gt;%
 "highlightLines": true,
 "highlightStyle": "github",
 "countIncrementalSlides": false,
-"slideNumberFormat": "%counter%"
+"slideNumberFormat": "%current%"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

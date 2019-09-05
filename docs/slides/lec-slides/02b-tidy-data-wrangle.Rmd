@@ -12,7 +12,7 @@ output:
       highlightLines: true
       highlightStyle: github
       countIncrementalSlides: false
-      slideNumberFormat: "%counter%"
+      slideNumberFormat: "%current%"
 ---
 
 layout: true
@@ -47,14 +47,12 @@ class: middle, center
 
 ---
 
-## Eli Review Signup: 
+### Announcements
 
-1. Go to [https://app.elireview.com](https://app.elireview.com). 
-2. Click the “New to Eli Review? Sign up!” button to create your account. 
-    - Be sure to choose the “Student” option. 
-    - Consider using your school email, but any address will work.
-    
-Join our course: In the box labeled “Ready to join a course?” enter this course code: **hyper425bend**
+- Lab 01 due **TODAY at 11:59p**
+    - Your lab must be on GitHub! 
+
+- Reading 02 on the course schedule - due Thursday
 
 ---
 
@@ -139,8 +137,24 @@ ggplot(data = starwars, mapping = aes(x = height)) +
 ## Side-by-side box plots
 
 .small[
+```{r echo = F}
+starwars <- starwars %>%
+  mutate(hair_color2 = case_when(
+    hair_color == "black" ~ "black", 
+    hair_color == "brown" ~ "brown", 
+    hair_color == "none" ~ "none", 
+    TRUE ~ "other"), 
+         eye_color2 = case_when(
+           eye_color == "brown" ~ "brown", 
+           eye_color == "blue" ~ "blue", 
+           eye_color == "yellow" ~ "yellow", 
+           eye_color == "black" ~ "black", 
+           TRUE ~ "other"
+         ))
+```
+
 ```{r fig.width = 7, fig.height=4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(y = height, x = gender)) +
+ggplot(data = starwars, mapping = aes(y = height, x = eye_color2)) +
   geom_boxplot()
 ```
 ]
@@ -157,7 +171,7 @@ class: center, middle
 
 .small[
 ```{r fig.width = 7, fig.height=4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = gender)) +
+ggplot(data = starwars, mapping = aes(x = eye_color2)) +
   geom_bar()
 ```
 ]
@@ -168,7 +182,7 @@ ggplot(data = starwars, mapping = aes(x = gender)) +
 
 .small[
 ```{r fig.width = 7, fig.height=4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
+ggplot(data = starwars, mapping = aes(x = eye_color2, fill = hair_color2)) +
   geom_bar()
 ```
 ]
@@ -179,7 +193,7 @@ ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
 
 .small[
 ```{r fig.width = 7, fig.height=4, fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
+ggplot(data = starwars, mapping = aes(x = eye_color2, fill = hair_color2)) +
   geom_bar(position = "fill") + #<<
   labs(y = "proportion")
 ```
@@ -188,17 +202,14 @@ ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
 ---
 
 .question[
-Which bar plot is a more useful representation for visualizing the relationship between gender and hair color? Why?
+Which bar plot is a more useful representation for visualizing the relationship between eye color and hair color? Why?
 ]
 
 .pull-left[
 
 ```{r echo=FALSE,fig.height=6, fig.width=6}
-starwars <- starwars %>%
-  mutate(hair_color2 = fct_other(hair_color, 
-                                 keep = c("black", "brown", "brown", "blond")))
 
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color2)) +
+ggplot(data = starwars, mapping = aes(x = eye_color2, fill = hair_color2)) +
   geom_bar()
 ```
 ]
@@ -206,7 +217,7 @@ ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color2)) +
 .pull-right[
 
 ```{r echo=FALSE, fig.height=6, fig.width=6}
-ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color2)) +
+ggplot(data = starwars, mapping = aes(x = eye_color2, fill = hair_color2)) +
   geom_bar(position = "fill") +
   labs(y = "proportion")
 ```
@@ -248,7 +259,7 @@ class: center, middle
 ## Summary tables 
 
 .question[
-Is each of the following a dataset or a summary table?
+Is each of the following a dataset? Which is a summary table?
 ]
 
 .small[
@@ -262,8 +273,9 @@ starwars %>%
 .pull-right[
 ```{r echo=FALSE}
 starwars %>%
-  group_by(gender) %>%
-  summarize(avg_height = round(mean(height, na.rm = TRUE), 2))
+  group_by(species) %>%
+  summarize(avg_height = round(mean(height, na.rm = TRUE), 2)) %>%
+  slice(1:10)
 ```
 ]
 ]
@@ -276,10 +288,9 @@ class: center, middle
 
 ---
 
-## Where does the name come from?
+### Where does the name come from?
 
-The pipe operator is implemented in the package **magrittr**, it's pronounced 
-"and then".
+The pipe operator is implemented in the package **magrittr**, it's pronounced "and then".
 
 .pull-left[
 ![pipe](img/02b/magritte.jpg)
@@ -420,16 +431,15 @@ glimpse(ncbikecrash)
 
 - Subsequent arguments say what to do with that data frame
 
-- Always return a data frame
-
-- Don't modify in place
+- Always returns a data frame
 
 ---
 
 ## A note on piping and layering
 
-- The `%>%` operator in **dplyr** functions is called the pipe operator. This means you "pipe" the output of the previous line of code as the first input of the next line of code.
-<br> 
+- The `%>%` operator in **dplyr** functions is called the **pipe operator**. This means you "pipe" the output of the previous line of code as the first input of the next line of code.
+
+<br>
 
 - The `+` operator in **ggplot2** functions is used for "layering". This means you create the plot in layers, separated by `+`.
 
@@ -448,11 +458,11 @@ ncbikecrash %>%
 
 ### `filter` for many conditions at once
 
-for crashes in Durham County where biker was 0-5 years old
+for crashes in Durham County where biker was 30-39 years old
 
 ```{r}
 ncbikecrash %>%
-  filter(county == "Durham", bike_age_group == "0-5")
+  filter(county == "Durham", bike_age_group == "30-39") #<<
 ```
 
 ---
@@ -475,8 +485,8 @@ operator    | definition                   || operator     | definition
 
 ```{r}
 ncbikecrash %>%
-  filter(county == "Durham", bike_age_group == "0-5") %>%
-  select(locality, speed_limit)
+  filter(county == "Durham", bike_age_group == "30-39") %>%
+  select(locality, speed_limit) #<<
 ```
 
 ---
@@ -485,7 +495,7 @@ ncbikecrash %>%
 
 ```{r}
 ncbikecrash %>%
-  select(-object_id)
+  select(-object_id) #<<
 ```
 
 ---
@@ -494,28 +504,30 @@ ncbikecrash %>%
 
 ```{r}
 ncbikecrash %>%
-  select(city:locality)
+  select(city:locality) #<<
 ```
 
 ---
 
 ### `slice` for certain row numbers
 
-First five
+First five rows 
+
 ```{r}
 ncbikecrash %>%
-  slice(1:5)
+  slice(1:5) #<<
 ```
 
 ---
 
 ### `slice` for certain row numbers
 
-Last five
+Last five rows
+
 ```{r}
 last_row <- nrow(ncbikecrash)
 ncbikecrash %>%
-  slice((last_row - 4):last_row)
+  slice((last_row - 4):last_row) #<<
 ```
 
 ---
@@ -525,15 +537,17 @@ ncbikecrash %>%
 ```{r}
 ncbikecrash %>%
   slice(1:6) %>%
-  pull(locality)
+  pull(locality) #<<
 ```
+
+--
 
 vs.
 
 ```{r}
 ncbikecrash %>%
   slice(1:6) %>%
-  select(locality)
+  select(locality) #<<
 ```
 
 ---
@@ -544,15 +558,17 @@ ncbikecrash %>%
 
 ```{r}
 ncbikecrash_n5 <- ncbikecrash %>%
-  sample_n(5, replace = FALSE)
+  sample_n(5, replace = FALSE) #<<
 dim(ncbikecrash_n5)
 ```
+
+--
 
 - `sample_frac`: randomly sample 20% of observations
 
 ```{r}
 ncbikecrash_perc20 <-ncbikecrash %>%
-  sample_frac(0.2, replace = FALSE)
+  sample_frac(0.2, replace = FALSE) #<<
 dim(ncbikecrash_perc20)
 ```
 
@@ -566,7 +582,7 @@ And `arrange` to order alphabetically
 ncbikecrash %>% 
   select(county, city) %>% 
   distinct() %>% 
-  arrange(county, city)
+  arrange(county, city) #<<
 ```
 
 ---
@@ -575,7 +591,7 @@ ncbikecrash %>%
 
 ```{r}
 ncbikecrash %>%
-  summarise(avg_hr = mean(crash_hour))
+  summarise(avg_hr = mean(crash_hour)) #<<
 ```
 
 ---
@@ -584,7 +600,7 @@ ncbikecrash %>%
 
 ```{r}
 ncbikecrash %>%
-  group_by(hit_run) %>%
+  group_by(hit_run) %>% #<<
   summarise(avg_hr = mean(crash_hour))
 ```
 
@@ -594,7 +610,7 @@ ncbikecrash %>%
 
 ```{r}
 ncbikecrash %>%
-  count(driver_alcohol_drugs)
+  count(driver_alcohol_drugs) #<<
 ```
 
 ---
@@ -603,9 +619,10 @@ ncbikecrash %>%
 
 .small[
 ```{r eval=FALSE}
-ncbikecrash %>%
+ncbikecrash %>% 
   mutate(driver_alcohol_drugs_simplified = case_when(
-    driver_alcohol_drugs == "Missing"       ~ NA,
+    is.na(driver_alcohol_drugs)             ~ driver_alcohol_drugs,
+    driver_alcohol_drugs == "Missing"       ~ NA_character_,
     str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
     TRUE                                    ~ "No"
   ))
@@ -618,10 +635,12 @@ ncbikecrash %>%
 Most often when you define a new variable with `mutate` you'll also want to save the resulting data frame, often by writing over the original data frame.
 
 ```{r}
-ncbikecrash <- ncbikecrash %>%
+ncbikecrash <- ncbikecrash %>% #<<
   mutate(driver_alcohol_drugs_simplified = case_when(
+    is.na(driver_alcohol_drugs)             ~ driver_alcohol_drugs,
+    driver_alcohol_drugs == "Missing"       ~ NA_character_,
     str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
-    TRUE                                    ~ driver_alcohol_drugs
+    TRUE                                    ~ "No"
   ))
 ```
 

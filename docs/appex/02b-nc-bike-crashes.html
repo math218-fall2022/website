@@ -7,10 +7,11 @@
 <meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
-<meta name="date" content="2019-01-28" />
+<meta name="date" content="2019-09-04" />
 
 <title>NC bike crashes</title>
 
@@ -70,9 +71,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type="text/css">
 .main-container {
@@ -86,7 +85,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -97,22 +95,80 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -122,7 +178,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">NC bike crashes</h1>
-<h4 class="date"><em>2019-01-28</em></h4>
+<h4 class="date">2019-09-04</h4>
 
 </div>
 
@@ -130,90 +186,21 @@ $(document).ready(function () {
 <div id="filter-for-bike-crashes-in-residential-development-areas-where-driver-age-group-is-0-to-19." class="section level3">
 <h3>Filter for bike crashes in Residential development areas where driver age group is 0 to 19.</h3>
 <pre class="r"><code>ncbikecrash %&gt;%
-  filter(development==&quot;Residential&quot;, driver_age_group==&quot;0-19&quot;)</code></pre>
-<pre><code>## # A tibble: 223 x 66
-##    object_id city  county region development locality on_road rural_urban
-##        &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
-##  1      3743 None… Burke  Mount… Residential Mixed (… &lt;NA&gt;    Rural      
-##  2      3756 Fore… Ruthe… Mount… Residential Urban (… &lt;NA&gt;    Urban      
-##  3      3805 Rale… Wake   Piedm… Residential Mixed (… &lt;NA&gt;    Urban      
-##  4      3824 Sout… Moore  Piedm… Residential Urban (… &lt;NA&gt;    Urban      
-##  5      3897 Sile… Chath… Piedm… Residential Urban (… &lt;NA&gt;    Urban      
-##  6      2173 Ashe… Rando… Piedm… Residential Urban (… &lt;NA&gt;    Urban      
-##  7      2029 None… Johns… Coast… Residential Rural (… &lt;NA&gt;    Rural      
-##  8      7047 Moun… Gaston Piedm… Residential Urban (… &lt;NA&gt;    Urban      
-##  9      7049 None… Meckl… Piedm… Residential Rural (… &lt;NA&gt;    Rural      
-## 10      7245 Char… Meckl… Piedm… Residential Urban (… &lt;NA&gt;    Urban      
-## # … with 213 more rows, and 58 more variables: speed_limit &lt;chr&gt;,
-## #   traffic_control &lt;chr&gt;, weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;,
-## #   bike_age_group &lt;chr&gt;, bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;,
-## #   bike_direction &lt;chr&gt;, bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;,
-## #   bike_race &lt;chr&gt;, bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;,
-## #   driver_age_group &lt;chr&gt;, driver_alcohol &lt;chr&gt;,
-## #   driver_alcohol_drugs &lt;chr&gt;, driver_est_speed &lt;chr&gt;,
-## #   driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;, driver_sex &lt;chr&gt;,
-## #   driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;, crash_date &lt;chr&gt;,
-## #   crash_day &lt;chr&gt;, crash_group &lt;chr&gt;, crash_hour &lt;int&gt;,
-## #   crash_location &lt;chr&gt;, crash_month &lt;chr&gt;, crash_severity &lt;chr&gt;,
-## #   crash_time &lt;time&gt;, crash_type &lt;chr&gt;, crash_year &lt;int&gt;,
-## #   ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;, light_condition &lt;chr&gt;,
-## #   road_character &lt;chr&gt;, road_class &lt;chr&gt;, road_condition &lt;chr&gt;,
-## #   road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;, road_feature &lt;chr&gt;,
-## #   road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;, num_bikes_bi &lt;int&gt;,
-## #   num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;, num_bikes_no &lt;int&gt;,
-## #   num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;, num_lanes &lt;chr&gt;,
-## #   num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;, frm_road &lt;chr&gt;,
-## #   rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;, geo_shape &lt;chr&gt;</code></pre>
+  ___</code></pre>
 </div>
 <div id="identify-the-most-commonly-occurring-estimated-speed-for-drivers." class="section level3">
 <h3>Identify the most commonly occurring estimated speed for drivers.</h3>
 <pre class="r"><code>ncbikecrash %&gt;%
-    count(driver_est_speed) %&gt;%
-    arrange(-n)</code></pre>
-<pre><code>## # A tibble: 17 x 2
-##    driver_est_speed     n
-##    &lt;chr&gt;            &lt;int&gt;
-##  1 0-5 mph           1756
-##  2 31-35 mph          846
-##  3 6-10 mph           840
-##  4 41-45 mph          670
-##  5 &lt;NA&gt;               580
-##  6 11-15 mph          552
-##  7 16-20 mph          544
-##  8 21-25 mph          525
-##  9 26-30 mph          367
-## 10 51-55 mph          338
-## 11 36-40 mph          261
-## 12 46-50 mph          142
-## 13 56-60 mph           29
-## 14 61-65 mph           10
-## 15 66-70 mph            4
-## 16 &gt;100 mph             2
-## 17 81-85 mph            1</code></pre>
-<p>The most commonly occuring is 0-5 mph.</p>
+  ___</code></pre>
 </div>
 <div id="remove-text-like-a-b-etc.-from-the-bike_injury-variable-and-save-the-result-in-a-new-variable-called-bike_injury_rec-and-check-your-work." class="section level3">
 <h3>Remove text like <code>A:</code>, <code>B:</code>, etc. from the <code>bike_injury</code> variable and save the result in a new variable called <code>bike_injury_rec</code>, and check your work.</h3>
-<pre class="r"><code> ncbikecrash &lt;- ncbikecrash %&gt;% mutate(bike_injury_rec = case_when(
-  str_detect(bike_injury, &quot;A:&quot;) ~ &quot;Disabling Injury&quot;, 
-  str_detect(bike_injury, &quot;B:&quot;) ~ &quot;Evident Injury&quot;,
-  str_detect(bike_injury, &quot;C:&quot;) ~ &quot;Possible Injury&quot;, 
-  str_detect(bike_injury, &quot;K:&quot;) ~ &quot;Killed&quot;,
-  str_detect(bike_injury, &quot;O:&quot;) ~ &quot;No Injury&quot;,
-  TRUE ~ bike_injury
-))
-
-ncbikecrash %&gt;%
-  count(bike_injury, bike_injury_rec)</code></pre>
-<pre><code>## # A tibble: 6 x 3
-##   bike_injury         bike_injury_rec      n
-##   &lt;chr&gt;               &lt;chr&gt;            &lt;int&gt;
-## 1 A: Disabling Injury Disabling Injury   364
-## 2 B: Evident Injury   Evident Injury    3105
-## 3 C: Possible Injury  Possible Injury   2916
-## 4 K: Killed           Killed             162
-## 5 O: No Injury        No Injury          710
-## 6 Unknown Injury      Unknown Injury     210</code></pre>
+<pre class="r"><code>ncbikecrash &lt;- ncbikecrash %&gt;%
+  ___</code></pre>
+</div>
+<div id="acknowledgements" class="section level3">
+<h3>Acknowledgements</h3>
+<p>Adpated from <a href="http://www.datasciencebox.org">datasciencebox.org</a></p>
 </div>
 
 
@@ -233,6 +220,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
