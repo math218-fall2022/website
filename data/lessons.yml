@@ -46,10 +46,10 @@ lessons:
  #lab: "lab-02-data-wrangle-visualize.html"
  #slides: "lab-slides/02-lab-slides.html"
  - title: "Week 04"
+ - date: "Mon, Sep 16"
+   hw: "hw-01.html"
  - date: "Tue, Sep 17"
    title: "Effective data visualization, Part 2"
-
-   hw: "hw-01.html"
  #slides: "lec-slides/02c-data-wrangle.html"
  #appex: "02b-nc-bike-crashes.html"
   # title: "Merge Conflicts"
