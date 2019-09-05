@@ -9,7 +9,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Due Tuesday, September 17
+### Due Thursday, September 12
 
 ### Required:
 

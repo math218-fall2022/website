@@ -9,7 +9,7 @@ output:
 
 - [Reading 02: Data Visualization and Exploration](./reading-02.html), due September 5
 
-- [Reading 03: Data Collection](./reading-03.html), due September 17
+- [Reading 03: Data Collection](./reading-03.html), due September 12
 
 - [Reading 04: Data Science Ethics](./reading-04.html), due October 1
 
