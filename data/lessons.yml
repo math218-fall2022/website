@@ -22,6 +22,8 @@ lessons:
    appex: "02a-starwars.html"
  - date: "Thu, Sep 5"
    title: "Tidy data & data wrangling"
+   slides: "lec-slides/02b-tidy-data-wrangle.html"
+   appex: "02b-nc-bike-crashes.html"
    reading: "reading-02.html"
  #slides: ""
  #appex: ""
