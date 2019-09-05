@@ -1,6 +1,7 @@
 ---
 title: "Lab 02 - Data wrangling and visualization"
 subtitle: "What should I major in?"
+author: "Total: 100 points"
 date: "due Wed, Sep 11 at 11:59p"
 output: 
   tufte::tufte_html:
@@ -389,9 +390,7 @@ median earning is on top.
 10. Create a scatterplot of median income vs. proportion of 
 women in that major, colored by whether the major is in a STEM field or not. Describe the association between these three variables.
 
-*You’re done! Knit, commit all remaining changes using the commit message “Done with Lab 2!”, and push. Before you wrap up the assignment, make sure the .Rmd and .md documents are updated in your GitHub repo.*
-
-
+*You're done! Commit all remaining changes, use the commit message "Done with Lab 2!", and push. Before you wrap up the assignment, make sure the .Rmd and .md documents are all updated on your GitHub repo. There is a 10% penality if the .md file is not updated on GitHub.*
 
 <!--
 ## Writing Task 1
