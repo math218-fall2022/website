@@ -1,7 +1,7 @@
 ---
 title: "Lab 03: Visualizing spatial data"
 author: ""
-date: "01.31.19"
+date: "09.13.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -45,19 +45,10 @@ library(rvest)
 
 ## Agenda
 
-1. Team name
-2. What are merge conflicts?
-3. Practice dealing with merge conflicts
-4. Lab introduction
-5. Starting a new project & lab tips
-
----
-
-## Team Name
-
-.middle[
-If you haven't already, please give me your team name by the end of today's lab.
-]
+1. What are merge conflicts?
+2. Practice dealing with merge conflicts
+3. Lab introduction
+4. Starting a new project & lab tips
 
 ---
 
@@ -108,7 +99,7 @@ and open the R Markdown file.
 - Assign the numbers 1, 2, 3, and 4 to each of the team members.
     - If you have 3 team members, make one person **Member 2** and **Member 4**.
 
-- Follow the [application exercise instructions](https://www2.stat.duke.edu/courses/Spring19/sta199.001/appex/02c-merge-conflicts.html) exactly.
+- Follow the [application exercise instructions](https://www2.stat.duke.edu/courses/Fall19/sta199.001/appex/02c-merge-conflicts.html) exactly.
 
 - Raise your hand if you have any questions during the exercise. 
 

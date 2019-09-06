@@ -1,7 +1,7 @@
 ---
 title: "Application Exercise 05: Merge Conflicts"
 author: ""
-date: "01.28.19"
+date: "Fall 2019"
 output: 
   html_document: 
     fig_height: 4
