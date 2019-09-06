@@ -102,7 +102,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>A note on expectations: </strong> For each exercise and on your own question you answer include any relevant output (tables, summary statistics, plots) in your answer. Doing this is easy! Just place any relevant R code in a code chunk, and hit Knit HTML.</span></span></p>
+<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>A note on expectations: </strong> For each exercise and on your own question you answer include any relevant output (tables, summary statistics, plots) in your answer. Doing this is easy! Just place any relevant R code in a code chunk, and hit Knit.</span></span></p>
 <p>Some define statistics as the field that focuses on turning information into knowledge. The first step in that process is to summarize and describe the raw information - the data. In this lab we explore data on college majors and earnings, specifically the data behind the FiveThirtyEight story <a href="https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/">“The Economic Guide To Picking A College Major”</a>.</p>
 <p>These data originally come from the American Community Survey (ACS) 2010-2012 Public Use Microdata Series. While this is outside the scope of this lab, if you are curious about how raw data from the ACS were cleaned and prepared, see <a href="https://github.com/fivethirtyeight/data/blob/master/college-majors/college-majors-rscript.R">the code</a> FiveThirtyEight authors used.</p>
 <p>We should also note that there are many considerations that go into picking a major.Earnings potential and employment prospects are two of them, and they are important, but they don’t tell the whole story. Keep this in mind as you analyze the data.</p>
@@ -341,8 +341,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 <p>This is telling us that we might want to reconsider the binwidth we chose for our histogram – or more accurately, the binwidth we didn’t specify. It’s good practice to always thing in the context of the data and try out a few binwidths before settling on a binwidth. You might ask yourself: “What would be a meaningful difference in median incomes?” $1 is obviously too little, $10000 might be too high.</p>
 <ol start="4" style="list-style-type: decimal">
-<li>Try binwidths of $1000 and $5000 and choose one. Explain your reasoning for your choice. Note that the binwidth is an argument for the <code>geom_histogram</code> function. So to specify a binwidth of $1000, you would use <code>geom_histogram(binwidth = 1000)</code>.</li>
+<li>Create two histograms - one with binwidth of $1000 and one with binwidth of $5000. Which histogram would you choose to display the distribution of <code>median</code>? Explain the reasoning for your choice.</li>
 </ol>
+<p>Note that the binwidth is an argument for the <code>geom_histogram</code> function. So to specify a binwidth of $1000, you would use <code>geom_histogram(binwidth = 1000)</code>.</p>
 <p>We can also calculate summary statistics for this distribution using the <code>summarise</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">college_recent_grads <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">min =</span> <span class="kw">min</span>(median), <span class="dt">max =</span> <span class="kw">max</span>(median),

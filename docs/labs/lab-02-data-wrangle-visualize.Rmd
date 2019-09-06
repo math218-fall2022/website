@@ -18,7 +18,7 @@ knitr::opts_chunk$set(eval = FALSE)
 ```{marginfigure}
 **A note on expectations: ** For each exercise and on your own question you 
 answer include any relevant output (tables, summary statistics, plots) in your answer. Doing this is easy! Just place any relevant R code in a code chunk, 
-and hit Knit HTML.
+and hit Knit.
 ```
 
 Some define statistics as the field that focuses on turning information into
@@ -265,7 +265,9 @@ Along with the plot, we get a message:
 
 This is telling us that we might want to reconsider the binwidth we chose for our histogram -- or more accurately, the binwidth we didn't specify. It's good practice to always thing in the context of the data and try out a few binwidths before settling on a binwidth. You might ask yourself: "What would be a meaningful difference in median incomes?" $1 is obviously too little, $10000 might be too high.
 
-4. Try binwidths of $1000 and $5000 and choose one. Explain your reasoning for your choice. Note that the binwidth is an argument for the `geom_histogram` function. So to specify a binwidth of $1000, you would use 
+4. Create two histograms  - one with binwidth of $1000 and one with binwidth of $5000. Which histogram would you choose to display the distribution of `median`? Explain the reasoning for your choice. 
+
+Note that the binwidth is an argument for the `geom_histogram` function. So to specify a binwidth of $1000, you would use 
 `geom_histogram(binwidth = 1000)`.
 
 We can also calculate summary statistics for this distribution using the 
