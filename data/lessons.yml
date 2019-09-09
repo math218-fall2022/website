@@ -35,7 +35,7 @@ lessons:
  - date: "Tue, Sep 10"
    title: "Effective data visualization, Part 1"
  #reading: "reading-01.html"
- #slides: "lec-slides/02a-fund-data-viz.html"
+   slides: "lec-slides/STA199_EffVis_Fall2019.pdfkae"
  - date: "Thu, Sep 12"
    title: "Confounding variables & Simpson's paradox"
    reading: "reading-03.html"
