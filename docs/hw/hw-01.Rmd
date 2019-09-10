@@ -1,5 +1,6 @@
 ---
 title: "HW 01 - Fixing ugly charts"
+subtitle: "Total: 10 points"
 date: "Due: Monday, September 16 at noon"
 output: 
     html_document: 
@@ -13,6 +14,8 @@ output:
 knitr::include_graphics("img/hw-01-ugly-chart.png")
 ```
 </div>
+
+**You will work on this assignment with your lab group. If the team name on your GitHub repo is incorrect or is still the original team name (e.g. Team01L-10), [click here](https://forms.gle/f52ihxRVykYirbhm9) to resubmit your team information.**
 
 Use any software you like to improve the data visualization assigned to your lab section. Click the link to see the original "ugly chart". The dataset is available in the **hw-01-** repo on GitHub.
 
@@ -37,8 +40,6 @@ Use any software you like to improve the data visualization assigned to your lab
 - [Flowing Data - Ugly Charts](https://flowingdata.com/category/visualization/ugly-visualization/)
 
 
-
-
 ## Grading
 
-10 points
+You will be graded on whether your graph effectively displays the data based on the guidelines presented in [Tips for Effective Data Visualization](https://www2.stat.duke.edu/courses/Fall19/sta199.001/slides/lec-slides/STA199_EffVis_Fall2019.pdf) and course lectures on data visualizaiton. 
