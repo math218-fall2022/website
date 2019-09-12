@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Scientific studies, confounding, and Simpson’s paradox</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Maria Tackett" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Scientific studies, confounding, and Simpson’s paradox
+### Dr. Maria Tackett
+### 09.12.19
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="http://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+
+
+class: middle, center
+
+### [Click for PDF of slides](05a-confounding.pdf)
+
+---
+
+## Announcements
+
+- HW 01 - due **Monday, September 16 at 12p (noon)**
+
+
+- Writing Exercise 1
+    - Draft Response: 9/12 - 9/14
+    - Peer Review: 9/15 - 9/17
+    - Final Revision: 9/18 - 9/19
+
+---
+
+class: middle, center
+
+## `mutate`
+(from September 5 lecture)
+
+---
+
+### `mutate` to add new variables
+
+.small[
+
+```r
+ncbikecrash %&gt;% 
+  mutate(driver_alcohol_drugs_simplified = case_when(
+    is.na(driver_alcohol_drugs)             ~ driver_alcohol_drugs,
+    driver_alcohol_drugs == "Missing"       ~ NA_character_,
+    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
+    TRUE                                    ~ "No"
+  ))
+```
+]
+---
+
+### "Save" when you `mutate`
+
+Most often when you define a new variable with `mutate` you'll also want to save the resulting data frame, often by writing over the original data frame.
+
+
+```r
+*ncbikecrash &lt;- ncbikecrash %&gt;%
+  mutate(driver_alcohol_drugs_simplified = case_when(
+    is.na(driver_alcohol_drugs)             ~ driver_alcohol_drugs,
+    driver_alcohol_drugs == "Missing"       ~ NA_character_,
+    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
+    TRUE                                    ~ "No"
+  ))
+```
+
+---
+
+### Check before you move on
+
+
+```r
+ncbikecrash %&gt;% 
+  count(driver_alcohol_drugs, driver_alcohol_drugs_simplified)
+```
+
+```
+## # A tibble: 6 x 3
+##   driver_alcohol_drugs                driver_alcohol_drugs_simplified     n
+##   &lt;chr&gt;                               &lt;chr&gt;                           &lt;int&gt;
+## 1 &lt;NA&gt;                                &lt;NA&gt;                             6654
+## 2 Missing                             &lt;NA&gt;                               99
+## 3 No                                  No                                695
+## 4 Yes-Alcohol,  impairment suspected  Yes                                12
+## 5 Yes-Alcohol, no impairment detected Yes                                 3
+## 6 Yes-Drugs, impairment suspected     Yes                                 4
+```
+
+
+```r
+ncbikecrash %&gt;% 
+  count(driver_alcohol_drugs_simplified)
+```
+
+```
+## # A tibble: 3 x 2
+##   driver_alcohol_drugs_simplified     n
+##   &lt;chr&gt;                           &lt;int&gt;
+## 1 &lt;NA&gt;                             6753
+## 2 No                                695
+## 3 Yes                                19
+```
+
+
+---
+
+class: center, middle
+
+# Scientific studies
+
+---
+
+## Scientific studies
+
+- &lt;font class="vocab"&gt;Observational&lt;/font&gt;
+    - Collect data in a way that does not interfere with how the data arise ("observe")
+    - Only establish an association
+- &lt;font class="vocab"&gt;Experimental&lt;/font&gt;
+    - Randomly assign subjects to treatments
+    - Establish causal connections
+
+.question[
+Design a study comparing average energy levels of people who do and do not exercise -- both as an observational study and as an experiment.
+]
+
+---
+
+### Study: "Cereal Keeps Girls Slim"
+
+.small[
+Girls who ate breakfast of any type had a lower average body mass index, a common obesity gauge, than those who said they didn't. The index was even lower for girls who said they ate cereal for breakfast, according to findings of the study conducted by the Maryland Medical Research Institute with funding from the National Institutes of Health (NIH) and cereal-maker General Mills.
+
+[...]
+
+The results were gleaned from a larger NIH survey of 2,379 girls in California, Ohio, and Maryland who were tracked between the ages of 9 and 19.
+
+[...]
+
+As part of the survey, the girls were asked once a year what they had eaten during the previous three days.
+
+[...]
+
+]
+
+&lt;br&gt;&lt;b&gt;
+.footnote[
+Source: .midi[[Study: Cereal Keeps Girls Slim](https://www.cbsnews.com/news/study-cereal-keeps-girls-slim/)].
+]
+
+---
+
+### 3 possible explanations
+
+--
+
+- Eating breakfast causes girls to be slimmer 
+&lt;br&gt;
+
+--
+
+- Being slim causes girls to eat breakfast
+&lt;br&gt;
+
+--
+
+- A third variable is responsible for both -- a confounding variable 
+
+--
+
+.alert[
+A &lt;font class="vocab"&gt;confounding&lt;/font&gt; variable is an an extraneous variable that affects both the explanatory and the response variable, and that make it seem like there is a relationship between them
+]
+
+---
+
+## Correlation != causation
+
+&lt;br&gt;&lt;br&gt;
+.center[
+![](img/05a/xkcdcorrelation.png)
+]
+&lt;br&gt;&lt;br&gt;
+
+.footnote[
+Randall Munroe CC BY-NC 2.5 http://xkcd.com/552/
+]
+
+---
+
+## Studies and conclusions
+
+![](img/05a/random_sample_assign_grid.png)
+
+---
+
+### Non-random samples: a cautionary tale
+
+In 2016, the Natural Environment Research Council in England
+started an online competition in an effort to name a polar research
+ship. People were invited to submit suggestions and/or cast a vote for
+their favorite choice.
+
+.question[
+What type of sampling design is this? 
+]
+
+[What happened?](https://www.cnn.com/2016/04/18/world/boaty-mcboatface-wins-vote/index.html)
+
+---
+
+class: center, middle
+
+# Conditional probability
+
+---
+
+## Conditional probability
+
+.alert[
+**Notation**: `\(P(A | B)\)`: Probability of event A given event B
+]
+
+`\(A\)`: it will be unseasonably warm tomorrow
+
+`\(B\)`: it is unseasonably warm today
+
+- What is the probability that it will be unseasonably warm tomorrow? 
+    - What is `\(P(A)\)`? 
+
+
+--
+
+- What is the probability that it will be unseasonably warm tomorrow, given that is unseasonably warm today? 
+    - What is `\(P(A|B)\)`?
+
+---
+
+.question[
+A January 2018 SurveyUSA poll asked 500 randomly selected Californians whether they are familiar with the DREAM act. The distribution of the responses by age category are shown below.
+
+What proportion of **&lt;u&gt;all respondents&lt;/u&gt;** are very familiar with the DREAM act?  
+]
+&lt;br&gt;
+.pull-left[
+|            | 18 - 49 | 50+ | Total |
+|------------|---------|-----|-------|
+| Very       | 90      | 32  | 122   |
+| Somewhat   | 125     | 86  | 211   |
+| Not very   | 56      | 33  | 89    |
+| Not at all | 36      | 24  | 60    |
+| Not sure   | 9       | 9   | 18    |
+| Total      | 316     | 184 | 500   |
+
+&lt;br&gt;&lt;br&gt;
+]
+
+
+--
+.pull-right[
+`\(P(\text{Very}) = \frac{122}{500} = 0.244\)`
+]
+
+
+.footnote[
+Source: [SurveyUSA News Poll 23754](http://www.surveyusa.com/client/PollReport.aspx?g=783743b0-efc1-4b67-9201-58352a8f61f1)
+]
+
+---
+
+.question[
+A January 2018 SurveyUSA poll asked 500 randomly selected Californians whether they are familiar with the DREAM act. The distribution of the responses by age category are shown below.
+
+What proportion of **&lt;u&gt;respondents who are 18 - 49 years old&lt;/u&gt;** are very familiar with the DREAM act?
+]
+&lt;br&gt;
+.pull-left[
+|            | 18 - 49 | 50+ | Total |
+|------------|---------|-----|-------|
+| Very       | 90      | 32  | 122   |
+| Somewhat   | 125     | 86  | 211   |
+| Not very   | 56      | 33  | 89    |
+| Not at all | 36      | 24  | 60    |
+| Not sure   | 9       | 9   | 18    |
+| Total      | 316     | 184 | 500   |
+]
+--
+.pull-right[
+`\(P(\text{Very}~|~18-49) = \frac{90}{316} = 0.285\)`
+]
+
+---
+
+.question[
+A January 2018 SurveyUSA poll asked 500 randomly selected Californians whether they are familiar with the DREAM act. The distribution of the responses by age category are shown below.
+
+What proportion of **&lt;u&gt;respondents who are 50+ years old&lt;/u&gt;** are very familiar with the DREAM act?
+]
+&lt;br&gt;
+.pull-left[
+|            | 18 - 49 | 50+ | Total |
+|------------|---------|-----|-------|
+| Very       | 90      | 32  | 122   |
+| Somewhat   | 125     | 86  | 211   |
+| Not very   | 56      | 33  | 89    |
+| Not at all | 36      | 24  | 60    |
+| Not sure   | 9       | 9   | 18    |
+| Total      | 316     | 184 | 500   |
+]
+--
+.pull-right[
+`\(P(\text{Very}~|~50+) = \frac{32}{184} = 0.173\)`
+]
+
+---
+
+.question[
+Given that
+
+- `\(P(\text{Very}) = \frac{122}{500} = 0.244\)`
+
+- `\(P(\text{Very}~|~18-49) = \frac{90}{316} = 0.285\)`
+
+- `\(P(\text{Very}~|~50+) = \frac{32}{184} = 0.173\)`
+
+does there appear to be a relationship between age and familiarity with the DREAM act? Explain your reasoning.
+]
+
+--
+
+&lt;br&gt;
+
+.question[
+Could there be another variable that explains this relationship?
+]
+
+---
+
+## Independence
+
+.question[
+Inspired by the previous example and how we used the conditional probabilities to make conclusions, come up with a definition of independent events. If easier, you can keep the context limited to the example (independence/dependence of familiarity with the DREAM act and age), but try to push yourself to make a more general statement.
+]
+
+---
+
+class: center, middle
+
+# Simpson's paradox
+
+---
+
+## Relationships between variables
+
+- **Bivariate relationship**: Fitness `\(\rightarrow\)` Heart health
+
+- **Multivariate relationship**: Calories + Age + Fitness `\(\rightarrow\)` Heart health
+
+---
+
+## Simpson's paradox
+
+- Not considering an important variable when studying a relationship can result in &lt;font class="vocab"&gt;Simpson's paradox&lt;/font&gt;, a phenomenon in which the omission of one explanatory variable can affect the measure of association between another explanatory variable and a response variable. 
+
+
+- In other words, the inclusion of a third variable in the analysis can change the apparent relationship between the other two variables. 
+
+---
+
+## Simpson's paradox
+
+&lt;img src="05a-confounding_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Simpson's paradox 
+
+&lt;img src="05a-confounding_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Data
+
+- Is one hospital more effective than the other at treating a certain disease? 
+- To answer this question, we will analyze the treatment outcomes for a 100 patients at each hospital. 
+
+
+
+
+```r
+treatments %&gt;% slice(1:20)
+```
+
+```
+## # A tibble: 20 x 3
+##    hospital disease     outcome
+##    &lt;fct&gt;    &lt;fct&gt;       &lt;fct&gt;  
+##  1 A        Less Severe success
+##  2 A        Less Severe success
+##  3 A        Less Severe success
+##  4 A        Less Severe success
+##  5 A        Less Severe success
+##  6 A        Less Severe success
+##  7 A        Less Severe success
+##  8 A        Less Severe success
+##  9 A        Less Severe success
+## 10 A        Less Severe success
+## 11 A        Less Severe success
+## 12 A        Less Severe success
+## 13 A        Less Severe success
+## 14 A        Less Severe success
+## 15 A        Less Severe success
+## 16 A        Less Severe success
+## 17 A        Less Severe success
+## 18 A        Less Severe success
+## 19 A        Less Severe failure
+## 20 A        Less Severe failure
+```
+
+---
+
+## Glimpse at the data
+
+
+```r
+glimpse(treatments)
+```
+
+```
+## Observations: 200
+## Variables: 3
+## $ hospital &lt;fct&gt; A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A, A…
+## $ disease  &lt;fct&gt; Less Severe, Less Severe, Less Severe, Less Severe, Les…
+## $ outcome  &lt;fct&gt; success, success, success, success, success, success, s…
+```
+
+---
+
+### Overall distribution of treatment outcomes
+
+.question[
+What can you say about the overall distribution of outcomes by hospital? Hint: Calculate the following probabilities: `\(P(\text{Success} | \text{Hospital A})\)` and `\(P(\text{Success} | \text{Hospital B})\)`.
+]
+
+
+```r
+treatments %&gt;%
+  count(hospital, outcome)
+```
+
+```
+## # A tibble: 4 x 3
+##   hospital outcome     n
+##   &lt;fct&gt;    &lt;fct&gt;   &lt;int&gt;
+## 1 A        failure    50
+## 2 A        success    50
+## 3 B        failure    32
+## 4 B        success    68
+```
+
+---
+
+### Overall distribution of treatment outcomes
+
+.question[
+What type of visualization would be appropriate for representing this data?
+]
+
+
+```r
+treatments %&gt;%
+  count(hospital, outcome) %&gt;%
+  group_by(hospital) %&gt;%
+  mutate(prop_success = n / sum(n))
+```
+
+```
+## # A tibble: 4 x 4
+## # Groups:   hospital [2]
+##   hospital outcome     n prop_success
+##   &lt;fct&gt;    &lt;fct&gt;   &lt;int&gt;        &lt;dbl&gt;
+## 1 A        failure    50         0.5 
+## 2 A        success    50         0.5 
+## 3 B        failure    32         0.32
+## 4 B        success    68         0.68
+```
+
+---
+
+### Overall distribution of treatment outcomes
+
+
+```r
+ggplot(treatments, mapping = aes(x = hospital, fill = outcome)) +
+  geom_bar(position = "fill") + 
+  labs(y = "", title = "Treatment Outcomes by Hospital")
+```
+
+![](05a-confounding_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+
+### Distribution of treatment outcomes, by disease severity
+
+.question[
+What can you say about the distribution of treatment outcomes after accounting for the severity of the disease. 
+]
+
+
+```r
+treatments %&gt;%
+  count(disease, hospital, outcome)    
+```
+
+```
+## # A tibble: 8 x 4
+##   disease     hospital outcome     n
+##   &lt;fct&gt;       &lt;fct&gt;    &lt;fct&gt;   &lt;int&gt;
+## 1 Less Severe A        failure     2
+## 2 Less Severe A        success    18
+## 3 Less Severe B        failure    16
+## 4 Less Severe B        success    64
+## 5 More Severe A        failure    48
+## 6 More Severe A        success    32
+## 7 More Severe B        failure    16
+## 8 More Severe B        success     4
+```
+
+---
+
+### Distribution of treatment outcomes, by disease severity
+
+
+.question[
+What type of visualization would be appropriate for representing these data?
+]
+
+.small[
+
+```r
+treatments %&gt;%
+  count(disease, hospital, outcome) %&gt;%
+  group_by(disease, hospital) %&gt;%
+  mutate(perc_success = n / sum(n)) %&gt;%
+  filter(outcome == "success")
+```
+
+```
+## # A tibble: 4 x 5
+## # Groups:   disease, hospital [4]
+##   disease     hospital outcome     n perc_success
+##   &lt;fct&gt;       &lt;fct&gt;    &lt;fct&gt;   &lt;int&gt;        &lt;dbl&gt;
+## 1 Less Severe A        success    18          0.9
+## 2 Less Severe B        success    64          0.8
+## 3 More Severe A        success    32          0.4
+## 4 More Severe B        success     4          0.2
+```
+]
+
+---
+
+### Distribution of treatment outcomes, by disease severity
+
+
+```r
+ggplot(treatments, mapping = aes(x = hospital, fill = outcome)) +
+  geom_bar(position = "fill") +
+  facet_grid(. ~ disease) +
+  labs(x = "Hospital", y = "", fill = "Outcome",
+       title = "Treatment outcome by Hospital by Disease Severity")
+```
+
+![](05a-confounding_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+
+### Distribution of treatment outcomes, by disease severity
+
+![](05a-confounding_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+&lt;br&gt;
+
+.question[
+Why do you think Simpson's paradox occurred? In other words, why is the overall success rate much lower for Hospital A, even though the success rate for Hospital A is higher for each disease severity level?
+]
+
+---
+
+class: middle, center
+
+## Writing Assignments
+
+---
+
+## Writing Assignments
+
+- We will do 3 writing assignments over the course of the semester. 
+
+- The purpose of the writing assignments is to help you engage with complex statistical concept in a new way
+
+- Each assignment will consist of 3 parts: 
+    - Initial draft (~ 15 min.)
+    - Peer review (~ 15 min.)
+    - Revision (~ 15 min.)
+
+- You will be graded on
+    - Timely submission for each component
+    - Reasonable attempt at each component
+    - Correctness of revised response
+
+---
+
+## Writing
+- If you haven't already registered for Eli, [follow the instructions](https://www2.stat.duke.edu/courses/Fall19/sta199.001/reading/student-eli-registration.pdf) to register. 
+
+- Go to [https://app.elireview.com/unit](https://app.elireview.com/unit) and log in. 
+
+- Click Prompt 01: Warm-up and submit your response. 
+
+- You will receive an email on Sunday for the next step - peer review.
+
+- See the course schedule for the writing assignment schedule.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
