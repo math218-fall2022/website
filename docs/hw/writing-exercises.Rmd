@@ -1,0 +1,39 @@
+---
+title: "Writing Exercises"
+subtitle: "Fall 2019"
+date: ""
+output: 
+    html_document: 
+     css: "./sta199-hw.css"
+---
+
+**Intro:**
+
+- The purpose of the writing assignments is to help you engage with complex statistical concept in a new way
+
+- Each assignment will consist of 3 parts: 
+    - Initial draft (~ 15 min.)
+    - Peer review (~ 15 min.)
+    - Revision (~ 15 min.)
+
+
+**Fall 2019 Writing Exercise Schedule**
+
+|  	| Draft 	| Peer Review 	| Revision 	|
+|---------------------	|---------------	|---------------	|---------------	|
+| Writing Exercise #1 	| 9/12 - 9/14 	| 9/15 - 9/17 	| 9/18 - 9/19 	|
+| Writing Exercise #2 	| 9/24 - 9/26 	| 9/27 - 9/29 	| 9/30 - 10/1 	|
+| Writing Exercise #3 	| 11/12 - 11/14 	| 11/15 - 11/17 	| 11/18 - 11/19 	|
+
+
+**Notes**: 
+
+- Each part of the exercise will be available at 9a on the day it opens and due at 11:59p on it's due date.
+
+
+- Writing exercises are worth 5% of the final course grade. 
+
+- Each exercise will be 10 points allocated as follows: 
+  - Draft (5 pt): Timely submission and reasonable attempt 
+  - Peer Review (5 pt): Timely submission and reasonable feedback using the peer review rubric.
+  - Revision (5 pt): Timely submission and correct final answer based on peer feedback

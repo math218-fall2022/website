@@ -141,15 +141,12 @@ The results were gleaned from a larger NIH survey of 2,379 girls in California, 
 
 [...]
 
-As part of the survey, the girls were asked once a year what they had eaten during the previous three days.
-
-[...]
-
+As part of the survey, the girls were asked once a year what they had eaten during the previous three days....
 ]
+<br>
 
-<br><b>
 .footnote[
-Source: .midi[[Study: Cereal Keeps Girls Slim](https://www.cbsnews.com/news/study-cereal-keeps-girls-slim/)].
+Source: [Study: Cereal Keeps Girls Slim](https://www.cbsnews.com/news/study-cereal-keeps-girls-slim/)
 ]
 
 ---
@@ -551,8 +548,8 @@ class: middle, center
     - Revision (~ 15 min.)
 
 - You will be graded on
-    - Timely submission for each component
-    - Reasonable attempt at each component
+    - Timely submission for each part
+    - Reasonable attempt at each part
     - Correctness of revised response
 
 ---
