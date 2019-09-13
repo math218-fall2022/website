@@ -11,7 +11,7 @@ output:
 
 - The purpose of the writing assignments is to help you engage with complex statistical concept in a new way
 
-- Each assignment will consist of 3 parts: 
+- Each assignment will be completed on the [Eli Review](https://app.elireview.com/unit) platform and will consist of 3 parts: 
     - Initial draft (~ 15 min.)
     - Peer review (~ 15 min.)
     - Revision (~ 15 min.)
@@ -29,7 +29,6 @@ output:
 **Notes**: 
 
 - Each part of the exercise will be available at 9a on the day it opens and due at 11:59p on it's due date.
-
 
 - Writing exercises are worth 5% of the final course grade. 
 

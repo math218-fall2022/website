@@ -1,10 +1,10 @@
 ---
 title: "Lab 03 - Visualizing Spatial Data"
-subtitle: "Are LaQunitas always next to Denny's?"
+subtitle: "Denny's and LaQuinta Inn Hotel and Suites"
 author: "Total: 100 points"
-date: "due Wednesday, September 18 at 11:59p"
+date: "due Wed, Sep 11 at 11:59p"
 output: 
-  tufte::tufte_html:
+  tufte::tufte_html: 
     tufte_variant: "envisioned"
     highlight: pygments
     css: "./sta199-labs.css"
@@ -25,13 +25,11 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Introduction
 
-```{r fig.margin=TRUE, eval=TRUE, echo=FALSE}
+```{r fig.margin=TRUE, eval=FALSE, echo=FALSE}
 include_graphics("img/03-viz-sp-data/mitch-hedgeberg-lqd.jpg")
 ```
 
-Have you ever taken a road trip in the US and thought to yourself "I wonder what La Quinta means". Well, the late comedian [Mitch Hedberg](https://en.wikipedia.org/wiki/Mitch_Hedberg) thinks it's Spanish for *next to Denny's*.
-
-If you're not familiar with these two establishments, [Denny's](https://www.dennys.com/) is a casual diner chain that is open 24 hours and [La Quinta Inn and Suites](http://www.lq.com/) is a hotel chain.
+Today's lab is based on a joke by the late comedian [Mitch Hedberg](https://en.wikipedia.org/wiki/Mitch_Hedberg). He observed that he often saw Denny's restaurants next to La Quinta Inn and Suites hotels whenever he traveled. If you're not familiar with these two establishments, [Denny's](https://www.dennys.com/) is a casual diner chain that is open 24 hours and [La Quinta Inn and Suites](http://www.lq.com/) is a hotel chain.
 
 These two establishments tend to be clustered together, or at least this observation is a joke made famous by Mitch Hedberg. In this lab we explore the validity of this joke and along the way learn some more data wrangling and tips for visualizing spatial data.
 
@@ -58,12 +56,12 @@ Use the `use_git_config()` function from the `usethis` package to configure Git,
 Type the following lines of code in the **console** in RStudio filling in your name and email address.
 
 ```{marginfigure}
-Your email address is the address tied to your GitHub account and your name should be first and last name.
+Your email address is the address tied to your GitHub account and your name should be your GitHub username.
 ```
 
 ```{r eval=FALSE}
 library(usethis)
-use_git_config(user.name="your name", user.email="your email")
+use_git_config(user.name="github username", user.email="your email")
 ```
 
 Once you run the code, your values for `user.name` and `user.email` will show in the console. If your `user.name` and `user.email` are correct, you're good to go! Otherwise, run the code again with the necessary changes. 

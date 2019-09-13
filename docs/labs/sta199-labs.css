@@ -13,7 +13,7 @@
 /* Tufte CSS styles */
 
 html {
-	font-size: 13px;
+	font-size: 13pt;
 }
 
 body {
@@ -22,6 +22,7 @@ body {
 	background-color: #fefefe;
 	color: #222;
 	counter-reset: li;
+	font-size: 13pt;
 }
 
 h1.title {
@@ -95,7 +96,7 @@ strong {
 
 code {
 	font-family: 'Source Code Pro', Consolas, "Liberation Mono", Menlo, Courier, monospace;
-	font-size: 15px;
+	font-size: 13pt;
 	line-height: 1.6;
 }
 
@@ -135,7 +136,7 @@ ol>li {
 
 ol>li:before {
 	/* Use the counter as content */
-	content: "Exercise " counter(li)".";
+	content: "Question " counter(li)".";
 	/* Increment the counter by 1 */
 	counter-increment: li;
 	position: absolute;
@@ -147,4 +148,8 @@ ol>li:before {
 
 ol ol {
 	counter-reset: subitem;
+}
+
+li {
+  font-size: 13pt;
 }

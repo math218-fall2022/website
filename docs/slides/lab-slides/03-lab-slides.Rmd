@@ -1,5 +1,6 @@
 ---
-title: "Lab 03: Visualizing spatial data"
+title: "Lab 03:" 
+subtitle: "Visualizing spatial data"
 author: ""
 date: "09.13.19"
 output:
@@ -50,6 +51,7 @@ library(rvest)
 3. Lab introduction
 4. Starting a new project & lab tips
 
+
 ---
 
 class: middle, center
@@ -93,15 +95,15 @@ knitr::include_graphics("img/03/merge-conflict-identifiers.png")
 
 ### Practce dealing with merge conflicts
 
-- Clone the repo starting with **ae-05-** in RStudio Cloud (`ae-05-merge-conflicts-TEAMNAME`), 
+- Clone the repo starting with **lab-03-merge-conflict-** in RStudio Cloud (`lab-03-merge-conflict-TEAMNAME`), 
 and open the R Markdown file.
 
 - Assign the numbers 1, 2, 3, and 4 to each of the team members.
-    - If you have 3 team members, make one person **Member 2** and **Member 4**.
+    - If you have 3 team members, just number 1 - 3..
 
-- Follow the [application exercise instructions](https://www2.stat.duke.edu/courses/Fall19/sta199.001/appex/02c-merge-conflicts.html) exactly.
+- Follow along as we complete each step to the  [application exercise instructions](https://www2.stat.duke.edu/courses/Fall19/sta199.001/labs/lab-03-merge-conflicts.html).
 
-- Raise your hand if you have any questions during the exercise. 
+-  Raise your hand if you have any questions during the exercise. 
 
 - Completing the exercise will be part of the Lab 03 grade.
 
@@ -158,7 +160,7 @@ knitr::include_graphics("img/03/mitch-hedberg.jpg")
 
 ```{r eval=FALSE}
 library(usethis)
-use_git_config(user.name="your name", user.email="your email")
+use_git_config(user.name="GITHUB USERNAME", user.email="your email")
 ```
 ]
 
