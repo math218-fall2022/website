@@ -2,7 +2,7 @@
 title: "Lab 03 - Visualizing Spatial Data"
 subtitle: "Denny's and LaQuinta Inn Hotel and Suites"
 author: "Total: 100 points"
-date: "due Wed, Sep 11 at 11:59p"
+date: "due Wed, Sep 18 at 11:59p"
 output: 
   tufte::tufte_html: 
     tufte_variant: "envisioned"
