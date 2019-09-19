@@ -1,6 +1,6 @@
 ---
 title: "Lab 04:"
-subtitle: "Simpson's Paradox"
+subtitle: "Wrangling Spatial Data"
 author: ""
 date: "09.20.19"
 output:
@@ -46,23 +46,9 @@ library(rvest)
 
 ## Agenda
 
-1. Lab 05: Simpson's Paradox
+1. Lab 04: Wrangling Spatial Data
 2. Getting started with lab
 3. Password caching
-
-
----
-
-## Writing Exercise 2
-
-- The second writing exercise is about conditional probabilities
-    - Draft response - due tonight at 11:59p
-    - Peer review - due Saturday at 11:59p
-    - Final draft - due Monday at 11:59p
-
-- You can find the exercise at [https://app.elireview.com](https://app.elireview.com)
-
-- If you finish the lab early, you can go ahead and work on the draft response. Otherwise, I will announce when there are 15 minutes remaining in lab, so you can complete the draft response before you leave.
 
 
 ---
@@ -96,7 +82,7 @@ library(rvest)
 
 ```{r eval=FALSE}
 library(usethis)
-use_git_config(user.name="your name", user.email="your email")
+use_git_config(user.name="github username", user.email="your email")
 ```
 ]
 
