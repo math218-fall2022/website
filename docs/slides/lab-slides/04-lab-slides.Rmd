@@ -1,7 +1,8 @@
 ---
-title: "Lab 04: Wrangling spatial data"
+title: "Lab 04:"
+subtitle: "Simpson's Paradox"
 author: ""
-date: "02.07.19"
+date: "09.20.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -45,10 +46,9 @@ library(rvest)
 
 ## Agenda
 
-1. Writing Exercise 2
-2. Lab 04: Wrangling spatial data
-3. Getting started with lab
-4. Password caching
+1. Lab 05: Simpson's Paradox
+2. Getting started with lab
+3. Password caching
 
 
 ---
