@@ -59,7 +59,7 @@ For each exercise, write down an interpretation of your visualization (and what 
 
 5. Pick a numerical and a categorical variable, and construct side-by-side box plots depicting the relationship between them.
 
-6. Learn something new: violin plots! Read about them at [http://ggplot2.tidyverse.org/reference/geom_violin.html](http://ggplot2.tidyverse.org/reference/geom_violin.html), and convert your side-by-side box plots from the previous task to violin plots. Add the `draw_quantiles = c(0.25, 0.5, 0.75)` to see the first, second and third quantiles. What, do the violin plots reveal that box plots do not? What features are apparent in the box plots but not in the violin plots?
+6. Learn something new: violin plots! Read about them at [http://ggplot2.tidyverse.org/reference/geom_violin.html](http://ggplot2.tidyverse.org/reference/geom_violin.html), and convert your side-by-side box plots from the previous task to violin plots. Add the `draw_quantiles = c(0.25, 0.5, 0.75)` option to see the first, second and third quantiles. What, do the violin plots reveal that box plots do not? What features are apparent in the box plots but not in the violin plots?
 
 To answer, it may help to view multiple examples of each plot type. Visit the link above to see more examples of violin plots. Visit the `geom_boxplot` reference page ([https://ggplot2.tidyverse.org/reference/geom_boxplot.html](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)) to see more examples of box plots. 
 
