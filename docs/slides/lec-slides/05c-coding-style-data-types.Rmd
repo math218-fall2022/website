@@ -151,6 +151,11 @@ ggplot(diamonds,mapping=aes(x=price))+geom_histogram()
 ### Long lines
 
 - Try to limit your code to 80 characters per line. This fits comfortably on a printed page with a reasonably sized font.
+    - You can add a margin line to help you stay within 80 characters.
+    
+.center[
+    **Tools -> Global Options -> Code -> Dispaly -> Check "Show Margin"**
+  ]
 
 - Take advantage of RStudio editor's auto formatting for indentation at line breaks.
 
@@ -288,7 +293,9 @@ myotherlist$B
 
 ### Concatenation
 
-Vectors can be constructed using the `c()` function.
+- Vectors can be constructed using the `c()` function.
+
+- Unlike lists, all elements of a vector must be the same data type
 
 ```{r}
 c(1, 2, 3)

@@ -89,6 +89,6 @@ Informatively named code chunks                         | 5 pts
 Regular commits                                         | 2 pts
 Informative commit messages                             | 3 pts
 Document organization                                   | 4 pts
-Narrative written in complete sentences                       | 6 pts
+Narrative in clear and complete sentences                       | 6 pts
 
 *Review your .md file on GitHub to make sure it is fully updated and includes all of your final output, graphs and narrative. There is a 10% penalty if the .Rmd file has to be knitted to display graphs, i.e. the graphs are not showing in the .md file on GitHub.*
