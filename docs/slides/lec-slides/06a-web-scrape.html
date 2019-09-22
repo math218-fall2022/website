@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Web scraping</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Maria Tackett" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Web scraping
+### Dr. Maria Tackett
+### 09.24.19
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="http://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+
+
+class: middle, center
+
+### [Click for PDF of slides](06a-web-scrape.pdf)
+
+---
+
+### Announcements
+
+- Lab 04 - **due Wednesday, 9/25 at 11:59p**
+
+- Writing Exercise #2 initial draft - **due Thursday, 9/26 at 11:59p**
+
+- HW 02 - **due Thursday, 9/26 at 11:59p**
+
+- Team Feedback #1 **due Thursday, 9/26 at 11:59p**
+    - Please provide honest and constructive feedback. This team feedback will be graded for completion.
+  
+---
+
+## Today's Agenda
+
+- Data frames and tibbles
+
+- Factors 
+
+- Web scraping
+
+
+---
+
+class: center, middle
+
+# Data "set"
+
+---
+
+### Data "sets" in R
+
+- "set" is in quotation marks because it is not a formal data class
+
+- A tidy data "set" can be one of the following types:
+    + `tibble`
+    + `data.frame`
+    
+---
+
+### Data frames &amp; tibbles
+
+- A `data.frame` is the most commonly used data structure in R, they are just a list of equal length vectors. Each vector is treated as a column and elements of the vectors as rows.
+
+- A tibble is a type of data frame that ... makes the data analysis easier.
+
+- Most often a data frame will be constructed by reading in from a file, but we can also create them from scratch.
+    - `readr` package (e.g. `read_csv` function) loads data as a `tibble` by default
+    - `tibble`s are part of the tidyverse, so they work well with other packages we are using
+    - they make minimal assumptions about your data, so are less likely to cause hard to track bugs in your code
+
+---
+
+### Creating data frames
+
+
+```r
+df &lt;- tibble(x = 1:3, y = c("a", "b", "c"))
+class(df)
+```
+
+```
+## [1] "tbl_df"     "tbl"        "data.frame"
+```
+
+```r
+glimpse(df)
+```
+
+```
+## Observations: 3
+## Variables: 2
+## $ x &lt;int&gt; 1, 2, 3
+## $ y &lt;chr&gt; "a", "b", "c"
+```
+
+---
+
+### Features of data frames
+
+
+```r
+attributes(df)
+```
+
+```
+## $names
+## [1] "x" "y"
+## 
+## $row.names
+## [1] 1 2 3
+## 
+## $class
+## [1] "tbl_df"     "tbl"        "data.frame"
+```
+
+```r
+class(df$x)
+```
+
+```
+## [1] "integer"
+```
+
+```r
+class(df$y)
+```
+
+```
+## [1] "character"
+```
+
+---
+
+### Working with tibbles in pipelines
+
+- Recall the [cat lovers](https://www2.stat.duke.edu/courses/Fall19/sta199.001/appex/05c-cat-lovers.html) data set
+
+
+```
+## Parsed with column specification:
+## cols(
+##   name = col_character(),
+##   number_of_cats = col_character(),
+##   handedness = col_character()
+## )
+```
+
+```
+## # A tibble: 60 x 3
+##    name           number_of_cats handedness
+##    &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;     
+##  1 Bernice Warren              0 left      
+##  2 Woodrow Stone               0 left      
+##  3 Willie Bass                 1 left      
+##  4 Tyrone Estrada              3 left      
+##  5 Alex Daniels                3 left      
+##  6 Jane Bates                  2 left      
+##  7 Latoya Simpson              1 left      
+##  8 Darin Woods                 1 left      
+##  9 Agnes Cobb                  0 left      
+## 10 Tabitha Grant               0 left      
+## # … with 50 more rows
+```
+
+
+.question[
+How many respondents have below average number of cats?
+]
+
+--
+
+
+```r
+mean_cats &lt;- cat_lovers %&gt;%
+  summarise(mean_cats = mean(number_of_cats))
+```
+
+```
+## Warning in mean.default(number_of_cats): argument is not numeric or
+## logical: returning NA
+```
+
+```r
+cat_lovers %&gt;%
+  filter(number_of_cats &lt; mean_cats) %&gt;%
+  nrow()
+```
+
+```
+## [1] 0
+```
+
+.question[
+Do you believe this number? Why, why not?
+]
+
+---
+
+### A result of a pipeline is always a tibble
+
+
+```r
+mean_cats
+```
+
+```
+## # A tibble: 1 x 1
+##   mean_cats
+##       &lt;dbl&gt;
+## 1        NA
+```
+
+```r
+class(mean_cats)
+```
+
+```
+## [1] "tbl_df"     "tbl"        "data.frame"
+```
+
+---
+
+### `pull()` can be great
+
+But use it sparingly!
+
+
+```r
+mean_cats &lt;- cat_lovers %&gt;%
+  summarise(mean_cats = mean(number_of_cats)) %&gt;%
+  pull()
+```
+
+```
+## Warning in mean.default(number_of_cats): argument is not numeric or
+## logical: returning NA
+```
+
+```r
+cat_lovers %&gt;%
+  filter(number_of_cats &lt; mean_cats) %&gt;%
+  nrow()
+```
+
+```
+## [1] 0
+```
+
+--
+
+
+```r
+mean_cats
+```
+
+```
+## [1] NA
+```
+
+```r
+class(mean_cats)
+```
+
+```
+## [1] "numeric"
+```
+
+---
+
+class: center, middle
+
+# Factors
+
+---
+
+### Factors
+
+**Factor** objects are what R uses to store data for categorical variables (fixed numbers of discrete values).
+
+
+```r
+(x = factor(c("BS", "MS", "PhD", "MS")))
+```
+
+```
+## [1] BS  MS  PhD MS 
+## Levels: BS MS PhD
+```
+
+
+```r
+glimpse(x)
+```
+
+```
+##  Factor w/ 3 levels "BS","MS","PhD": 1 2 3 2
+```
+
+
+```r
+typeof(x)
+```
+
+```
+## [1] "integer"
+```
+
+---
+
+### Read data in as character strings
+
+
+```r
+glimpse(cat_lovers)
+```
+
+```
+## Observations: 60
+## Variables: 3
+## $ name           &lt;chr&gt; "Bernice Warren", "Woodrow Stone", "Willie Bass",…
+## $ number_of_cats &lt;chr&gt; "0", "0", "1", "3", "3", "2", "1", "1", "0", "0",…
+## $ handedness     &lt;chr&gt; "left", "left", "left", "left", "left", "left", "…
+```
+
+---
+
+### But coerce when plotting
+
+
+```r
+ggplot(cat_lovers, mapping = aes(x = handedness)) +
+  geom_bar()
+```
+
+![](06a-web-scrape_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+
+### Use forcats to manipulate factors
+
+
+```r
+cat_lovers &lt;- cat_lovers %&gt;%
+  mutate(handedness = fct_relevel(handedness, 
+                                  "right", "left", "ambidextrous"))
+```
+
+
+```r
+ggplot(cat_lovers, mapping = aes(x = handedness)) +
+  geom_bar()
+```
+
+![](06a-web-scrape_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+---
+
+### forcats
+
+.center[
+![](img/05b/hex-forcats.png)
+]
+
+- R uses factors to handle categorical variables, variables that have a fixed and known set of possible values. Historically, factors were much easier to work with than character vectors, so many base R functions automatically convert character vectors to factors.
+
+- However, factors are still useful when you have true categorical data, and when you want to override the ordering of character vectors to improve display. The goal of the forcats package is to provide a suite of useful tools that solve common problems with factors.
+
+Source: [forcats.tidyverse.org](http://forcats.tidyverse.org/)
+
+---
+
+### Recap
+
+- Always best to think of data as part of a tibble
+    + This works nicely with the `tidyverse` as well
+    + Rows are observations, columns are variables
+    
+- Be careful about data types / classes
+    + Sometimes `R` makes silly assumptions about your data class 
+        + Using `tibble`s help, but it might not solve all issues
+        + Think about your data in context, e.g. 0/1 variable is most likely a `factor`
+    + If a plot/output is not behaving the way you expect, first
+    investigate the data class
+    + If you are absolutely sure of a data class, over-write it in your
+    tibble so that you don't need to keep having to keep track of it
+        + `mutate` the variable with the correct class
+
+---
+
+class: center, middle
+
+# Scraping the web
+
+---
+
+### Scraping the web: what? why?
+
+- Increasing amount of data is available on the web.
+
+--
+
+- These data are provided in an unstructured format: you can always copy&amp;paste, but it's time-consuming and prone to errors.
+
+--
+
+- Web scraping is the process of extracting this information automatically and transform it into a structured dataset.
+
+--
+
+- Two different scenarios:
+    - &lt;font class="vocab"&gt;Screen scraping&lt;/font&gt;: extract data from source code of website, with html parser (easy) or 
+    regular expression matching (less easy).
+    - &lt;font class="vocab"&gt;Web APIs (application programming interface)&lt;/font&gt;: website offers a set of structured http 
+    requests that return JSON or XML files.
+    
+---
+
+class: center, middle
+
+# Web Scraping with rvest
+
+---
+
+### Hypertext Markup Language (HTML)
+
+Most of the data on the web is still largely available as HTML - while it is structured (hierarchical / tree based) it often is not available in a form useful for analysis (flat / tidy).
+
+```html
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;This is a title&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p align="center"&gt;Hello world!&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+```
+
+---
+
+### rvest
+
+.pull-left[
+- **`rvest`** is a package that makes basic processing and manipulation of HTML data straight forward
+
+- It's designed to work with pipelines built with `%&gt;%`
+]
+
+.pull-right[
+![rvest](img/06a/rvest-logo.png)
+]
+
+---
+
+### Core functions in rvest:
+
+- **`read_html`** - read HTML data from a url or character string.
+
+- **`html_nodes`** - select specified nodes from the HTML document using CSS selectors.
+
+- **`html_table`** - parse an HTML table into a data frame.
+
+- **`html_text`** - extract tag pairs' content.
+
+- **`html_name`** - extract tags' names.
+
+- **`html_attrs`** - extract all of each tag's attributes.
+
+- **`html_attr`** - extract tags' attribute value by name.
+
+---
+
+### SelectorGadget
+
+- &lt;font class="vocab"&gt;SelectorGadget&lt;/font&gt;: Open source tool that eases CSS selector generation and discovery
+
+- Easiest to use with the [Chrome Extension](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb) 
+
+- Learn more on the [Selector Gadget Vignette](https://cran.r-project.org/web/packages/rvest/vignettes/selectorgadget.html)
+
+
+---
+
+### Using SelectorGadget
+
+- Click on the app logo next to the search bar
+- A box will open in the bottom right of the website. Click on a page element that you 
+would like your selector to match (it will turn green). SelectorGadget will then generate 
+a minimal CSS selector for that element, and will highlight (yellow) everything that is 
+matched by the selector. 
+- Now click on a highlighted element to remove it from the selector (red), or click on an 
+unhighlighted element to add it to the selector. Through this process of selection and 
+rejection, SelectorGadget helps you come up with the appropriate CSS selector for your needs.
+
+---
+
+class: center, middle
+
+# Top 250 movies on IMDB
+
+---
+
+### Top 250 movies on IMDB
+
+Take a look at the source code, look for the tag `table` tag:
+&lt;br&gt;
+[http://www.imdb.com/chart/top](http://www.imdb.com/chart/top)
+
+![imdb_top](img/06a/imdb_top_250.png)
+
+---
+
+### First check to make sure you're allowed!
+
+
+```r
+# install.packages("robotstxt")
+library(robotstxt)
+paths_allowed("http://www.imdb.com")
+```
+
+```
+## 
+ www.imdb.com                      No encoding supplied: defaulting to UTF-8.
+```
+
+```
+## [1] TRUE
+```
+
+--
+
+versus
+
+
+```r
+paths_allowed("http://www.facebook.com")
+```
+
+```
+## 
+ www.facebook.com
+```
+
+```
+## [1] FALSE
+```
+
+
+---
+
+### Demo
+
+![imdb_top](img/06a/demo.png)
+
+Go to [rstudio.cloud](https://rstudio.cloud/) `\(\rightarrow\)` Web scraping `\(\rightarrow\)` Make a copy `\(\rightarrow\)` `scrape-250.R`
+
+---
+
+### Select and format pieces
+
+.small[
+
+```r
+library(rvest)
+
+page &lt;- read_html("http://www.imdb.com/chart/top")
+
+titles &lt;- page %&gt;%
+  html_nodes(".titleColumn a") %&gt;%
+  html_text()
+
+years &lt;- page %&gt;%
+  html_nodes(".secondaryInfo") %&gt;%
+  html_text() %&gt;%
+  str_replace("\\(", "") %&gt;% # remove (
+  str_replace("\\)", "") %&gt;% # remove )
+  as.numeric()
+
+scores &lt;- page %&gt;%
+  html_nodes(".imdbRating") %&gt;%
+  html_text() %&gt;%
+  as.numeric()
+  
+imdb_top_250 &lt;- tibble(
+  title = titles, 
+  year = years, 
+  score = scores
+  )
+```
+]
+
+---
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; score &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Shawshank Redemption &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather: Part II &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1974 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Dark Knight &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2008 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 Angry Men &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Schindler's List &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1993 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Return of the King &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Pulp Fiction &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Good, the Bad and the Ugly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1966 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Fight Club &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1999 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+### Clean up / enhance
+
+May or may not be a lot of work depending on how messy the data are
+
+- See if you like what you got:
+
+
+```r
+glimpse(imdb_top_250)
+```
+
+```
+## Observations: 250
+## Variables: 3
+## $ title &lt;chr&gt; "The Shawshank Redemption", "The Godfather", "The Godfathe…
+## $ year  &lt;dbl&gt; 1994, 1972, 1974, 2008, 1957, 1993, 2003, 1994, 1966, 1999…
+## $ score &lt;dbl&gt; 9.2, 9.1, 9.0, 9.0, 8.9, 8.9, 8.9, 8.9, 8.8, 8.8, 8.8, 8.8…
+```
+
+- Add a variable for rank
+
+```r
+imdb_top_250 &lt;- imdb_top_250 %&gt;%
+  mutate(
+    rank = 1:nrow(imdb_top_250)
+  )
+```
+
+---
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; score &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; rank &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Shawshank Redemption &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather: Part II &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1974 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Dark Knight &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2008 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 Angry Men &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Schindler's List &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1993 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Return of the King &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Pulp Fiction &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Good, the Bad and the Ugly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1966 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Fight Club &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1999 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+### Analyze
+
+.question[
+How would you go about answering this question: Which 1995 movies made the list?
+]
+
+---
+
+
+```r
+imdb_top_250 %&gt;% 
+  filter(year == 1995)
+```
+
+```
+## # A tibble: 8 x 4
+##   title               year score  rank
+##   &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1 Se7en               1995   8.6    20
+## 2 The Usual Suspects  1995   8.5    32
+## 3 Braveheart          1995   8.3    75
+## 4 Toy Story           1995   8.3    81
+## 5 Heat                1995   8.2   121
+## 6 Casino              1995   8.2   138
+## 7 Before Sunrise      1995   8.1   194
+## 8 La Haine            1995   8     228
+```
+
+---
+
+### Analyze
+
+.question[
+How would you go about answering this question: Which years have the most movies on the list?
+]
+
+--
+
+
+```r
+imdb_top_250 %&gt;% 
+  group_by(year) %&gt;%
+  summarise(total = n()) %&gt;%
+  arrange(desc(total)) %&gt;%
+  head(5)
+```
+
+```
+## # A tibble: 5 x 2
+##    year total
+##   &lt;dbl&gt; &lt;int&gt;
+## 1  1995     8
+## 2  2004     7
+## 3  2014     7
+## 4  1957     6
+## 5  1998     6
+```
+
+---
+
+### Visualize
+
+.question[
+How would you go about creating this visualization: Visualize the average yearly score for movies that made it on the top 250 list over time.
+]
+
+--
+
+.small[
+![](06a-web-scrape_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+]
+---
+
+### Potential challenges
+
+- Unreliable formatting at the source
+- Data broken into many pages
+- ...
+
+.question[
+Compare the display of information at [raleigh.craigslist.org/search/apa](raleigh.craigslist.org/search/apa) to the list on the IMDB top 250 list. 
+
+What challenges can you foresee in scraping a list of the available apartments?
+]
+
+---
+
+class: middle, center
+
+## Application Exercise
+
+---
+
+### Popular TV Shows
+
+RStudio Cloud `\(\rightarrow\)` Web scraping 
+
+1. Scrape the list of most popular TV shows on IMDB: http://www.imdb.com/chart/tvmeter
+
+2. Examine each of the first three (or however many you can get through) tv show subpage to also obtain genre and runtime.
+
+3. Time permitting, also try to get the following:
+
+    - How many episodes so far
+    - Certificate
+    - First five plot keywords
+    - Country
+    - Language
+
+Add this information to the data frame you created in step 1.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
