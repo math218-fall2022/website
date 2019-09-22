@@ -1,7 +1,8 @@
 ---
-title: "Lab 05: Simpson's Paradox"
+title: "Lab 05"
+subtitle: "Simpson's Paradox"
 author: ""
-date: "02.15.19"
+date: "09.27.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -45,19 +46,8 @@ library(rvest)
 
 ## Agenda
 
-1. Reminder: Exam 01
-2. Lab 05: Simpson's Paradox
-3. Getting started with lab
-
----
-
-## Exam 01
-
-- Exam 01 is due tomorrow, Friday 2/15 at 11:59p
-
-- Late work **not** accepted for the exam
-
-- Can answer clarifying questions only **after** lab
+1. Lab 05: Simpson's Paradox
+2. Getting started with lab
 
 ---
 
@@ -106,14 +96,14 @@ knitr::include_graphics("img/05/breakdown.PNG")
 
 - Does this effect differ by age?
 
-- Write all R code using the style guidelines from [Monday's class notes](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/05b-coding-style-data-types.html#1)
+- Write all R code using the style guidelines from [last week's notes](https://www2.stat.duke.edu/courses/Fall19/sta199.001/slides/lec-slides/05c-coding-style-data-types.html#1)
     
 ---
 
 ## Getting started with lab
 
 .small[
-- Go to the course GitHub organization and find the **lab-04** repo that has your team name on it.
+- Go to the course GitHub organization and find the **lab-05** repo that has your team name on it.
 
 - On GitHub, click on the green Clone or download button, select Use HTTPS. Click on the clipboard icon to copy the repo URL.
 

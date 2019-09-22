@@ -1,7 +1,7 @@
 ---
-title: "Lab 04: Simpson's paradox"
-subtitle: "Total: "
-date: "due Wed, September 25 at 11:59p"
+title: "Lab 05: Simpson's paradox"
+subtitle: "Total: 100 points "
+date: "due Wed, October 2 at 11:59p"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
