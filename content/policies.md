@@ -157,7 +157,9 @@ On individual assignments, you may not directly share code or write up with othe
 
 ### Regrade Requests
 
-Requests for a regrade must be made within one week of when the assignment is returned. The request should be submitted through the online form. Regrade requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. No grades will be changed after the final project presentations.
+Regrade requests should be submitted through the regrade request from on Gradescope. **Requests for a regrade must be made within a week of when the assignment is returned.** Due to the time consuming nature of regrades, requests submitted later will not be regraded. Requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. Please note that by submitting a regrade request, your entire assignment may be regraded and you may potentially lose points. Therefore, you should attend office hours to ask a member of the teaching team about your grading feedback before submitting a regrade request.  
+
+No grades will be changed after the final project presentations.
 
 *Note: Grades can only be changed by the Professor Tackett. Teaching Assistants cannot change grades on returned assignments.*
 <br> 
