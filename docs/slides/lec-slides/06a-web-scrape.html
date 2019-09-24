@@ -44,6 +44,7 @@ class: middle, center
 - Lab 04 - **due Wednesday, 9/25 at 11:59p**
 
 - Writing Exercise #2 initial draft - **due Thursday, 9/26 at 11:59p**
+    - Access Eli at [https://app.elireview.com/unit](https://app.elireview.com/unit) or through the link on Sakai
 
 - HW 02 - **due Thursday, 9/26 at 11:59p**
 
@@ -158,31 +159,6 @@ class(df$y)
 - Recall the [cat lovers](https://www2.stat.duke.edu/courses/Fall19/sta199.001/appex/05c-cat-lovers.html) data set
 
 
-```
-## Parsed with column specification:
-## cols(
-##   name = col_character(),
-##   number_of_cats = col_character(),
-##   handedness = col_character()
-## )
-```
-
-```
-## # A tibble: 60 x 3
-##    name           number_of_cats handedness
-##    &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;     
-##  1 Bernice Warren              0 left      
-##  2 Woodrow Stone               0 left      
-##  3 Willie Bass                 1 left      
-##  4 Tyrone Estrada              3 left      
-##  5 Alex Daniels                3 left      
-##  6 Jane Bates                  2 left      
-##  7 Latoya Simpson              1 left      
-##  8 Darin Woods                 1 left      
-##  9 Agnes Cobb                  0 left      
-## 10 Tabitha Grant               0 left      
-## # … with 50 more rows
-```
 
 
 .question[
@@ -195,21 +171,14 @@ How many respondents have below average number of cats?
 ```r
 mean_cats &lt;- cat_lovers %&gt;%
   summarise(mean_cats = mean(number_of_cats))
-```
 
-```
-## Warning in mean.default(number_of_cats): argument is not numeric or
-## logical: returning NA
-```
-
-```r
 cat_lovers %&gt;%
   filter(number_of_cats &lt; mean_cats) %&gt;%
   nrow()
 ```
 
 ```
-## [1] 0
+## [1] 60
 ```
 
 .question[
@@ -229,7 +198,7 @@ mean_cats
 ## # A tibble: 1 x 1
 ##   mean_cats
 ##       &lt;dbl&gt;
-## 1        NA
+## 1     0.817
 ```
 
 ```r
@@ -251,21 +220,14 @@ But use it sparingly!
 mean_cats &lt;- cat_lovers %&gt;%
   summarise(mean_cats = mean(number_of_cats)) %&gt;%
   pull()
-```
 
-```
-## Warning in mean.default(number_of_cats): argument is not numeric or
-## logical: returning NA
-```
-
-```r
 cat_lovers %&gt;%
   filter(number_of_cats &lt; mean_cats) %&gt;%
   nrow()
 ```
 
 ```
-## [1] 0
+## [1] 33
 ```
 
 --
@@ -276,7 +238,7 @@ mean_cats
 ```
 
 ```
-## [1] NA
+## [1] 0.8166667
 ```
 
 ```r
@@ -340,7 +302,7 @@ glimpse(cat_lovers)
 ## Observations: 60
 ## Variables: 3
 ## $ name           &lt;chr&gt; "Bernice Warren", "Woodrow Stone", "Willie Bass",…
-## $ number_of_cats &lt;chr&gt; "0", "0", "1", "3", "3", "2", "1", "1", "0", "0",…
+## $ number_of_cats &lt;dbl&gt; 0, 0, 1, 3, 3, 2, 1, 1, 0, 0, 0, 0, 1, 3, 3, 2, 1…
 ## $ handedness     &lt;chr&gt; "left", "left", "left", "left", "left", "left", "…
 ```
 
@@ -524,7 +486,7 @@ class: center, middle
 
 ### Top 250 movies on IMDB
 
-Take a look at the source code, look for the tag `table` tag:
+Take a look at the source code, look for `table` tag:
 &lt;br&gt;
 [http://www.imdb.com/chart/top](http://www.imdb.com/chart/top)
 
@@ -817,7 +779,7 @@ imdb_top_250 %&gt;%
 ## 3 Braveheart          1995   8.3    75
 ## 4 Toy Story           1995   8.3    81
 ## 5 Heat                1995   8.2   121
-## 6 Casino              1995   8.2   138
+## 6 Casino              1995   8.2   139
 ## 7 Before Sunrise      1995   8.1   194
 ## 8 La Haine            1995   8     228
 ```
