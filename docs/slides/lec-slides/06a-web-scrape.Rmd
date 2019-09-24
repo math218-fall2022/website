@@ -74,6 +74,7 @@ class: middle, center
 - Lab 04 - **due Wednesday, 9/25 at 11:59p**
 
 - Writing Exercise #2 initial draft - **due Thursday, 9/26 at 11:59p**
+    - Access Eli at [https://app.elireview.com/unit](https://app.elireview.com/unit) or through the link on Sakai
 
 - HW 02 - **due Thursday, 9/26 at 11:59p**
 
@@ -146,9 +147,9 @@ class(df$y)
 
 - Recall the [cat lovers](https://www2.stat.duke.edu/courses/Fall19/sta199.001/appex/05c-cat-lovers.html) data set
 
-```{r echo = F}
+```{r echo = F, warning = F, message = F}
 cat_lovers <- read_csv("data/cat-lovers.csv")
-cat_lovers %>%
+cat_lovers <- cat_lovers %>%
   mutate(
     number_of_cats = case_when(
       name == "Ginger Clark" ~ "2",
@@ -416,7 +417,7 @@ class: center, middle
 
 ### Top 250 movies on IMDB
 
-Take a look at the source code, look for the tag `table` tag:
+Take a look at the source code, look for `table` tag:
 <br>
 [http://www.imdb.com/chart/top](http://www.imdb.com/chart/top)
 
