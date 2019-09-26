@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Functions and automation</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Maria Tackett" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Functions and automation
+### Dr. Maria Tackett
+### 09.26.19
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="http://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+
+
+class: middle, center
+
+### [Click for PDF of slides](06b-functions.pdf)
+
+---
+
+### Announcements
+
+- Writing Exercise #2 initial draft - **due TODAY at 11:59p**
+    - Peer Review available tomorrow and due Sunday 9/29 at 11:59p
+
+- HW 02 - **due TODAY at 11:59p**
+
+- Team Feedback #1 **due TODAY at 11:59p**
+    - Please provide honest and constructive feedback. This team feedback will be graded for completion.
+    
+
+---
+
+### Check in: Regrade Requests
+
+- All regrade requests should be submitted through Gradescope. [See updated course policy](https://www2.stat.duke.edu/courses/Fall19/sta199.001/policies.html)
+
+- Only submit a regrade request if you still have concerns about your grade after you have attended office hours and asked a member of the teaching team to explain the feedback you received. This will ultimately help with your understanding of the course material and help the teaching team get an idea about points to clarify.
+
+- **When you submit a regrade request, please indicate who you've talked with prior to submitting the request.**
+
+- Professor Tackett is the only person who can update grades, so &lt;u&gt;do not&lt;/u&gt; ask your TAs to regrade your assignment.
+   
+---
+
+### Check in: Lab 04
+
+- Will get Lab 04 assignment from RStudio Cloud project. 
+
+- [Fill out form](https://forms.gle/Ci8XCcHh6ESvuac6A) with the name of the RStudio Cloud project for grading.
+
+---
+
+class: middle, center
+
+# Web scraping 
+
+
+
+---
+
+### Clean up / enhance
+
+May or may not be a lot of work depending on how messy the data are
+
+- See if you like what you got:
+
+
+```r
+glimpse(imdb_top_250)
+```
+
+```
+## Observations: 250
+## Variables: 3
+## $ title &lt;chr&gt; "The Shawshank Redemption", "The Godfather", "The Godfathe…
+## $ year  &lt;dbl&gt; 1994, 1972, 1974, 2008, 1957, 1993, 2003, 1994, 1966, 1999…
+## $ score &lt;dbl&gt; 9.2, 9.1, 9.0, 9.0, 8.9, 8.9, 8.9, 8.9, 8.8, 8.8, 8.8, 8.8…
+```
+
+- Add a variable for rank
+
+```r
+imdb_top_250 &lt;- imdb_top_250 %&gt;%
+  mutate(
+    rank = 1:nrow(imdb_top_250)
+  )
+```
+
+---
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; score &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; rank &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Shawshank Redemption &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather: Part II &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1974 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Dark Knight &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2008 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 Angry Men &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Schindler's List &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1993 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Return of the King &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Pulp Fiction &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Good, the Bad and the Ugly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1966 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Fight Club &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1999 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+### Analyze
+
+.question[
+How would you go about answering this question: Which 1995 movies made the list?
+]
+
+---
+
+
+```r
+imdb_top_250 %&gt;% 
+  filter(year == 1995)
+```
+
+```
+## # A tibble: 8 x 4
+##   title               year score  rank
+##   &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1 Se7en               1995   8.6    20
+## 2 The Usual Suspects  1995   8.5    32
+## 3 Braveheart          1995   8.3    75
+## 4 Toy Story           1995   8.3    81
+## 5 Heat                1995   8.2   121
+## 6 Casino              1995   8.2   138
+## 7 Before Sunrise      1995   8.1   194
+## 8 La Haine            1995   8     228
+```
+
+---
+
+### Analyze
+
+.question[
+How would you go about answering this question: Which years have the most movies on the list?
+]
+
+--
+
+
+```r
+imdb_top_250 %&gt;% 
+  group_by(year) %&gt;%
+  summarise(total = n()) %&gt;%
+  arrange(desc(total)) %&gt;%
+  head(5)
+```
+
+```
+## # A tibble: 5 x 2
+##    year total
+##   &lt;dbl&gt; &lt;int&gt;
+## 1  1995     8
+## 2  2014     8
+## 3  2004     7
+## 4  1957     6
+## 5  1998     6
+```
+
+---
+
+### Visualize
+
+.question[
+How would you go about creating this visualization: Visualize the average yearly score for movies that made it on the top 250 list over time.
+]
+
+--
+
+.small[
+![](06b-functions_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+---
+
+### Top Rated 
+
+.question[
+- Which year has the highest average score for movies that made the Top 250? 
+]
+
+--
+
+.question[
+- What is one reason we should write code to answer this question rather than look through the data?
+- What is one reason we only want to print the year with the highest average rather than entire table?
+]
+
+---
+
+### Potential challenges
+
+- Unreliable formatting at the source
+- Data broken into many pages
+- ...
+
+.question[
+Compare the display of information at [raleigh.craigslist.org/search/apa](https://raleigh.craigslist.org/search/apa) to the list on the IMDB top 250 list. 
+
+What challenges can you foresee in scraping a list of the available apartments?
+]
+
+---
+
+class: middle, center
+
+## Application Exercise
+
+---
+
+### Popular TV Shows
+
+RStudio Cloud `\(\rightarrow\)` Web scraping 
+
+1. Scrape the list of most popular TV shows on IMDB: http://www.imdb.com/chart/tvmeter
+
+2. Examine each of the first three (or however many you can get through) tv show subpage to also obtain genre and runtime.
+
+3. Time permitting, also try to get the following:
+
+    - How many episodes so far
+    - Certificate
+    - First five plot keywords
+    - Country
+    - Language
+
+Add this information to the data frame you created in step 1.
+
+---
+class: middle, center
+### Writing More Efficient Code 
+
+---
+
+### Writing Exercise #1: Original code
+
+
+```r
+# create data set for each education level
+educ_1 &lt;- NHANES %&gt;% 
+  filter(Education=="8th Grade") %&gt;%
+  select(HomeOwn)
+
+educ_2 &lt;- NHANES %&gt;% 
+  filter(Education=="9 - 11th Grade") %&gt;%
+  select(HomeOwn)
+
+educ_3 &lt;- NHANES %&gt;% 
+  filter(Education=="High School") %&gt;%
+  select(HomeOwn)
+
+educ_4 &lt;- NHANES %&gt;% 
+  filter(Education=="Some College") %&gt;%
+  select(HomeOwn)
+
+educ_5 &lt;- NHANES %&gt;% 
+  filter(Education=="College Grad") %&gt;%
+  select(HomeOwn)
+```
+
+---
+
+### Writing Exercise #1: Original Code
+
+
+```r
+# calculate proportion of HomeOwn
+educ_1 %&gt;%
+  count(HomeOwn) %&gt;%
+  mutate(proportion = n/sum(n))
+
+educ_2 %&gt;%
+  count(HomeOwn) %&gt;%
+  mutate(proportion = n/sum(n))
+
+educ_3 %&gt;%
+  count(HomeOwn) %&gt;%
+  mutate(proportion = n/sum(n))
+
+educ_4 %&gt;%
+  count(HomeOwn) %&gt;%
+  mutate(proportion = n/sum(n))
+
+educ_5 %&gt;%
+  count(HomeOwn) %&gt;%
+  mutate(proportion = n/sum(n))
+```
+
+
+---
+
+### Writing Exercise #1: Efficient code
+
+
+```r
+NHANES %&gt;%
+  group_by(Education) %&gt;%
+  count(HomeOwn) %&gt;%
+  mutate(proportion=n/sum(n))
+```
+
+.question[
+- What are two reasons we prefer to write code in this efficient way instead of in the original format?
+]
+
+---
+
+class: center, middle
+
+# Functions
+
+---
+
+### Setup
+
+
+
+```r
+library(tidyverse)
+library(rvest)
+
+pb &lt;- read_html("https://www.imdb.com/title/tt2442560/")
+st &lt;- read_html("https://www.imdb.com/title/tt4574334/")
+fr &lt;- read_html("https://www.imdb.com/title/tt0108778/")
+```
+
+
+---
+
+### Why functions?
+
+- Automate common tasks in a power powerful and general way than copy-and-pasting:
+    - You can give a function an evocative name that makes your code easier to understand.
+    - As requirements change, you only need to update code in one place, instead of many.
+    - You eliminate the chance of making incidental mistakes when you copy and paste (i.e. updating a variable name in one place, but not in another).
+
+--
+
+- Down the line: Improve your reach as a data scientist by writing functions (and packages!) that others use
+
+---
+
+### When should you write a function?
+
+Whenever you’ve copied and pasted a block of code more than twice.
+
+.question[
+Do you see any problems in the code below?
+]
+
+.small[
+
+```r
+pb_episode &lt;- st %&gt;%
+  html_nodes(".np_right_arrow .bp_sub_heading") %&gt;%
+  html_text() %&gt;%
+  str_replace(" episodes", "") %&gt;%
+  as.numeric()
+
+st_episode &lt;- got %&gt;%
+  html_nodes(".np_right_arrow .bp_sub_heading") %&gt;%
+  html_text() %&gt;%
+  str_replace(" episodes", "") %&gt;%
+  as.numeric()
+
+fr_episode &lt;- twd %&gt;%
+  html_nodes(".np_right_arrow .bp_sub_heading") %&gt;%
+  html_text() %&gt;%
+  str_replace(" episodes", "") %&gt;%
+  as.numeric()
+```
+]
+
+---
+
+### Inputs
+
+.question[
+How many inputs does the following code have?
+]
+
+
+```r
+st_episode &lt;- st %&gt;%
+  html_nodes(".np_right_arrow .bp_sub_heading") %&gt;%
+  html_text() %&gt;%
+  str_replace(" episodes", "") %&gt;%
+  as.numeric()
+```
+
+---
+
+### Turn your code into a function
+
+1. Pick a short but informative &lt;font class="vocab"&gt;name&lt;/font&gt;, preferably a verb.
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+
+
+```r
+scrape_episode &lt;- 
+```
+
+---
+
+### Turn your code into a function
+
+1. Pick a short but informative **name**, preferably a verb.
+2. List inputs, or &lt;font class="vocab"&gt;arguments&lt;/font&gt;, to the function inside `function`. If we had more the call would look like `function(x, y, z)`.
+
+&lt;br&gt;
+
+
+```r
+scrape_episode &lt;- function(x){
+  
+  
+  
+  
+  
+}  
+```
+
+---
+
+### Turn your code into a function
+
+1. Pick a short but informative **name**, preferably a verb.
+2. List inputs, or **arguments**, to the function inside `function`. If we had more the call would look like `function(x, y, z)`.
+3. Place the &lt;font class="vocab"&gt;code&lt;/font&gt; you have developed in body of the function, a `{` block that immediately follows `function(...)`.
+
+
+```r
+scrape_episode &lt;- function(x){
+  x %&gt;%
+    html_nodes(".np_right_arrow .bp_sub_heading") %&gt;%
+    html_text() %&gt;%
+    str_replace(" episodes", "") %&gt;%
+    as.numeric()
+}
+```
+
+--
+
+
+```r
+scrape_episode(st)
+```
+
+```
+## [1] 25
+```
+
+---
+
+### Check your function
+
+[Peaky Blinders](https://www.imdb.com/title/tt2442560/)
+
+
+```r
+scrape_episode(pb)
+```
+
+```
+## [1] 37
+```
+
+[Friends](https://www.imdb.com/title/tt0108778/)
+
+
+```r
+scrape_episode(fr)
+```
+
+```
+## [1] 236
+```
+
+---
+
+### Naming functions
+
+&gt; "There are only two hard things in Computer Science: cache invalidation and naming things." - Phil Karlton
+
+--
+
+- Names should be short but clearly evoke what the function does
+
+--
+
+- Names should be verbs, not nouns
+
+--
+
+- Multi-word names should be separated by underscores (`snake_case` as opposed to `camelCase`)
+
+--
+
+- A family of functions should be named similarly (`scrape_title`, `scrape_episode`, `scrape_genre`, etc.)
+
+--
+
+- Avoid overwriting existing (especially widely used) functions
+
+---
+
+### Scraping show info
+
+.small[
+
+```r
+scrape_show_info &lt;- function(x){
+
+  title &lt;- x %&gt;%
+    html_node("h1") %&gt;%
+    html_text(trim = TRUE) 
+
+  runtime &lt;- x %&gt;%
+    html_node("time") %&gt;%
+    html_text() %&gt;% # could use trim = TRUE instead of str_ functions
+    str_replace("\\n", "") %&gt;%
+    str_trim()
+  
+  genres &lt;- x %&gt;%
+    html_nodes(".txt-block~ .canwrap a") %&gt;%
+    html_text() %&gt;%
+    str_c(collapse = ", ")
+  
+  tibble(title = title, runtime = runtime, genres = genres)
+}
+```
+]
+
+---
+
+.small[
+
+```r
+scrape_show_info(pb)
+```
+
+```
+## # A tibble: 1 x 3
+##   title          runtime genres          
+##   &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;           
+## 1 Peaky Blinders 1h      " Crime,  Drama"
+```
+
+```r
+scrape_show_info(st)
+```
+
+```
+## # A tibble: 1 x 3
+##   title          runtime genres                                            
+##   &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;                                             
+## 1 Stranger Thin… 51min   " Drama,  Fantasy,  Horror,  Mystery,  Sci-Fi,  T…
+```
+
+```r
+scrape_show_info(fr)
+```
+
+```
+## # A tibble: 1 x 3
+##   title   runtime genres             
+##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;              
+## 1 Friends 22min   " Comedy,  Romance"
+```
+]
+
+---
+
+.question[
+How would you update the following function to use the URL of the page as an argument?
+]
+
+.small[
+
+```r
+scrape_show_info &lt;- function(x){
+
+  title &lt;- x %&gt;%
+    html_node("h1") %&gt;%
+    html_text() %&gt;%
+    str_trim()
+
+  runtime &lt;- x %&gt;%
+    html_node("time") %&gt;%
+    html_text() %&gt;%
+    str_replace("\\n", "") %&gt;%
+    str_trim()
+  
+  genres &lt;- x %&gt;%
+    html_nodes(".txt-block~ .canwrap a") %&gt;%
+    html_text() %&gt;%
+    str_trim() %&gt;%
+    paste(collapse = ", ")
+  
+  tibble(title = title, runtime = runtime, genres = genres)
+}
+```
+]
+
+---
+
+.small[
+
+```r
+scrape_show_info &lt;- function(x){
+  
+*  y &lt;- read_html(x) 
+
+  title &lt;- y %&gt;%
+    html_node("h1") %&gt;%
+    html_text() %&gt;%
+    str_trim()
+
+  runtime &lt;- y %&gt;%
+    html_node("time") %&gt;%
+    html_text() %&gt;%
+    str_replace("\\n", "") %&gt;%
+    str_trim()
+
+  genres &lt;- y %&gt;%
+    html_nodes(".txt-block~ .canwrap a") %&gt;%
+    html_text() %&gt;%
+    str_trim() %&gt;%
+    paste(collapse = ", ")
+  
+  tibble(title = title, runtime = runtime, genres = genres)
+}
+```
+]
+
+---
+
+### Let's check
+
+.small[
+
+```r
+pb_url &lt;- "https://www.imdb.com/title/tt2442560/"
+st_url &lt;- "https://www.imdb.com/title/tt4574334/"
+fr_url &lt;- "https://www.imdb.com/title/tt0108778/"
+```
+]
+--
+.small[
+
+```r
+scrape_show_info(pb_url)
+```
+
+```
+## # A tibble: 1 x 3
+##   title          runtime genres      
+##   &lt;chr&gt;          &lt;chr&gt;   &lt;chr&gt;       
+## 1 Peaky Blinders 1h      Crime, Drama
+```
+
+```r
+scrape_show_info(st_url)
+```
+
+```
+## # A tibble: 1 x 3
+##   title           runtime genres                                           
+##   &lt;chr&gt;           &lt;chr&gt;   &lt;chr&gt;                                            
+## 1 Stranger Things 51min   Drama, Fantasy, Horror, Mystery, Sci-Fi, Thriller
+```
+
+```r
+scrape_show_info(fr_url)
+```
+
+```
+## # A tibble: 1 x 3
+##   title   runtime genres         
+##   &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;          
+## 1 Friends 22min   Comedy, Romance
+```
+]
+
+---
+
+class: center, middle
+
+# Automation
+
+---
+
+.question[
+You now have a function that will scrape the relevant info on shows given its URL. Where can we get a list of URLs of top 100 most popular TV shows on IMDB? Write the code for doing this in your teams.
+]
+
+---
+
+
+```r
+urls &lt;- read_html("http://www.imdb.com/chart/tvmeter") %&gt;%
+  html_nodes(".titleColumn a") %&gt;%
+  html_attr("href") %&gt;%
+  paste("http://www.imdb.com", ., sep = "")
+```
+
+
+```
+##   [1] "http://www.imdb.com/title/tt7909970/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_1"  
+##   [2] "http://www.imdb.com/title/tt1844624/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_2"  
+##   [3] "http://www.imdb.com/title/tt9067020/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_3"  
+##   [4] "http://www.imdb.com/title/tt2442560/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_4"  
+##   [5] "http://www.imdb.com/title/tt1830379/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_5"  
+##   [6] "http://www.imdb.com/title/tt0489974/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_6"  
+##   [7] "http://www.imdb.com/title/tt1190634/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_7"  
+##   [8] "http://www.imdb.com/title/tt5290382/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_8"  
+##   [9] "http://www.imdb.com/title/tt6905542/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_9"  
+##  [10] "http://www.imdb.com/title/tt8101850/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_10" 
+##  [11] "http://www.imdb.com/title/tt10875696/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_11"
+##  [12] "http://www.imdb.com/title/tt4998212/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_12" 
+##  [13] "http://www.imdb.com/title/tt0460681/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_13" 
+##  [14] "http://www.imdb.com/title/tt8634332/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_14" 
+##  [15] "http://www.imdb.com/title/tt0944947/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_15" 
+##  [16] "http://www.imdb.com/title/tt1586680/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_16" 
+##  [17] "http://www.imdb.com/title/tt5952634/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_17" 
+##  [18] "http://www.imdb.com/title/tt4574334/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_18" 
+##  [19] "http://www.imdb.com/title/tt1520211/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_19" 
+##  [20] "http://www.imdb.com/title/tt1606375/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_20" 
+##  [21] "http://www.imdb.com/title/tt7660850/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_21" 
+##  [22] "http://www.imdb.com/title/tt0903747/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_22" 
+##  [23] "http://www.imdb.com/title/tt0108778/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_23" 
+##  [24] "http://www.imdb.com/title/tt1837492/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_24" 
+##  [25] "http://www.imdb.com/title/tt6468322/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_25" 
+##  [26] "http://www.imdb.com/title/tt1043813/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_26" 
+##  [27] "http://www.imdb.com/title/tt1632701/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_27" 
+##  [28] "http://www.imdb.com/title/tt0386676/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_28" 
+##  [29] "http://www.imdb.com/title/tt0099864/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_29" 
+##  [30] "http://www.imdb.com/title/tt2085059/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_30" 
+##  [31] "http://www.imdb.com/title/tt5834204/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_31" 
+##  [32] "http://www.imdb.com/title/tt7134908/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_32" 
+##  [33] "http://www.imdb.com/title/tt0413573/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_33" 
+##  [34] "http://www.imdb.com/title/tt7366338/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_34" 
+##  [35] "http://www.imdb.com/title/tt7049682/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_35" 
+##  [36] "http://www.imdb.com/title/tt4052886/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_36" 
+##  [37] "http://www.imdb.com/title/tt3281796/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_37" 
+##  [38] "http://www.imdb.com/title/tt8772296/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_38" 
+##  [39] "http://www.imdb.com/title/tt2661044/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_39" 
+##  [40] "http://www.imdb.com/title/tt3006802/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_40" 
+##  [41] "http://www.imdb.com/title/tt2306299/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_41" 
+##  [42] "http://www.imdb.com/title/tt4955642/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_42" 
+##  [43] "http://www.imdb.com/title/tt9348692/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_43" 
+##  [44] "http://www.imdb.com/title/tt7736572/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_44" 
+##  [45] "http://www.imdb.com/title/tt0898266/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_45" 
+##  [46] "http://www.imdb.com/title/tt3526078/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_46" 
+##  [47] "http://www.imdb.com/title/tt2467372/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_47" 
+##  [48] "http://www.imdb.com/title/tt2372162/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_48" 
+##  [49] "http://www.imdb.com/title/tt0452046/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_49" 
+##  [50] "http://www.imdb.com/title/tt9113406/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_50" 
+##  [51] "http://www.imdb.com/title/tt0063878/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_51" 
+##  [52] "http://www.imdb.com/title/tt5753856/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_52" 
+##  [53] "http://www.imdb.com/title/tt9054904/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_53" 
+##  [54] "http://www.imdb.com/title/tt0364845/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_54" 
+##  [55] "http://www.imdb.com/title/tt0203259/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_55" 
+##  [56] "http://www.imdb.com/title/tt8201186/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_56" 
+##  [57] "http://www.imdb.com/title/tt2741602/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_57" 
+##  [58] "http://www.imdb.com/title/tt3743822/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_58" 
+##  [59] "http://www.imdb.com/title/tt9131050/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_59" 
+##  [60] "http://www.imdb.com/title/tt4998350/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_60" 
+##  [61] "http://www.imdb.com/title/tt2699110/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_61" 
+##  [62] "http://www.imdb.com/title/tt8111088/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_62" 
+##  [63] "http://www.imdb.com/title/tt7949218/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_63" 
+##  [64] "http://www.imdb.com/title/tt0472954/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_64" 
+##  [65] "http://www.imdb.com/title/tt3107288/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_65" 
+##  [66] "http://www.imdb.com/title/tt2364582/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_66" 
+##  [67] "http://www.imdb.com/title/tt2193021/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_67" 
+##  [68] "http://www.imdb.com/title/tt5016504/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_68" 
+##  [69] "http://www.imdb.com/title/tt6143796/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_69" 
+##  [70] "http://www.imdb.com/title/tt0412253/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_70" 
+##  [71] "http://www.imdb.com/title/tt4236770/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_71" 
+##  [72] "http://www.imdb.com/title/tt3032476/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_72" 
+##  [73] "http://www.imdb.com/title/tt5363918/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_73" 
+##  [74] "http://www.imdb.com/title/tt6048596/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_74" 
+##  [75] "http://www.imdb.com/title/tt1327801/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_75" 
+##  [76] "http://www.imdb.com/title/tt5057054/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_76" 
+##  [77] "http://www.imdb.com/title/tt5420376/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_77" 
+##  [78] "http://www.imdb.com/title/tt2708480/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_78" 
+##  [79] "http://www.imdb.com/title/tt2891574/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_79" 
+##  [80] "http://www.imdb.com/title/tt2356777/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_80" 
+##  [81] "http://www.imdb.com/title/tt0118401/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_81" 
+##  [82] "http://www.imdb.com/title/tt0804503/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_82" 
+##  [83] "http://www.imdb.com/title/tt2802850/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_83" 
+##  [84] "http://www.imdb.com/title/tt0460649/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_84" 
+##  [85] "http://www.imdb.com/title/tt1796960/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_85" 
+##  [86] "http://www.imdb.com/title/tt5296406/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_86" 
+##  [87] "http://www.imdb.com/title/tt0141842/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_87" 
+##  [88] "http://www.imdb.com/title/tt1442437/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_88" 
+##  [89] "http://www.imdb.com/title/tt0436992/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_89" 
+##  [90] "http://www.imdb.com/title/tt0412142/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_90" 
+##  [91] "http://www.imdb.com/title/tt4786824/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_91" 
+##  [92] "http://www.imdb.com/title/tt4524056/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_92" 
+##  [93] "http://www.imdb.com/title/tt5715524/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_93" 
+##  [94] "http://www.imdb.com/title/tt0475784/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_94" 
+##  [95] "http://www.imdb.com/title/tt5180504/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_95" 
+##  [96] "http://www.imdb.com/title/tt1266020/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_96" 
+##  [97] "http://www.imdb.com/title/tt2861424/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_97" 
+##  [98] "http://www.imdb.com/title/tt5687612/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_98" 
+##  [99] "http://www.imdb.com/title/tt9544034/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_99" 
+## [100] "http://www.imdb.com/title/tt0306414/?pf_rd_m=A2FGELUUNOQJNL&amp;pf_rd_p=332cb927-0342-42b3-815c-f9124e84021d&amp;pf_rd_r=EHPB2JX44NPCF19P2Z6N&amp;pf_rd_s=center-1&amp;pf_rd_t=15506&amp;pf_rd_i=tvmeter&amp;ref_=chttvm_tt_100"
+```
+
+---
+
+### Go to each page, scrape show info 
+
+Now we need a way to programatically direct R to each page on the `urls` list and run the `scrape_show_info` function on that page.
+
+.small[
+
+```r
+scrape_show_info(urls[1])
+```
+
+```
+## # A tibble: 1 x 3
+##   title        runtime genres      
+##   &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;       
+## 1 Unbelievable 58min   Crime, Drama
+```
+
+```r
+scrape_show_info(urls[2])
+```
+
+```
+## # A tibble: 1 x 3
+##   title                 runtime genres                 
+##   &lt;chr&gt;                 &lt;chr&gt;   &lt;chr&gt;                  
+## 1 American Horror Story 1h      Drama, Horror, Thriller
+```
+
+```r
+scrape_show_info(urls[3])
+```
+
+```
+## # A tibble: 1 x 3
+##   title      runtime genres                           
+##   &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;                            
+## 1 The I-Land 40min   Adventure, Drama, Mystery, Sci-Fi
+```
+]
+
+---
+
+class: middle
+
+### Oh no! 
+
+### 1. We're not scraping genre for every TV show!
+### 2. We're repeating our code again!
+
+---
+
+### Update genre code
+
+.small[
+
+```r
+scrape_show_info &lt;- function(x){
+  
+  y &lt;- read_html(x) 
+
+  title &lt;- y %&gt;%
+    html_node("h1") %&gt;%
+    html_text() %&gt;%
+    str_trim()
+
+  runtime &lt;- y %&gt;%
+    html_node("time") %&gt;%
+    html_text() %&gt;%
+    str_replace("\\n", "") %&gt;%
+    str_trim()
+
+  genres &lt;- y %&gt;%
+*   html_nodes(".see-more.canwrap~ .canwrap a") %&gt;%
+    html_text() %&gt;%
+    str_trim() %&gt;%
+    paste(collapse = ", ")
+  
+  tibble(title = title, runtime = runtime, genres = genres)
+}
+```
+]
+
+---
+
+### Try again: go to each page, scrape show info 
+
+
+```r
+scrape_show_info(urls[1])
+```
+
+```
+## # A tibble: 1 x 3
+##   title        runtime genres      
+##   &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;       
+## 1 Unbelievable 58min   Crime, Drama
+```
+
+```r
+scrape_show_info(urls[2])
+```
+
+```
+## # A tibble: 1 x 3
+##   title                 runtime genres                 
+##   &lt;chr&gt;                 &lt;chr&gt;   &lt;chr&gt;                  
+## 1 American Horror Story 1h      Drama, Horror, Thriller
+```
+
+```r
+scrape_show_info(urls[3])
+```
+
+```
+## # A tibble: 1 x 3
+##   title      runtime genres                           
+##   &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;                            
+## 1 The I-Land 40min   Adventure, Drama, Mystery, Sci-Fi
+```
+
+--
+
+**... but we're still repeating our code!**
+---
+
+### Automation 
+
+- We need a way to programatically repeat the code
+
+- There are two ways to do this: 
+    - use a **`for`** loop
+    - **`map`**ping with functional programming
+    
+---
+
+### `for` loops
+
+- **`for`** loops are the simplest and most common type of loop in R
+- Iterate through the elements of a vector and evaluate the code block for each
+
+**Goal**: Scrape info from individual pages of TV shows using iteration with for loops. We'll use only 5 shows for now to keep things simple.
+
+---
+
+### `for` loop
+
+### 1) Set up a tibble to store the results
+
+
+```r
+n &lt;- 5
+top_n_shows &lt;- tibble( title = rep(NA, n), 
+                       runtime = rep(NA, n), 
+                       genres = rep(NA, n), 
+                       epsiodes = rep(NA, n), 
+                       keywords = rep(NA, n)
+  )
+top_n_shows
+```
+
+```
+## # A tibble: 5 x 5
+##   title runtime genres epsiodes keywords
+##   &lt;lgl&gt; &lt;lgl&gt;   &lt;lgl&gt;  &lt;lgl&gt;    &lt;lgl&gt;   
+## 1 NA    NA      NA     NA       NA      
+## 2 NA    NA      NA     NA       NA      
+## 3 NA    NA      NA     NA       NA      
+## 4 NA    NA      NA     NA       NA      
+## 5 NA    NA      NA     NA       NA
+```
+
+---
+
+### `for` loop
+
+### 2) Iterate through urls to scrape data and save results
+
+
+```r
+for(i in 1:n){
+  top_n_shows[i, ] = scrape_show_info(urls[i])
+}
+top_n_shows
+```
+
+```
+## # A tibble: 5 x 5
+##   title           runtime genres                  epsiodes         keywords
+##   &lt;chr&gt;           &lt;chr&gt;   &lt;chr&gt;                   &lt;chr&gt;            &lt;chr&gt;   
+## 1 Unbelievable    58min   Crime, Drama            Unbelievable     58min   
+## 2 American Horro… 1h      Drama, Horror, Thriller American Horror… 1h      
+## 3 The I-Land      40min   Adventure, Drama, Myst… The I-Land       40min   
+## 4 Peaky Blinders  1h      Crime, Drama            Peaky Blinders   1h      
+## 5 Top Boy         1h      ""                      Top Boy          1h
+```
+
+---
+
+### `map`ping
+
+- **`map`** functions transform the input by applying a function to each element and returning an object the same length as the input
+
+- There are various map functions (e.g. `map_lgl()`, `map_chr()`, `map_dbl()`, `map_df()`)
+    - each of which return a different type of object (logical, character, double, and data frame, respectively)
+
+--
+
+- We will `map` the `scrape_show_info` function to each element of `urls`   
+    - This will go to each url at a time and get the info
+    
+**Goal:** Scrape info from individual pages of TV shows using functional programming with mapping. We'll use only 5 shows for now to keep things simple.
+
+---
+
+### `map`: Go to each page, scrape show info 
+
+
+```r
+top_n_shows &lt;- map_df(urls[1:n], scrape_show_info)
+top_n_shows
+```
+
+```
+## # A tibble: 5 x 3
+##   title                 runtime genres                           
+##   &lt;chr&gt;                 &lt;chr&gt;   &lt;chr&gt;                            
+## 1 Unbelievable          58min   Crime, Drama                     
+## 2 American Horror Story 1h      Drama, Horror, Thriller          
+## 3 The I-Land            40min   Adventure, Drama, Mystery, Sci-Fi
+## 4 Peaky Blinders        1h      Crime, Drama                     
+## 5 Top Boy               1h      ""
+```
+
+---
+
+### Slow down the function
+
+- If you get `HTTP Error 429 (Too man requests)` you might want to slow down your hits.
+
+- You can add a `Sys.sleep()` call to slow down your function:
+
+
+```r
+scrape_show_info &lt;- function(x){
+#suspend execution between 0 to 1 seconds
+
+*    Sys.sleep(runif(1)) 
+  
+  ...
+
+}
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
