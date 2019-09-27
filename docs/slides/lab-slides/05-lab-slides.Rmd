@@ -115,7 +115,7 @@ knitr::include_graphics("img/05/breakdown.PNG")
 
 ```{r eval=FALSE}
 library(usethis)
-use_git_config(user.name="your name", user.email="your email")
+use_git_config(user.name="github username", user.email="your email")
 ```
 ]
 
