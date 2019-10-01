@@ -1,7 +1,7 @@
 ---
 title: "Functions and automation"
 author: "Dr. Maria Tackett"
-date: "09.26.19"
+date: "10.01.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -71,188 +71,20 @@ class: middle, center
 
 ### Announcements
 
-- Writing Exercise #2 initial draft - **due TODAY at 11:59p**
-    - Peer Review available tomorrow and due Sunday 9/29 at 11:59p
+- Writing Exercise #2 final revision - **due TODAY at 11:59p**
 
-- HW 02 - **due TODAY at 11:59p**
+- Lab 05 - **due Wednesday at 11:59p**
 
-- Team Feedback #1 **due TODAY at 11:59p**
-    - Please provide honest and constructive feedback. This team feedback will be graded for completion.
+- Exam 01 - **due Sunday at 11:59p**
+    - Friday's lab sessions for exam office hours
+
+- Thursday's Class: Text Analysis with Becky Tang and Graham Tierney
+    - EC for Exam 01: Attendance + complete activity 
+    - Email me documentation **before Thursday's class** if you have an excused absence but would like to participate
     
-
 ---
 
-### Check in: Regrade Requests
-
-- All regrade requests should be submitted through Gradescope. [See updated course policy](https://www2.stat.duke.edu/courses/Fall19/sta199.001/policies.html)
-
-- Only submit a regrade request if you still have concerns about your grade after you have attended office hours and asked a member of the teaching team to explain the feedback you received. This will ultimately help with your understanding of the course material and help the teaching team get an idea about points to clarify.
-
-- **When you submit a regrade request, please indicate who you've talked with prior to submitting the request.**
-
-- Professor Tackett is the only person who can update grades, so <u>do not</u> ask your TAs to regrade your assignment.
-   
----
-
-### Check in: Lab 04
-
-- Will get Lab 04 assignment from RStudio Cloud project. 
-
-- [Fill out form](https://forms.gle/Ci8XCcHh6ESvuac6A) with the name of the RStudio Cloud project for grading.
-
----
-
-class: middle, center
-
-# Web scraping 
-
-```{r echo = F, message=FALSE}
-library(rvest)
-
-page <- read_html("http://www.imdb.com/chart/top")
-
-titles <- page %>%
-  html_nodes(".titleColumn a") %>%
-  html_text()
-
-years <- page %>%
-  html_nodes(".secondaryInfo") %>%
-  html_text() %>%
-  str_replace("\\(", "") %>% # remove (
-  str_replace("\\)", "") %>% # remove )
-  as.numeric()
-
-scores <- page %>%
-  html_nodes(".imdbRating") %>%
-  html_text() %>%
-  as.numeric()
-  
-imdb_top_250 <- tibble(
-  title = titles, 
-  year = years, 
-  score = scores
-  )
-```
-
----
-
-### Clean up / enhance
-
-May or may not be a lot of work depending on how messy the data are
-
-- See if you like what you got:
-
-```{r}
-glimpse(imdb_top_250)
-```
-
-- Add a variable for rank
-```{r}
-imdb_top_250 <- imdb_top_250 %>%
-  mutate(
-    rank = 1:nrow(imdb_top_250)
-  )
-```
-
----
-
-```{r echo=FALSE, results='asis'}
-imdb_top_250 %>% head(10)%>% rbind(rep("...", 3)) %>% kable(format = "html")
-```
-
----
-
-### Analyze
-
-.question[
-How would you go about answering this question: Which 1995 movies made the list?
-]
-
----
-
-```{r}
-imdb_top_250 %>% 
-  filter(year == 1995)
-```
-
----
-
-### Analyze
-
-.question[
-How would you go about answering this question: Which years have the most movies on the list?
-]
-
---
-
-```{r}
-imdb_top_250 %>% 
-  group_by(year) %>%
-  summarise(total = n()) %>%
-  arrange(desc(total)) %>%
-  head(5)
-```
-
----
-
-### Visualize
-
-.question[
-How would you go about creating this visualization: Visualize the average yearly score for movies that made it on the top 250 list over time.
-]
-
---
-
-.small[
-```{r echo=FALSE}
-imdb_top_250 %>% 
-  group_by(year) %>%
-  summarise(avg_score = mean(score)) %>%
-  ggplot(aes(y = avg_score, x = year)) +
-    geom_point() +
-    geom_smooth(method = "lm") +
-    xlab("year")
-```
-]
-
----
-
-### Top Rated 
-
-.question[
-- Which year has the highest average score for movies that made the Top 250? 
-]
-
---
-
-.question[
-- What is one reason we should write code to answer this question rather than look through the data?
-- What is one reason we only want to print the year with the highest average rather than entire table?
-]
-
----
-
-### Potential challenges
-
-- Unreliable formatting at the source
-- Data broken into many pages
-- ...
-
-.question[
-Compare the display of information at [raleigh.craigslist.org/search/apa](https://raleigh.craigslist.org/search/apa) to the list on the IMDB top 250 list. 
-
-What challenges can you foresee in scraping a list of the available apartments?
-]
-
----
-
-class: middle, center
-
-## Application Exercise
-
----
-
-### Popular TV Shows
+### Application Exercise: Popular TV Shows
 
 RStudio Cloud $\rightarrow$ Web scraping 
 
@@ -262,87 +94,12 @@ RStudio Cloud $\rightarrow$ Web scraping
 
 3. Time permitting, also try to get the following:
 
+    - Genre
+    - Runtime
     - How many episodes so far
-    - Certificate
     - First five plot keywords
-    - Country
-    - Language
 
 Add this information to the data frame you created in step 1.
-
----
-class: middle, center
-### Writing More Efficient Code 
-
----
-
-### Writing Exercise #1: Original code
-
-```{r eval = F}
-# create data set for each education level
-educ_1 <- NHANES %>% 
-  filter(Education=="8th Grade") %>%
-  select(HomeOwn)
-
-educ_2 <- NHANES %>% 
-  filter(Education=="9 - 11th Grade") %>%
-  select(HomeOwn)
-
-educ_3 <- NHANES %>% 
-  filter(Education=="High School") %>%
-  select(HomeOwn)
-
-educ_4 <- NHANES %>% 
-  filter(Education=="Some College") %>%
-  select(HomeOwn)
-
-educ_5 <- NHANES %>% 
-  filter(Education=="College Grad") %>%
-  select(HomeOwn)
-```
-
----
-
-### Writing Exercise #1: Original Code
-
-```{r eval = F}
-# calculate proportion of HomeOwn
-educ_1 %>%
-  count(HomeOwn) %>%
-  mutate(proportion = n/sum(n))
-
-educ_2 %>%
-  count(HomeOwn) %>%
-  mutate(proportion = n/sum(n))
-
-educ_3 %>%
-  count(HomeOwn) %>%
-  mutate(proportion = n/sum(n))
-
-educ_4 %>%
-  count(HomeOwn) %>%
-  mutate(proportion = n/sum(n))
-
-educ_5 %>%
-  count(HomeOwn) %>%
-  mutate(proportion = n/sum(n))
-```
-
-
----
-
-### Writing Exercise #1: Efficient code
-
-```{r eval = F}
-NHANES %>%
-  group_by(Education) %>%
-  count(HomeOwn) %>%
-  mutate(proportion=n/sum(n))
-```
-
-.question[
-- What are two reasons we prefer to write code in this efficient way instead of in the original format?
-]
 
 ---
 
@@ -364,7 +121,23 @@ st <- read_html("https://www.imdb.com/title/tt4574334/")
 fr <- read_html("https://www.imdb.com/title/tt0108778/")
 ```
 
+.center[
+.pull-left[
+```{r echo = F, out.width = '85%', out.height = '85%'}
+knitr::include_graphics("img/06b/peaky_blinders.jpg")
+```
+]
 
+.pull-right[
+```{r echo = F, out.width = '85%', out.height = '85%'}
+knitr::include_graphics("img/06b/stranger_things.png")
+```
+]
+
+```{r echo = F, out.width = '37%', out.height = '37%'}
+knitr::include_graphics("img/06b/friends.jpg")
+```
+]
 ---
 
 ### Why functions?
@@ -391,19 +164,19 @@ Do you see any problems in the code below?
 .small[
 ```{r eval=FALSE}
 pb_episode <- st %>%
-  html_nodes(".np_right_arrow .bp_sub_heading") %>%
+  html_nodes(".bp_sub_heading") %>%
   html_text() %>%
   str_replace(" episodes", "") %>%
   as.numeric()
 
-st_episode <- got %>%
-  html_nodes(".np_right_arrow .bp_sub_heading") %>%
+st_episode <- st %>%
+  html_nodes(".bp_sub_heading") %>%
   html_text() %>%
   str_replace(" episodes", "") %>%
   as.numeric()
 
-fr_episode <- twd %>%
-  html_nodes(".np_right_arrow .bp_sub_heading") %>%
+fr_episode <- fr %>%
+  html_nodes(".bp_sub_heading") %>%
   html_text() %>%
   str_replace(" episodes", "") %>%
   as.numeric()
@@ -420,7 +193,7 @@ How many inputs does the following code have?
 
 ```{r eval=FALSE}
 st_episode <- st %>%
-  html_nodes(".np_right_arrow .bp_sub_heading") %>%
+  html_nodes(".bp_sub_heading") %>%
   html_text() %>%
   str_replace(" episodes", "") %>%
   as.numeric()
@@ -452,7 +225,7 @@ scrape_episode <-
 ### Turn your code into a function
 
 1. Pick a short but informative **name**, preferably a verb.
-2. List inputs, or <font class="vocab">arguments</font>, to the function inside `function`. If we had more the call would look like `function(x, y, z)`.
+2. List inputs, or <font class="vocab">arguments</font>, to the function inside `function`. If we had more inputs the call would look like `function(x, y, z)`.
 
 <br>
 
@@ -477,7 +250,7 @@ scrape_episode <- function(x){
 ```{r}
 scrape_episode <- function(x){
   x %>%
-    html_nodes(".np_right_arrow .bp_sub_heading") %>%
+    html_nodes(".bp_sub_heading") %>%
     html_text() %>%
     str_replace(" episodes", "") %>%
     as.numeric()
@@ -531,6 +304,7 @@ scrape_episode(fr)
 --
 
 - Avoid overwriting existing (especially widely used) functions
+    - e.g. don't name a function `summarise()`
 
 ---
 
@@ -547,13 +321,13 @@ scrape_show_info <- function(x){
   runtime <- x %>%
     html_node("time") %>%
     html_text() %>% # could use trim = TRUE instead of str_ functions
-    str_replace("\\n", "") %>%
     str_trim()
   
   genres <- x %>%
-    html_nodes(".txt-block~ .canwrap a") %>%
+    html_nodes(".see-more.canwrap~ .canwrap a") %>%
     html_text() %>%
-    str_c(collapse = ", ")
+    str_c(collapse = ", ") %>%
+    str_trim()
   
   tibble(title = title, runtime = runtime, genres = genres)
 }
@@ -588,11 +362,10 @@ scrape_show_info <- function(x){
   runtime <- x %>%
     html_node("time") %>%
     html_text() %>%
-    str_replace("\\n", "") %>%
     str_trim()
   
   genres <- x %>%
-    html_nodes(".txt-block~ .canwrap a") %>%
+    html_nodes(".see-more.canwrap~ .canwrap a") %>%
     html_text() %>%
     str_trim() %>%
     paste(collapse = ", ")
@@ -622,7 +395,7 @@ scrape_show_info <- function(x){
     str_trim()
 
   genres <- y %>%
-    html_nodes(".txt-block~ .canwrap a") %>%
+    html_nodes(".see-more.canwrap~ .canwrap a") %>%
     html_text() %>%
     str_trim() %>%
     paste(collapse = ", ")
@@ -681,7 +454,7 @@ urls
 
 ### Go to each page, scrape show info 
 
-Now we need a way to programatically direct R to each page on the `urls` list and run the `scrape_show_info` function on that page.
+Now we need a way to programmatically direct R to each page on the `urls` list and run the `scrape_show_info` function on that page.
 
 .small[
 ```{r}
@@ -697,59 +470,13 @@ class: middle
 
 ### Oh no! 
 
-### 1. We're not scraping genre for every TV show!
-### 2. We're repeating our code again!
+### We're repeating our code again!
 
----
-
-### Update genre code
-
-.small[
-```{r}
-scrape_show_info <- function(x){
-  
-  y <- read_html(x) 
-
-  title <- y %>%
-    html_node("h1") %>%
-    html_text() %>%
-    str_trim()
-
-  runtime <- y %>%
-    html_node("time") %>%
-    html_text() %>%
-    str_replace("\\n", "") %>%
-    str_trim()
-
-  genres <- y %>%
-    html_nodes(".see-more.canwrap~ .canwrap a") %>% #<<
-    html_text() %>%
-    str_trim() %>%
-    paste(collapse = ", ")
-  
-  tibble(title = title, runtime = runtime, genres = genres)
-}
-```
-]
-
----
-
-### Try again: go to each page, scrape show info 
-
-```{r}
-scrape_show_info(urls[1])
-scrape_show_info(urls[2])
-scrape_show_info(urls[3])
-```
-
---
-
-**... but we're still repeating our code!**
 ---
 
 ### Automation 
 
-- We need a way to programatically repeat the code
+- We need a way to programmatically repeat the code
 
 - There are two ways to do this: 
     - use a **`for`** loop
@@ -774,9 +501,7 @@ scrape_show_info(urls[3])
 n <- 5
 top_n_shows <- tibble( title = rep(NA, n), 
                        runtime = rep(NA, n), 
-                       genres = rep(NA, n), 
-                       epsiodes = rep(NA, n), 
-                       keywords = rep(NA, n)
+                       genres = rep(NA, n)
   )
 top_n_shows
 ```
@@ -837,3 +562,33 @@ scrape_show_info <- function(x){
 
 }
 ```
+
+---
+
+class: middle, center
+
+## Exam 01
+
+---
+
+### Exam 01 - due Sunday at 11:59p
+
+- Read the exam rules carefully! They can be found in the REAMDE file of the exam-01 repo
+ 
+- In addition to the correctness of your responses, you will be graded on using tidyverse syntax, style, naming code chunks, commits, and organization
+
+- Make sure to knit, commit, and push your .Rmd and .md documents frequently
+    - We will grade the most recent .md file in your repo submitted by the deadline
+
+---
+
+### Exam 01 - due Sunday at 11:59p
+
+- This is an individual assignment - you may not talk about the exam with anyone other than me or the TAs
+    - You may only ask me and the TAs clarifying questions.
+    - Members of the teaching team will not help you write or debug code
+
+- Friday's lab is exam office hours. You can use this time to ask the TAs clarifying questions
+
+- Use lecture notes and *R for Data Science* as your primary resources.
+
