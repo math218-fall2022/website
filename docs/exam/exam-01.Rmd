@@ -1,0 +1,23 @@
+---
+title: "Exam 01"
+subtitle: "due Sunday, October 6 at 11:59p"
+output: 
+  tufte::tufte_html:
+    css: "../labs/sta199-labs.css"
+    tufte_variant: "envisioned"
+    highlight: pygments
+link-citations: yes
+---
+
+Please see your **exam-01** repo on GitHub for the exam instructions (in the README file) and starter docs. **Read all of the exam instructions and questions carefully.**
+
+Remember this is an **individual assignment**. You may not discuss the exam with anyone except Professor Tackett and the TAs for this course.
+
+Only post **private** questions on Piazza.
+
+Be sure to knit, commit, and push frequently. We will grade the most recent version of the .md file in your GitHub repo by the deadline. 
+
+
+In addition to the correctness of your responses, you will be graded on using tidyverse syntax, style, naming code chunks, commits, and organization.
+
+Use lecture notes and *R for Data Science* as your primary resources.
