@@ -388,10 +388,9 @@ scrape_show_info <- function(x){
     html_text() %>%
     str_trim()
 
-  runtime <- y %>%
+   runtime <- y %>%
     html_node("time") %>%
     html_text() %>%
-    str_replace("\\n", "") %>%
     str_trim()
 
   genres <- y %>%
@@ -498,7 +497,7 @@ class: middle
 ### 1) Set up a tibble to store the results
 
 ```{r}
-n <- 5
+n <- 10
 top_n_shows <- tibble( title = rep(NA, n), 
                        runtime = rep(NA, n), 
                        genres = rep(NA, n)
