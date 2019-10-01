@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Webscrape</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Dr. Maria Tackett" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Webscrape
+## Part 2
+### Dr. Maria Tackett
+### 09.26.19
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="http://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+
+
+class: middle, center
+
+### [Click for PDF of slides](06a-webscrape-part2.pdf)
+
+---
+
+### Announcements
+
+- Writing Exercise #2 initial draft - **due TODAY at 11:59p**
+    - Peer Review available tomorrow and due Sunday 9/29 at 11:59p
+
+- HW 02 - **due TODAY at 11:59p**
+
+- Team Feedback #1 **due TODAY at 11:59p**
+    - Please provide honest and constructive feedback. This team feedback will be graded for completion.
+    
+
+---
+
+### Check in: Regrade Requests
+
+- All regrade requests should be submitted through Gradescope. [See updated course policy](https://www2.stat.duke.edu/courses/Fall19/sta199.001/policies.html)
+
+- Only submit a regrade request if you still have concerns about your grade after you have attended office hours and asked a member of the teaching team to explain the feedback you received. This will ultimately help with your understanding of the course material and help the teaching team get an idea about points to clarify.
+
+- **When you submit a regrade request, please indicate who you've talked with prior to submitting the request.**
+
+- Professor Tackett is the only person who can update grades, so &lt;u&gt;do not&lt;/u&gt; ask your TAs to regrade your assignment.
+   
+---
+
+### Check in: Lab 04
+
+- Will get Lab 04 assignment from RStudio Cloud project. 
+
+- [Fill out form](https://forms.gle/Ci8XCcHh6ESvuac6A) with the name of the RStudio Cloud project for grading.
+
+---
+
+class: middle, center
+
+# Web scraping 
+
+
+
+---
+
+### Clean up / enhance
+
+May or may not be a lot of work depending on how messy the data are
+
+- See if you like what you got:
+
+
+```r
+glimpse(imdb_top_250)
+```
+
+```
+## Observations: 250
+## Variables: 3
+## $ title &lt;chr&gt; "The Shawshank Redemption", "The Godfather", "The Godfathe…
+## $ year  &lt;dbl&gt; 1994, 1972, 1974, 2008, 1957, 1993, 2003, 1994, 1966, 1999…
+## $ score &lt;dbl&gt; 9.2, 9.1, 9.0, 9.0, 8.9, 8.9, 8.9, 8.9, 8.8, 8.8, 8.8, 8.8…
+```
+
+- Add a variable for rank
+
+```r
+imdb_top_250 &lt;- imdb_top_250 %&gt;%
+  mutate(
+    rank = 1:nrow(imdb_top_250)
+  )
+```
+
+---
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; score &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; rank &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Shawshank Redemption &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.1 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather: Part II &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1974 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Dark Knight &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2008 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 Angry Men &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Schindler's List &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1993 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Return of the King &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Pulp Fiction &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Good, the Bad and the Ugly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1966 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Fight Club &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1999 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+### Analyze
+
+.question[
+How would you go about answering this question: Which 1995 movies made the list?
+]
+
+---
+
+
+```r
+imdb_top_250 %&gt;% 
+  filter(year == 1995)
+```
+
+```
+## # A tibble: 8 x 4
+##   title               year score  rank
+##   &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1 Se7en               1995   8.6    20
+## 2 The Usual Suspects  1995   8.5    32
+## 3 Braveheart          1995   8.3    76
+## 4 Toy Story           1995   8.3    81
+## 5 Heat                1995   8.2   121
+## 6 Casino              1995   8.2   139
+## 7 Before Sunrise      1995   8.1   194
+## 8 La Haine            1995   8     228
+```
+
+---
+
+### Analyze
+
+.question[
+How would you go about answering this question: Which years have the most movies on the list?
+]
+
+--
+
+
+```r
+imdb_top_250 %&gt;% 
+  group_by(year) %&gt;%
+  summarise(total = n()) %&gt;%
+  arrange(desc(total)) %&gt;%
+  head(5)
+```
+
+```
+## # A tibble: 5 x 2
+##    year total
+##   &lt;dbl&gt; &lt;int&gt;
+## 1  1995     8
+## 2  2004     7
+## 3  2014     7
+## 4  1957     6
+## 5  1998     6
+```
+
+---
+
+### Visualize
+
+.question[
+How would you go about creating this visualization: Visualize the average yearly score for movies that made it on the top 250 list over time.
+]
+
+--
+
+.small[
+![](06a-webscrape-part2_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+
+---
+
+### Top Rated 
+
+.question[
+- Which year has the highest average score for movies that made the Top 250? 
+]
+
+--
+
+.question[
+- What is one reason we should write code to answer this question rather than look through the data?
+- What is one reason we only want to print the year with the highest average rather than entire table?
+]
+
+---
+
+### Potential challenges
+
+- Unreliable formatting at the source
+- Data broken into many pages
+- ...
+
+.question[
+Compare the display of information at [raleigh.craigslist.org/search/apa](https://raleigh.craigslist.org/search/apa) to the list on the IMDB top 250 list. 
+
+What challenges can you foresee in scraping a list of the available apartments?
+]
+
+---
+
+class: middle, center
+
+## Application Exercise
+
+---
+
+### Popular TV Shows
+
+RStudio Cloud `\(\rightarrow\)` Web scraping 
+
+1. Scrape the list of most popular TV shows on IMDB: http://www.imdb.com/chart/tvmeter
+
+2. Examine each of the first three (or however many you can get through) tv show subpage to also obtain genre and runtime.
+
+3. Time permitting, also try to get the following:
+
+    - How many episodes so far
+    - Certificate
+    - First five plot keywords
+    - Country
+    - Language
+
+Add this information to the data frame you created in step 1.
+
+&lt;!-- Ended here on 9/26 --&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
