@@ -98,7 +98,7 @@ lessons:
  - title: "Exam 01 assigned"
  - date: "Thu, Oct 3"
    title: "Text Analysis"
- #slides: "lec-slides/05b-coding-style-data-types.html"
+   slides: "lec-slides/textanalysis_slides.html"
  - date: "Fri, Oct 4"
    title: "Exam 01 Office Hours"
  - date: "Sun, Oct 6"
