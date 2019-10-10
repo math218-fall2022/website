@@ -1,6 +1,6 @@
 ---
 title: "Showcase your inner data scientist"
-date: ""
+date: "Due When"
 output: 
     html_document: 
      css: "./sta199-hw.css"
@@ -9,7 +9,7 @@ output:
      fig_caption: false
 ---
 
-```{r echo=FALSE, fig.align="right",out.width="50%", out.extra='style="float:right; padding:10px"'}
+```{r echo=FALSE, fig.align="right", out.width="50%", out.extra='style="float:right"'}
 knitr::include_graphics("img/laptop-3190194_1920.jpg")
 ```
 

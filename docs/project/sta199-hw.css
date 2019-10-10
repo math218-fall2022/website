@@ -1,18 +1,17 @@
 /* * Customizing tufte.css * */
-@import url'https://fonts.googleapis.com/css?family=Open+Sans';
+
 @import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700';
 @import 'https://fonts.googleapis.com/css?family=Source+Code+Pro';
-@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700';
-@import 'https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700';
-@import 'https://fonts.googleapis.com/icon?family=Material+Icons)';
-@import 'https://fonts.googleapis.com/css?family=Inconsolata';
-
 
 @charset "UTF-8";
 
 /* Tufte CSS styles */
 
 html {
+  font-size: 13pt;
+}
+
+p {
 	font-size: 13pt;
 }
 
@@ -26,7 +25,7 @@ body {
 }
 
 h1.title {
-	font-weight: 650;
+	font-weight: 700;
 	font-family: 'Source Sans Pro', sans-serif;
 	color: #875687;
 }
@@ -64,10 +63,6 @@ h4.date {
 	font-weight: 300;
 }
 
-
-td { 
-  font-size: 10pt;
-}
 .numeral {
 	font-family: "Source Sans Pro";
 	font-weight: 300;
@@ -96,7 +91,7 @@ strong {
 
 code {
 	font-family: 'Source Code Pro', Consolas, "Liberation Mono", Menlo, Courier, monospace;
-	font-size: 13pt;
+	font-size: 15px;
 	line-height: 1.6;
 }
 
@@ -107,6 +102,10 @@ pre code {
 .marginnote code,
 .sidenote code {
 	font-size: 1rem;
+}
+
+.marginnote{
+  font-size: 13px;
 }
 
 pre {
@@ -120,6 +119,7 @@ pre {
 ol {
 	/* Remove the default left padding */
 	padding-left: 0;
+	font-size: 13pt;
 }
 
 ol>li {
@@ -130,8 +130,9 @@ ol>li {
 	width: 90%;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	padding-right: 0px;
-	padding-left: 95px;
+	padding-right: 0;
+	padding-left: 90px;
+	font-size: 13pt;
 }
 
 ol>li:before {
@@ -143,13 +144,20 @@ ol>li:before {
 	color: #875687;
 	left: -0.5px;
 	font-weight: bold;
-	margin-right: 10px;
 }
 
-ol ol {
-	counter-reset: subitem;
+ol ol>li:before {
+	counter-reset: sub-item;
+		/* Use the counter as content */
+	/* Increment the counter by 1 */
+	position: absolute;
+	color: #875687;
+	left: -0.5px;
+	font-weight: bold;
+	padding-left: 90px;
 }
 
-li {
-  font-size: 13pt;
+.td {
+  font-size: 10pt;
 }
+
