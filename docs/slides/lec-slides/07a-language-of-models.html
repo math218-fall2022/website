@@ -162,7 +162,7 @@ Pierre-Antoine de Machy, Public Sale at the Hôtel Bullion, Musée Carnavalet, P
 
 ]
 .pull-right[
-.small[
+.tiny[
 Two paintings very rich in composition, of a beautiful execution, and whose merit is very remarkable, each 17 inches 3 lines high, 23 inches wide; the first, painted on wood, comes from the Cabinet of Madame la Comtesse de Verrue; it represents a departure for the hunt: it shows in the front a child on a white horse, a man who gives the horn to gather the dogs, a falconer and other figures nicely distributed across the width of the painting; two horses drinking from a fountain; on the right in the corner a lovely country house topped by a terrace, on which people are at the table, others who play instruments; trees and fabriques pleasantly enrich the background.
 ]
 ]
@@ -446,8 +446,7 @@ The plot below displays the relationship between height and width of paintings. 
 ### Multiple explanatory variables
 
 .question[
-How, if at all, the relationship between width and height of paintings vary by whether
-or not they have any landscape elements?
+How, if at all, does the relationship between width and height of paintings vary by whether or not they have any landscape elements?
 ]
 .small[
 
@@ -466,7 +465,7 @@ ggplot(data = pp, aes(x = Width_in, y = Height_in,
 ### Models - upsides and downsides
 
 - Models can sometimes reveal patterns that are not evident in a graph of the
-data. This is a great advantage of modelling over simple visual inspection of
+data. This is a great advantage of modeling over simple visual inspection of
 data. 
 
 - There is a real risk, however, that a model is imposing structure that is
@@ -591,7 +590,7 @@ The regression line minimizes the sum of squared residuals.
 
 --
 
-- &lt;font class="vocab"&gt;Residuals: &lt;/font&gt; `\(e_i = y - \hat{y}\)`,
+- &lt;font class="vocab"&gt;Residuals: &lt;/font&gt; `\(e_i = y_i - \hat{y}_i\)`,
 
 
 - The regression line minimizes `\(\sum_{i = 1}^n e_i^2\)`.
@@ -623,15 +622,20 @@ The regression line minimizes the sum of squared residuals.
 
 `$$b_1 = r \frac{s_y}{s_x}$$`
 
+--
+
 - The regression line goes through the center of mass point, the coordinates corresponding to average `\(x\)` and average `\(y\)`: `\((\bar{x}, \bar{y})\)`.
 
 `$$\hat{y} = b_0 + b_1 x \hspace{5mm} ~ \Rightarrow  \hspace{5mm}~ b_0 = \bar{y} - b_1 \bar{x}$$`
 
+--
 
 
 - The sum of the residuals is zero: 
 
 `$$\sum_{i = 1}^n e_i = 0$$`
+
+--
 
 - The residuals and `\(x\)` values are uncorrelated.
 
@@ -715,7 +719,7 @@ tidy(m_ht_sch)
 
 --
 
-- When the categorical explanatory variable has many levels, the levels are encoded to &lt;font class="vocab"&gt;dummy variables&lt;/font&gt;
+- When the categorical explanatory variable has many levels, the levels are encoded to &lt;font class="vocab"&gt;dummy (indicator) variables&lt;/font&gt;
 
 - Each coefficient describes the expected difference between heights in that 
 particular school compared to the baseline level.
