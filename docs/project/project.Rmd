@@ -65,6 +65,15 @@ variables, and continuous numerical variables.**"
 
 Write the topic and proposed datasets in `topic-ideas` .Rmd file in the GitHub repo for your project. Be sure to knit the files to generate the .md file of your project ideas. 
 
+### Need help finding data? 
+
+The following sites are are good resources for interesting datasets: 
+
+- [www.kaggle.com](https://www.kaggle.com/)
+- [FiveThirtyEight datasets](https://data.fivethirtyeight.com/)
+- ["TidyTuesday" datasets](https://github.com/rfordatascience/tidytuesday)
+
+
 ### Project proposal: due Fri, Oct 25 at 11:59p
 
 This is a draft of the introduction section and exploratory data analysis for your project. Each section should contain no more than 1 page of text (this does not include figures). Write the topic and proposed datasets in `proposal` .Rmd file in the GitHub repo for your project. Be sure to knit the files to generate the .md file of your project ideas. 
@@ -83,7 +92,7 @@ The exploratory data analysis should include the following:
 - Bivariate and/or multivariate data visualizations and summary statistics if applicable. 
 - Narrative about what you observe in the exploratory data analysis and what you learn about the data from the exploratory data analysis
 
-### Section 3 - Research Questions
+#### Section 3 - Research Questions
 
 Using what you learn from the exploratory data analysis as a guide, write **two research questions** that you will answer in the project. For <u>**each**</u> question: 
 - Identify the outcome (dependent, response, Y) and predictor (independent, explanatory, X) 
