@@ -124,6 +124,7 @@ lessons:
  #slides: "lec-slides/06b-formalizing-linear-models.html"
  - date: "Fri, Oct 11"
    title: "Project Lab"
+   slides: "lab-slides/project-lab-slides.html"
    project: "project.html"
  #lab: "lab-06-modeling-course-evals.html"
  #slides: "lab-slides/06-lab-slides.html"

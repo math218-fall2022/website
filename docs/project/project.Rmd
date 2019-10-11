@@ -1,6 +1,6 @@
 ---
 title: "Showcase your inner data scientist"
-date: ""
+date: " "
 output: 
     html_document: 
      css: "./sta199-hw.css"
