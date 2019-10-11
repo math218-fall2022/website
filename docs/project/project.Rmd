@@ -36,8 +36,7 @@ In order for you to have the greatest chance of success with this project it is 
 you choose a manageable dataset. This means that the data should be readily accessible and large 
 enough that multiple relationships can be explored. **As such, your dataset must have at least 50 
 observations and between 10 to 20 variables (exceptions can be made but you must speak with me 
-first). The dataset’s variables should include categorical variables, discrete numerical 
-variables, and continuous numerical variables.**
+first). The dataset’s variables should include categorical variables and numerical variables (discrete and/or continuous).**
 
 All analyses must be done in RStudio. If you are using a dataset that comes in a format that 
 we haven't encountered in class, make sure that you are able to load it into RStudio as this 
@@ -58,8 +57,7 @@ Generating ideas is the first step to starting any project! This is the place fo
 
 - Identify datasets that are related to at least two of the topics. Include the name of the dataset, the topic it's related to, and a link to access the data. If you wish to scrape data (optional but not required), provide the link to the website from which the data will be scraped. Be sure the datasets you propose meet the criteria stated previously, "**your dataset must have at least 50 
 observations and between 10 to 20 variables (exceptions can be made but you must speak with me 
-first). The dataset’s variables should include categorical variables, discrete numerical 
-variables, and continuous numerical variables.**"
+first). The dataset’s variables should include categorical variables and numerical variables (discrete and/or continuous).**"
 
     For example, dataset to analyze characteristics of popular movies is the IMDB 5000 Movie Dataset: https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset. 
 
