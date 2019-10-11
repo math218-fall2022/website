@@ -1,6 +1,6 @@
 ---
 title: "Showcase your inner data scientist"
-date: "Due When"
+date: ""
 output: 
     html_document: 
      css: "./sta199-hw.css"
@@ -48,73 +48,84 @@ class.
 
 ## Components
 
-### Project proposal: due Fri, Mar 29 at 11:59p
+### Topic ideas: due Wed, Oct 16 at 11:59p
 
-This is a draft of the introduction section of your project as well as a 
-data analysis plan and your dataset. Each section should be no more than 1 
-page (excluding figures). You can check a print preview to confirm length. 
-Your write up and all typesetting must be done using R Markdown.
+Generating ideas is the first step to starting any project! This is the place for you to generate topic ideas as a group and identify datasets that could be used to explore these topics. As a group, complete the following: 
+
+- Identify 3 - 4 topics of interest for the project. You may think of a lot more as you start generating ideas, but you should narrow the list to the top 3 or 4. This is the first step in the project, so your topics can be general at this point. They should be detailed enough, however, that you have some guidance as you start looking for data. 
+
+    For example, a topic idea may be "characteristics of popular movies."
+
+- Identify datasets that are related to at least two of the topics. Include the name of the dataset, the topic it's related to, and a link to access the data. If you wish to scrape data (optional but not required), provide the link to the website from which the data will be scraped. Be sure the datasets you propose meet the criteria stated previously, "**your dataset must have at least 50 
+observations and between 10 to 20 variables (exceptions can be made but you must speak with me 
+first). The dataset’s variables should include categorical variables, discrete numerical 
+variables, and continuous numerical variables.**"
+
+    For example, dataset to analyze characteristics of popular movies is the IMDB 5000 Movie Dataset: https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset. 
+
+Write the topic and proposed datasets in `topic-ideas` .Rmd file in the GitHub repo for your project. Be sure to knit the files to generate the .md file of your project ideas. 
+
+### Project proposal: due Fri, Oct 25 at 11:59p
+
+This is a draft of the introduction section and exploratory data analysis for your project. Each section should contain no more than 1 page of text (this does not include figures). Write the topic and proposed datasets in `proposal` .Rmd file in the GitHub repo for your project. Be sure to knit the files to generate the .md file of your project ideas. 
 
 #### Section 1 - Introduction: 
 
 The introduction should introduce your general research 
-question and your data (where it came from, how it was collected, what 
+topic and your data (where it came from, how it was collected, what 
 are the cases, what are the variables, etc.).
 
-#### Section 2 - Data analysis plan: 
+#### Section 2 - Exploratory Data Analysis: 
 
-The data analysis plan should include:
+The exploratory data analysis should include the following: 
 
-- The outcome (dependent, response, Y) and predictor (independent, explanatory, X) 
-variables you will use to answer your question.
-- The comparison groups you will use, if applicable.
-- Very preliminary exploratory data analysis, including some summary statistics and 
-visualizations, along with some explanation on how they help you learn more about your data.
-(You can add to these later as you work on your project..)
-- The statistical method(s) that you believe will be useful in answering your question(s). 
-(You can update these later as you work on your project.)
--  What results from these specific statistical methods are needed to support your 
-hypothesized answer?
+- Univariate summary statistics and data visualizations
+- Bivariate and/or multivariate data visualizations and summary statistics if applicable. 
+- Narrative about what you observe in the exploratory data analysis and what you learn about the data from the exploratory data analysis
 
-#### Section 3 - Data: 
+### Section 3 - Research Questions
 
-Place your data in the `/data` folder, and add dimensions and codebook to the README in this folder. Then print out the output of `glimpse` of your data frame.
+Using what you learn from the exploratory data analysis as a guide, write **two research questions** that you will answer in the project. For <u>**each**</u> question: 
+- Identify the outcome (dependent, response, Y) and predictor (independent, explanatory, X) 
+variables you will use to answer the question.
+- Identify the groups you will compare to answer the question, if applicable. comparison groups you will use, if applicable.
+- Write your hypothesis.
+
+#### Section 4 - Data: 
+
+In Section 4 of the proposal: 
+  - Print out a `glimpse` of the data frame
+  
+In your project repo: 
+- Place your data in the `/data` folder
+- Add the dimensions and codebook for the dataset to the `README` in the `data` folder. Make sure the codebook is neatly formatted and easy to read. 
 
 #### Grading
 
 Total                                                   | 20 pts
 --------------------------------------------------------|--------
-Introduction                                            | 6 pts
-Data analysis plan                                      | 10 pts
-Data                                                    | 2 pts
-Organization and code quality                           | 2 pts
+Introduction                                            | 5 pts
+Exploratory data analysis                               | 10 pts
+Data and codebook                                       | 3 pts
+Organization, formatting and code quality               | 2 pts
 
 
-### Project: due Mon, Apr 29 at 2p
+### Data Analysis: Fri, Nov 15 at 11:59p
 
-#### Write up
+The bulk of your project is in the data analysis. This is where you will statistical methods to answer your research questions. The data analysis should include the following: 
 
-After providing the description of your dataset and research question in the 
-introduction use the remainder of your write up to showcase how you have arrived at 
-an answer / answers to your question using any techniques we have learned in this
-class (and some beyond, if you're feeling adventurous). The goal is not to do an exhaustive 
+- The statistical method(s) that you believe will be useful in answering your question(s), including why you chose them. 
+- Results of the methods(s) including all relevant code and output. 
+- Preliminary conclusions from the statistical analysis. Do these results support your hypothesized answer? 
+
+Remember, the goal is not to do an exhaustive 
 data analysis i.e., do not calculate every statistic and procedure you have 
-learned for every variable, but rather let me know that you are proficient at 
+learned for every variable. The goal is to let me know that you are proficient at 
 asking meaningful questions and answering them with results of data analysis, that
 you are proficient in using R, and that you are proficient at interpreting and 
 presenting the results. Focus on methods that help you begin to answer your research 
 questions. You do not have to apply every statistical procedure we learned.
 Also pay attention to your presentation. Neatness, coherency, and clarity will count.
-
-Your write up must also include a one to two page conclusion and discussion. 
-This will require a summary of what you have learned about your research 
-question along with statistical arguments supporting your conclusions. Also 
-critique your own methods and provide suggestions for improving your analysis. 
-Issues pertaining to the reliability and validity of your data and 
-appropriateness of the statistical analysis should also be discussed here. A 
-paragraph on what you would do differently if you were able to start over 
-with the project or what you would do next if you were going to continue 
-work on the project should also be included.
 
 The project is very open ended. You should create some kind of compelling 
 visualization(s) of this data in R. There is no limit on what tools or 
@@ -123,29 +134,48 @@ is required. You do not need to visualize all of the data at once. A single high
 visualization will receive a much higher grade than a large number of poor quality 
 visualizations.
 
+### Writeup & Presentation: due Fri, Dec 13 at 11:59p
+
+#### Write up
+
+The majority of the write up will be the revised results from the proposal and data analysis. 
+After providing the description of your dataset and research question in the 
+introduction, write up the results of the data analysis, incorporating any feedback you received. Remember to pay attention to your presentation. Neatness, coherency, and clarity will count.
+
+Your write up must also include a one to two page conclusion and discussion. 
+This will require a summary of what you have learned about your research 
+question along with statistical arguments supporting your conclusions. Also 
+critique your own methods and provide suggestions for improving your analysis. 
+Issues pertaining to the reliability and validity of your data and 
+appropriateness of the statistical analysis should also be discussed here. You should also include a 
+paragraph on what you would do differently if you were able to start over 
+with the project or what you would do next if you were going to continue 
+work on the project should also be included.
+
 Before you finalize your write up, make sure your chunks are turned off 
-with `echo = FALSE`. 
+with `echo = FALSE`. In other words, there should be no visible code in your final write up, unless there is a piece of code that is important to include as part of your narrative.
 
 You can add sections as you see fit to the template in your project repo. Make sure 
 you have a section called Introduction at the beginning and a section called 
 Conclusion at the end. The rest is up to you!
 
-#### Presentation: due Mon, Apr 29 at 2p
+#### Presentation: slides due Fri, Dec 13 at 11:59p
 
-**Your presentation should be no longer than 6 minutes, and each team member should say something substantial.**
+
+**Your presentation should be no longer than 5 minutes, and each team member should say something substantial.**
 
 You can use any software you like for your final presentation, including R Markdown
 to create your slides. There isn't a limit to how many slides you can use, just a 
-time limit (6 minutes total). Each team member should get a chance to speak during 
+time limit (5 minutes total). Each team member should get a chance to speak during 
 the presentation. Your presentation should not just be an account of everything you 
 tried ("then we did this, then we did this, etc."), instead it should convey what 
 choices you made, and why, and what you found.
 
-**Presentation schedule**: All teams will present during the university scheduled time of the final exam for this course, on Monday, April 29 2p - 5p. The presentation schedule is below; however, the write up and presentations are due at 2p for <u>all teams</u>.
+**Presentation schedule**: All teams will present during the university scheduled time of the final exam for this course, on Saturday, December 14, 7p - 10p. The presentation schedule is below; however, the write up and presentations are due on Fri, Dec 13 at 11:59p for <u>all teams</u>.
 
-- Section 01L: 2p - 3p
-- Section 02L: 3p - 4p
-- Section 03L: 4p - 5p
+- Section 01L: 7p - 8p
+- Section 02L: 8p - 9p
+- Section 03L: 9p - 10p
 
 #### Deliverables
 
@@ -169,9 +199,9 @@ sure everything looks good and your data and code are properly formatted.
 
 - Set aside time to work together in the same location and remotely.
 
-- When you're done, review the .md document on GitHub to make sure you're happy with the final state of your work. Then go get some rest!
+- When you're done, review the md document on GitHub to make sure you're happy with the final state of your work. Then go get some rest!
 
-- *Code*: In your write up your code should be hidden (`echo = FALSE`) so that your 
+- *Code*: In your final write up your code should be hidden (`echo = FALSE`) so that your 
 document is neat and easy to read. However your document should include 
 all your code such that if I re-knit your Rmd file I should be 
 able to obtain the results you presented. **Exception:** If you want to 
@@ -190,12 +220,14 @@ the assignment works.
 
 Total                          | 100 pts
 -------------------------------|--------
-Proposal                       | 20 pts
-Presentation                   | 25 pts
-Write up                       | 30 pts
+Topic ideas                    | 5 pts
+Proposal                       | 15 pts
+Data analysis                  | 25 pts
+Write up                       | 20 pts
+Presentation                   | 15 pts
 Classmates' presentation scores             | 5 pts
 Team peer evaluation           | 10 pts
-Repo and document organization | 10 pts
+Repo and document organization | 5 pts
 
 **Team peer evaluation:** You will be asked to fill out a survey where you 
 rate the contribution and teamwork of each team member out of 10 points. You will 
@@ -240,7 +272,7 @@ of results is unclear.
 
 ## Getting started
 
-- Go to the course organization on GitHub: https://github.com/Sta199-Sp19.
+- Go to the course organization on GitHub: https://github.com/sta199-fa19.
 
 - Find the repo starting with `project` and that has your team name at the end (this should be the only `project` repo available to you).
 
