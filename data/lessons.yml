@@ -132,6 +132,7 @@ lessons:
  - date: "Tue, Oct 15"
    title: "Formalizing linear models"
    reading: "reading-05.html"
+   slides: "lec-slides/07b-formalizing-linear-models.html"
  - date: "Wed, Oct 16"
    title: "Project topic ideas due"
    project: "project.html"
