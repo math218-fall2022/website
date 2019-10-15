@@ -1,5 +1,5 @@
 ---
-title: "Language of Models"
+title: "Formalizing Linear Models"
 author: "Dr. Maria Tackett"
 date: "10.15.19"
 output:
@@ -279,6 +279,24 @@ pp %>%
   datatable()
 ```
 ]
+
+---
+
+### Relationship between height and school 
+
+```{r echo = F}
+(m_ht_sch <- lm(Height_in ~ school_pntg, data = pp))
+```
+
+
+.question[
+1. What is the expected height of paintings from School A?
+
+2. Interpret the slope for `school_pntgG`.
+
+3. What is the expected height of paintings from School I?
+]
+
 
 ---
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Language of Models</title>
+    <title>Formalizing Linear Models</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr. Maria Tackett" />
     <link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -21,7 +21,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Language of Models
+# Formalizing Linear Models
 ### Dr. Maria Tackett
 ### 10.15.19
 
@@ -281,9 +281,36 @@ particular school compared to the baseline level.
 ### Categorical predictor with &gt;2 levels
 
 .small[
-<div id="htmlwidget-0b76ebfad48e3a3e048e" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0b76ebfad48e3a3e048e">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7"],["A","D/FL","F","G","I","S","X"],[0,1,0,0,0,0,0],[0,0,1,0,0,0,0],[0,0,0,1,0,0,0],[0,0,0,0,1,0,0],[0,0,0,0,0,1,0],[0,0,0,0,0,0,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>school_pntg<\/th>\n      <th>D_FL<\/th>\n      <th>F<\/th>\n      <th>G<\/th>\n      <th>I<\/th>\n      <th>S<\/th>\n      <th>X<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-af17b913818adc47b8e2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-af17b913818adc47b8e2">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7"],["A","D/FL","F","G","I","S","X"],[0,1,0,0,0,0,0],[0,0,1,0,0,0,0],[0,0,0,1,0,0,0],[0,0,0,0,1,0,0],[0,0,0,0,0,1,0],[0,0,0,0,0,0,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>school_pntg<\/th>\n      <th>D_FL<\/th>\n      <th>F<\/th>\n      <th>G<\/th>\n      <th>I<\/th>\n      <th>S<\/th>\n      <th>X<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 ]
+
+---
+
+### Relationship between height and school 
+
+
+```
+## 
+## Call:
+## lm(formula = Height_in ~ school_pntg, data = pp)
+## 
+## Coefficients:
+##     (Intercept)  school_pntgD/FL     school_pntgF     school_pntgG  
+##          14.000            2.329           10.197            1.650  
+##    school_pntgI     school_pntgS     school_pntgX  
+##          10.287           30.429            2.869
+```
+
+
+.question[
+1. What is the expected height of paintings from School A?
+
+2. Interpret the slope for `school_pntgG`.
+
+3. What is the expected height of paintings from School I?
+]
+
 
 ---
 
@@ -585,7 +612,7 @@ ggplot(m_ht_wt_aug, mapping = aes(x = .fitted, y = .resid)) +
   labs(x = "Predicted height", y = "Residuals")
 ```
 
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 ]
 
 --
@@ -636,7 +663,7 @@ class: center, middle
 
 ## Data: Paris Paintings
 
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -646,7 +673,7 @@ class: center, middle
 Describe the relationship between price and width of painting.
 ]
 
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -669,11 +696,11 @@ Which plot shows a more linear relationship?
 .small[
   
 .pull-left[
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 ]
 
 ]
@@ -689,11 +716,11 @@ Which plot shows a residuals that are uncorrelated with predicted values from th
 .small[
   
 .pull-left[
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 ]
 
 ]
