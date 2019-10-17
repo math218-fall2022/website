@@ -281,8 +281,8 @@ particular school compared to the baseline level.
 ### Categorical predictor with &gt;2 levels
 
 .small[
-<div id="htmlwidget-85751c1ccc8c7637f395" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-85751c1ccc8c7637f395">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7"],["A","D/FL","F","G","I","S","X"],[0,1,0,0,0,0,0],[0,0,1,0,0,0,0],[0,0,0,1,0,0,0],[0,0,0,0,1,0,0],[0,0,0,0,0,1,0],[0,0,0,0,0,0,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>school_pntg<\/th>\n      <th>D_FL<\/th>\n      <th>F<\/th>\n      <th>G<\/th>\n      <th>I<\/th>\n      <th>S<\/th>\n      <th>X<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-48f202f39a97a7f386e2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-48f202f39a97a7f386e2">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7"],["A","D/FL","F","G","I","S","X"],[0,1,0,0,0,0,0],[0,0,1,0,0,0,0],[0,0,0,1,0,0,0],[0,0,0,0,1,0,0],[0,0,0,0,0,1,0],[0,0,0,0,0,0,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>school_pntg<\/th>\n      <th>D_FL<\/th>\n      <th>F<\/th>\n      <th>G<\/th>\n      <th>I<\/th>\n      <th>S<\/th>\n      <th>X<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 ]
 
 ---
@@ -652,97 +652,6 @@ glance(m_ht_wt)$r.squared
 --
 
 The `\(R^2\)` is 68.29%.
-
----
-
-class: center, middle
-
-# Exploring linearity
-
----
-
-## Data: Paris Paintings
-
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
-
----
-
-## Price vs. width
-
-.question[
-Describe the relationship between price and width of painting.
-]
-
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
-
----
-
-### Let's focus on paintings with `Width_in &lt; 100`
-
-
-```r
-pp_wt_lt_100 &lt;- pp %&gt;% 
-  filter(Width_in &lt; 100)
-```
-
----
-
-## Price vs. width
-
-.question[
-Which plot shows a more linear relationship?
-]
-
-.small[
-  
-.pull-left[
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
-]
-
-]
-
----
-
-## Price vs. width, residuals
-
-.question[
-Which plot shows a residuals that are uncorrelated with predicted values from the model?
-]
-
-.small[
-  
-.pull-left[
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-![](07b-formalizing-linear-models_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
-]
-
-]
-
---
-
-.question[
-What's the unit of residuals?
-]
-
----
-
-## Transforming the data
-
-- We saw that `price` has a right-skewed distribution, and the relationship between price and width of painting is non-linear.
-
-- We also observed signs of the model violation, non-constant variance.
-
-- In these situations a transformation applied to the response variable (y) may be useful.
-    - The most common transformation is the log transformation `\((\log(y) = ln(y))\)` 
-    
-- This is beyond the scope of the course, but I'm happy to provide guidance if you want to try modeling a response that requires transformation in your final project
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
