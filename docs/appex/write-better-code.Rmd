@@ -114,3 +114,7 @@ median_price_colors %>%
 
 **[Click here](write-better-code-solutions.html) for example of revised code.**
 
+
+### Acknowledgements
+
+Thanks to Max Bartlett and Becky Tang for writing the code examples and solutions for this activity.

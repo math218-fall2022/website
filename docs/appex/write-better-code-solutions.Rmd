@@ -134,3 +134,8 @@ diamonds %>%
   arrange(desc(median_price)) %>%
   slice(1)
 ```
+
+
+### Acknowledgements
+
+Thanks to Max Bartlett and Becky Tang for writing the code examples and solutions for this activity.
