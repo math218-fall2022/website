@@ -1,7 +1,8 @@
 ---
-title: "Lab 06: Modeling course evaluations"
+title: "Lab 06"
+subtitle: "Modeling course evaluations"
 author: ""
-date: "02.21.19"
+date: "10.18.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -43,19 +44,15 @@ library(tidyverse)
 library(rvest)
 ```
 
-## Agenda
+### Agenda
 
-1. Reminders: 
-    - Review issues on repos with graded work
-    - Team feedback 1 due Friday at 11:59p (You received an email from Teammates yesterday. Check your spam if you don't see it.)
+1. Lab 06: Modeling course evaluations
 
-2. Lab 06: Modeling course evaluations
-
-3. Getting started with lab
+2. Getting started with lab
 
 ---
 
-## Lab 06: Modeling course evaluations
+### Lab 06: Modeling course evaluations
 
 - Many college courses give students the opportunity to evaluate the course and the instructor anonymously
 
@@ -63,19 +60,19 @@ library(rvest)
 
 ---
 
-## You've all seen something like this...
+### You've all seen something like this...
 
 ![](img/06/course-eval.jpg)
 
 ---
 
-## and then there's also this
+### and then there's also this
 
 ![](img/06/rmp.png)
 
 ---
 
-## Data comes from...
+### Data comes from...
 
 "Beauty in the classroom: instructors’ pulchritude and putative pedagogical productivity" 
 
@@ -83,7 +80,7 @@ Daniel S. Hamermesh, Amy Parker, Beauty in the classroom: instructors pulchritud
 
 ---
 
-## Some new challenges in this lab
+### Some new challenges in this lab
 
 - Dataset is not in your repo, you will need to download it to your computer first and upload it into the appropriate folder in your project (link in the Data section of lab instructions)
 
@@ -94,7 +91,7 @@ Daniel S. Hamermesh, Amy Parker, Beauty in the classroom: instructors pulchritud
 
 ---
 
-## Getting started with lab
+### Getting started with lab
 
 .small[
 - Go to the course GitHub organization and find the **lab-06** repo that has your team name on it.
@@ -109,13 +106,13 @@ Daniel S. Hamermesh, Amy Parker, Beauty in the classroom: instructors pulchritud
 
 ```{r eval=FALSE}
 library(usethis)
-use_git_config(user.name="your name", user.email="your email")
+use_git_config(user.name="github username", user.email="your email")
 ```
 ]
 
 ---
 
-## Caching your password
+### Caching your password
 
 You need to cache your password on a per-project basis: 
 
