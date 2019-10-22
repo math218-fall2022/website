@@ -1,0 +1,331 @@
+---
+title: "Multiple linear regression + Model selection"
+author: "Dr. Maria Tackett"
+date: "10.22.19"
+output:
+  xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    css: "sta199-slides.css"
+    logo: img/sta199-sticker-icon.png
+    lib_dir: libs
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"
+---
+
+layout: true
+
+<div class="my-footer">
+<span>
+<a href="http://datasciencebox.org" target="_blank">datasciencebox.org</a>
+</span>
+</div> 
+
+---
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(knitr)
+library(emo)
+library(DT)
+library(broom)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning=FALSE,
+                      message=FALSE,
+                      fig.height = 2.65, 
+                      dpi = 300) 
+# For nonsese...
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+# For magick
+dev.off <- function(){
+  invisible(grDevices::dev.off())
+}
+```
+
+```{r include=F}
+library(tidyverse)
+library(broom)
+```
+
+class: middle, center
+
+### [Click for PDF of slides](08b-mlr-model-select.pdf)
+
+---
+
+### Announcements
+
+- Lab 06 **due Wednesday at 11:59p**
+
+- Complete [Reading 06](https://www2.stat.duke.edu/courses/Fall19/sta199.001/reading/reading-06.html) for Thursday
+
+- Project proposal **due Friday at 11:59p**
+
+---
+
+class: center, middle
+
+## The linear model with multiple predictors
+
+---
+
+### Data: Riders in Florence, MA
+
+The Pioneer Valley Planning Commission collected data in Florence, MA for 90 days from April 5 to November 15, 2005 using a laser sensor, with breaks in the laser beam recording when a rail-trail user passed the data collection station.
+
+- `hightemp`: daily high temperature (in degrees Fahrenheit)
+- `volume`:  estimated number of trail users that day (number of breaks recorded)
+- `dayType`: weekday or weekend
+
+```{r}
+library(mosaicData)
+data(RailTrail)
+```
+
+---
+
+### Main effects, numerical and categorical predictors
+
+```{r echo=FALSE}
+m_main <- lm(volume ~ hightemp + dayType, data = RailTrail)
+tidy(m_main) %>%
+  select(term, estimate) %>% kable(format = "markdown", digits = 3)
+m_main_coefs <- tidy(m_main) 
+```
+
+.midi[
+- For each additional degree Fahrenheit in the day's high temperature, there are predicted to be, on average, `r m_main_coefs %>% filter(term == "hightemp") %>% pull(estimate)` (about 5) additional riders on the trail, holding all else constant.
+
+- Days on the weekend are predicted to have, on average, `r m_main_coefs %>% filter(term == "dayTypeweekend") %>% pull(estimate)` (about 52) more riders on the trail than days that are weekdays, holding all else constant.  
+
+- Weekdays that have a high temperature of 0 degrees Fahrenheit are predicted to have `r m_main_coefs %>% filter(term == "(Intercept)") %>% pull(estimate)` (about -9) riders, on average.
+]
+
+---
+
+### Modeling with interaction effects
+
+.small[
+```{r}
+m_int <- lm(volume ~ hightemp + dayType + hightemp*dayType, 
+            data = RailTrail)
+kable(tidy(m_int) %>% select(term, estimate), format = "html", digits = 3)
+```
+]
+
+$$\small{\widehat{volume} = \\
+-51.224 + 5.980~hightemp + 186.377~dayTypeweekend - 1.906~hightemp \times dayTypeweekend}$$
+
+---
+
+### Practice
+
+Suppose you wish to fit a model using `hightemp` and `summer` to predict the number of riders on a trail. `summer` is 1 if the day is during the summer, 0 otherwise. 
+
+```{r echo = F}
+RailTrail <- RailTrail %>% mutate(summer = as.factor(summer))
+m_int2 <- lm(volume ~ hightemp + summer + hightemp*summer, data = RailTrail)
+kable(tidy(m_int2) %>% select(term, estimate), format = "html", digits = 3)
+```
+
+.question[
+1. Interpret the coefficient of `summer1`. 
+2. Write the model equation for days that are <u>not</u> during the summer. 
+3. Write the model equation for days that are during the summer.
+4. Interpret the coefficient of `highTemp` for days during the summer.
+]
+---
+
+class: center, middle
+
+### Quality of fit in MLR
+
+---
+
+### $R^2$
+
+- $R^2$ is the percentage of variability in the response variable explained by the 
+regression model.
+
+```{r}
+glance(m_main)$r.squared
+glance(m_int)$r.squared
+```
+
+--
+
+- Clearly the model with interactions has a higher $R^2$.
+
+--
+
+- However using $R^2$ for model selection in models with multiple explanatory 
+variables is not a good idea as $R^2$ increases when **<u>any</u>** variable is added to the 
+model.
+
+---
+
+### $R^2$ - first principles
+
+$$ R^2 =  \frac{ SS\_{Reg} }{ SS\_{Total} } = 1 - \left( \frac{ SS\_{Error} }{ SS\_{Total} } \right) $$
+
+.question[
+Calculate $R^2$ based on the output below.
+]
+
+```{r digits = 3}
+anova(m_main)
+```
+
+---
+
+### Adjusted $R^2$
+
+.question[
+$$ R^2\_{adj} = 1 - \left( \frac{ SS\_{Error} }{ SS\_{Total} } \times \frac{n - 1}{n - k - 1} \right), $$
+]
+
+where $n$ is the number of cases and $k$ is the number of predictors in the model
+
+--
+
+- Adjusted $R^2$ doesn't increase if the new variable does not provide any new 
+informaton or is completely unrelated.
+
+--
+
+- This makes adjusted $R^2$ a preferable metric for model selection in multiple
+regression models.
+
+---
+
+### In pursuit of Occam's Razor
+
+- Occam's Razor states that among competing hypotheses that predict equally well, 
+the one with the fewest assumptions should be selected.
+
+- Model selection follows this principle.
+
+- We only want to add another variable to the model if the addition of that
+variable brings something valuable in terms of predictive power to the model.
+
+- In other words, we prefer the simplest best model, i.e. <font class="vocab">parsimonious</font> model.
+
+---
+
+### Comparing models
+
+It appears that adding the interaction actually increased adjusted $R^2$, so we 
+should indeed use the model with the interactions.
+
+```{r}
+glance(m_main)$adj.r.squared
+glance(m_int)$adj.r.squared
+```
+
+---
+
+class: center, middle
+
+### Model selection
+
+---
+
+### Backwards elimination
+
+- Start with **full** model (including all candidate explanatory variables and all
+candidate interactions)
+
+- Remove one variable at a time, and select the model with the highest adjusted $R^2$
+
+- Continue until adjusted $R^2$ does not increase
+
+---
+
+### Forward selection
+
+- Start with **empty** model
+
+- Add one variable (or interaction effect) at a time, and select the model with the 
+highest adjusted $R^2$
+
+- Continue until adjusted $R^2$ does not increase
+
+---
+
+### Model selection and interaction effects
+
+If an interaction is included in the model, the main effects of both of
+those variables must also be in the model
+
+If a main effect is not in the model, then its interaction should not be 
+in the model.
+
+---
+
+### Other model selection criteria
+
+- Adjusted $R^2$ is one model selection criterion
+
+- There are others out there (many many others!), we'll discuss some later in the 
+course, and you may see some in future courses
+
+---
+
+class: center, middle
+
+### Your turn
+
+---
+
+### What's the ultimate Halloween candy?
+
+- In the 2017 article, [The Ultimate Halloween Candy Power Ranking](https://fivethirtyeight.com/features/the-ultimate-halloween-candy-power-ranking/), Walt Hickey from FiveThirtyEight sought to find the best Halloween candy. 
+
+- To collect data, [random candy matchups](http://walthickey.com/2017/10/18/whats-the-best-halloween-candy/) were generated and users selected their favorite of the two candies
+  - There were about 296,000 matchups voted on by users from 8,371 different IP addresses
+ 
+---
+
+### The Dataset
+
+- We will use the .vocab[`candy_rankings`] dataset in the fivethirtyeight package 
+
+- Each row contains the characteristics and win percentage for a certain candy
+
+- The response variable is `winpercent`, the overall percentage of times a candy won according to the 296,000 matchups
+
+- type `??candy_rankings` in the console to see the other variables in the dataset
+
+---
+
+### Your turn
+
+- Work with your lab group in Rstudio Cloud 
+
+- .vocab[Project]: Ultimate Candy Rankings - Model Selection 
+
+- .vocab[Task]:
+    - Use backwards elimination to do model selection. Make sure to show each step of decision (though you don't have to interpret the models at each stage).
+    - Provide interpretations for the slopes for your final model and create at least one visualization that supports your narrative.
+
+- 2 groups will be picked to share their results 
+
+---
+
+### Planning
+
+- You want to consider at least two interactions in the model 
+    - The interactions should be between a categorical variable and a numeric variable 
+    
+- Remember if an interaction term is in the model, the main effects should also be in the model
+    
+- Consider 7 - 10 variables (including interactions) for the model
+
+
+
+
