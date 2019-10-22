@@ -277,8 +277,7 @@ variable brings something valuable in terms of predictive power to the model.
 
 ### Comparing models
 
-It appears that adding the interaction actually increased adjusted `\(R^2\)`, so we 
-should indeed use the model with the interactions.
+It appears that adding the interaction actually increased adjusted `\(R^2\)`, so for now we'll use the model with the interactions
 
 
 ```r
@@ -296,7 +295,6 @@ glance(m_int)$adj.r.squared
 ```
 ## [1] 0.3600599
 ```
-
 ---
 
 class: center, middle
@@ -400,7 +398,7 @@ ggplot(data = candy_rankings, aes(x = winpercent)) +
     - Use backwards elimination to do model selection. Make sure to show each step of decision (though you don't have to interpret the models at each stage).
     - Provide interpretations for the slopes for your final model and create at least one visualization that supports your narrative.
 
-- 2 groups will be picked to share their results 
+- We'll have two groups share their results in the beginning of next class
 
 ---
 
