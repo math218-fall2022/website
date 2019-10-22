@@ -358,7 +358,7 @@ class: center, middle
 
 - To collect data, [random candy matchups](http://walthickey.com/2017/10/18/whats-the-best-halloween-candy/) were generated and users selected their favorite of the two candies
   - There were about 296,000 matchups voted on by users from 8,371 different IP addresses
- 
+
 ---
 
 ### The Dataset
@@ -370,6 +370,23 @@ class: center, middle
 - The response variable is `winpercent`, the overall percentage of times a candy won according to the 296,000 matchups
 
 - type `??candy_rankings` in the console to see the other variables in the dataset
+
+---
+
+### Distribution of response: `winpercent`
+
+
+
+
+
+```r
+ggplot(data = candy_rankings, aes(x = winpercent)) + 
+  geom_histogram() +
+  labs(x = "Percentage of Wins", 
+       title = "Distribution of the Response: Win Percentage")
+```
+
+![](08b-mlr-model-select_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
 ---
 
