@@ -11,7 +11,7 @@
 
 
 
-<meta name="date" content="2019-10-21" />
+<meta name="date" content="2019-10-24" />
 
 <title>Ultimate Candy Rankings - Model Selection</title>
 
@@ -363,11 +363,23 @@ summary {
 
 
 <h1 class="title toc-ignore">Ultimate Candy Rankings - Model Selection</h1>
-<h4 class="date">2019-10-21</h4>
+<h4 class="date">2019-10-24</h4>
 
 </div>
 
 
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────── tidyverse 1.2.1 ──</code></pre>
+<pre><code>## ✔ ggplot2 3.2.1       ✔ purrr   0.3.2  
+## ✔ tibble  2.1.3       ✔ dplyr   0.8.0.1
+## ✔ tidyr   0.8.1       ✔ stringr 1.4.0  
+## ✔ readr   1.3.1       ✔ forcats 0.3.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(fivethirtyeight)
+library(broom)
+library(knitr)</code></pre>
 <ul>
 <li><p>In your R Markdown file, load the fivethirtyeight package along with other packages required for analysis.</p></li>
 <li><p>We will use the <code>candy_rankings</code> dataset for this analysis. Type <code>??candy_rankings</code> to see the variable names and definitions.</p></li>
@@ -387,6 +399,141 @@ summary {
 <li>Yes, this is tedious. And yes, there are ways of automating it. But for now, go through the process “manually”, to get a good sense of how the model selection algorithm works.</li>
 <li>Provide interpretations for the slopes for the final model you arrive at and create at least one visualization that supports your narrative.</li>
 </ul>
+</div>
+<div id="example-solution" class="section level3">
+<h3>Example Solution</h3>
+<p>Let’s suppose I start with the variables:</p>
+<p><code>chocolate</code>, <code>fruity</code>, <code>nougat</code>, <code>pricepercent</code>, <code>sugarpercent</code>, <code>sugarpercent*chocolate</code>, <code>pricepercent*fruity</code></p>
+<p><strong>Step 0: Full Model</strong></p>
+<pre class="r"><code>full &lt;- lm(winpercent ~ chocolate + fruity + nougat + pricepercent + sugarpercent +
+             sugarpercent*chocolate + pricepercent*fruity, data = candy_rankings)
+glance(full)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.425307</code></pre>
+<p><strong>Step 1: All possible models removing 1 term at a time from the full model</strong></p>
+<pre class="r"><code>#remove chocolate and it&#39;s associated interaction
+step1 &lt;- lm(winpercent ~ fruity + nougat + pricepercent + sugarpercent + pricepercent*fruity, data = candy_rankings)
+glance(step1)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.2391039</code></pre>
+<pre class="r"><code>#remove fruity and it&#39;s associated interaction
+step1 &lt;- lm(winpercent ~ chocolate + nougat + pricepercent + sugarpercent + sugarpercent*chocolate,
+            data = candy_rankings)
+glance(step1)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4068991</code></pre>
+<pre class="r"><code>#remove nougat
+step1 &lt;- lm(winpercent ~ chocolate + fruity + pricepercent + sugarpercent + sugarpercent*chocolate +
+              pricepercent*fruity, data = candy_rankings)
+glance(step1)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4318255</code></pre>
+<pre class="r"><code>#remove pricepercent and its associated interactions
+step1 &lt;- lm(winpercent ~ chocolate + fruity + nougat + sugarpercent + 
+              sugarpercent*chocolate, data = candy_rankings)
+glance(step1)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4233822</code></pre>
+<pre class="r"><code>#remove sugarpercent*chocolate
+step1 &lt;- lm(winpercent ~ chocolate + fruity + nougat + sugarpercent + pricepercent +
+              pricepercent*fruity, data = candy_rankings)
+glance(step1)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4291193</code></pre>
+<pre class="r"><code>#remove pricepercent*fruity
+step1 &lt;- lm(winpercent ~ chocolate + fruity + nougat + sugarpercent + pricepercent +
+              sugarpercent*chocolate, data = candy_rankings)
+glance(step1)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4164148</code></pre>
+<p>Of the models from Step 0 and Step 1, the model with the highest adjusted <span class="math inline">\(R^2\)</span> is the one with <code>nougat</code> removed. Therefore, we will go to Step 2 eliminating one variable at a time from that model.</p>
+<p><strong>Step 2: All possible models removing 1 term at a time from the model selected in the previous step</strong></p>
+<pre class="r"><code>#remove chocolate and its associated interactions
+step2 &lt;- lm(winpercent ~ fruity + pricepercent + sugarpercent +
+              pricepercent*fruity, data = candy_rankings)
+glance(step2)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.2438859</code></pre>
+<pre class="r"><code>#remove fruity and its associated interactions
+step2 &lt;- lm(winpercent ~ chocolate + pricepercent + sugarpercent + 
+              sugarpercent*chocolate,  data = candy_rankings)
+glance(step2)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.414247</code></pre>
+<pre class="r"><code>#remove pricepercent and its associated interactions
+step2 &lt;- lm(winpercent ~ chocolate + fruity + sugarpercent + 
+              sugarpercent*chocolate,  data = candy_rankings)
+glance(step2)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4299143</code></pre>
+<pre class="r"><code>#remove sugarpercent*chocolate
+step2 &lt;- lm(winpercent ~ chocolate + fruity + sugarpercent + pricepercent +
+              pricepercent*fruity,  data = candy_rankings)
+glance(step2)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4348899</code></pre>
+<pre class="r"><code>#remove pricepercent*fruity
+step2 &lt;- lm(winpercent ~ chocolate + fruity + sugarpercent + pricepercent +
+              sugarpercent*chocolate,  data = candy_rankings)
+glance(step2)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4231559</code></pre>
+<p>The model with <code>sugarpercent*chocolate</code> has the highest <span class="math inline">\(R^2\)</span> of all the models we’ve tested so far, so we will now go to Step 3 eliminating one variable at a time from this model.</p>
+<p><strong>Step 3: All possible models removing 1 term at a time from the model selected in the previous step</strong></p>
+<pre class="r"><code>#remove chocolate 
+step3 &lt;- lm(winpercent ~ fruity + sugarpercent + pricepercent + pricepercent*fruity,  data = candy_rankings)
+glance(step3)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.2438859</code></pre>
+<pre class="r"><code>#remove fruity and its associated interactions 
+step3 &lt;- lm(winpercent ~ chocolate + sugarpercent + pricepercent,  data = candy_rankings)
+glance(step3)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4116449</code></pre>
+<pre class="r"><code>#remove sugarpercent
+step3 &lt;- lm(winpercent ~ chocolate + fruity + pricepercent +pricepercent*fruity, 
+            data = candy_rankings)
+glance(step3)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4196533</code></pre>
+<pre class="r"><code>#remove pricepercent and its associated interactions
+step3 &lt;- lm(winpercent ~ chocolate + fruity + sugarpercent, 
+            data = candy_rankings)
+glance(step3)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4273057</code></pre>
+<pre class="r"><code>#remove pricepercent*fruity 
+step3 &lt;- lm(winpercent ~ chocolate + fruity + sugarpercent + pricepercent, 
+            data = candy_rankings)
+glance(step3)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4202664</code></pre>
+<p>None of the models in Step 3 resulted in a higher adjusted <span class="math inline">\(R^2\)</span>. Therefore our final model is the one selected in Step 2. It is</p>
+<pre class="r"><code>selected_model &lt;- lm(winpercent ~ chocolate + fruity + sugarpercent + pricepercent +
+              pricepercent*fruity,  data = candy_rankings)
+
+tidy(selected_model) %&gt;% 
+  select(term, estimate) %&gt;% 
+  kable(format = &quot;markdown&quot;, digits = 3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">term</th>
+<th align="right">estimate</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="right">31.475</td>
+</tr>
+<tr class="even">
+<td align="left">chocolateTRUE</td>
+<td align="right">20.772</td>
+</tr>
+<tr class="odd">
+<td align="left">fruityTRUE</td>
+<td align="right">11.809</td>
+</tr>
+<tr class="even">
+<td align="left">sugarpercent</td>
+<td align="right">8.102</td>
+</tr>
+<tr class="odd">
+<td align="left">pricepercent</td>
+<td align="right">6.897</td>
+</tr>
+<tr class="even">
+<td align="left">fruityTRUE:pricepercent</td>
+<td align="right">-17.422</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>glance(selected_model)$adj.r.squared</code></pre>
+<pre><code>## [1] 0.4348899</code></pre>
 </div>
 
 
