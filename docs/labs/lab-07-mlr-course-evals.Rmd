@@ -1,7 +1,7 @@
 ---
 title: "Lab 07 - Modeling course evaluations, Pt. 2"
-subtitle: "Multiple predictors"
-date: "due Mon, Mar 4 at 11:59p"
+subtitle: "Total: 100 points"
+date: "due Wed, Oct 30 at 11:59p"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
@@ -27,7 +27,7 @@ If you don't remember the data, review the previous lab's introduction before co
 
 # Getting started
 
-- Go to the course organization on GitHub: [http://github.com/STA199-Sp19](http://github.com/STA199-Sp19). 
+- Go to the course organization on GitHub: [http://github.com/sta199-fa19](http://github.com/sta199-fa19). 
 
 - Find the repo starting with `lab-07` and that has your team name at the end.
 
@@ -87,8 +87,9 @@ Now, the remaining team members who have not been concurrently making these chan
 
 In this lab you will first download the data, then upload it to the `data/` folder in your RStudio Cloud project.
 
-- Click [here](http://www2.stat.duke.edu/courses/Spring19/sta199.001/labs/data/evals-mod.csv) to download the data. The file is called `evals-mod.csv`.
+- Click [here](http://www2.stat.duke.edu/courses/Fall19/sta199.001/labs/data/evals-mod.csv) to download the data. The file is called `evals-mod.csv`.
 - Navigate to the data folder in your project and upload the `evals-mod.csv` file.
+- The codebook is available in the data section of [Lab 06](https://www2.stat.duke.edu/courses/Fall19/sta199.001/labs/lab-06-modeling-course-evals.html). 
 
 # Exercises
 
@@ -102,37 +103,35 @@ In this lab you will first download the data, then upload it to the `data/` fold
 
 ## Part 2: Multiple linear regression
 
-2. Fit a linear model (one you have fit before): `m_bty_gen`, predicting average
-   professor evaluation `score` based on average beauty rating (`bty_avg`) and `gender`. 
+2. Fit a linear model (one you have fit before) predicting average
+   professor evaluation `score` based on average beauty rating (`bty_avg`) and `sex`. 
    Write the linear model, and note the $R^2$ and the adjusted $R^2$.
    
-3. Interpret the slope and intercept of `m_bty_gen` in context of the data.
+3. Interpret the slope and intercept of the model in Exercise 3 in context of the data.
 
-4. What percent of the variability in `score` is explained by the model `m_bty_gen`?
+4. What percent of the variability in `score` is explained by the model in Exercise 3?
 
 5.  What is the equation of the line corresponding to *just* male professors?
     
-6.  For two professors who received the same beauty rating, which gender tends 
+6.  For two professors who received the same beauty rating, which sex tends 
     to have the higher course evaluation score?
     
 7. How does the relationship between beauty and evaluation score
     vary between male and female professors?
     
-8. How do the adjusted $R^2$ values of `m_bty_gen` and `m_bty` compare? What does this tell us 
-   about how useful `gender` is in explaining the variability in evaluation scores when we 
+8. How do the adjusted $R^2$ values of the models from Exercises 2 and 3 compare? What does this tell us 
+   about how useful `sex` is in explaining the variability in evaluation scores when we 
    already have information on the beaty score of the professor.
 
-9. Compare the slopes of `bty_avg` under the two models (`m_bty` and `m_bty_gen`). Has the 
-   addition of `gender` to the model changed the parameter estimate (slope) for `bty_avg`?
+9. Compare the slopes of `bty_avg` under the two models. Has the 
+   addition of `sex` to the model changed the parameter estimate (slope) for `bty_avg`?
     
-10. Create a new model called `m_bty_rank` with `gender` removed and `rank` 
-    added in. Write the equation of the linear model and interpret the slopes and intercept 
-    in context of the data. 
+10. Create a new model called `m_bty_rank` using `rank` and `bty_avg` to predict `score`. Write the equation of the linear model and interpret the slopes and intercept in context of the data. 
 
 ## Part 3: The search for the best model
 
 Going forward, only consider the following variables as potential predictors: `rank`, 
-`ethnicity`, `gender`, `language`, `age`, `cls_perc_eval`, `cls_did_eval`, `cls_students`, 
+`ethnicity`, `sex`, `language`, `age`, `cls_perc_eval`, `cls_did_eval`, `cls_students`, 
 `cls_level`, `cls_profs`, `cls_credits`, `bty_avg`.
 
 11. Which variable, on its own, would you expect to be the worst predictor of 
