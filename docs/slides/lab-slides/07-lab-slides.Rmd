@@ -1,8 +1,8 @@
 ---
-title: "Lab 07: Modeling Course Evaluations, Pt. 2"
+title: "Lab 07"
 subtitle: "Multiple regression"
 author: ""
-date: "02.28.19"
+date: "10.25.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -51,9 +51,10 @@ library(rvest)
 2. Lab 07: Modeling course evaluations, Pt. 2
 
 3. Getting started with the lab
-    - Note about Git config
 
 ---
+
+class: middle, center
 
 ##Questions from last time? 
 
@@ -77,15 +78,11 @@ library(rvest)
 
 ---
 
-### The Challenge of Multiple Modeling
+### The Challenge of multiple regression
+
+- Obtaining *parsimonious* models
 
 - Problems with *collinearity* 
-
-- *Parsimonious* models
-
-```{r echo=F,out.width="30%", fig.align="center"}
-knitr::include_graphics("img/07/tackle.png")
-```
 
 example from: 
 http://blog.minitab.com/blog/understanding-statistics/handling-multicollinearity-in-regression-analysis
@@ -118,7 +115,7 @@ http://blog.minitab.com/blog/understanding-statistics/handling-multicollinearity
 
 ```{r eval=FALSE}
 library(usethis)
-use_git_config(user.name="your name", user.email="your email")
+use_git_config(user.name="github username", user.email="your email")
 ```
 ]
 
