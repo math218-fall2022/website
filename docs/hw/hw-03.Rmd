@@ -108,7 +108,7 @@ data. *Hint: You will need to use one of the variables you created above.*
 
 11. Fit a full model predicting total daily bike rentals from season, year, whether the day is holiday or not, whether the day is a working day or not, the weather category, temperature, feeling temperature, humidity, and windspeed, as well as the interaction between at least one numerical and one categorical variable.
 
-12. Perform backward selection using adjusted $R^2$ as the decision criterion to find the "best" model. Provide the model output for the final model.
+12. Perform backward selection using $AIC$ as the decision criterion to find the "best" model. Provide the model output for the final model.
 
 13. Interpret slope coefficients associated with two of the variables in your final model in context of the data. Note: If one of these is categorical with multiple levels, make sure you interpret all of the slope coefficients associated with the levels of the variable.
 

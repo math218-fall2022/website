@@ -559,7 +559,8 @@ font-size: 10pt;
 <li><p>Check your suspicions from the previous exercise. Include the model output for that variable in your response.</p></li>
 <li><p>Suppose you wanted to fit a full model with the variables listed above. If you are already going to include <code>cls_perc_eval</code> and <code>cls_students</code>, which variable should you not include as an additional predictor? Why?</p></li>
 <li><p>Fit a full model with all predictors listed above (except for the one you decided to exclude) in the previous question.</p></li>
-<li><p>Using backward-selection with adjusted R-squared as the selection criterion, determine the <em>best</em> model. You do not need to show all steps in your answer, just the output for the final model. Also, write out the linear model for predicting score based on the final model you settle on.</p></li>
+<li><p>Using backward-selection with <span class="math inline">\(AIC\)</span> as the selection criterion, determine the <em>best</em> model. You do not need to show all steps in your answer, just the output for the final model. Also, write out the equation of linear model for predicting score based on your results.</p>
+<p>Include <code>results = &quot;hide&quot;</code> in the code chunk header to suppress the output from the <code>step</code> function.</p></li>
 <li><p>Interpret the slopes of one numerical and one categorical predictor based on your final model.</p></li>
 <li><p>Based on your final model, describe the characteristics of a professor and course at University of Texas at Austin that would be associated with a high evaluation score.</p></li>
 <li><p>Would you be comfortable generalizing your conclusions to apply to professors generally (at any university)? Why or why not?</p></li>

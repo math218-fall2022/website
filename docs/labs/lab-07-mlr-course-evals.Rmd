@@ -148,12 +148,13 @@ Going forward, only consider the following variables as potential predictors: `r
 14. Fit a full model with all predictors listed above (except for the one you decided to 
     exclude) in the previous question.
 
-15. Using backward-selection with adjusted R-squared as the selection 
+15. Using backward-selection with $AIC$ as the selection 
     criterion, determine the *best* model. You do not need to show all 
     steps in your answer, just the output for the final model. Also, 
-    write out the linear model for predicting score based on the final 
-    model you settle on.
-
+    write out the equation of linear model for predicting score based on your results. 
+    
+    Include `results = "hide"` in the code chunk header to suppress the output from the `step` function.
+    
 16. Interpret the slopes of one numerical and one categorical predictor based on your final model.
 
 17. Based on your final model, describe the characteristics of a professor and 
