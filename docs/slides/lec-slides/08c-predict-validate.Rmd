@@ -236,9 +236,77 @@ why some of them may have been dropped? Remember: We like parsimonious models.
 
 ---
 
+
+class: center, middle
+
+# Prediction
+
+---
+
+### New observation
+
+To make a prediction for a new observation we need to create a data frame with that observation.
+
+<div class="question">
+Suppose we want to make a prediction for a candy that contains chocolate, isn't fruity, has no peanuts or almonds, has a wafer, isn't hard, and has a sugar content in the 20th percentile.
+<br><br>
+The following will result in an incorrect prediction. Why? How would you correct it?
+</div>
+
+```{r}
+new_candy <- tibble(chocolate = TRUE, 
+                       fruity = FALSE, 
+                       peanutyalmondy = FALSE, 
+                       crispedricewafer = TRUE,
+                       hard = FALSE, 
+                       sugarpercent = 20)
+```
+
+---
+
+### New observation, corrected
+
+```{r}
+new_candy <- tibble(chocolate = TRUE, 
+                       fruity = FALSE, 
+                       peanutyalmondy = FALSE, 
+                       crispedricewafer = TRUE,
+                       hard = FALSE, 
+                       sugarpercent = 0.20)
+
+```
+
+---
+
+### Prediction
+
+```{r}
+predict(selected_model, newdata = new_candy)
+```
+
+---
+
+### Uncertainty around prediction
+
+- Confidence interval around $\hat{y}$ for new data (average win percentage for candy types with the given characteristics):
+
+```{r}
+predict(selected_model, newdata = new_candy, interval = "confidence")
+```
+
+- Prediction interval around $\hat{y}$ for new data (predicted score for an individual type of candy with the given characteristics ):
+
+```{r}
+predict(selected_model, newdata = new_candy, interval = "prediction")
+```
+
+---
+
 class: center, middle
 
 # Model validation
+
+**(optional, supplementary material)**
 
 ---
 
@@ -547,69 +615,5 @@ rmses <- map2_dbl(models, candy_rankings_cv$test, rmse)
 rmses
 ```
 
----
 
-
-class: center, middle
-
-# Prediction
-
----
-
-### New observation
-
-To make a prediction for a new observation we need to create a data frame with that observation.
-
-<div class="question">
-Suppose we want to make a prediction for a candy that contains chocolate, isn't fruity, has no peanuts or almonds, has a wafer, isn't hard, and has a sugar content in the 20th percentile.
-<br><br>
-The following will result in an incorrect prediction. Why? How would you correct it?
-</div>
-
-```{r}
-new_candy <- tibble(chocolate = TRUE, 
-                       fruity = FALSE, 
-                       peanutyalmondy = FALSE, 
-                       crispedricewafer = TRUE,
-                       hard = FALSE, 
-                       sugarpercent = 20)
-```
-
----
-
-### New observation, corrected
-
-```{r}
-new_candy <- tibble(chocolate = TRUE, 
-                       fruity = FALSE, 
-                       peanutyalmondy = FALSE, 
-                       crispedricewafer = TRUE,
-                       hard = FALSE, 
-                       sugarpercent = 0.20)
-
-```
-
----
-
-### Prediction
-
-```{r}
-predict(selected_model, newdata = new_candy)
-```
-
----
-
-### Uncertainty around prediction
-
-- Confidence interval around $\hat{y}$ for new data (average win percentage for candy types with the given characteristics):
-
-```{r}
-predict(selected_model, newdata = new_candy, interval = "confidence")
-```
-
-- Prediction interval around $\hat{y}$ for new data (predicted score for an individual type of candy with the given characteristics ):
-
-```{r}
-predict(selected_model, newdata = new_candy, interval = "prediction")
-```
 

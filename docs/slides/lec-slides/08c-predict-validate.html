@@ -263,9 +263,96 @@ why some of them may have been dropped? Remember: We like parsimonious models.
 
 ---
 
+
+class: center, middle
+
+# Prediction
+
+---
+
+### New observation
+
+To make a prediction for a new observation we need to create a data frame with that observation.
+
+&lt;div class="question"&gt;
+Suppose we want to make a prediction for a candy that contains chocolate, isn't fruity, has no peanuts or almonds, has a wafer, isn't hard, and has a sugar content in the 20th percentile.
+&lt;br&gt;&lt;br&gt;
+The following will result in an incorrect prediction. Why? How would you correct it?
+&lt;/div&gt;
+
+
+```r
+new_candy &lt;- tibble(chocolate = TRUE, 
+                       fruity = FALSE, 
+                       peanutyalmondy = FALSE, 
+                       crispedricewafer = TRUE,
+                       hard = FALSE, 
+                       sugarpercent = 20)
+```
+
+---
+
+### New observation, corrected
+
+
+```r
+new_candy &lt;- tibble(chocolate = TRUE, 
+                       fruity = FALSE, 
+                       peanutyalmondy = FALSE, 
+                       crispedricewafer = TRUE,
+                       hard = FALSE, 
+                       sugarpercent = 0.20)
+```
+
+---
+
+### Prediction
+
+
+```r
+predict(selected_model, newdata = new_candy)
+```
+
+```
+##        1 
+## 62.06853
+```
+
+---
+
+### Uncertainty around prediction
+
+- Confidence interval around `\(\hat{y}\)` for new data (average win percentage for candy types with the given characteristics):
+
+
+```r
+predict(selected_model, newdata = new_candy, interval = "confidence")
+```
+
+```
+##        fit      lwr      upr
+## 1 62.06853 53.65186 70.48519
+```
+
+- Prediction interval around `\(\hat{y}\)` for new data (predicted score for an individual type of candy with the given characteristics ):
+
+
+```r
+predict(selected_model, newdata = new_candy, interval = "prediction")
+```
+
+```
+##        fit      lwr      upr
+## 1 62.06853 39.54943 84.58762
+```
+
+---
+
 class: center, middle
 
 # Model validation
+
+**(optional, supplementary material)**
 
 ---
 
@@ -591,7 +678,7 @@ ggplot(data = rmse_candy, mapping = aes(x = test_fold, y = rmse_test)) +
   geom_line()
 ```
 
-![](08c-predict-validate_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](08c-predict-validate_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -700,91 +787,6 @@ rmses
 ```
 ##         1         2         3         4         5 
 ## 10.877690  9.373646 10.881654  7.517380 13.240856
-```
-
----
-
-
-class: center, middle
-
-# Prediction
-
----
-
-### New observation
-
-To make a prediction for a new observation we need to create a data frame with that observation.
-
-&lt;div class="question"&gt;
-Suppose we want to make a prediction for a candy that contains chocolate, isn't fruity, has no peanuts or almonds, has a wafer, isn't hard, and has a sugar content in the 20th percentile.
-&lt;br&gt;&lt;br&gt;
-The following will result in an incorrect prediction. Why? How would you correct it?
-&lt;/div&gt;
-
-
-```r
-new_candy &lt;- tibble(chocolate = TRUE, 
-                       fruity = FALSE, 
-                       peanutyalmondy = FALSE, 
-                       crispedricewafer = TRUE,
-                       hard = FALSE, 
-                       sugarpercent = 20)
-```
-
----
-
-### New observation, corrected
-
-
-```r
-new_candy &lt;- tibble(chocolate = TRUE, 
-                       fruity = FALSE, 
-                       peanutyalmondy = FALSE, 
-                       crispedricewafer = TRUE,
-                       hard = FALSE, 
-                       sugarpercent = 0.20)
-```
-
----
-
-### Prediction
-
-
-```r
-predict(selected_model, newdata = new_candy)
-```
-
-```
-##        1 
-## 62.06853
-```
-
----
-
-### Uncertainty around prediction
-
-- Confidence interval around `\(\hat{y}\)` for new data (average win percentage for candy types with the given characteristics):
-
-
-```r
-predict(selected_model, newdata = new_candy, interval = "confidence")
-```
-
-```
-##        fit      lwr      upr
-## 1 62.06853 53.65186 70.48519
-```
-
-- Prediction interval around `\(\hat{y}\)` for new data (predicted score for an individual type of candy with the given characteristics ):
-
-
-```r
-predict(selected_model, newdata = new_candy, interval = "prediction")
-```
-
-```
-##        fit      lwr      upr
-## 1 62.06853 39.54943 84.58762
 ```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
