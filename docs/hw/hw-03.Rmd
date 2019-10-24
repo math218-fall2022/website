@@ -1,6 +1,7 @@
 ---
 title: "HW 03 - Bike rentals in DC"
-date: "due Mon, Mar 4 at 11:59p"
+subtitle: "due Thu, Oct 31 at 11:59p"
+date: "Total: 100 points"
 output: 
     html_document: 
      css: "./sta199-hw.css"
@@ -105,7 +106,7 @@ data. *Hint: You will need to use one of the variables you created above.*
 
 10. Fit another linear model predicting total daily bike rentals from daily feeling temperature. Write the linear model, interpret the slope and the intercept in context of the data, and determine and interpret the $R^2$. Is temperature or feeling temperature a better predictor of bike rentals?
 
-11. Fit a full model predicting total daily bike rentals from season, year, whether the day is holiday or not, whether the day is a workingday or not, the weather category, temperature, feeling temperature, humidity, and windspeed, as well as the interaction between at least one numerical and one categorical variable.
+11. Fit a full model predicting total daily bike rentals from season, year, whether the day is holiday or not, whether the day is a working day or not, the weather category, temperature, feeling temperature, humidity, and windspeed, as well as the interaction between at least one numerical and one categorical variable.
 
 12. Perform backward selection using adjusted $R^2$ as the decision criterion to find the "best" model. Provide the model output for the final model.
 
@@ -115,18 +116,16 @@ data. *Hint: You will need to use one of the variables you created above.*
 
 ## Getting help
 
-Use Piazza to ask questions about the assignment. 
+Attend office hours or use Piazza to ask questions about the assignment. 
 
-You are also welcomed to discuss the homework with each other broadly (no sharing code!) as well as ask questions at office hours.
+You are also welcomed to discuss the homework with each other broadly, but no sharing code!
 
 ## Grading
-
 In addition to accuracy of your answers to questions, your homework submission will be 
 evaluated for
 
 - coding style
 - informatively named code chunks
-- commit after each question (at a minimum, more commits ok)
-- informative commit messages
+- at least 3 informative commits (recommend more often)
 - document organization
-- quality of narrative writing
+- quality narratives.
