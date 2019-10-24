@@ -156,7 +156,7 @@ lessons:
  - date: "Thu, Oct 24"
    title: "Prediction + model validation "
    reading: "reading-06.html"
- #slides: "lec-slides/08b-bootstrap.html"
+   slides: "lec-slides/08c-predict-validate.html"
  - date: "Fri, Oct 25"
    title: "Lab 07"
  #lab: "lab-08-bootstrap.html"
