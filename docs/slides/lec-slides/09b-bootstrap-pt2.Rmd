@@ -1,5 +1,5 @@
 ---
-title: "Inference overview"
+title: "Confidence Intervals via Bootstrapping"
 author: "Dr. Maria Tackett"
 date: "Halloween 2019 `r emo::ji('jack_o_lantern')`"
 output:
@@ -76,6 +76,8 @@ class: middle, center
 
 - Review proposal comments in the "Issue" of your GitHub repo
     - Data Analysis due Friday, November 15
+
+- [Extra credit](https://www2.stat.duke.edu/courses/Fall19/sta199.001/ec/ec.html)
 ---
 
 ## Packages 
@@ -179,7 +181,6 @@ manhattan %>%
 ```
 
 ---
----
 
 ### Accuracy vs. precision
 
@@ -234,6 +235,14 @@ visualize(sd_boot_dist)
 ### Confidence interval for standard deviation 
 
 ```{r}
+(percentile_ci <- get_ci(sd_boot_dist) )
+```
+
+---
+
+### Confidence interval for standard deviation 
+
+```{r echo = F}
 (percentile_ci <- get_ci(sd_boot_dist) )
 ```
 

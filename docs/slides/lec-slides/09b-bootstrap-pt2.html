@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
   <head>
-    <title>Inference overview</title>
+    <title>Confidence Intervals via Bootstrapping</title>
     <meta charset="utf-8" />
     <meta name="author" content="Dr. Maria Tackett" />
     <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Inference overview
+# Confidence Intervals via Bootstrapping
 ### Dr. Maria Tackett
 ### Halloween 2019 🎃
 
@@ -48,6 +48,8 @@ class: middle, center
 
 - Review proposal comments in the "Issue" of your GitHub repo
     - Data Analysis due Friday, November 15
+
+- [Extra credit](https://www2.stat.duke.edu/courses/Fall19/sta199.001/ec/ec.html)
 ---
 
 ## Packages 
@@ -160,7 +162,6 @@ manhattan %&gt;%
 ```
 
 ---
----
 
 ### Accuracy vs. precision
 
@@ -211,13 +212,25 @@ visualize(sd_boot_dist)
 ## 1   523.    951.
 ```
 
+---
+
+### Confidence interval for standard deviation 
+
+
+```
+## # A tibble: 1 x 2
+##   `2.5%` `97.5%`
+##    &lt;dbl&gt;   &lt;dbl&gt;
+## 1   523.    951.
+```
+
 
 ```r
 visualize(sd_boot_dist) +
   shade_confidence_interval(endpoints = percentile_ci)
 ```
 
-![](09b-bootstrap-pt2_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](09b-bootstrap-pt2_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
 We are 95% confident that the standard deviation of 1-br apartments in Manhattan is between \$538.38 and \$950.99.
 

@@ -1,7 +1,8 @@
 ---
-title: "Lab 08: Pull yourself up by your bootstraps"
+title: "Lab 08"
+subtitle: "Pull yourself up by your bootstraps"
 author: ""
-date: "03.07.19"
+date: "11.01.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -43,25 +44,13 @@ library(tidyverse)
 library(rvest)
 ```
 
-## Agenda
+### Agenda
 
-1. Mid-semester survey
+1. Lab 08: Pull yourself up by your bootstraps
 
-2. Lab 08: Pull yourself up by your bootstraps
+2. Working with large data
 
----
-
-## Midsemester survey
-
-- Take a few minutes to fill out the midsemester survey: 
-
-.center[
-[http://bit.ly/sta199-midsemester-survey](http://bit.ly/sta199-midsemester-survey)
-]
-
-- Your responses are anonymous. 
-
-- Be sure any feedback is constructive. Positive comments are also welcome if there's something in the course that has really helped you better learn data science.
+3. Setting a seed.
 
 ---
 
@@ -81,11 +70,11 @@ library(rvest)
 
 --
 
-**Use the [lecture notes](https://www2.stat.duke.edu/courses/Spring19/sta199.001/slides/lec-slides/08b-bootstrap.html) for help with coding and interpretations.**
+**Use the lecture notes for help with coding and interpretations.**
 
 ---
 
-## Working with large data
+### Working with large data
 
 - GitHub will warn you when pushing files larger than 50 MB, and you will not be allowed to push files larger than 100 MB.
 
@@ -100,7 +89,7 @@ library(rvest)
 
 ---
 
-## Setting a seed
+### Setting a seed
 
 - We'll be doing bootstrapping, i.e. random sampling, so make sure to set a seed.
 
@@ -108,7 +97,7 @@ library(rvest)
 
 ---
 
-## Lab flow
+### Lab flow
 
 - Part 1: Estimate a proportion
 
@@ -137,7 +126,7 @@ Each part requires some data wrangling and visualization along with the inferenc
 
 ```{r eval=FALSE}
 library(usethis)
-use_git_config(user.name="your name", user.email="your email")
+use_git_config(user.name="github username", user.email="your email")
 ```
 ]
 
