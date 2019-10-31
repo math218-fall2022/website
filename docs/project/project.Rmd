@@ -117,7 +117,7 @@ Data and codebook                                       | 3 pts
 Organization, formatting and code quality               | 2 pts
 
 
-### Data Analysis: Fri, Nov 15 at 11:59p
+### Data Analysis: Wed, Dec 4 at 11:59p
 
 The bulk of your project is in the data analysis. This is where you will statistical methods to answer your research questions. The data analysis should include the following: 
 
