@@ -1,6 +1,6 @@
 ---
 title: "Lab 08 - Pull yourself up by your bootstraps"
-date: "due Wed, Mar 20 at 11:59p"
+date: "due Wed, Nov 6 at 11:59p"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
