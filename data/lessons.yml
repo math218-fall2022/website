@@ -171,6 +171,7 @@ lessons:
    slides: "lec-slides/09a-bootstrap.html"
  - date: "Thu, Oct 31"
    title: "Estimation via bootstrapping"
+   slides: "lec-slides/09b-bootstrap-pt2.html"
    hw: "hw-03.html"
  - date: "Fri, Nov 1"
    title: "Lab 08"

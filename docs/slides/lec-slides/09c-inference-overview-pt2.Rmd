@@ -1,0 +1,615 @@
+---
+title: "Inference overview"
+subtitle: "Part 2"
+author: "Dr. Maria Tackett"
+date: "03.25.19"
+output:
+  xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    css: "sta199-slides.css"
+    logo: img/sta199-sticker-icon.png
+    lib_dir: libs
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+---
+
+layout: true
+
+<div class="my-footer">
+<span>
+<a href="http://datasciencebox.org" target="_blank">datasciencebox.org</a>
+</span>
+</div> 
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(broom)
+library(knitr)
+library(DT)
+library(emo)
+library(openintro)
+```
+
+
+```{r setup, include=FALSE}
+# R options
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE,     # for regression output
+  warm = 1
+  )
+# Set dpi and height for images
+knitr::opts_chunk$set(fig.height = 2.5, fig.width = 5, 
+                      dpi = 300, 
+                      warning = FALSE, 
+                      message = FALSE) 
+# ggplot2 color palette with gray
+color_palette <- list(gray = "#999999", 
+                      salmon = "#E69F00", 
+                      lightblue = "#56B4E9", 
+                      green = "#009E73", 
+                      yellow = "#F0E442", 
+                      darkblue = "#0072B2", 
+                      red = "#D55E00", 
+                      purple = "#CC79A7")
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+# For magick
+dev.off <- function(){
+  invisible(grDevices::dev.off())
+}
+# For ggplot2
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+---
+
+## Announcements
+
+- HW 04 due Wednesday at 11:59p
+
+- Project proposal due **Friday** at 11:59p
+
+
+---
+
+## Packages 
+
+```{r}
+library(tidyverse)
+library(infer)
+```
+
+```{r echo=F}
+set.seed(03202019)
+```
+
+---
+
+## What do you want to do?
+
+- **Estimation** -> Confidence interval
+
+- **Decision** -> Hypothesis test
+
+- First step: Ask the following questions
+
+  1. How many variables?
+  2. What types of variables?
+  3. What is the research question?
+  
+---
+
+class: center, middle
+
+# Hypothesis tests
+
+---
+
+## Hypothesis testing
+
+- Set the hypotheses.
+
+- Calculate the observed sample statistic.
+
+- Calculate the p-value.
+
+- Make a conclusion, about the hypotheses, in context of the data and the research question.
+
+- `infer::hypothesize(null = "point")` and 
+    - `infer::generate(reps, type = "simulate")`: testing parameter for categorical data 
+    - `infer::generate(reps, type = "bootstrap")`: testing parameter for numeric data 
+    
+- `infer::hypothesize(null = "independence")` and 
+`infer::generate(reps, type = "permute")`
+
+---
+
+## Hypothesis testing with numeric data
+
+Let's go back to the price to rent a one-bedroom apartment in Manhattan. 
+
+```{r message=FALSE}
+library(tidyverse)
+manhattan <- read_csv("data/manhattan.csv")
+```
+
+.small[
+.pull-left[
+```{r}
+manhattan %>% slice(1:10)
+```
+]
+.pull-right[
+```{r}
+manhattan %>% slice(11:20)
+```
+]
+]
+
+---
+
+### Rent in Manhattan vs. the US
+
+```{r}
+manhattan %>% 
+  summarise(sample_mean = mean(rent))
+```
+
+.question[
+According a CBS News report, the mean rent for an apartment in the US is $1405. Is the mean rent for a one-bedroom in Manhattan significantly higher than the national average?
+]
+
+
+.footnote[[*U.S. housing rents hit record-high average of $1,405 per month*]( https://www.cbsnews.com/news/u-s-urban-rents-hit-all-time-high-at-average-1405-report/)]
+
+---
+
+### Simulation process
+
+We will use bootstrapping to generate a sampling distribution under the assumption of the null hypothesis being true. Then, we'll calculate the p-value to make a decision on the hypotheses.
+
+--
+
+1. Take a bootstrap sample - a random sample taken <u>with replacement</u> from the original sample, of the same size as the original sample.
+
+--
+
+2. Calculate the appropriate statistic of the bootstrap sample.
+
+--
+
+3. Repeat steps (1) and (2) many times to create a bootstrap distribution - a distribution of bootstrap statistics.
+
+--
+
+4. Shift the bootstrap distribution to be centered at the null value by subtracting/adding the difference between the center of the bootstrap distribution and the null value to each bootstrap statistic.
+
+--
+
+5. Calculate the p-value as the proportion of simulations that yield a sample statistic at least as extreme as the observed sample statistic.
+
+---
+
+### Steps 1 - 3: Create bootstrap distribution
+
+.small[
+```{r}
+rent_bootstrap <- manhattan %>%
+  specify(response = "rent") %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+```
+]
+
+```{r echo=F, warning = F, message = F, fig.height = 2.5}
+ggplot(data = rent_bootstrap, mapping = aes(x = stat)) +
+  geom_histogram() +
+  labs(title = "Bootstrap distribution")
+```
+
+---
+
+### Bootstrap distribution 
+
+```{r echo=F, warning = F, message = F, fig.height = 2.5}
+ggplot(data = rent_bootstrap, mapping = aes(x = stat)) +
+  geom_histogram() +
+  labs(title = "Bootstrap distribution")
+```
+
+.question[What is the center of this distribution? What should the center be under the null hypothesis?]
+
+---
+
+### Step 4: Shift Distribution 
+
+Shift the bootstrap distribution to be centered at the null value by subtracting/adding the difference between the center of the bootstrap distribution and the null value to each bootstrap mean.
+
+```{r}
+rent_boot_mean <- rent_bootstrap %>%
+  summarise(mean = mean(stat)) %>% pull()
+rent_boot_mean
+```
+
+```{r}
+rent_bootstrap <- rent_bootstrap %>%
+  mutate(stat_shifted = stat - (rent_boot_mean - 1405))
+```
+
+---
+
+### Step 4: Shift Distribution 
+
+```{r echo=F, warning = F, message = F, fig.height = 3}
+ggplot(data = rent_bootstrap, mapping = aes(x = stat_shifted)) +
+  geom_histogram() +
+  labs(title = "Null distribution") + 
+  geom_vline(xintercept = 2625.8, color = "red") 
+```
+
+---
+
+### Step 5: Calculate p-value
+
+```{r}
+rent_bootstrap %>%
+  filter(stat_shifted >= 2625.8) %>%
+  summarise(p_value = n() / 1000)
+```
+
+--
+
+The p-value is less than $\alpha = 0.05$, so we reject the null hypothesis. There is sufficient evidence that the rent for a one-bedroom apartment in Manhattan is higher than the national average.
+
+---
+
+### Hypothesis testing a little quicker
+
+```{r}
+boot_means_shifted <- manhattan %>%
+  specify(response = rent) %>%
+  hypothesize(null = "point", mu = 1405) %>% # hypothesize step #<<
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+```
+
+---
+
+### Hypothesis testing a little quicker
+
+```{r fig.height = 2.5}
+ggplot(data = boot_means_shifted, aes(x = stat)) +
+  geom_histogram() + 
+  geom_vline(xintercept = 2625.8, color = "red")
+```
+
+
+---
+
+## Testing errors
+
+- <font class="vocab">Type 1</font>: Reject $H_0$ when you shouldn't have
+    + P(Type 1 error) = $\alpha$
+    
+- <font class="vocab">Type 2</font>: Fail to reject $H_0$ when you should have
+    + P(Type 2 error) is harder to calculate, but increases as $\alpha$ decreases
+
+--
+
+.question[
+In a court of law
+
+- Null hypothesis: Defendant is innocent
+- Alternative hypothesis: Defendant is guilty
+
+Which is worse: Type 1 or Type 2 error?
+]
+
+---
+
+## Probabilities of testing errors
+
+- P(Type 1 error) = $\alpha$
+
+- P(Type 2 error) = 1 - Power
+
+- Power = P(correctly rejecting the null hypothesis)
+
+--
+
+.question[
+Fill in the blanks in terms of correctly/incorrectly rejecting/failing to reject the null hypothesis:
+
+- $\alpha$ is the probability of ______.
+- 1 - Power is the probability of ______.
+]
+
+---
+
+class: middle, center
+
+## NC Births example
+
+---
+
+## Data: NC births
+
+The dataset is in the `openintro` package.
+
+```{r}
+glimpse(ncbirths)
+```
+
+---
+
+## Length of gestation
+
+```{r echo=FALSE, warning=FALSE}
+ggplot(data = ncbirths, aes(x = weeks)) +
+  geom_histogram(binwidth = 1)
+```
+
+```{r echo=FALSE}
+ncbirths %>%
+  filter(!is.na(weeks)) %>%
+  summarise(
+    min = min(weeks),
+    xbar = round(mean(weeks), 2),
+    med = median(weeks),
+    s = round(sd(weeks), 2),
+    q1 = quantile(weeks, 0.25),
+    q3 = quantile(weeks, 0.75),
+    max = max(weeks)
+  )
+```
+
+
+---
+
+## Length of gestation
+
+.question[
+Assuming that this sample is representative of all births in NC, we are 95% confident that the average length of gestation for babies in NC is between ---- and ---- weeks.
+]
+
+--
+
+**(1) How many variables?**
+
+--
+
+1 variable: length of gestation, `weeks`
+
+--
+
+**(2) What type(s) of variable(s)?**
+
+--
+
+Numerical
+
+--
+
+**(3) What is the research question?**
+
+--
+
+Estimate the average length of gestation $\rightarrow$ confidence interval
+
+---
+
+## Simulation for CI for a mean
+
+**Goal:** Use bootstrapping to estimate the sampling variability of the mean, i.e. the variability of means taken from the same population with the same sample size.
+
+--
+
+1. Take a bootstrap sample - a random sample taken with replacement from the 
+original sample, of the same size as the original sample.
+
+2. Calculate the mean of the bootstrap sample.
+
+3. Repeat steps (1) and (2) many times to create a bootstrap distribution - 
+a distribution of bootstrap means.
+
+4. Calculate the bounds of the 95% confidence interval as the middle 95% 
+of the bootstrap distribution.
+
+---
+
+## Set a seed first
+
+From the documentation of `set.seed`:
+
+- `set.seed` uses a single integer argument to set as many seeds as are required. There is no guarantee that different values of seed will seed the RNG differently, although any exceptions would be extremely rare.
+
+- Initially, there is no seed; a new one is created from the current time and the process ID when one is required. Hence different sessions will give different simulation results, by default.
+
+```{r}
+set.seed(20180326)
+```
+
+---
+
+## Computation for CI for a mean
+.small[
+```{r}
+boot_means <- ncbirths %>%
+  filter(!is.na(weeks)) %>% # remove NAs
+  specify(response = weeks) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+ggplot(data = boot_means, aes(x = stat)) +
+  geom_histogram(binwidth = 0.03)
+```
+]
+---
+
+## Length of gestation
+
+```{r}
+boot_means %>%
+  summarise(
+    lower = quantile(stat, 0.025),
+    upper = quantile(stat, 0.975)
+  )
+```
+
+--
+
+Assuming that this sample is representative of all births in NC, we are 95% confident that the average length of gestation for babies in NC is between 38.1 and 38.5 weeks.
+
+---
+
+## Length of gestation, revisited
+
+.question[
+The average length of human gestation is 280 days, or 40 weeks, from the first day of the woman's last menstrual period. Do these data provide convincing evidence that average length of gestation for women in NC is different than 40 weeks? Use a significance level of 5%.
+]
+
+--
+
+$H_0: \mu = 40$  
+$H_A: \mu \ne 40$
+
+--
+
+- We just said, "we are 95% confident that the average length of gestation for babies in NC is between 38.1 and 38.5 weeks".
+
+- Since the null value is outside the CI, we would reject the null hypothesis in favor of the alternative.
+
+- But an alternative, more direct, way of answering this question is using a hypothesis test.
+
+---
+
+## Simulation for HT for a mean
+
+**Goal:** Use bootstrapping to generate a sampling distribution under the assumption of the null hypothesis being true. Then, calculate the p-value to make a decision on the hypotheses.
+
+--
+
+1. Take a bootstrap sample - a random sample taken with replacement from the 
+original sample, of the same size as the original sample.
+
+2. Calculate the mean of the bootstrap sample.
+
+3. Repeat steps (1) and (2) many times to create a bootstrap distribution - 
+a distribution of bootstrap means.
+
+4. Shift the bootstrap distribution to be centered at the null value by subtracting/adding the difference between the center of the bootstrap distribution and the null value to each bootstrap mean.
+
+5. Calculate the p-value as the proportion of simulations that yield a sample mean at least as extreme as the observed sample mean.
+
+---
+
+## Computation for HT for a mean
+
+```{r fig.height=2}
+boot_means_shifted <- ncbirths %>%
+  filter(!is.na(weeks)) %>% # remove NAs
+  specify(response = weeks) %>%
+  hypothesize(null = "point", mu = 40) %>% # hypothesize step
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+ggplot(data = boot_means_shifted, aes(x = stat)) +
+  geom_histogram(binwidth = 0.03) +
+  geom_vline(xintercept = 38.33, color = "red") +
+  geom_vline(xintercept = 40 + (40 - 38.33), color = "red")
+```
+
+---
+
+## Length of gestation
+
+```{r}
+boot_means_shifted %>%
+  filter(stat <= 38.33) %>%
+  summarise(p_value = 2 * (n() / 1000))
+```
+
+--
+
+Since p-value less than the significance level, we reject the null hypothesis. The data provide convincing evidence that the average length of gestation of births in NC is different than 40.
+
+---
+
+class: middle, center
+
+# Review
+
+---
+
+## Hypothesis testing exercises
+
+.question[
+
+.midi[Describe the simulation process for testing for the parameter assigned to your team.]
+
+- .midi[Note any assumptions you make in terms of sample size, observed sample statistic, etc.]
+- .midi[Imagine using index cards or chips to represent the data.]
+- .midi[Specify whether the null hypothesis would be independence or point.]
+
+> .midi[**M&Ms, stat stars, LAW students, paranormal distribution, WAMS:** single standard deviation]
+
+> .midi[**Fantastic4, JJJB, zuck(R)berg, the 9 lives, BlueTurtle:** single population mean]
+
+> .midi[**EMS, Turquoise, ccbk, Baes 4 Bayes, ShiftHappens:** difference between two population proportions]
+
+> .midi[**Team Audit, PipeOperators, Stats Soulmates, Datan't You Know We're Team 1?, ACOJ:** difference between two population medians]
+
+> .midi[**significantly different, 16EYES, TwoSquared, Motivated Seniors, numero uno:** single population median]
+]
+
+---
+
+## `infer` structure
+
+```{r eval=FALSE}
+df %>%
+  specify(response, explanatory) %>% # explanatory optional
+  generate(reps, type) %>% # type: bootstrap, simulate, or permute
+  calculate(stat)
+```
+
+- Always start with data frame
+- Result is always a data frame with a variable called `stat`
+   - See the documentation for `calculate` to see which `stat`istics can be calculated
+- For hypothesis testing add a `hypothesize()` step between `specify()` and `generate()`
+    - `null = "point"`, and then specify the null value
+    - `null = "independence"`
+---
+
+## Review
+
+<font class = "vocab">Confidence intervals: </font>
+- Bootstrapping
+<br> 
+
+--
+
+<font class="vocab">Hypothesis Testing: </font>
+- 1 variable: testing a `point` null
+    - categorical data: `simulate` to generate null distribution
+    - numeric data: `bootstrap` to generate null distribution 
+    
+--
+    
+- 2 variables: testing `independence`
+    - Use `permute` to generate null distribution
+
+---
+
+### Writing Exercise 3
+
+- Go to [https://app.elireview.com/unit](https://app.elireview.com/unit)
+
+- Include **all** relevant detail in your answer. This is practice for the next week's exam.
+
+- Schedule: 
+    - First draft due Tuesday at 11:59p
+    - Peer review due Thursday at 11:59p (will have time in lab)
+    - Final revision due Sunday at 11:59p
+
+
