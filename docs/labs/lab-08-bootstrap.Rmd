@@ -1,5 +1,6 @@
 ---
 title: "Lab 08 - Pull yourself up by your bootstraps"
+subtitle: "Total: 100 points"
 date: "due Wed, Nov 6 at 11:59p"
 output: 
   tufte::tufte_html:
@@ -31,7 +32,7 @@ In this lab we analyze data from the 2016 GSS, using it to estimate values of po
 
 # Getting started
 
-- Go to the course organization on GitHub: [http://github.com/STA199-Sp19](http://github.com/STA199-Sp19). 
+- Go to the course organization on GitHub: [http://github.com/sta199-fa19](http://github.com/sta199-fa19). 
 
 - Find the repo starting with `lab-08` and that has your team name at the end.
 
@@ -84,7 +85,7 @@ Now, the remaining team members who have not been concurrently making these chan
 
 # Set a seed!
 
-In this lab we'll be bootstrapping, which means we'll be generating random samples. The last thing you want is those samples to change every time you knit your document. So, you should set a seed. There's an R chunk in your R Markdown file set aside for this. Locate it and add a seed. **Make sure all members in a team are using the same seed so that you don't get merge conflicts and your results match up for the narratives.**
+In this lab we'll be bootstrapping, which means we'll be generating random samples. The last thing you want is those samples to change every time you knit your document. So, you should set a seed in each code chunk that uses bootstrappning. Locate it and add a seed. **Make sure all members in a team are using the same seed so that you don't get merge conflicts and your results match up for the narratives.**
 
 # The data
 
@@ -94,7 +95,7 @@ The size of the data file we're working with it 34.3 MB. For perspective, the pr
 
 The `.gitignore` file contains a list of the files you don't want to to commit to Git or push to GitHub. If you open the `.gitignore` file in your project, you'll see that our data file, `gss2016.csv`, is already listed there.
 
-- Click [here](http://www2.stat.duke.edu/courses/Spring19/sta199.001/labs/data/gss2016.csv) to download the data. The file is called `gss2016.csv`.
+- Click [here](http://www2.stat.duke.edu/courses/Fall19/sta199.001/labs/data/gss2016.csv) to download the data. The file is called `gss2016.csv`.
 - Navigate to the data folder in your project and upload the `gss2016.csv` file.
 - Note that even though you made a change in your files by adding the data, `gss2016.csv` does not appear in your Git pane. This is because it's being ignored by git.
 
@@ -137,7 +138,9 @@ Hint: The `%in%` operator will be helpful here as well as in the rest of the lab
 3. What percent of the respondents for whom this question is applicable have been harassed by their superiors or co-workers at their job.
 
 ```{marginfigure}
-Ideally, you should be using 15,000 simulations (`rep = 15000`) however you might find that knitting your document over and over with 15,000 simulations for each bootstrap interval you need to construct in this lab can slow things down. Hence, you can develop your answers with a small number of simulations, like 100, and once you have everything working go back and change these numbers to 15,000.
+Ideally, you should be using 15,000 simulations (`rep = 15000`) however you might find that knitting your document over and over with 15,000 simulations for each bootstrap interval you need to construct in this lab can slow things down. Hence, you can develop your answers with a small number of simulations, like 100, and once you have everything working go back and change these numbers to 15,000 (or 1000 if you have problems knitting with 15000).
+
+Note that the bounds for your bootstrapped confidence intervals will likely change when you change the number of repititions. You can use inline code to ensure the bounds update in your narrative as well. 
 ```
 
 4. Construct and visualize a bootstrap distribution for the proportion of Americans who have been harassed at work. Note that since we're constructing a simulation for a proportion, we use `stat = "prop"` in the `calculate()` function. Also note that since the response variable is categorical, we need to add a new argument to the `specify()` function that specifies the level which we want to consider as `success`. In this case, since we're interested in proportion of Americans who have been harassed, we're interested in `success = "Yes"`.

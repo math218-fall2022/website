@@ -459,6 +459,7 @@ font-size: 10pt;
 
 
 <h1 class="title toc-ignore">Lab 08 - Pull yourself up by your bootstraps</h1>
+<h3 class="subtitle">Total: 100 points</h3>
 <h4 class="date">due Wed, Nov 6 at 11:59p</h4>
 
 
@@ -472,7 +473,7 @@ font-size: 10pt;
 <div id="getting-started" class="section level1">
 <h1>Getting started</h1>
 <ul>
-<li><p>Go to the course organization on GitHub: <a href="http://github.com/STA199-Sp19">http://github.com/STA199-Sp19</a>.</p></li>
+<li><p>Go to the course organization on GitHub: <a href="http://github.com/sta199-fa19">http://github.com/sta199-fa19</a>.</p></li>
 <li><p>Find the repo starting with <code>lab-08</code> and that has your team name at the end.</p></li>
 <li><p>In the repo, click on the green <strong>Clone or download</strong> button, select <strong>Use HTTPS</strong> (this might already be selected by default, and if it is, you’ll see the text <strong>Clone with HTTPS</strong> as in the image below). Click on the clipboard icon to copy the repo URL.</p></li>
 <li><p>Go to RStudio Cloud and into the course workspace. Create a <strong>New Project from Git Repo</strong>. You will need to click on the down arrow next to the <strong>New Project</strong> button to see this option.</p></li>
@@ -518,7 +519,7 @@ font-size: 10pt;
 </div>
 <div id="set-a-seed" class="section level1">
 <h1>Set a seed!</h1>
-<p>In this lab we’ll be bootstrapping, which means we’ll be generating random samples. The last thing you want is those samples to change every time you knit your document. So, you should set a seed. There’s an R chunk in your R Markdown file set aside for this. Locate it and add a seed. <strong>Make sure all members in a team are using the same seed so that you don’t get merge conflicts and your results match up for the narratives.</strong></p>
+<p>In this lab we’ll be bootstrapping, which means we’ll be generating random samples. The last thing you want is those samples to change every time you knit your document. So, you should set a seed in each code chunk that uses bootstrappning. Locate it and add a seed. <strong>Make sure all members in a team are using the same seed so that you don’t get merge conflicts and your results match up for the narratives.</strong></p>
 </div>
 <div id="the-data" class="section level1">
 <h1>The data</h1>
@@ -526,7 +527,7 @@ font-size: 10pt;
 <p>The size of the data file we’re working with it 34.3 MB. For perspective, the professor evaluations data in the previous lab was 45KB, which means the GSS data is a little over 750 times the size of the evaluations data. That’s a big difference! GitHub will warn you when pushing files larger than 50 MB, and you will not be allowed to push files larger than 100 MB.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> While our file is smaller than these limits, it’s still large enough to not push to GitHub.</p>
 <p>The <code>.gitignore</code> file contains a list of the files you don’t want to to commit to Git or push to GitHub. If you open the <code>.gitignore</code> file in your project, you’ll see that our data file, <code>gss2016.csv</code>, is already listed there.</p>
 <ul>
-<li>Click <a href="http://www2.stat.duke.edu/courses/Spring19/sta199.001/labs/data/gss2016.csv">here</a> to download the data. The file is called <code>gss2016.csv</code>.</li>
+<li>Click <a href="http://www2.stat.duke.edu/courses/Fall19/sta199.001/labs/data/gss2016.csv">here</a> to download the data. The file is called <code>gss2016.csv</code>.</li>
 <li>Navigate to the data folder in your project and upload the <code>gss2016.csv</code> file.</li>
 <li>Note that even though you made a change in your files by adding the data, <code>gss2016.csv</code> does not appear in your Git pane. This is because it’s being ignored by git.</li>
 </ul>
@@ -562,7 +563,7 @@ font-size: 10pt;
 <li><p>Filter the data for only those who answered “Yes” or “No” to this question. Do not overwrite the data frame (you’ll need the full data later). Instead save the resulting data frame with a new name.</p></li>
 <li><p>What percent of the respondents for whom this question is applicable have been harassed by their superiors or co-workers at their job.</p></li>
 </ol>
-<p><label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><span style="display: block;">Ideally, you should be using 15,000 simulations (<code>rep = 15000</code>) however you might find that knitting your document over and over with 15,000 simulations for each bootstrap interval you need to construct in this lab can slow things down. Hence, you can develop your answers with a small number of simulations, like 100, and once you have everything working go back and change these numbers to 15,000.</span></span></p>
+<p><label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><span style="display: block;">Ideally, you should be using 15,000 simulations (<code>rep = 15000</code>) however you might find that knitting your document over and over with 15,000 simulations for each bootstrap interval you need to construct in this lab can slow things down. Hence, you can develop your answers with a small number of simulations, like 100, and once you have everything working go back and change these numbers to 15,000 (or 1000 if you have problems knitting with 15000).</span> <span style="display: block;">Note that the bounds for your bootstrapped confidence intervals will likely change when you change the number of repititions. You can use inline code to ensure the bounds update in your narrative as well.</span></span></p>
 <ol start="4" style="list-style-type: decimal">
 <li><p>Construct and visualize a bootstrap distribution for the proportion of Americans who have been harassed at work. Note that since we’re constructing a simulation for a proportion, we use <code>stat = &quot;prop&quot;</code> in the <code>calculate()</code> function. Also note that since the response variable is categorical, we need to add a new argument to the <code>specify()</code> function that specifies the level which we want to consider as <code>success</code>. In this case, since we’re interested in proportion of Americans who have been harassed, we’re interested in <code>success = &quot;Yes&quot;</code>.</p></li>
 <li><p>Determine the 95% bootstrap confidence interval based on the distribution you constructed above.</p></li>
