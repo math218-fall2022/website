@@ -91,7 +91,7 @@ library(rvest)
 
 ### Setting a seed
 
-- We'll be doing bootstrapping, i.e. random sampling, so make sure to set a seed.
+- We'll be doing bootstrapping, i.e. random sampling, so make sure to set a seed in the code chunk with the bootstrap code.
 
 - All members of a given team should use the **same seed** to get the same results.
 
