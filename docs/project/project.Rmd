@@ -228,8 +228,8 @@ the assignment works.
 Total                          | 100 pts
 -------------------------------|--------
 Topic ideas                    | 5 pts
-Proposal                       | 15 pts
-Data analysis                  | 25 pts
+Proposal                       | 20 pts
+Data analysis                  | 20 pts
 Write up                       | 20 pts
 Presentation                   | 15 pts
 Classmates' presentation scores             | 5 pts
