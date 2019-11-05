@@ -183,6 +183,7 @@ lessons:
  - date: "Tue, Nov 5"
    title: "Hypothesis testing via simulation methods, Part 1"
    reading: "reading-07.html"
+   slides: "lec-slides/10a-sim-test.html"
  # hw: "hw-04.html"
  # ec: "ec-01.html"
  #slides: "lec-slides/09a-sim-test.html"
