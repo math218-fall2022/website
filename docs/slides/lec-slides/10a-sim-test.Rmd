@@ -122,9 +122,9 @@ organ_donor %>%
 A <font class="vocab">parameter</font> for a hypothesis test is the "true" value of interest. We typically 
 estimate the parameter using a <font class="vocab">sample statistic</font> as a **point estimate**.
 
-$p~$: true rate of complication
+$p$: true rate of complication
 
-$\hat{p}~$: rate of complication in the sample = $\frac{3}{62}$ = 
+$\hat{p}$: rate of complication in the sample = $\frac{3}{62}$ = 
 `r round(3/62, 3)`
 
 ---
