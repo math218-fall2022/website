@@ -59,6 +59,33 @@ Each part requires some data wrangling and visualization along with the inferenc
 
 ---
 
+### Hypothesis test for a single numeric variable
+
+Below is an outline of code to generate the null distribution when conducting a hypothesis test for a single numeric variable (e.g. testing a claim about a mean)
+
+Let `var` be the variable of interest and `mu0` be the hypothesized value
+
+
+```r
+null_dist &lt;- my_data %&gt;%
+  specify(response = var) %&gt;%
+  hypothesize(null = "point", mu = mu0) %&gt;%
+* generate(reps = 1000, type = "bootstrap") %&gt;%
+  calculate(stat = "mean")
+```
+
+Notice we will use a bootstrap sampling scheme to generate the null distribution. We'll talk more about what is happening here in Tuesday's class.  You can also refer to [the slides](https://www2.stat.duke.edu/courses/Fall19/sta199.001/slides/lec-slides/10b-sim-test-pt2.html#36) in the meantime.
+
+---
+
+### What should I put in the `generate` function?
+
+
+
+![](img/sim-inference-chart.png)
+
+---
+
 ## Getting started with lab
 
 .small[
