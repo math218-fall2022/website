@@ -98,7 +98,7 @@ Notice we will use a bootstrap sampling scheme to generate the null distribution
 
 ---
 
-### What should I put in the `generate` function?
+### What should I put as the "type" in the `generate` function?
 
 
 
