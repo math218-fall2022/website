@@ -248,7 +248,7 @@ is contagious, i.e. does seeing someone yawn and yawning appear to be dependent?
 
 ---
 
-### Simulation by hard - Your results
+### Simulation by hand - Your results
 
 .pull-left[
 
@@ -256,18 +256,18 @@ is contagious, i.e. does seeing someone yawn and yawning appear to be dependent?
 ## # A tibble: 12 x 1
 ##    diff_in_prop
 ##           &lt;dbl&gt;
-##  1            0
-##  2            0
-##  3            0
-##  4            0
-##  5            0
-##  6            0
-##  7            0
-##  8            0
-##  9            0
-## 10            0
-## 11            0
-## 12            0
+##  1      -0.232 
+##  2      -0.232 
+##  3      -0.232 
+##  4      -0.2   
+##  5      -0.18  
+##  6      -0.140 
+##  7      -0.0625
+##  8      -0.048 
+##  9      -0.0478
+## 10      -0.0478
+## 11      -0.0478
+## 12      -0.0478
 ```
 ]
 
@@ -278,20 +278,38 @@ is contagious, i.e. does seeing someone yawn and yawning appear to be dependent?
 ## # A tibble: 12 x 1
 ##    diff_in_prop
 ##           &lt;dbl&gt;
-##  1            0
-##  2            0
-##  3            0
-##  4            0
-##  5            0
-##  6            0
-##  7            0
-##  8            0
-##  9            0
-## 10            0
-## 11            0
-## 12            0
+##  1      -0.015 
+##  2       0.0278
+##  3       0.0278
+##  4       0.0485
+##  5       0.0775
+##  6       0.136 
+##  7       0.136 
+##  8       0.19  
+##  9       0.198 
+## 10       0.23  
+## 11       0.287 
+## 12       0.320
 ```
 ]
+
+---
+
+### Simulation by hand - Your results
+
+
+```r
+ggplot(data = sim_data, aes(x = diff_in_prop)) +
+  geom_histogram() +
+  labs(title = "Simulate by Hand")
+```
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
 
 ---
 
@@ -321,8 +339,8 @@ null_dist &lt;- mb_yawn %&gt;%
 
 ```r
 mb_yawn %&gt;%
-{{  specify(response = outcome, explanatory = group, 
-          success = "yawn") }}
+*  specify(response = outcome, explanatory = group, 
+*          success = "yawn") 
 ```
 ]
 
@@ -431,7 +449,7 @@ null distribution to be?
 visualize(null_dist)
 ```
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -449,7 +467,7 @@ visualize(null_dist) +
   shade_p_value(obs_stat = 0.0441, direction = "greater")
 ```
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -503,7 +521,7 @@ Do you buy this conclusion?
 
 - One sided alternative HT with `\(\alpha\)` `\(\rightarrow\)` `\(CL = 1 - (2 \times \alpha)\)`
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -667,7 +685,7 @@ rent_bootstrap &lt;- manhattan %&gt;%
 
 ### Part 1:  Take Bootstrap Sample
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 
 .question[Where is the center of the distribution? What should it be under the null hypothesis?]
 
@@ -691,7 +709,7 @@ rent_bootstrap &lt;- rent_bootstrap %&gt;%
 
 ### Part 2: Shift Distribution 
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -701,7 +719,7 @@ rent_bootstrap &lt;- rent_bootstrap %&gt;%
 How should we calculate the p-value?
 ]
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 ---
 

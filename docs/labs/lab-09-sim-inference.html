@@ -459,7 +459,7 @@ font-size: 10pt;
 
 
 <h1 class="title toc-ignore">Lab 09 - Simulation-based inference</h1>
-<h3 class="subtitle">Total: 100 points</h3>
+<h3 class="subtitle">Total: 70 points</h3>
 <h4 class="date">due Wed, Nov 13 at 11:59p</h4>
 
 
@@ -609,10 +609,7 @@ font-size: 10pt;
 <ol start="2" style="list-style-type: decimal">
 <li>Create a filtered data frame called <code>ncbirths_white</code> that contain data only from white mothers. Then, calculate the mean of the weights of their babies.</li>
 </ol>
-<p>You will use <code>ncbirths_white</code> for Exercises 3 and 4.</p>
-<ol start="3" style="list-style-type: decimal">
-<li>Are the conditions necessary for conducting statistical inference satisfied? Explain your reasoning.</li>
-</ol>
+<p>You will use <code>ncbirths_white</code> for Exercise 3.</p>
 <p>Let’s discuss how this test would work. Our goal is to simulate a null distribution of sample means that is centered at the null value of 7.43 pounds. In order to do so, we</p>
 <ul>
 <li>take a bootstrap sample of from the original sample,</li>
@@ -622,7 +619,7 @@ font-size: 10pt;
 <li>calculate the p-value as the proportion of bootstrap samples that yielded a sample mean at least as extreme as the observed sample mean.</li>
 </ul>
 <ol start="4" style="list-style-type: decimal">
-<li>Run the appropriate hypothesis test, visualize the null distribution, calculate the p-value, and interpret the results in context of the data and the hypothesis test.</li>
+<li>Use the <code>infer</code> package to run the appropriate hypothesis test, visualize the null distribution, calculate the p-value, and interpret the results in context of the data and the hypothesis test.</li>
 </ol>
 </div>
 <div id="baby-weight-vs.-smoking" class="section level1">
@@ -636,10 +633,12 @@ font-size: 10pt;
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>ncbirths_habitgiven <span class="op">%&gt;%</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span><span class="kw">group_by</span>(habit) <span class="op">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_weight =</span> <span class="kw">mean</span>(weight))</span></code></pre></div>
-<p>There is an observed difference, but is this difference statistically significant? In order to answer this question we will conduct a hypothesis test .</p>
+<p>There is an observed difference, but we want to know if the difference is statistically significant. In order to answer this question we will conduct a hypothesis test .</p>
 <ol start="7" style="list-style-type: decimal">
-<li><p>Write the hypotheses for testing if the average weights of babies born to smoking and non-smoking mothers are different.</p></li>
-<li><p>Are the conditions necessary for conducting statistical inference satisfied? Explain your reasoning.</p></li>
+<li>Write the hypotheses for testing if the average weights of babies born to smoking and non-smoking mothers are different.</li>
+</ol>
+<!-- 8. Are the conditions necessary for conducting statistical inference satisfied? Explain your reasoning. -->
+<ol start="9" style="list-style-type: decimal">
 <li><p>Run the appropriate hypothesis test, calculate the p-value, and interpret the results in the context of the data and the hypothesis test.</p></li>
 <li><p>Construct and interpret a 95% confidence interval for the difference between the average weights of babies born to smoking and non-smoking mothers.</p></li>
 </ol>

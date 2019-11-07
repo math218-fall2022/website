@@ -254,7 +254,7 @@ ggplot(data = sim_data, mapping = aes(x = diff_in_prop)) +
 
 ---
 
-### Simulation by hard - Your results
+### Simulation by hand - Your results
 
 .pull-left[
 ```{r echo=F}
@@ -274,6 +274,17 @@ sim_data %>%
   select(diff_in_prop)
 ```
 ]
+
+---
+
+### Simulation by hand - Your results
+
+```{r}
+ggplot(data = sim_data, aes(x = diff_in_prop)) +
+  geom_histogram() +
+  labs(title = "Simulate by Hand")
+```
+
 
 ---
 
@@ -301,8 +312,8 @@ null_dist <- mb_yawn %>%
 
 ```{r eval=FALSE}
 mb_yawn %>%
-{{  specify(response = outcome, explanatory = group, 
-          success = "yawn") }}
+{{  specify(response = outcome, explanatory = group, }}
+        {{  success = "yawn") }}
 ```
 ]
 
