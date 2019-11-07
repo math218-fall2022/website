@@ -1,7 +1,8 @@
 ---
-title: "Lab 09: Simulation-based inference"
+title: "Lab 09"
+subtitle: "Simulation-based inference"
 author: ""
-date: "03.28.19"
+date: "11.08.19"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -46,31 +47,7 @@ library(rvest)
 
 ## Agenda
 
-- Next week midterm -- some tips and guidelines
-
 - Lab 09 overview
-
-- Writing Exercise 3 Peer Review (last 15 minutes of class)
-    - [https://app.elireview.com](https://app.elireview.com)
-
----
-
-## Midterm 02
-
-- Assigned after class on Monday, due Friday at 11:59p
-
-- On Monday: (at a minimum)
-    - clone repo to RStudio
-    - read the questions
-    - make a plan for when you'll work on the exam
-    
-- Asking questions on Piazza and in office hours:
-    - On Piazza - ask private questions to instructor and TA
-    - Only ask questions to clarify exam instructions; We won't be reading/debugging code
-    
-- Exam content:
-    - Mostly modeling and inference
-    - Some exploratory data analysis (EDA)
 
 ---
 
@@ -118,6 +95,6 @@ Each part requires some data wrangling and visualization along with the inferenc
 
 ```{r eval=FALSE}
 library(usethis)
-use_git_config(user.name="your name", user.email="your email")
+use_git_config(user.name="github username", user.email="your email")
 ```
 ]

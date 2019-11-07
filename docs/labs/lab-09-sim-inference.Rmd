@@ -1,6 +1,7 @@
 ---
 title: "Lab 09 - Simulation-based inference"
-date: "due Mon, Apr 1 at 11:59p"
+subtitle: "Total: 100 points"
+date: "due Wed, Nov 13 at 11:59p"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
@@ -32,7 +33,7 @@ observations from this data set.
 
 # Getting started
 
-- Go to the course organization on GitHub: [http://github.com/STA199-Sp19](http://github.com/STA199-Sp19). 
+- Go to the course organization on GitHub: [http://github.com/sta199-fa19](http://github.com/sta199-fa19). 
 
 - Find the repo starting with `lab-09` and that has your team name at the end.
 
