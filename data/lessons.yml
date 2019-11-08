@@ -176,8 +176,6 @@ lessons:
  - date: "Fri, Nov 1"
    title: "Lab 08: Pull yourself up by your bootstraps"
    slides: "lab-slides/08-lab-slides.html"
-   title: "Lab 08: Pulling yourself up by your bootstraps"
-   slides: "slides/08-lab-slides.html"
    lab: "lab-08-bootstrap.html"
  - title: "Week 11"
  - date: "Tue, Nov 5"
