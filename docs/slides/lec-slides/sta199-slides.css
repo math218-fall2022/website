@@ -115,8 +115,8 @@ li{
   font-size: 16pt;
   
 }
-.small {
-  font-size: 9pt; 
+.small ul body p {
+  font-size: 10%; 
 }
 
 .large {

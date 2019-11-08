@@ -305,6 +305,12 @@ null_dist <- mb_yawn %>%
 
 ### Simulation by computation - 1
 
+```{css echo = F}
+.small{
+  font-size: 10%
+}
+```
+
 .small[
 - Start with the data frame
 - **Specify the variables**
@@ -362,20 +368,19 @@ mb_yawn %>%
 .small[
 - Start with the data frame
 - Specify the variables
-    - Since the response variable is categorical, specify the level which should be considered as "success"
-- State the null hypothesis (yawning and whether or not you see someone yawn are independent)
+- State the null hypothesis (independence)
 - Generate simulated differences via permutation
 - **Calculate the sample statistic of interest (difference in propotions)**
     - **Since the explanatory variable is categorical, specify the order in which the subtraction should occur for the calculation of the sample statistic, $(\hat{p}_{treatment} - \hat{p}_{control})$.**
-    
+
 ```{r eval=FALSE}
 mb_yawn %>%
   specify(response = outcome, explanatory = group, 
           success = "yawn") %>%
   hypothesize(null = "independence") %>%
   generate(1000, type = "permute") %>%
-{{ calculate(stat = "diff in props", 
-           order = c("treatment", "control")) }}
+{{ calculate(stat = "diff in props", }}
+          {{ order = c("treatment", "control")) }}
 ```
 ]
 
@@ -387,7 +392,7 @@ mb_yawn %>%
 - **Save the result**
 - Start with the data frame
 - Specify the variables
-- State the null hypothesis (yawning and whether or not you see someone yawn are independent)
+- State the null hypothesis (independence)
 - Generate simulated differences via permutation
 - Calculate the sample statistic of interest (difference in proportions)
 ]
@@ -427,7 +432,7 @@ simulations was the simulated difference in sample proportion at least as extrem
 as the observed difference in sample proportions?
 ]
 
-```{r}
+```{r, fig.height = 2}
 visualize(null_dist) +
   shade_p_value(obs_stat = 0.0441, direction = "greater")
 ```
@@ -600,7 +605,7 @@ rent_bootstrap <- manhattan %>%
 
 ### Part 1:  Take Bootstrap Sample
 
-```{r echo=F, warning = F, message = F, fig.height = 3}
+```{r echo=F, warning = F, message = F}
 ggplot(data = rent_bootstrap, mapping = aes(x = stat)) +
   geom_histogram() +
   labs(title = "Bootstrap distribution")

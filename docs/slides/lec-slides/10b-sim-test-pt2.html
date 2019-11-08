@@ -331,6 +331,12 @@ null_dist &lt;- mb_yawn %&gt;%
 
 ### Simulation by computation - 1
 
+&lt;style type="text/css"&gt;
+.small{
+  font-size: 10%
+}
+&lt;/style&gt;
+
 .small[
 - Start with the data frame
 - **Specify the variables**
@@ -391,12 +397,11 @@ mb_yawn %&gt;%
 .small[
 - Start with the data frame
 - Specify the variables
-    - Since the response variable is categorical, specify the level which should be considered as "success"
-- State the null hypothesis (yawning and whether or not you see someone yawn are independent)
+- State the null hypothesis (independence)
 - Generate simulated differences via permutation
 - **Calculate the sample statistic of interest (difference in propotions)**
     - **Since the explanatory variable is categorical, specify the order in which the subtraction should occur for the calculation of the sample statistic, `\((\hat{p}_{treatment} - \hat{p}_{control})\)`.**
-    
+
 
 ```r
 mb_yawn %&gt;%
@@ -404,8 +409,8 @@ mb_yawn %&gt;%
           success = "yawn") %&gt;%
   hypothesize(null = "independence") %&gt;%
   generate(1000, type = "permute") %&gt;%
-{{ calculate(stat = "diff in props", 
-           order = c("treatment", "control")) }}
+* calculate(stat = "diff in props", 
+*           order = c("treatment", "control")) 
 ```
 ]
 
@@ -417,7 +422,7 @@ mb_yawn %&gt;%
 - **Save the result**
 - Start with the data frame
 - Specify the variables
-- State the null hypothesis (yawning and whether or not you see someone yawn are independent)
+- State the null hypothesis (independence)
 - Generate simulated differences via permutation
 - Calculate the sample statistic of interest (difference in proportions)
 ]
@@ -449,7 +454,7 @@ null distribution to be?
 visualize(null_dist)
 ```
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -467,7 +472,7 @@ visualize(null_dist) +
   shade_p_value(obs_stat = 0.0441, direction = "greater")
 ```
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -521,7 +526,7 @@ Do you buy this conclusion?
 
 - One sided alternative HT with `\(\alpha\)` `\(\rightarrow\)` `\(CL = 1 - (2 \times \alpha)\)`
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -685,7 +690,7 @@ rent_bootstrap &lt;- manhattan %&gt;%
 
 ### Part 1:  Take Bootstrap Sample
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 
 .question[Where is the center of the distribution? What should it be under the null hypothesis?]
 
@@ -709,7 +714,7 @@ rent_bootstrap &lt;- rent_bootstrap %&gt;%
 
 ### Part 2: Shift Distribution 
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -719,7 +724,7 @@ rent_bootstrap &lt;- rent_bootstrap %&gt;%
 How should we calculate the p-value?
 ]
 
-![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+![](10b-sim-test-pt2_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 
 ---
 
