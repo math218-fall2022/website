@@ -3,25 +3,30 @@ STA 199 Sticker
 Maria Tackett
 01/02/2019
 
-This document contains the code to make the sticker for [STA 199: Intro to Data Science](https://www2.stat.duke.edu/courses/Spring19/sta199.001/). The following packages are used in this project:
+This document contains the code to make the sticker for [STA 199: Intro
+to Data
+Science](https://www2.stat.duke.edu/courses/Spring19/sta199.001/). The
+following packages are used in this project:
 
 ``` r
 library(hexSticker)
-library(readr)
 library(tidyverse)
-library(tibble)
 library(showtext)
 library(nnet)
 library(knitr)
 ```
 
-The Data
---------
+## The Data
 
-The data is the [Capital Bikeshare data set](https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset) pulled from the UCI Machine Learning Repository. The following variables are used in this project:
+The data is the [Capital Bikeshare data
+set](https://archive.ics.uci.edu/ml/datasets/bike+sharing+dataset)
+pulled from the UCI Machine Learning Repository. The following variables
+are used in this project:
 
--   `season`: 1 - Winter, 2 - Spring, 3 - Summer 4 - Fall
--   `atemp`: feeling temperature ÷ 50 (in degrees Celsius) <br>
+  - `season`: 1 - Winter, 2 - Spring, 3 - Summer 4 - Fall
+  - `atemp`: feeling temperature ÷ 50 (in degrees Celsius) <br>
+
+<!-- end list -->
 
 ``` r
 bikeshare <- read_csv("https://raw.githubusercontent.com/matackett/data/master/capital-bikeshare.csv")    
@@ -35,10 +40,10 @@ bikeshare <- bikeshare %>%
   select(season,cnt,atemp)
 ```
 
-Density Plot
-------------
+## Density Plot
 
-A multinomial logistic regression model is used to create the main plot. The response variable is `season` and the predictor variable is `atemp`.
+A multinomial logistic regression model is used to create the main plot.
+The response variable is `season` and the predictor variable is `atemp`.
 
 ``` r
 p <- ggplot(data=bikeshare,aes(x=cnt,fill=season)) +
@@ -48,8 +53,7 @@ p <- ggplot(data=bikeshare,aes(x=cnt,fill=season)) +
   theme(legend.position="none") 
 ```
 
-Make Sticker
-------------
+## Make Sticker
 
 ``` r
 # add font to be used in sticker function
@@ -66,4 +70,4 @@ sticker(p, package="STA 199",p_color="#7A4183", p_family="open", p_size=7.5, p_y
 include_graphics("static/img/sta199_sticker.png")
 ```
 
-![](static/img/sta199_sticker.png)
+![](static/img/sta199_sticker.png)<!-- -->
