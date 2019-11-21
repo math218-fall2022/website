@@ -73,7 +73,7 @@ class: middle, center
 
 - Writing Exercise #3 final revision **due TODAY at 11:59p**
 
-- [Exam 02](https://www2.stat.duke.edu/courses/Spring19/sta199.001/exam/exam-02.html) assigned after class, due Friday at 11:59p
+- [Exam 02](https://www2.stat.duke.edu/courses/Fall19/sta199.001/exam/exam-02.html) assigned after class, due Sunday, November 24 at 11:59p
     - Mostly modeling + inference
     - Some exploratory data analysis
     - Use in-line code to write narrative but also show output
@@ -86,7 +86,7 @@ class: middle, center
 
 - Question 5 thrown out. Note
     - Adjusted $R^2$ is only used to compare models in multiple linear regression 
-    - $R^2$ is the variability in $Y$ explained by the model
+    - $R^2$ is the proportion of variability in $Y$ explained by the model
 
 ---
 
