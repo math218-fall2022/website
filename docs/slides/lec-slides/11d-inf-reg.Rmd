@@ -1,0 +1,563 @@
+---
+title: "CLT-based Inference & Inference for Regression"
+author: "Dr. Maria Tackett"
+date: "11.21.19"
+output:
+  xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    css: "sta199-slides.css"
+    logo: img/sta199-sticker-icon.png
+    lib_dir: libs
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"
+---
+
+layout: true
+
+<div class="my-footer">
+<span>
+<a href="http://datasciencebox.org" target="_blank">datasciencebox.org</a>
+</span>
+</div> 
+
+---
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(broom)
+library(knitr)
+library(DT)
+library(emo)
+library(openintro)
+library(infer)
+library(gridExtra)
+```
+
+```{r setup, include=FALSE}
+# R options
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE,     # for regression output
+  warm = 1
+  )
+# Set dpi and height for images
+opts_chunk$set(fig.height = 2.5, fig.width = 5, dpi = 300) 
+# ggplot2 color palette with gray
+color_palette <- list(gray = "#999999", 
+                      salmon = "#E69F00", 
+                      lightblue = "#56B4E9", 
+                      green = "#009E73", 
+                      yellow = "#F0E442", 
+                      darkblue = "#0072B2", 
+                      red = "#D55E00", 
+                      purple = "#CC79A7")
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+# For magick
+dev.off <- function(){
+  invisible(grDevices::dev.off())
+}
+# For ggplot2
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+class: middle, center
+
+### [Click for PDF of slides](11d-inf-reg.pdf)
+
+---
+
+### Announcements
+
+- [Exam 02](https://www2.stat.duke.edu/courses/Fall19/sta199.001/exam/exam-02.html) due Sunday, November 25 at 11:59p
+
+- **Friday's Lab**: Exam Office Hours
+
+- **Tuesday's class**: Project meeting day
+    - At least one member from each group must be present
+    - Each group will meet with me or Becky during the class period.
+    
+- Statistics Trivia Night **TODAY 7p - 9p** in Old Chem 101
+
+---
+
+class: center, middle
+
+## Inference methods based on CLT
+
+---
+
+## Hypotheses
+
+.question[
+What are the hypotheses for evaluating if Americans, on average, spend more than 3 hours
+per day relaxing?
+]
+
+--
+
+$$H_0: \mu = 3$$ 
+$$H_A: \mu > 3$$
+
+---
+
+## Set up calculations
+
+Summary statistics from the sample:
+
+
+```{r fig.height=2.5, fig.width=5, echo = FALSE, message=FALSE, warning = FALSE}
+gss = read_csv("data/gss2010.csv")
+
+gss %>% 
+  filter(!is.na(hrsrelax)) %>%
+  summarise(x_bar = mean(hrsrelax), med = median(hrsrelax), 
+            sd = sd(hrsrelax), n = n())
+```
+
+---
+
+### Calculating the test statistic
+
+And the CLT says:
+
+$$\bar{x} \sim N\left(mean = \mu, SE = \frac{\sigma}{\sqrt{n}}\right)$$
+--
+
+.alert[
+How many standard errors away from the population mean is the observed sample mean?
+]
+
+**Test Statistic**
+
+$$t = \frac{\bar{x} - \text{hypothesized }\mu}{s / \sqrt{n}} = \frac{3.68 - 3}{2.63/\sqrt{1154}} = 8.78$$
+
+
+The sample mean of 3.68 is 8.78 standard errors above the hypothesized mean, 3.
+
+---
+
+### Calculating the p-value
+.alert[
+How likely are we to observe a sample mean that is at least as extreme as the observed sample mean, if in fact the null hypothesis is true
+]
+
+**P-value**
+```{r}
+df <- 1154 - 1
+pt( 8.7876, df, lower.tail = FALSE)
+```
+
+Given Americans relax three hours, on average, the probability of observing $\bar{x} \geq 3.68$ hours in a sample of 1154, is $2.72 \times 10^{-18} \approx 0$.
+
+---
+
+## Conclusion
+
+- Since the p-value is small, we reject $H_0$.
+
+- The data provide convincing evidence that Americans, on average, spend more than 3 hours per day relaxing after work.
+
+
+---
+
+## Confidence interval for a mean
+
+$$point~estimate \pm critical~value \times SE$$
+
+```{r}
+se <- 2.63 / sqrt(1154)
+df <- 1154 - 1
+t_star <- qt(0.95, df)
+
+pt_est <- 3.68
+round(pt_est + c(-1,1) * t_star * se, 2)
+```
+
+.question[
+The 90% confidence interval is 3.55 to 3.81.  Interpret this interval in context of the data.
+]
+
+---
+
+## Built-in functionality in R
+
+- There are built in functions for doing some of these tests in R:
+
+- However a learning goal is this course is not to go through an exhaustive list of all CLT based tests and how to implement them
+
+- Instead you should try to understand how these methods are / are not like the simulation based methods we learned about earlier
+
+.question[
+What is similar, and what is different, between CLT based test of means vs. simulation based test?
+]
+
+---
+
+### *t* distribution using `infer`
+
+.small[
+```{r}
+t_null_theor <- gss %>%
+  filter(!is.na(hrsrelax)) %>%
+  specify(response = hrsrelax) %>%
+  hypothesize(null = "point", mu = 3) %>%
+  # generate() ## Not used for theoretical
+  calculate(stat = "t")
+```
+
+]
+
+---
+
+### *t* distribution using `infer`
+
+.small[
+```{r, fig.height = 2}
+visualize(t_null_theor, method = "theoretical") +
+  shade_p_value(obs_stat = 8.7876, direction = "greater")
+```
+]
+
+---
+
+### Calculate p-value 
+
+```{r, fig.height = 2, echo = F}
+visualize(t_null_theor, method = "theoretical") +
+  shade_p_value(obs_stat = 8.7876, direction = "greater")
+```
+
+```{r}
+df <- 1154 - 1
+pt(8.7876, df, lower.tail = FALSE)
+```
+
+
+---
+
+### Hypothesis tests in R
+
+.small[
+```{r}
+# Hypothesis tests
+t.test(gss$hrsrelax, mu = 3, alternative = "greater")
+```
+]
+
+---
+
+### Confidence intervals in R
+
+.small[
+```{r}
+# Confidence intervals
+t.test(gss$hrsrelax, conf.level = 0.90)
+```
+]
+
+---
+
+class: middle, center
+
+### Inference for Regression
+
+---
+
+## Riders in Florence, MA
+
+.small[
+The Pioneer Valley Planning Commission collected data in Florence, MA for 90 days from April 5 to November 15, 2005 using a laser sensor, with breaks in the laser beam recording when a rail-trail user passed the data collection station.
+
+- `hightemp` daily high temperature (in degrees Fahrenheit)
+- `volume` estimated number of trail users that day (number of breaks recorded)
+]
+
+```{r}
+library(mosaicData)
+data(RailTrail)
+```
+
+---
+
+## Riders in Florence, MA
+
+- `hightemp` daily high temperature (in degrees Fahrenheit)
+- `volume` estimated number of trail users that day (number of breaks recorded)
+
+```{r echo=FALSE, fig.height=2.25}
+ggplot(data = RailTrail, mapping = aes(x = hightemp, y = volume)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  xlim(40, 100) +
+  ylim(120, 750) +
+  labs(ylab = "Volume", xlab)
+```
+
+
+---
+
+## Coefficient interpretation
+
+.question[
+`r emo::ji("bust_in_silhouette")` Interpret the coefficients of the regression model for predicting volume (estimated number of trail users that day) from hightemp (daily high temperature, in F).
+]
+
+```{r}
+m_riders <- lm(volume ~ hightemp, data = RailTrail)
+tidy(m_riders) %>%
+  select(term, estimate)
+```
+
+
+
+---
+
+## Uncertainty around the slope
+
+```{r echo=FALSE}
+ggplot(data = RailTrail, mapping = aes(x = hightemp, y = volume)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "black") +
+  xlim(40, 100) +
+  ylim(120, 750)
+```
+
+---
+
+
+### Bootstrapping the data, once
+
+```{r echo=FALSE}
+set.seed(18472)
+
+boot_samples <- RailTrail %>%
+  specify(volume ~ hightemp) %>% 
+  generate(reps = 50, type = "bootstrap")
+
+first_boot_sample <- boot_samples %>%
+  filter(replicate == 1)
+
+ggplot(first_boot_sample, aes(x = hightemp, y = volume, color = factor(replicate))) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme(legend.position = "none") +
+  scale_color_manual(values = "gray") +
+  xlim(40, 100) +
+  ylim(120, 750)
+```
+
+```{r echo=FALSE}
+m_boot <- lm(volume ~ hightemp, data = first_boot_sample)
+tidy(m_boot) %>%
+  select(term, estimate)
+```
+
+---
+
+### Bootstrapping the data, again
+
+```{r echo=FALSE}
+second_boot_sample <- boot_samples %>%
+  filter(replicate == 2)
+
+ggplot(second_boot_sample, aes(x = hightemp, y = volume, color = factor(replicate))) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme(legend.position = "none") +
+  scale_color_manual(values = "gray") +
+  xlim(40, 100) +
+  ylim(120, 750)
+```
+
+```{r echo=FALSE}
+m_boot <- lm(volume ~ hightemp, data = second_boot_sample)
+tidy(m_boot) %>%
+  select(term, estimate)
+```
+
+---
+
+### ...and again
+
+```{r echo=FALSE}
+third_boot_sample <- boot_samples %>%
+  filter(replicate == 3)
+
+ggplot(third_boot_sample, aes(x = hightemp, y = volume, color = factor(replicate))) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme(legend.position = "none") +
+  scale_color_manual(values = "gray") +
+  xlim(40, 100) +
+  ylim(120, 750)
+```
+
+```{r echo=FALSE}
+m_boot <- lm(volume ~ hightemp, data = third_boot_sample)
+tidy(m_boot) %>%
+  select(term, estimate)
+```
+
+---
+
+## Bootstrapping the regression line
+
+```{r echo=FALSE}
+ggplot(boot_samples, aes(x = hightemp, y = volume, color = factor(replicate))) +
+  geom_smooth(method = "lm", se = FALSE, lwd = 0.2) +
+  geom_abline(slope = m_riders$coefficients[2], intercept = m_riders$coefficients[1], lwd = 1, color = "black") +
+  theme(legend.position = "none") +
+  scale_color_manual(values = rep("gray", 100)) +
+  ylim(100, 750)
+```
+
+---
+
+## Bootstrap interval for the slope
+
+.small[
+```{r}
+boot_dist <- RailTrail %>%
+  specify(volume ~ hightemp) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "slope")
+```
+]
+
+```{r echo=FALSE, warning = F}
+ci <- boot_dist %>% get_ci()
+
+visualize(boot_dist) + 
+  shade_ci(ci, level= 0.95)
+```
+
+---
+
+## Bootstrap interval for the slope
+
+.question[
+Interpret the bootstrap interval in context of the data.
+]
+
+```{r}
+boot_dist %>%
+  summarise(l = quantile(stat, 0.025), 
+            u = quantile(stat, 0.975))
+```
+
+---
+
+## Hypothesis testing for the slope
+
+$H_0$: No relationship, $\beta_1 = 0$  
+$H_A$: There is a relationship, $\beta_1 \ne 0$
+
+--
+
+.small[
+```{r}
+null_dist <- RailTrail %>%
+  specify(response = volume, explanatory = hightemp) %>% 
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "slope")
+```
+]
+
+--
+
+```{r echo=FALSE, fig.height = 2.25, warning = F, message = F}
+visualize(null_dist) + 
+  shade_p_value(m_riders$coefficients[2],direction = "two_sided")
+```
+
+---
+
+## Finding the p-value
+
+```{r}
+obs_slope <- tidy(m_riders) %>% 
+  select(estimate) %>% 
+  slice(2) %>% pull()
+
+get_p_value(null_dist, obs_slope, direction = "two_sided")
+```
+
+---
+
+## Hypothesis testing for the slope
+
+... using the Central Limit Theorem
+
+```{r}
+tidy(m_riders)
+```
+
+---
+
+### Conditions for inference for regression
+
+Four conditions:
+
+--
+
+1. Observations should be independent
+
+--
+
+2. Residuals should be randomly distributed around 0
+
+--
+
+3. Residuals should be nearly normally distributed, centered at 0
+
+--
+
+4. Residuals should have constant variance
+
+
+---
+
+## Checking independence
+
+One consideration might be time series structure of the data. We can check whether one residual depends on the previous by plotting the residuals in the order of data collection.
+
+```{r fig.height = 2}
+m_riders_aug <- augment(m_riders)
+ggplot(data = m_riders_aug, aes(x = 1:nrow(m_riders_aug), y = .resid)) +
+  geom_point() +
+  labs(x = "Index", y = "Residual")
+```
+
+---
+
+### Checking distribution of residuals around 0 and constant variance
+
+```{r, fig.height = 2}
+ggplot(data = m_riders_aug, aes(x = .fitted, y = .resid)) +
+  geom_point() +
+  geom_hline(yintercept = 0, lty = 3, color = "gray") +
+  labs(y = "Residuals", x = "Predicted values, y-hat")
+```
+
+---
+
+## Checking normality of residuals
+
+```{r}
+ggplot(data = m_riders_aug, aes(x = .resid)) +
+  geom_histogram(binwidth = 30) +
+  labs(x = "Residuals")
+```
+
+---
+
+## Thoughts...
+
+* Coefficient p-value 
+    - If you truly want to know if a coefficient is significantly different from zero (taking the other predictors into account) then use the p-value
+    - If you want to know which predictors are important - use model selection
+
