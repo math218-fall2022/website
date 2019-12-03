@@ -299,7 +299,7 @@ class: middle, center
 
 class: middle, center
 
-### Sentencing algorithms
+### Algorithms in Criminal Justice
 
 ---
 
