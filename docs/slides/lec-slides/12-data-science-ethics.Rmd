@@ -142,7 +142,7 @@ class: middle, center
 
 ---
 
-## What is a p-value? 
+### What is a p-value? 
 
 .center[
 <iframe src="https://fivethirtyeight.abcnews.go.com/video/embed/56150342" width="640" height="360" scrolling="no" style="border:none;" allowfullscreen></iframe>
@@ -153,7 +153,7 @@ Source: ["Not Even Scientists Can Easily Explain p-values"](https://fivethirtyei
 
 ---
 
-## Statistically significant? 
+### Statistically significant? 
 
 .pull-left[
 ![](img/12/green_beans_1.png)
@@ -214,7 +214,7 @@ class: middle, center
 
 ---
 
-## OK Cupid Data Breach
+### OK Cupid Data Breach
 
 - In 2016, researchers published data of 70,000 OkCupid users—including usernames, political leanings, drug usage, and intimate sexual details.
 
@@ -244,11 +244,14 @@ When collecting and analyzing social media data, how do you make sure you don't 
 
 ---
 
-## Facebook & Cambridge Analytica
+### Facebook & Cambridge Analytica
 
 .center[
 ![](img/12/fb_ca.png)
 ]
+<br>
+
+[How Cambridge Analytica turned Facebook 'likes' into a lucrative political tool](https://www.theguardian.com/technology/2018/mar/17/facebook-cambridge-analytica-kogan-data-algorithm)
 
 ---
 
@@ -300,7 +303,7 @@ class: middle, center
 
 ---
 
-## Machine Bias
+### Machine Bias
 
 .center[
 ![](img/12/propublica-criminal-sentencing.png)
@@ -320,7 +323,7 @@ class: middle
 
 ---
 
-## ProPublica analysis
+### ProPublica analysis
 
 **Data:** Risk scores assigned to more than 7,000 people arrested in Broward County, Florida, in 2013 and 2014 + whether they were charged with new crimes over the next two years
 
@@ -362,20 +365,45 @@ class: middle, center
 
 >"Gender bias was not the only issue. Problems with the data that underpinned the models’ judgments meant that unqualified candidates were often recommended for all manner of jobs, the people said."
 
-<small>Source: ["Amazon scraps secret AI recruiting tool that showed bias against women"](https://www.reuters.com/article/us-amazon-com-jobs-automation-insight/amazon-scraps-secret-ai-recruiting-tool-that-showed-bias-against-women-idUSKCN1MK08G)</small>
+<br><br>
+
+["Amazon scraps secret AI recruiting tool that showed bias against women"](https://www.reuters.com/article/us-amazon-com-jobs-automation-insight/amazon-scraps-secret-ai-recruiting-tool-that-showed-bias-against-women-idUSKCN1MK08G)
 
 ---
 
+### Amazon's Experimental Hiring Algorithm
+
+.center[
+```{r echo = F, out.width = '50%'}
+include_graphics("img/12/tech-gender.png")
+```
+]
+<br>
+
+["Amazon scraps secret AI recruiting tool that showed bias against women"](https://www.reuters.com/article/us-amazon-com-jobs-automation-insight/amazon-scraps-secret-ai-recruiting-tool-that-showed-bias-against-women-idUSKCN1MK08G)
+
+---
+
+class: middle, center
+
 ## Algorithmic Justice
+---
+
+### Algorithmic Justice
 
 .center[
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/UG_X_7g63rY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 ]
+<br>
+<br>
+
+
+Interview with Joy Buolamwini: ['A White mask worked better': why algorithms are not colour blind](https://www.theguardian.com/technology/2017/may/28/joy-buolamwini-when-algorithms-are-racist-facial-recognition-bias)
 
 ---
 
-## Review
+### Review
 
 .question[
 A company uses a machine learning algorithm to determine which job advertisement to display for users searching for technology jobs. Based on past results, the algorithm tends to display lower paying jobs for women than for men (after controlling for other characteristics).
@@ -392,7 +420,7 @@ class: center, middle
 
 ---
 
-## Further Reading
+### Further Reading
 
 .pull-left[
 ![](img/12/american_statistician.jpg)
@@ -407,7 +435,7 @@ March 2019 issue of American Statistician
 
 ---
 
-## Further reading
+### Further reading
 
 .pull-left[
 ![](img/12/ethics-data-science.jpg)
@@ -423,7 +451,7 @@ by Mike Loukides, Hilary Mason, DJ Patil
 
 ---
 
-## Further reading
+### Further reading
 
 .pull-left[
 ![](img/12/how-charts-lie.jpg)
@@ -439,7 +467,7 @@ by Alberto Cairo
 
 ---
 
-## Further reading
+### Further reading
 
 .pull-left[
 ![](img/12/weapons-of-math-destruction.jpg)
@@ -452,7 +480,7 @@ by Cathy O'Neil
 
 ---
 
-## Further watching
+### Further watching
 
 .center[
 <iframe width="560" height="315" src="https://www.youtube.com/embed/MfThopD7L1Y" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -463,7 +491,7 @@ by Kristian Lum
 
 ---
 
-## Parting thoughts
+### Parting thoughts
 
 - At some point during your data science journey you will learn tools that can be used unethically
 
@@ -475,16 +503,17 @@ How do you train yourself to make the right decisions (or reduce the likelihood 
 
 ---
 
-## Do good with data
+### Do good with data
 
 - Data Science for Social Good: http://www.dssgfellowship.org/
 
 - DataKind: https://www.datakind.org/
 
 - Data Values & Practices: https://datapractices.org/manifesto/
+
 ---
 
-## Acknowledgement
+### Acknowledgement
 
 These slides were largely based on [*Data Science Ethics*](http://www2.stat.duke.edu/courses/Fall18/sta112.01/slides/u3_d01-ethics/u3_d01-ethics.html)
 
