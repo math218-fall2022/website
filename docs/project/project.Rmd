@@ -210,7 +210,7 @@ choices you made, and why, and what you found.
 |-----------------	|-------	|-------------------------------------------------------------------------------------------------------------------------------	|
 | Content 	| 5 	| The group told a unified story that highlights the main results from their analysis. 	|
 | Slides 	| 5 	| The presentation slides were organized, included clear and informative visualizations, and were readable (not too much text). 	|
-| Time Mangement 	| 2 	| Team divided the time well, stayed within the 8 minute time limit, and all team members spoke. 	|
+| Time Management 	| 2 	| Team divided the time well, stayed within the 8 minute time limit, and all team members spoke. 	|
 | Professionalism 	| 3 	| The group's presentation was clear and professional. 	|
 | **Total** 	| **15** 	|  	|
 
