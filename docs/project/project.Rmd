@@ -146,7 +146,7 @@ visualizations.
 #### Write up
 
 The majority of the write up will be the revised results from the proposal and data analysis. 
-After providing the description of your dataset and research question in the 
+After providing the description of your dataset and research questions in the 
 introduction, write up the results of the data analysis, incorporating any feedback you received. Remember to pay attention to your presentation. Neatness, coherency, and clarity will count.
 
 Your write up must also include a one to two page conclusion and discussion. 
@@ -171,11 +171,8 @@ Conclusion at the end. The rest is up to you!
 | **Component** 	| **Total** 	| **Assessment** 	|
 |--------------------------	|-----------	|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | Introduction & EDA 	| 5 	| Is the research question, motivation for the analysis, and data clearly described? Are univariate distributions in the data clearly visualized and described using the appropriate summary statistics? Are relevant and interesting bivariate/multivariate relationships clearly visualized and described using the appropriate summary statistics?
-	|
 | Statistical Inference 	| 8	| Are appropriate statistical inference procedures carried out and explained thoroughly and correctly? This includes stating hypotheses (if needed), showing all relevant output, checking appropriate assumptions (if needed). Are the conclusions correct and written in context of the data and research question?
- 	|
 | Creativity & Critical Thought 	| 4	| Is the project carefully thought out? Are the limitations carefully considered? Does it appear that time and effort went into planning and implementation of project?
- 	|
 | Discussion & Limitations 	| 4 	| Are interesting findings from the model clearly described? If model is used for prediction, is the model’s predictive power thoroughly explored? Is there thorough discussion on model performance? Are the limitations carefully considered and described? 	|
 | Writing & Organization 	| 3 	| What is the quality of the statistical presentation, writing, and explanations? Does write up tell a unified story? Is the document neatly organized? This includes appropriate section headers, figures appropriately sized with informative labels, all code suppressed in .md document, all R messages and warnings suppressed, narrative and output neatly organized. 
  	|
