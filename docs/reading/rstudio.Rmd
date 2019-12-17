@@ -8,7 +8,7 @@ output:
 <br>
 Congratulations on completing STA 199: Intro to Data Science! If you plan to continue using R and RStudio (and I hope you do!), here are some options about accessing RStudio going forward: 
 
-1. **Continue using** [RStudio Cloud](http://rstudio.cloud): I would recommend putting any future work in your personal workspace ("Your Workspace") in RStudio Cloud. At the end of the summer, I will delete the STA 199 course workspace. At that point, all of your RStudio Cloud projects you created for this class will be moved to your personal workspace.
+1. **Continue using** [RStudio Cloud](http://rstudio.cloud): I would recommend putting any future work in your personal workspace ("Your Workspace") in RStudio Cloud. Eventually the STA 199 workspace will be deleted, and at that point, all of your RStudio Cloud projects you created for this class will be moved to your personal workspace.
 
 2. **Use RStudio through** [Duke OIT VM-Manage](https://vm-manage.oit.duke.edu/): As a Duke student, you have access to  RStudio through a Docker container managed by Duke OIT. You just need your NetID and password to log in. Similar to RStudio Cloud, the Docker container is set up so you can connect to GitHub.
 
