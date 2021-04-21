@@ -1,6 +1,6 @@
 ---
 title: "STA 199: Intro to Data Science"
-description: "Intro to data science and statistical thinking. Learn to explore, visualize,and analyze data to understand natural phenomena, investigate patterns, model outcomes,and make predictions, and do so in a reproducible and shareable manner. Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, data visualization, and effectively communicating results. Work on problems and case studies inspired by and based on real-world questions and data. The course will focus on the R statistical computing language."
+description: "Intro to data science and statistical thinking. Learn to explore, visualize,and analyze data to understand natural phenomena, investigate patterns, model outcomes,and make predictions, and do so in a reproducible and shareable manner. Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, data visualization, and effectively communicating results. Work on problems and case studies inspired by and based on real-world questions and data. The course will introduce and focus on the R statistical computing language."
 markup: "mmark"
 ---
 
@@ -27,13 +27,8 @@ Lab 03 &nbsp;&nbsp; <font color="#875687"><i class="fas fa-university"></i></fon
 {.table .table1 .table-condensed .table-striped .text-left}
 <span></span>     | <span></span>     | <span></span>    | <span></span>    |  <span></span>      
 ------------------|-------------------|------------------|------------------|------------------ 
-Instructor        | [Prof. Maria Tackett](http://stat.duke.edu/~mt324/) | <a href="mailto:maria.tackett@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/matackett" title="GitHub"><i class="fa fa-github"></i></a> | Thu 1p - 2:30p | Old Chem 118B
+Instructor        | [Becky Tang](https://beckytang.rbind.io/) | <a href="mailto:becky.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> |  | 
 TAs               | [Salvador Arellano](https://www.linkedin.com/in/salvador-chavero-arellano-405969168/) | <a href="mailto:salvador.chavero.arellano@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/salvadorchavero" title="GitHub"><i class="fa fa-github"></i></a> | Wed 5p - 7p| Old Chem 203B
-                  | [Max Bartlett](http://maxbartlett.com/) | <a href="mailto:maxwell.bartlett@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/MaxBartlett" title="GitHub"><i class="fa fa-github"></i></a> | Tue 6:30p - 8:30p| Old Chem 203B
-                  | [Meredith Brown](https://www.linkedin.com/in/meredith-brown-807964172/) | <a href="mailto:meredith.brown@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/meredithb3" title="GitHub"><i class="fa fa-github"></i></a> | Mon 12:30p - 2:30p | Old Chem 203B
-                  | [Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/) | <a href="mailto:rosvid.herrera.tenorio@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/stevenherrera24" title="GitHub"><i class="fa fa-github"></i></a> | Thu 5:30p - 7:30p | Old Chem 203B
-                  | [Malavi Ravindran](https://www.linkedin.com/in/malavi-ravindran-332035175)| <a href="mailto:malavi.ravindran@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/MalaviRavindran" title="GitHub"><i class="fa fa-github"></i></a> | Mon 3p - 5p | Old Chem 203B
-                  | [Becky Tang](https://beckytang.rbind.io/) | <a href="mailto:becky.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> | Wed 3p - 5p | Old Chem 203B
 
 ### Texts
 
@@ -48,7 +43,7 @@ All books are freely available online. Hardcopies are also available for purchas
 
 ### Materials
 
-You should bring a fully-charged laptop, tablet with keyboard, or comparable device to every lecture and lab session.
+You should have a fully-charged laptop, tablet with keyboard, or comparable device to every lecture and lab session.
 
 <br><br><br><br>
 
