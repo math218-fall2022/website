@@ -1,8 +1,8 @@
 # Website
 
-Course website for Sta 199 - Intro to Data Science, Fall 2019 at Duke University
+Course website for Sta 199 - Intro to Data Science, Summer 2021 at Duke University
 
-Website address: https://www2.stat.duke.edu/courses/Fall19/sta199.001/.
+Website address: https://sta199-summer2021.github.io/website/.
 
 # Attribution
 
