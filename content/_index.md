@@ -8,17 +8,16 @@ markup: "mmark"
 
 #### Lectures
 
-<font color="#875687"><i class="fas fa-university"></i></font> &nbsp; Soc Sci 139 &nbsp;&nbsp; <font color="#875687"><i class="fas fa-calendar"></i></font> &nbsp; Tue and Thu 10:05a - 11:20a
+<font color="#875687"><i class="fas fa-university"></i></font> &nbsp; Online &nbsp;&nbsp; <font color="#875687"><i class="fas fa-calendar"></i></font> &nbsp; Monday, Wednesday, Thursday 9:00 - 10:15am EDT
 <br>
 <br>
 
 #### Labs
 
-Lab 01 &nbsp;&nbsp; <font color="#875687"><i class="fas fa-university"></i></font> &nbsp; Old Chem 003 &nbsp;&nbsp;&nbsp; <font color="#875687"><i class="fas fa-calendar"></i></font> &nbsp; Fri 10:05a - 11:20p
+Lab 01 &nbsp;&nbsp; <font color="#875687"><i class="fas fa-university"></i></font> &nbsp; Online &nbsp;&nbsp;&nbsp; <font color="#875687"><i class="fas fa-calendar"></i></font> &nbsp; Friday 9:00 - 10:15am EDT
 
-Lab 02  &nbsp;&nbsp; <font color="#875687"><i class="fas fa-university"></i></font> &nbsp; Soc Psych 127 &nbsp;&nbsp; <font color="#875687"><i class="fas fa-calendar"></i></font> &nbsp; Fri 11:45a - 1p
+Lab 02  &nbsp;&nbsp; <font color="#875687"><i class="fas fa-university"></i></font> &nbsp; Online &nbsp;&nbsp; <font color="#875687"><i class="fas fa-calendar"></i></font> &nbsp; Asynchronous
 
-Lab 03 &nbsp;&nbsp; <font color="#875687"><i class="fas fa-university"></i></font> &nbsp; Old Chem 003 &nbsp;&nbsp;&nbsp; <font color="#875687"><i class="fas fa-calendar"></i></font> &nbsp; Fri 1:25p - 2:40p
 <br>
 <br>
 
