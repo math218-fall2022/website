@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>STA 199: Intro to Data Science on STA 199</title>
+    <title>STA 199: Introduction to Data Science on STA 199</title>
     <link>/</link>
-    <description>Recent content in STA 199: Intro to Data Science on STA 199</description>
+    <description>Recent content in STA 199: Introduction to Data Science on STA 199</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
@@ -16,7 +16,9 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>/schedule.html</guid>
-      <description>Note: This schedule may be updated as the semester progresses. Due dates for the exams and project will not be changed.  Date Lesson Slides Reading Lab AE HW Exam Project    Week 01          Tue, Aug 27 Welcome to Data Science          Thu, Aug 29 Meet the Toolkit          Fri, Aug 30 Lab 01: Hello R!</description>
+      <description>Note: This schedule may be updated as the semester progresses. Due dates for the exams and project will not be changed.
+
+ Date Lesson Slides Reading Lab AE HW Exam Project    Week 01          Wed, May 12 Welcome to Data Science          Thu, May 13 Meet the Toolkit          Fri, May 14 Lab 01: Hello R!</description>
     </item>
     
     <item>
