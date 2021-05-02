@@ -1,7 +1,7 @@
 ---
 title: "Meet the Toolkit"
-author: "Dr. Maria Tackett"
-date: "08.29.19"
+author: "Becky Tang"
+date: "05.13.21"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -360,7 +360,7 @@ Can you answer these questions?
 
 ## Before next class 
 
-- Accept the invite to join `sta199-fa19` organization on GitHub TODAY!! 
+- Accept the invite to join `sta199-summer2021` organization on GitHub TODAY!! 
 
 - Start Reading 02 posted on the course schedule - due Thu, Sep 5
 

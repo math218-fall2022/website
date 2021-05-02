@@ -1,7 +1,7 @@
 ---
 title: "Lab 01"
 subtitle: "Hello R!"
-date: "08.30.19"
+date: "05.14.21"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -34,7 +34,7 @@ color_palette <- list(gray = "#999999",
                       red = "#D55E00", 
                       purple = "#CC79A7")
 # For nonsese...
-library(emo)
+# library(emo)
 htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 ```
 
@@ -43,13 +43,7 @@ library(tidyverse)
 library(rvest)
 ```
 
-## Research study survey
 
-- Dr. Julie Reynolds, Associate Professor of the Practice in Biology: [julie.a.reynolds@duke.edu](mailto:julie.a.reynolds@duke.edu)
-
-- Survey & Consent: You should have received an email this morning with a link to the survey. If you did not receive the email, you may access the survey here: [https://duke.qualtrics.com/jfe/form/SV_eF07ubGm219RAoJ](https://duke.qualtrics.com/jfe/form/SV_eF07ubGm219RAoJ)
-
----
 
 ## Meet Your TA!
 
@@ -80,7 +74,7 @@ library(rvest)
 
 ### Any questions about course policies?
 
-Course website: [http://bit.ly/sta199-fa19](http://bit.ly/sta199-fa19)
+Course website: [https://sta199-summer2021.github.io/website/](https://sta199-summer2021.github.io/website/)
 
 ---
 
@@ -129,7 +123,7 @@ If you do not have a GitHub account and/or had problems with RStudio Cloud, plea
     
 - **Take small steps:**
     + This a solo lab to make versioning (working with Git) simpler
-    + Next week you’ll learn about collaborating on GitHub and produce a single lab report for the team
+    + In the future, you may learn about collaborating on GitHub and produce a single lab report for the team
 
 </small>
 
@@ -143,13 +137,13 @@ You may watch or follow along:
 
 - On GitHub, click on the green **Clone or download button**, select **Use HTTPS** if it is not already selected. Click on the clipboard icon to copy the repo URL.
 
-- Go to RStudio Cloud and into the STA199-FA19 course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
+- Go to RStudio Cloud and into the STA199-Summer21 course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
 
 - Copy and paste the URL of your assignment repo into the pop up dialog box.
 
 - Click OK.
 
-Now it's your turn! When you're done with this part, you may continue if you like or wait until I demonstrate the next part. Please raise your hand if you have any questions.
+Now it's your turn! When you're done with this part, you may continue if you like or wait until I demonstrate the next part. Please 'raise your hand' if you have any questions.
 
 ---
 
@@ -180,5 +174,5 @@ class: middle, center
 ## You're now ready to complete the rest of lab!
 
 .instructions[
-Please raise your hand if you need help as you work on the lab.
+Please 'raise your hand' if you need help as you work on the lab.
 ]
