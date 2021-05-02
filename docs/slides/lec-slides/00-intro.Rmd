@@ -71,7 +71,7 @@ We will be leveraging the programming language R to introduce ourselves to data 
 
 We assume ZERO background in data science, statistics, and coding. We will help you get started with learning statistics, but this course will *not* be your typical intro stats course.
 
-There is a large emphasis on computing, so we all we need is an openness to learn! (And a laptop) 
+There is a large emphasis on computing, so all we need is an openness to learn! (and a laptop) 
 ---
 
 class: regular
