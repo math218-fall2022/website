@@ -1,7 +1,7 @@
 ---
 title: "Welcome to Intro to Data Science"
-author: "Dr. Maria Tackett"
-date: "08.27.19"
+author: "Becky Tang"
+date: "05.12.21"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -63,23 +63,31 @@ class: center, middle
 [-Wikipedia](https://en.wikipedia.org/wiki/Data_science)
 ]
 
+We will be leveraging the programming language R to introduce ourselves to data science.
+---
+
+
+## Necessary background
+
+We assume ZERO background in data science, statistics, and coding. We will help you get started with learning statistics, but this course will *not* be your typical intro stats course.
+
+There is a large emphasis on computing, so we all we need is an openness to learn! (And a laptop) 
 ---
 
 class: regular
 
 ## Instructor
 
-[Prof. Maria Tackett](https://www2.stat.duke.edu/~mt324/)
+[Becky Tang](https://beckytang.rbind.io/)
 
-<i class="material-icons">mail_outline</i> &nbsp;[maria.tackett@duke.edu](mailto:maria.tackett@duke.edu)<br>
-<i class="material-icons">work_outline</i> &nbsp;Old Chem 118B<br>
+<i class="material-icons">mail_outline</i> &nbsp;[becky.tang@duke.edu](mailto:becky,tang@duke.edu)<br>
 <i class="material-icons">calendar_today</i>&nbsp; Th 1p - 2:30p
 
 --
 
 .pull-left[
 ```{r, echo=FALSE,out.width = '100%'} 
-knitr::include_graphics("img/00/capital-one-logo.jpg")
+knitr::include_graphics("img/00/eBird.png")
 ```
 ]
 
@@ -87,72 +95,21 @@ knitr::include_graphics("img/00/capital-one-logo.jpg")
 
 .pull-right[
 ```{r, echo=FALSE,out.width = '100%'} 
-knitr::include_graphics("img/00/fbi-fingerprint.jpg")
+knitr::include_graphics("img/00/restio.jpg")
 ```
 ]
 ---
 
 ## Teaching Assistants
-<small>
-.pull-left[
-[Max Bartlett](https://www.linkedin.com/in/maxbartlett/)
-
-<i class="material-icons">mail_outline</i> &nbsp;[maxwell.bartlett@duke.edu](mailto:maxwell.bartlett@duke.edu)<br>
-<i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
-<i class="material-icons">calendar_today</i>&nbsp; Mon 6p - 8p
-
-<br><br>
-
-[Meredith Brown](https://www.linkedin.com/in/meredith-brown-807964172/)
-
-<i class="material-icons">mail_outline</i> &nbsp;[meredith.brown@duke.edu](mailto:meredith.brown@duke.edu)<br>
-<i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
-<i class="material-icons">calendar_today</i>&nbsp; Mon 12:30p - 2:30p
-]
-
-.pull-right[
-[Steven Herrera](https://www.linkedin.com/in/rosvidstevenherrera/)
-
-<i class="material-icons">mail_outline</i> &nbsp; <small>[rosvid.herrera.tenorio@duke.edu](mailto:rosvid.herrera.tenorio@duke.edu)</small><br>
-<i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
-<i class="material-icons">calendar_today</i>&nbsp; Thu 5:30p - 7:30p
-
-<br>
-
-[Jessie Ou](https://www.linkedin.com/in/jessie-yc-ou/)
-
-<i class="material-icons">mail_outline</i> &nbsp;[yanchen.ou@duke.edu](mailto:yanchen.ou@duke.edu)<br>
-<i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
-<i class="material-icons">calendar_today</i>&nbsp; Sun 12p - 2p
-
-
-]
-
-
-</small>
----
-
-## Teaching Assistants
 
 <small>
 
-.pull-left[
-
-[Malavi Ravindran](https://www.linkedin.com/in/malavi-ravindran-332035175)
-
-<i class="material-icons">mail_outline</i> &nbsp;[malavi.ravindran@duke.edu](mailto:malavi.ravindran@duke.edu)<br>
-<i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
-<i class="material-icons">calendar_today</i>&nbsp; Mon 3p - 5p
-
-]
-
-.pull-right[
 [Becky Tang](https://beckytang.rbind.io/)
 
 <i class="material-icons">mail_outline</i> &nbsp;[becky.tang@duke.edu](mailto:becky.tang@duke.edu)<br>
 <i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
 <i class="material-icons">calendar_today</i>&nbsp; Wed 3p - 5p
-]
+
 
 </small>
 
@@ -160,9 +117,9 @@ knitr::include_graphics("img/00/fbi-fingerprint.jpg")
 
 ## Where to find information
 
-- Course website: [http://bit.ly/sta199-fa19](http://bit.ly/sta199-fa19)
+- Course website: [https://sta199-summer2021.github.io/website/](https://sta199-summer2021.github.io/website/)
 
-- GitHub (assignments): [https://github.com/sta199-fa19](https://github.com/sta199-fa19)
+- GitHub (assignments): [https://github.com/sta199-summer2021](https://github.com/sta199-summer2021)
 
 
 ---
