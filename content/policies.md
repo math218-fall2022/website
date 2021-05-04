@@ -24,13 +24,12 @@ The following activities and assessments will help you successfully achieve the 
 
 In homework, you will apply what you've learned during lecture and lab to complete data analysis tasks. You may discuss homework assignments with other students; however, homework should be completed and submitted individually. Homework must be typed up using R Markdown and submitted in the appropriate GitHub repository. 
 
-*The lowest homework grade will be dropped at the end of the semester.*
 <br> 
 <br>
 
 #### Labs 
 
-In labs, you will apply the concepts discussed in lecture to various data analysis scenarios, with a focus on the computation. You will work on lab assignments in teams, and all team members are expected to contribute equally to the completion of each assignment. You are expected to use the team's Git repository on the course's GitHub page as as the central platform for collaboration. Commits to this repository will be used as a metric of each team member's relative contribution for each lab. You will also be asked to evaluate your team members' performance periodically during the semester. 
+In labs, you will apply the concepts discussed in lecture to various data analysis scenarios, with a focus on the computation. You will complete lab assignments individually, but can discuss with your classmates. You are expected to use your Git repository on the course's GitHub page as as the central platform for work. Commits to this repository will be used as a component of the lab grade.
 
 *The lowest lab grade will be dropped at the end of the semester.*
 <br> 
@@ -44,7 +43,7 @@ The exams are an opportunity to assess the knowledge and skills you’ve learned
 
 #### Final Project 
 
-The purpose of the project is to apply what you’ve learned throughout the semester to analyze an interesting data-based research question. The project will be completed in teams, and each team will present their results during the final exam period, Saturday, December 14, 7p - 10p. *You must complete the final project and present your work in class to pass the course.*
+The purpose of the project is to apply what you’ve learned throughout the semester to analyze an interesting data-based research question. The project will be completed in teams, and each team will present their results during the lecture on Wednesday, July 21. *You must complete the final project and present your work in class to pass the course.*
 <br> 
 <br>
 
@@ -54,15 +53,9 @@ Application exercises give you an opportunity to practice using the statistical 
 <br> 
 <br>
 
-#### Writing Exercises 
+#### Data Visualization Examples 
 
-There will be several writing exercises throughout the semester. Each exercise will include a writing prompt related to the content discussed in class along with peer review. More details will be provided before the first exercise.
-<br> 
-<br>
-
-#### Teamwork 
-
-To construct functional and diverse teams, you will be asked to complete a short survey to gauge your previous exposure to programming topics. After completing the survey, you will be assigned to teams of 3-4 students; these teams will stay consistent throughout the semester (barring extraordinary circumstances). You will work in these teams during class, on application exercises, on labs, and on the final project.
+Everyone will sign up to share a data visualization that they find meaningful and believe does a good job at presenting a story. These will be accompanied by a short written submission. More details will be provided before the first presentation.
 <br> 
 <br>
 
@@ -78,10 +71,9 @@ Homework | 20%
 Labs | 15%
 Exam 1 | 17.5%
 Exam 2 | 17.5%
-Final Project | 15%
+Final Project | 20%
 Participation & Application Exercises | 5%
-Writing Exercises | 5%
-Teamwork | 5%
+Data Visualization Examples | 5%
 
 
 Class attendance in lecture and lab is a firm expectation; frequent absences or tardiness will be considered a legitimate cause for grade reduction.
@@ -130,7 +122,7 @@ If you have a personal or family emergency or health condition that affects your
 
 **Exam dates cannot be changed and no make-up exams will be given.** If you must miss an exam, your absence must be officially excused before the exam due date. If your absence is excused, the missing exam grade will be imputed at the end of the semester based on your performance on other relevant course assignments.
 
-The final project presentations will be during the university scheduled exam period, Saturday, December 14, 7p - 10p. **You must complete the final project and present your work during the exam period in order to pass the course.**
+The final project presentations will be held during lecture on Wednesday, July 21. **You must complete the final project and present your work during this period in order to pass the course.**
 <br> 
 <br>
 

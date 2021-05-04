@@ -1,7 +1,7 @@
 ---
 title: "Data and Visualization"
-author: "Dr. Maria Tackett"
-date: "09.03.19"
+author: "Becky Tang"
+date: "05.17.21"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
@@ -65,9 +65,9 @@ class: middle, center
 
 ## Announcements
 
-- Regular office hours start this week. Check the [course homepage](http://bit.ly/sta199-fa19) for the office hours schedule
+- Regular office hours start this week. Check the [course homepage](https://sta199-summer2021.github.io/website/) for the office hours schedule
 
-- Lab 01 - due Thursday at 11:59p
+- Lab 01 - due tomorrow Tuesday at 11:59p
 
 - Get to Know You Survey - due TODAY at 11:59p
 

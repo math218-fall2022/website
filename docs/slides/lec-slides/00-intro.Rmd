@@ -71,7 +71,10 @@ We will be leveraging the programming language R to introduce ourselves to data 
 
 We assume ZERO background in data science, statistics, and coding. We will help you get started with learning statistics, but this course will *not* be your typical intro stats course.
 
-There is a large emphasis on computing, so all we need is an openness to learn! (and a laptop) 
+There is a large emphasis on computing, so all we need is an openness to learn! (and a laptop)
+
+That being said, there is a lot of material in this course! *Please make sure you are enrolled in both Summer Sessions I and II, along with corresponding labs*.
+
 ---
 
 class: regular
@@ -81,7 +84,7 @@ class: regular
 [Becky Tang](https://beckytang.rbind.io/)
 
 <i class="material-icons">mail_outline</i> &nbsp;[becky.tang@duke.edu](mailto:becky,tang@duke.edu)<br>
-<i class="material-icons">calendar_today</i>&nbsp; Th 1p - 2:30p
+<i class="material-icons">calendar_today</i>&nbsp; Wed 10:30am-12:00pm
 
 --
 
@@ -283,7 +286,7 @@ class: middle, center
 
 ## Activities & Assessments
 
-- <font class="vocab">Homework</font>: Individual assignments combining conceptual and computational skills. *Lowest score dropped.*
+- <font class="vocab">Homework</font>: Individual assignments combining conceptual and computational skills.
 
 --
 
@@ -295,7 +298,7 @@ class: middle, center
 
 --
 
-- <font class="vocab">Final Project</font>: Project presented during the final day of class, **Thursday, July 22 9:00-10:15am**. You must complete the project and present in class to pass the course.
+- <font class="vocab">Final Project</font>: Project presented during the class on **Wednesday, July 21 9:00-10:15am**. You must complete the project and present in class to pass the course.
 
 .instructions[
 Let me know if you are unable to attend the project presentations due to differing time zones. 
@@ -446,7 +449,7 @@ class: center, middle
 
 - Fill out the **Getting To Know You Survey on Sakai** - due 9/3 at 11:59p
 
-- My office hours start this week: Thu, 1p - 2:30p and by appointment
+- My office hours start next week: Wed, 10:30am-12:00pm and by appointment
 
 - TA office hours start next week
 
