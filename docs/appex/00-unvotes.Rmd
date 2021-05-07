@@ -1,7 +1,7 @@
 ---
 title: "UN Votes"
-author: "Maria Tackett"
-date: "08.27.19"
+author: "Becky Tang"
+date: "05.12.21"
 output: html_document
 ---
 
@@ -43,7 +43,7 @@ un_roll_call_issues
 We begin by looking at how often each country voted "yes" on a resolution in each year. We'll visualize the results, so let's pick a few countries of interest and focus our analysis on them.
 
 ```{r country-list}
-country_list <- c("United States of America", "Ghana", "Mexico", "France")
+country_list <- c("United States", "Ghana", "Mexico", "France", "Spain")
 ```
 
 ```{r plot-yearly-yes, fig.width=10, warning=FALSE}
@@ -60,11 +60,11 @@ un_votes %>%
 
 ### Part 2
 
-Next, let's see how the voting records in the United States and France have changed over the years on each of the issues.
+Next, let's see how the voting records in France, Spain, and the United States have changed over the years on each of the issues.
 
 ```{r plot-yearly-yes-issue, fig.width=10, warning=FALSE}
 un_votes %>%
-  filter(country %in% c("United States of America", "France")) %>%
+  filter(country %in% c("United States", "France", "Spain")) %>%
   inner_join(un_roll_calls, by = "rcid") %>%
   inner_join(un_roll_call_issues, by = "rcid") %>%
   group_by(country, year = year(date), issue) %>%
@@ -78,20 +78,13 @@ un_votes %>%
     facet_wrap(~ issue)
 ```
 
-## Next Steps
-
-1. Put your name in the author field at the top of the file (in the  `yaml` -- we will discuss what this is at a later date). Knit again.
-
-2. Change the country names in parts 1 and 2 to countries that interest you. The spelling and capitalization must match what's in the data, so you can use the [Appendix](#appendix) to see the correct spelling and capitalization. Knit again.
-
-You have made your first data visualization!
 
 ## Discussion Questions
 
-1. Consider the plot in Part 1. Describe how the voting behaviors of the four countries have changed over time.
+1. Consider the plot in Part 1. Describe how the voting behaviors of the five countries have changed over time.
 
 2. Consider the plot in Part 2. 
-    - On which issues have the two countries voted most similarly in recent years?  
+    - On which issues have the three countries voted most similarly in recent years?  
     - On which issues have they voted most differently in recent years? 
     - Has this changed over time?
 
