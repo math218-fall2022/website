@@ -26,7 +26,7 @@ Lab 02  &nbsp;&nbsp; <font color="#875687"><i class="fas fa-university"></i></fo
 {.table .table1 .table-condensed .table-striped .text-left}
 <span></span>     | <span></span>     | <span></span>    | <span></span>    |  <span></span>      
 ------------------|-------------------|------------------|------------------|------------------ 
-Instructor        | [Becky Tang](https://beckytang.rbind.io/) | <a href="mailto:becky.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> | W 10:30am-12:00pm | 
+Instructor        | [Becky Tang](https://beckytang.rbind.io/) | <a href="mailto:becky.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> | M 1:00-3:00pm; W 10:30am-12:00pm | 
 TA               | [TBD] |  | | 
 
 ### Texts

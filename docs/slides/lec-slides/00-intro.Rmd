@@ -84,7 +84,7 @@ class: regular
 [Becky Tang](https://beckytang.rbind.io/)
 
 <i class="material-icons">mail_outline</i> &nbsp;[becky.tang@duke.edu](mailto:becky,tang@duke.edu)<br>
-<i class="material-icons">calendar_today</i>&nbsp; Wed 10:30am-12:00pm
+<i class="material-icons">calendar_today</i>&nbsp;  M 1:00-3:00pm; W 10:30am-12:00pm
 
 --
 
