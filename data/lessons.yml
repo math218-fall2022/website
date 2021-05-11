@@ -13,6 +13,7 @@ lessons:
    title: "Lab 01: Hello R!"
    slides: "lab-slides/01-lab-slides.html"
    lab: "lab-01-hello-r.html"
+ - title: "Last day for Drop/Add"
  - date: "UNIT 1"
    title: "Collecting, wrangling, & visualizing data"
  - title: "Week 02"

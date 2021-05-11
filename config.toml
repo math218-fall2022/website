@@ -51,16 +51,16 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   url = "/policies.html"
 [[menu.main]]
   weight = 4
-  identifier = "rstudio"
-  name = "RStudio"
-  pre = "<i class=\"material-icons\">cloud</i>"
-  url = "https://rstudio.cloud"
+  identifier = "gradescope"
+  name = "Gradescope"
+  pre = "<i class=\"material-icons\">grading</i>"
+  url = "https://www.gradescope.com/"
 [[menu.main]]
   weight = 5
   identifier = "github"
   name = "GitHub"
   pre = "<i class='fab fa-github fa-lg'></i>"
-  url = "https://github.com/sta199-fa19"
+  url = "https://github.com/sta199-summer2021"
   
 [[menu.main]]
   weight = 6
@@ -85,15 +85,10 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   url = "http://stat.duke.edu/"
 [[menu.footer]]
   weight = 2
-  name = "RStudio"
-  pre = "<i class=\"icon-rlogo\" style=\"font-size:150%\"></i>"
-  url = "https://rstudio.cloud/"
-[[menu.footer]]
-  weight = 3
   identifier = "GitHub"
   name = "GitHub"
   pre = "<i class=\"button-icon fa fa-2x fa-github\"></i>"
-  url = "https://github.com/sta199-fa19"
+  url = "https://github.com/sta199-summer2021"
 [[menu.footer]]
 
 

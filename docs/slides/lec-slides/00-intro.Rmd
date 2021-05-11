@@ -84,7 +84,7 @@ class: regular
 [Becky Tang](https://beckytang.rbind.io/)
 
 <i class="material-icons">mail_outline</i> &nbsp;[becky.tang@duke.edu](mailto:becky,tang@duke.edu)<br>
-<i class="material-icons">calendar_today</i>&nbsp;  M 1:00-3:00pm; W 10:30am-12:00pm
+<i class="material-icons">calendar_today</i>&nbsp;  M 1:30-3:00pm; W 10:30am-12:00pm
 
 --
 
@@ -107,11 +107,10 @@ knitr::include_graphics("img/00/restio.jpg")
 
 <small>
 
-[Becky Tang](https://beckytang.rbind.io/)
+[Marc Brooks](https://www.linkedin.com/in/marc-g-brooks)
 
-<i class="material-icons">mail_outline</i> &nbsp;[becky.tang@duke.edu](mailto:becky.tang@duke.edu)<br>
-<i class="material-icons">work_outline</i> &nbsp;Old Chem 203B<br>
-<i class="material-icons">calendar_today</i>&nbsp; Wed 3p - 5p
+<i class="material-icons">mail_outline</i> &nbsp;[becky.tang@duke.edu](mailto:marc.brooks@duke.edu)<br>
+<i class="material-icons">calendar_today</i>&nbsp; TBD
 
 
 </small>
@@ -267,11 +266,11 @@ class: middle, center
 
 ## Activities & Assessments
 
-- <font class="vocab">Homework</font>: Individual assignments combining conceptual and computational skills.
+- <font class="vocab">Homework</font>: Three individual assignments combining conceptual and computational skills.
 
 --
 
-- <font class="vocab">Labs</font>: Team assignments focusing on computational skills. Start labs on Friday and due Tuesday. *Lowest score will be dropped.*
+- <font class="vocab">Labs</font>: Assignments focusing on computational skills. Start labs on Friday and due Tuesday. *Lowest score will be dropped.*
 
 --
 
@@ -289,11 +288,11 @@ Let me know if you are unable to attend the project presentations due to differi
 ## Activities & Assessments
 --
 
-- <font class="vocab">Application Exercises</font>: Exercises usually started in class and completed by the next class. Check/no check grade.
+- <font class="vocab">Application Exercises</font>: Exercises usually started in class and when assigned, due by the next class. Graded based on a good-faith effort has been made in attempting all parts. Successful on-time completion of at least 90% will result in full points for that AE; anything lower than that will be assigned points accordingly. *Lowest two scores will be dropped.*
 
 --
 
-- <font class="vocab">Data Visualization Examples</font>: Share a visualization that you find interesting. One or two presentations per week.
+- <font class="vocab">Data Visualization Examples</font>: Share a visualization that you find interesting. Around one presentation per week.
 
 ---
 
@@ -303,12 +302,12 @@ Let me know if you are unable to attend the project presentations due to differi
 
 | Component | Weight |
 |---------------|--------|
-| Homework | 20%|
+| Homework | 17.5%|
 | Labs | 15% |
 | Exam 1 | 17.5% |
 | Exam 2 | 17.5% |
-| Final Project | 20% |
-| Participation & Application Exercises | 5% |
+| Final Project | 17.5% |
+| Participation & Application Exercises | 10% |
 | Data Visualization Examples | 5%|
 
 --
@@ -337,8 +336,8 @@ Let me know if you are unable to attend the project presentations due to differi
 ## Late Work &amp; Regrade Requests
 
 - Homework assignments: 
-    - Late but within 24 hours of deadline: 20% penalty
-    - Not accepted if submitted any later
+    - Late but within 12 hours of deadline: no penalty
+    - After the 12 hours, there is a 20% penalty for each day the assignment is late
     
 - Late work will not be accepted for the take-home exams or final project. 
 
@@ -379,7 +378,7 @@ Any violations will automatically result in a grade of 0 on the assignment and w
 
 --
 
-- **Piazza**: Outside of class and office hours, any general questions about course content or assignments should be posted on Piazza since there are likely other students with the same questions.
+- **Piazza**: Outside of class and office hours, any general questions about course content or assignments should be posted on Piazza since there are likely other students with the same questions. If you weren't invited to join our Piazza, sign up using [this link](piazza.com/duke/summer2021/sta199l101l1su21).
 
 ---
 
@@ -389,18 +388,11 @@ Sometimes you may need help with the class that is beyond what can be provided b
 <br><br>
 
 .small[
-The [Academic Resource Center (ARC)](https://arc.duke.edu) offers free services to all students during their undergraduate careers at Duke.  Services include Learning Consultations, Peer Tutoring and Study Groups, ADHD/LD Coaching, Outreach Workshops, and more. Because learning is a process unique to every individual, they work with each student to discover and develop their own academic strategy for success at Duke. Contact the ARC to schedule an appointment. Undergraduates in any year, studying any discipline can benefit! Contact <a href="mailto:arc@duke.edu" title="email">ARC@duke.edu</a>, 919-684-5917, 211 Academic Advising Center Building, East Campus – behind Marketplace.
+The [Academic Resource Center (ARC)](https://arc.duke.edu) offers free services to all students during their undergraduate careers at Duke.  Services include Learning Consultations, Peer Tutoring and Study Groups, ADHD/LD Coaching, Outreach Workshops, and more. Because learning is a process unique to every individual, they work with each student to discover and develop their own academic strategy for success at Duke. Contact the ARC to schedule an appointment. Undergraduates in any year, studying any discipline can benefit! 
 ]
 
 ---
 
-## Technology 
-
-- You should bring a laptop to every lecture and lab session. 
-
-- Refrain from engaging in activities not related to the class discussion. Browsing the web and social media, excessive messaging, playing games, etc. is not only a distraction for you but is also a distraction for everyone around you.
-
----
 
 ## Accessibility 
 
@@ -432,7 +424,7 @@ class: center, middle
 
 - Please make sure you have access to Sakai and Gradescope
 
-- My office hours start next week: Wed, 10:30am-12:00pm and by appointment
+- My office hours start today after class, 10:30am-12:00pm
 
 - TA office hours start next week
 
