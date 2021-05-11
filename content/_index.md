@@ -27,7 +27,7 @@ Lab 02  &nbsp;&nbsp; <font color="#875687"><i class="fas fa-university"></i></fo
 <span></span>     | <span></span>     | <span></span>    | <span></span>    |  <span></span>      
 ------------------|-------------------|------------------|------------------|------------------ 
 Instructor        | [Becky Tang](https://beckytang.rbind.io/) | <a href="mailto:becky.tang@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> | M 1:30-3:00pm; W 10:30am-12:00pm | 
-TA               | [Marc Brooks](https://www.linkedin.com/in/marc-g-brooks) | <a href="mailto:marc.brooks@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp | TBD | 
+TA               | [Marc Brooks](https://www.linkedin.com/in/marc-g-brooks) | <a href="mailto:marc.brooks@duke.edu" title="email"><i class="fa fa-envelope"></i></a>| TBD | 
 
 ### Texts
 
