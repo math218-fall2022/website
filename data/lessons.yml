@@ -8,7 +8,7 @@ lessons:
    title: "Meet the Toolkit"
    reading: "reading-01.html"
    slides: "lec-slides/01-meet-toolkit.html"
-   appex: "01-bechdel.html"
+   appex: "01-rstudio-tour.html"
  - date: "Fri, May 14"
    title: "Lab 01: Hello R!"
    slides: "lab-slides/01-lab-slides.html"
