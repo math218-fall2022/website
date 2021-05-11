@@ -278,7 +278,7 @@ class: middle, center
 
 --
 
-- <font class="vocab">Final Project</font>: Project presented during the class on **Wednesday, July 21 9:00-10:15am**. You must complete the project and present in class to pass the course.
+- <font class="vocab">Final Project</font>: Project presented during the class on **Wednesday-Thursday, July 21-22 9:00-10:15am**. You must complete the project and present in class to pass the course.
 
 .instructions[
 Let me know if you are unable to attend the project presentations due to differing time zones. 

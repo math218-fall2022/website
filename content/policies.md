@@ -160,7 +160,7 @@ If you have a personal or family emergency or health condition that affects your
 
 **Exam dates cannot be changed and no make-up exams will be given.** If you must miss an exam, your absence must be officially excused before the exam due date. If your absence is excused, the missing exam grade will be imputed at the end of the semester based on your performance on other relevant course assignments.
 
-The final project presentations will be held during lecture on Wednesday, July 21. **You must complete the final project and present your work during this period in order to pass the course.**
+The final project presentations will be held during lecture on Wednesday-Thursday July 21-22. **You must complete the final project and present your work during this period in order to pass the course.**
 <br> 
 <br>
 
