@@ -430,7 +430,7 @@ class: center, middle
 
 - Please make sure you have access to Sakai and Gradescope
 
-- My office hours start today after class, 10:30am-12:00pm
+- I will have abbreviated office hours immediately after class today
 
-- TA office hours start next week
+- Usual office hours start next week, including TA office hours (see Sakai for Zoom links)
 
