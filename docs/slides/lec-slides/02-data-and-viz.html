@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Data and visualization</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Becky Tang" />
+    <link href="libs/font-awesome/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="sta199-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Data and visualization
+### Becky Tang
+
+---
+
+
+layout: true
+
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+&lt;a href="http://datasciencebox.org" target="_blank"&gt;datasciencebox.org&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+
+
+
+
+class: middle, center
+
+## [Click for PDF of slides](02-data-and-viz.pdf)
+
+---
+
+class: center, middle
+
+# Exploratory data analysis
+
+---
+
+## What is EDA?
+
+- .vocab[Exploratory data analysis (EDA)] is an approach to analyzing data sets to summarize the main characteristics.
+
+&lt;br&gt; 
+
+- Often, EDA is visual. That's what we're focusing on today.
+
+&lt;br&gt; 
+
+- We can also calculate summary statistics and perform data wrangling/manipulation/transformation at (or before) this stage of the analysis.
+
+---
+
+class: center, middle
+
+# Data visualization
+
+---
+
+## Data visualization
+
+&gt; *"The simple graph has brought more information to the data analyst’s mind than any other device." — John Tukey*
+&lt;br&gt;
+
+- .vocab[Data visualization] is the creation and study of the visual representation of data.
+
+&lt;br&gt;
+
+- There are many tools for visualizing data (R is one of them), and many approaches/systems within R for making data visualizations
+    - We'll use  **`ggplot2`**.
+
+---
+
+## ggplot2 in tidyverse
+
+.pull-left[
+&lt;img src="img/02/ggplot2-part-of-tidyverse.png" width="70%" /&gt;
+]
+.pull-right[
+- **ggplot2** is tidyverse's data visualization package
+- The `gg` in "ggplot2" stands for Grammar of Graphics
+- It is inspired by the book **Grammar of Graphics** by Leland Wilkinson*
+![](img/02/grammar-of-graphics.png)
+]
+
+.footnote[ 
+Source: [BloggoType](http://bloggotype.blogspot.com/2016/08/holiday-notes2-grammar-of-graphics.html)
+]
+---
+
+## What is a Grammar of Graphics?
+
+A tool that allows for concisely describing the components of a graphic:
+
+&lt;img src="img/02/grammar-of-graphics.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## What function is doing the plotting?
+
+
+
+
+```r
+ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) +
+* geom_point() +
+  labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
+       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+```
+
+```
+## Warning: Removed 15 rows containing missing values (geom_point).
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## What is the dataset being plotted?
+
+
+```r
+*ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) +
+  geom_point() + 
+  labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
+       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+```
+
+```
+## Warning: Removed 15 rows containing missing values (geom_point).
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Which variable is on the x-axis? On the y-axis?
+
+
+
+```r
+*ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) +
+* geom_point() +
+  labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
+       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+```
+
+```
+## Warning: Removed 15 rows containing missing values (geom_point).
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## What does the warning mean?
+
+
+
+```r
+ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) +
+* geom_point() +
+  labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
+       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+```
+
+```
+## Warning: Removed 15 rows containing missing values (geom_point).
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## What does `geom_smooth()` do?
+
+
+```r
+*ggplot(data = countries_footprint, mapping = aes(x = GDP, y =Total)) +
+  geom_point() +
+* geom_smooth() +
+  labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
+       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Hello ggplot2!
+
+- `ggplot()` is the main function in ggplot2 and plots are constructed in layers
+- The structure of the code for plots can often be summarized as
+
+```r
+ggplot + 
+  geom_xxx
+```
+
+&lt;br&gt;
+
+--
+
+or, more precisely
+.small[
+
+```r
+ggplot(data = [dataset], mapping = aes(x = [x-variable], y = [y-variable])) +
+   geom_xxx() +
+   other options
+```
+]
+
+---
+
+## Hello ggplot2!
+
+To use ggplot2 functions, first load tidyverse
+
+
+```r
+library(tidyverse)
+```
+
+
+For help with the ggplot2, see [ggplot2.tidyverse.org](http://ggplot2.tidyverse.org/)
+
+---
+
+class: center, middle
+
+# Visualizing Star Wars
+
+---
+
+## Dataset terminology
+
+.small[
+
+```r
+countries_footprint
+```
+
+```
+## # A tibble: 188 x 14
+##    Country Region Population   HDI    GDP Cropland Grazing Forest Carbon  Fish
+##    &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 Afghan… Middl…      29.8   0.46   615.     0.3     0.2   0.08    0.18  0   
+##  2 Albania North…       3.16  0.73  4534.     0.78    0.22  0.25    0.87  0.02
+##  3 Algeria Africa      38.5   0.73  5431.     0.6     0.16  0.17    1.14  0.01
+##  4 Angola  Africa      20.8   0.52  4666.     0.33    0.15  0.12    0.2   0.09
+##  5 Antigu… Latin…       0.09  0.78 13205.    NA      NA    NA      NA    NA   
+##  6 Argent… Latin…      41.1   0.83 13540      0.78    0.79  0.290   1.08  0.1 
+##  7 Armenia Middl…       2.97  0.73  3426.     0.74    0.18  0.34    0.89  0.01
+##  8 Aruba   Latin…       0.1  NA       NA     NA      NA    NA      NA    NA   
+##  9 Austra… Asia-…      23.0   0.93 66604.     2.68    0.63  0.89    4.85  0.11
+## 10 Austria Europ…       8.46  0.88 51274.     0.82    0.27  0.63    4.14  0.06
+## # … with 178 more rows, and 4 more variables: Total &lt;dbl&gt;,
+## #   EarthsRequired &lt;dbl&gt;, CountriesRequired &lt;dbl&gt;, DataQuality &lt;chr&gt;
+```
+]
+
+Each row is an .vocab[observation]. Each column is a .vocab[variable]
+---
+
+## What's in the Ecological Footprint data?
+
+Take a `glimpse` of the data: 
+
+```r
+glimpse(countries_footprint)
+```
+
+```
+## Observations: 188
+## Variables: 14
+## $ Country           &lt;chr&gt; "Afghanistan", "Albania", "Algeria", "Angola", "Ant…
+## $ Region            &lt;chr&gt; "Middle East/Central Asia", "Northern/Eastern Europ…
+## $ Population        &lt;dbl&gt; 29.82, 3.16, 38.48, 20.82, 0.09, 41.09, 2.97, 0.10,…
+## $ HDI               &lt;dbl&gt; 0.46, 0.73, 0.73, 0.52, 0.78, 0.83, 0.73, NA, 0.93,…
+## $ GDP               &lt;dbl&gt; 614.66, 4534.37, 5430.57, 4665.91, 13205.10, 13540.…
+## $ Cropland          &lt;dbl&gt; 0.30, 0.78, 0.60, 0.33, NA, 0.78, 0.74, NA, 2.68, 0…
+## $ Grazing           &lt;dbl&gt; 0.20, 0.22, 0.16, 0.15, NA, 0.79, 0.18, NA, 0.63, 0…
+## $ Forest            &lt;dbl&gt; 0.08, 0.25, 0.17, 0.12, NA, 0.29, 0.34, NA, 0.89, 0…
+## $ Carbon            &lt;dbl&gt; 0.18, 0.87, 1.14, 0.20, NA, 1.08, 0.89, NA, 4.85, 4…
+## $ Fish              &lt;dbl&gt; 0.00, 0.02, 0.01, 0.09, NA, 0.10, 0.01, NA, 0.11, 0…
+## $ Total             &lt;dbl&gt; 0.79, 2.21, 2.12, 0.93, 5.38, 3.14, 2.23, 11.88, 9.…
+## $ EarthsRequired    &lt;dbl&gt; 0.46, 1.27, 1.22, 0.54, 3.11, 1.82, 1.29, 6.86, 5.3…
+## $ CountriesRequired &lt;dbl&gt; 1.60, 1.87, 3.61, 0.37, 5.70, 0.45, 2.52, 20.69, 0.…
+## $ DataQuality       &lt;chr&gt; "6", "6", "5", "6", "2", "6", "3B", "2", "5", "5", …
+```
+
+---
+
+## Example: What's in the Star Wars data?
+If data have been loaded into R for anyone to use, it comes with a help file.
+
+Run the following **&lt;u&gt;in the Console&lt;/u&gt;** to view the help file for the starwars dataset
+
+```r
+?starwars
+```
+
+&lt;img src="img/02/starwars-help.png" width="60%" /&gt;
+
+---
+
+## Mass vs. height
+
+
+```r
+ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) +
+  geom_point()
+```
+
+```
+## Warning: Removed 15 rows containing missing values (geom_point).
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## What's that warning?
+
+- Not all countries have GDP and Total Footprint information (hence 15 of them not plotted)
+
+```
+## Warning: Removed 15 rows containing missing values (geom_point).
+```
+
+- We can suppress warnings to save space on the output documents,  but it's important to note them
+
+- To suppress warning: 
+.center[
+`{r code-chunk-label, warning=FALSE}`
+]
+
+---
+
+## GDP vs. Total Footprint
+
+.question[
+How would you describe this **relationship**? 
+]
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## GDP vs. Forest Footprint
+
+.question[
+How about here? Which country has low GDP but a large forest footprint, and vice versa?
+]
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+## Which countries?
+
+&lt;img src="img/02/forest.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Additional variables
+
+We can map additional variables to various features of the plot:
+
+- **aesthetics**
+    - shape
+    - color
+    - size
+    - alpha (transparency)
+    
+- **faceting**: small multiples displaying different subsets
+
+---
+
+class: center, middle
+
+# Aesthetics
+
+---
+
+## Aesthetics options
+
+Visual characteristics of plotting characters that can be **mapped to a specific variable**
+in the data are
+
+- `color`
+- `size`
+- `shape`
+- `alpha` (transparency)
+
+---
+
+## GDP + Total Footprint + Data Quality
+
+
+```r
+ggplot(data = countries_footprint, 
+       mapping = aes(x = GDP, y = Total,
+*                    color = DataQuality)) +
+  geom_point() 
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## GDP + Total Footprint + Data Quality
+
+Let's map `shape` and `color` to `DataQuality`
+
+
+```r
+ggplot(data = countries_footprint, 
+       mapping = aes(x = GDP, y = Total, color = DataQuality,
+*                    shape = DataQuality)) +
+  geom_point() 
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### GDP + Total Footprint + Data Quality + HDI
+
+
+```r
+ggplot(data = countries_footprint, 
+       mapping = aes(x = GDP, y = Total, color = DataQuality, shape = DataQuality,
+*                    size = Fish)) +
+  geom_point() 
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/plot-birth-year-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## GDP + Total Footprint + Data Quality
+
+Let's increase the size of all points across the board:
+
+
+```r
+ggplot(data = countries_footprint, 
+       mapping = aes(x = GDP, y = Total, color = DataQuality, shape = DataQuality)) + 
+* geom_point(size = 3)
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Aesthetics summary
+
+- Continuous variable are measured on a continuous scale
+- Discrete variables are measured (or often counted) on a discrete scale
+
+.small[
+aesthetics    | discrete                 | continuous
+------------- | ------------------------ | ------------
+color         | rainbow of colors        | gradient
+size          | discrete steps           | linear mapping between radius and value
+shape         | different shape for each | shouldn't (and doesn't) work
+
+]
+
+&lt;br&gt;
+
+.alert[Use aesthetics (`aes`) for mapping features of a plot to a variable, define the 
+features in the `geom_xxx` for customization **&lt;u&gt;not&lt;/u&gt;** mapped to a variable
+]
+
+---
+
+class: center, middle
+
+# Faceting
+
+---
+
+## Faceting options
+
+- Smaller plots that display different subsets of the data
+- Useful for exploring conditional relationships and large data
+
+
+
+```r
+ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) + 
+  geom_point()+
+  labs(title = "GDP vs. Total Footprint of countries (2016)",
+*      subtitle = "Faceted by region",
+       x = "GDP ($)", y =  "Total footprint (hectare)")+
+* facet_grid(. ~ Region)
+```
+
+
+---
+
+
+```r
+ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) + 
+  geom_point()+
+  labs(title = "GDP vs. Total Footprint of countries (2016)",
+*      subtitle = "Faceted by region",
+       x = "GDP ($)", y =  "Total footprint (hectare)")+
+* facet_grid(. ~ Region)
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+In the next few slides describe what each plot displays. Think about
+how the code relates to the output.
+]
+
+--
+
+&lt;br&gt;&lt;br&gt;&lt;br&gt;
+
+.alert[
+The plots in the next few slides do not have proper titles, axis labels, etc, so you can more easily focus on what's happening in the plots. But you 
+should always label your plots!
+]
+
+---
+
+
+```r
+ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) + 
+  geom_point()+
+* facet_grid(DataQuality ~ Region)
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) + 
+  geom_point()+
+* facet_grid(Region ~ .)
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+
+```r
+ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) + 
+  geom_point()+
+* facet_wrap(Region ~.)
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) + 
+  geom_point()+
+* facet_wrap(Region ~ . , scales = "free_x")
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Facet summary
+
+- `facet_grid()`: 
+    - 2d grid
+    - `rows ~ cols`
+    - use `.` for no split
+
+--
+
+- `facet_wrap()`: 1d ribbon wrapped into 2d
+    - set scales using `scales = ` ("free_x", "free_y", "free")
+
+---
+
+## `ggplot2` supplementary resources
+
+1. [ggplot2.tidyverse.org](https://ggplot2.tidyverse.org/)
+2. `ggplot2` [cheat sheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf)
+3. STA 523 `ggplot2` [slides](https://shawnsanto.com/files/sta523/slides/lec-3b-ggplot2.html#1)
+4. [Top 50 `ggplot2` visualizations](http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html)
+5. [How the BBC uses `ggplot2`](https://medium.com/bbc-visual-and-data-journalism/how-the-bbc-visual-and-data-journalism-team-works-with-graphics-in-r-ed0b35693535)
+6. [ggplot2: Elegant Graphics for Data Analysis](https://ggplot2-book.org/)
+## Dive further...
+
+-- 
+
+Data obtained from [https://www.kaggle.com/footprintnetwork/ecological-footprint](https://www.kaggle.com/footprintnetwork/ecological-footprint)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%",
+"ratio": "16:9"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

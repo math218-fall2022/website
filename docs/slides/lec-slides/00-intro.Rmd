@@ -55,6 +55,12 @@ class: center, middle
 
 ---
 
+class: center, middle
+
+## [Click for PDF of slides](00-intro.pdf)
+
+---
+
 ## What is Data Science?
 
 *"Data science is a concept to unify statistics, data analysis, machine learning and their related methods in order to understand and analyze actual phenomena with data. It employs techniques and theories drawn from many fields within the context of <font class="vocab">mathematics, statistics, information science, and computer science</font>."*
@@ -109,7 +115,7 @@ knitr::include_graphics("img/00/restio.jpg")
 
 [Marc Brooks](https://www.linkedin.com/in/marc-g-brooks)
 
-<i class="material-icons">mail_outline</i> &nbsp;[becky.tang@duke.edu](mailto:marc.brooks@duke.edu)<br>
+<i class="material-icons">mail_outline</i> &nbsp;[marc.brooks@duke.edu](mailto:marc.brooks@duke.edu)<br>
 <i class="material-icons">calendar_today</i>&nbsp; TBD
 
 
@@ -171,7 +177,7 @@ Analysis:
 
 ---
 
-class: middle, center
+class: center, middle
 
 ## Your Turn!
 
