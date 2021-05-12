@@ -55,12 +55,6 @@ class: center, middle
 
 ---
 
-class: center, middle
-
-## [Click for PDF of slides](00-intro.pdf)
-
----
-
 ## What is Data Science?
 
 *"Data science is a concept to unify statistics, data analysis, machine learning and their related methods in order to understand and analyze actual phenomena with data. It employs techniques and theories drawn from many fields within the context of <font class="vocab">mathematics, statistics, information science, and computer science</font>."*
