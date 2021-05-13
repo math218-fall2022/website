@@ -1,5 +1,5 @@
 ---
-title: "Application exercise 02"
+title: "Application exercise 01"
 subtitle: "Tour of RStudio + RMarkdown + GitHub"
 date: "5.13.2021"
 output: 
@@ -58,7 +58,7 @@ x*7
 
 ### Your turn!
 
-- Go to the [course organization](https://github.com/sta199-summer2021) on GitHub  and find the repo with the prefix **ae-02-**. 
+- Go to the [course organization](https://github.com/sta199-summer2021) on GitHub  and find the repo with the prefix **ae-01-**. 
 
 - Clone the repo and make a new project in RStudio. 
 
@@ -83,7 +83,7 @@ use_git_config(user.name = "GitHub username", user.email="your email")
 
 ## Flint Water Crisis analysis
 
-Follow along with the instructions in **app02-flint.Rmd**. An html version of the file can be found [here](https://sta199-summer2021.github.io/website/appex/ae01-flint.html).
+Follow along with the instructions in **ae01-flint.Rmd**. An html version of the file can be found [here](https://sta199-summer2021.github.io/website/appex/ae01-flint.html).
 
 
 ## Submitting application exercises 
