@@ -297,7 +297,7 @@ glimpse(countries_footprint)
 ## $ Total             &lt;dbl&gt; 0.79, 2.21, 2.12, 0.93, 5.38, 3.14, 2.23, 11.88, 9.…
 ## $ EarthsRequired    &lt;dbl&gt; 0.46, 1.27, 1.22, 0.54, 3.11, 1.82, 1.29, 6.86, 5.3…
 ## $ CountriesRequired &lt;dbl&gt; 1.60, 1.87, 3.61, 0.37, 5.70, 0.45, 2.52, 20.69, 0.…
-## $ DataQuality       &lt;chr&gt; "6", "6", "5", "6", "2", "6", "3B", "2", "5", "5", …
+## $ DataQuality       &lt;chr&gt; "High", "High", "Medium", "High", "Low", "High", "L…
 ```
 
 ---
@@ -579,7 +579,7 @@ ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) +
 
 
 ```r
-ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) + 
+ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) + 
   geom_point()+
 * facet_wrap(Region ~ . , scales = "free_x")
 ```
@@ -602,6 +602,46 @@ ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) +
 
 ---
 
+## Modifications
+You can omit the names of first two arguments when building plots with `ggplot()`.
+
+
+```r
+*ggplot(countries_footprint, aes(x = GDP, y = Total)) +
+  geom_point()+
+  facet_wrap(Region ~ . , scales = "free_x")  
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
+
+----
+
+## Facet and color 
+
+
+```r
+ggplot(countries_footprint, aes(x = GDP, y = Total, col = Region)) +
+  geom_point()+
+  facet_grid(Region ~ DataQuality , scales = "free_x") 
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+
+----
+
+## Facet and color, but no legend
+
+
+```r
+ggplot(countries_footprint, aes(x = GDP, y = Total, col = Region)) +
+  geom_point()+
+  facet_grid(Region ~ DataQuality , scales = "free_x") +
+* guides(color = FALSE)
+```
+
+&lt;img src="02-data-and-viz_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
+
+----
 ## `ggplot2` supplementary resources
 
 1. [ggplot2.tidyverse.org](https://ggplot2.tidyverse.org/)

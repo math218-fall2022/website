@@ -138,7 +138,10 @@ knitr::include_graphics("img/02/grammar-of-graphics.png")
 ## What function is doing the plotting?
 
 ```{r echo = F}
-countries_footprint <- read_csv("data/countries_footprint.csv", col_types = cols())
+countries_footprint <- read_csv("data/countries_footprint.csv", col_types = cols()) %>%
+  mutate(DataQuality = case_when(DataQuality == "6" ~ "High",
+                                 DataQuality %in% c("4", "5") ~ "Medium",
+                                 T ~ "Low"))
 ```
 
 ```{r fig.width = 7, fig.height=2, fig.align='center'}
@@ -527,7 +530,7 @@ ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) +
 ---
 
 ```{r fig.height=2,fig.align='center', warning=FALSE}
-ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) + 
+ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) + 
   geom_point()+
   facet_wrap(Region ~ . , scales = "free_x")  #<<
 ```
@@ -548,6 +551,37 @@ ggplot(data = countries_footprint,mapping = aes(x = GDP, y = Total)) +
 
 ---
 
+## Modifications
+You can omit the names of first two arguments when building plots with `ggplot()`.
+
+```{r fig.height=2,fig.align='center', warning=FALSE}
+ggplot(countries_footprint, aes(x = GDP, y = Total)) + #<<
+  geom_point()+
+  facet_wrap(Region ~ . , scales = "free_x")  
+```
+
+----
+
+## Facet and color 
+
+```{r fig.height=2,fig.align='center', warning=FALSE}
+ggplot(countries_footprint, aes(x = GDP, y = Total, col = Region)) +
+  geom_point()+
+  facet_grid(Region ~ DataQuality , scales = "free_x") 
+```
+
+----
+
+## Facet and color, but no legend
+
+```{r fig.height=2,fig.align='center', warning=FALSE}
+ggplot(countries_footprint, aes(x = GDP, y = Total, col = Region)) +
+  geom_point()+
+  facet_grid(Region ~ DataQuality , scales = "free_x") +
+  guides(color = FALSE) #<<
+```
+
+----
 ## `ggplot2` supplementary resources
 
 1. [ggplot2.tidyverse.org](https://ggplot2.tidyverse.org/)
