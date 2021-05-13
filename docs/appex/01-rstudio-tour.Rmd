@@ -58,7 +58,7 @@ x*7
 
 ### Your turn!
 
-- Go to the [course organization](https://github.com/sta199-summer2021) on GitHub  and find the repo with the prefix **ae-01-**. 
+- Go to the [course organization](https://github.com/sta199-summer2021) on GitHub  and find the repo with the prefix **appex-01-**. 
 
 - Clone the repo and make a new project in RStudio. 
 
