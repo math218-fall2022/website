@@ -9,15 +9,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Due Thursday, September 5
+### Due Monday, May 24
 
 ### Required: 
 
-- [OpenIntro Statistics](https://drive.google.com/file/d/0B-DHaDEbiOGkc1RycUtIcUtIelE/view):
-    + Section 1.6: Examining numerical data
-    + Section 1.7: Considering categorical data
-
-- [What's so hard about histograms?](http://tinlizzie.org/histograms/)
+- *Data visualization*: [Ch 1: Look at Data](https://socviz.co/lookatdata.html)
 
 - *R for Data Science*: [Data Visualization](http://r4ds.had.co.nz/data-visualisation.html)
 
