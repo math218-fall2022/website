@@ -24,7 +24,7 @@ lessons:
  - date: "Wed, May 19"
    title: "Visualizing different types of data"
    #slides: "lec-slides/03-data-and-viz2.html"
-   #appex: 
+   #appex: "appex03-airbnb.html"
    #reading: "reading-02.html"
  - date: "Thu, May 20"
    title: "Tidy data and data wrangling"
