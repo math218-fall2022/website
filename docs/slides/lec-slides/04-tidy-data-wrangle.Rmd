@@ -61,12 +61,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
 ```
 
 
-class: middle, center
-
-## [Click for PDF of slides](05-tidy-data-wrangle.pdf)
-
----
-
 class: center, middle
 
 # Tidy data
