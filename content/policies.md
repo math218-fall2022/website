@@ -13,6 +13,9 @@ markup: "mmark"
 - Work on problems and case studies inspired by and based on real-world questions and data
 - Learn to effectively communicate results through written assignments and final project presentation
 
+<br> 
+<br>
+
 #### Units
 
 - Unit 1: Collecting, wrangling, & visualizing data
