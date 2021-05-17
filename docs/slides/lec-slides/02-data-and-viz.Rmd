@@ -143,7 +143,7 @@ countries_footprint <- read_csv("data/countries_footprint.csv", col_types = cols
 ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) +
   geom_point() + #<<
   labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
-       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+       x = "GDP ($)", y = "Total footprint (hectare)")
 ```
 
 ---
@@ -154,7 +154,7 @@ ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) +
 ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) + #<<
   geom_point() + 
   labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
-       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+       x = "GDP ($)", y = "Total footprint (hectare)")
 ```
 
 ---
@@ -166,7 +166,7 @@ ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) + #<<
 ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) + #<<
   geom_point() + #<<
   labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
-       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+       x = "GDP ($)", y = "Total footprint (hectare)")
 ```
 
 ---
@@ -178,7 +178,7 @@ ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) + #<<
 ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) +
   geom_point() + #<<
   labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
-       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+       x = "GDP ($)", y = "Total footprint (hectare)")
 ```
 
 ---
@@ -190,7 +190,7 @@ ggplot(data = countries_footprint, mapping = aes(x = GDP, y =Total)) + #<<
   geom_point() +
   geom_smooth() + #<<
   labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
-       x = "GDP ($)", y = "Total ecological footprint (hectare)")
+       x = "GDP ($)", y = "Total footprint (hectare)")
 ```
 
 ---
@@ -308,7 +308,7 @@ How would you describe this **relationship**?
 ggplot(data = countries_footprint, mapping = aes(x = GDP, y = Total)) +
   geom_point() + 
   labs(title = "GDP vs. Total Ecological Footprint of countries (2016)",
-       x = "GDP ($)", y = "Total ecological footprint (hectare)") 
+       x = "GDP ($)", y = "Total footprint (hectare)") 
 ```
 
 ---
