@@ -59,11 +59,6 @@ ggplot2::theme_set(ggplot2::theme_bw())
 ```
 
 
-class: middle, center
-
-## [Click for PDF of slides](02-data-and-viz.pdf)
-
----
 
 class: center, middle
 
