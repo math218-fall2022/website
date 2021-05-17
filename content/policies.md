@@ -13,6 +13,12 @@ markup: "mmark"
 - Work on problems and case studies inspired by and based on real-world questions and data
 - Learn to effectively communicate results through written assignments and final project presentation
 
+#### Units
+
+- Unit 1: Collecting, wrangling, & visualizing data
+- Unit 2: Making rigorous conclusions 
+- Unit 3: Introductory modeling techniques
+
 <br> 
 <br>
 
