@@ -33,11 +33,7 @@ layout: true
 
 
 
-class: middle, center
 
-## [Click for PDF of slides](04-data-and-viz-pt2.pdf)
-
----
 
 class: middle, center
 
@@ -93,34 +89,80 @@ class: center, middle
 
 ---
 
-## Starwars data 
+## Diamonds data 
 
 
 
 
 
 ```r
-starwars
+diamonds
 ```
 
 ```
-## # A tibble: 87 x 13
-##    name  height  mass hair_color skin_color eye_color birth_year gender
-##    &lt;chr&gt;  &lt;int&gt; &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;chr&gt; 
-##  1 Luke…    172    77 other      fair       blue            19   male  
-##  2 C-3PO    167    75 none       gold       yellow         112   &lt;NA&gt;  
-##  3 R2-D2     96    32 none       white, bl… red             33   &lt;NA&gt;  
-##  4 Dart…    202   136 none       white      yellow          41.9 male  
-##  5 Leia…    150    49 brown      light      brown           19   female
-##  6 Owen…    178   120 brown      light      blue            52   male  
-##  7 Beru…    165    75 brown      light      blue            47   female
-##  8 R5-D4     97    32 none       white, red red             NA   &lt;NA&gt;  
-##  9 Bigg…    183    84 black      light      brown           24   male  
-## 10 Obi-…    182    77 other      fair       blue-gray       57   male  
-## # … with 77 more rows, and 5 more variables: homeworld &lt;chr&gt;, species &lt;chr&gt;,
-## #   films &lt;list&gt;, vehicles &lt;list&gt;, starships &lt;list&gt;
+## # A tibble: 53,940 x 11
+##    carat cut   color clarity depth table price     x     y     z price_per_carat
+##    &lt;dbl&gt; &lt;ord&gt; &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt;
+##  1  0.23 Ideal E     SI2      61.5    55   326  3.95  3.98  2.43           1417.
+##  2  0.21 Prem… E     SI1      59.8    61   326  3.89  3.84  2.31           1552.
+##  3  0.23 Good  E     VS1      56.9    65   327  4.05  4.07  2.31           1422.
+##  4  0.29 Prem… I     VS2      62.4    58   334  4.2   4.23  2.63           1152.
+##  5  0.31 Good  J     SI2      63.3    58   335  4.34  4.35  2.75           1081.
+##  6  0.24 Very… J     VVS2     62.8    57   336  3.94  3.96  2.48           1400 
+##  7  0.24 Very… I     VVS1     62.3    57   336  3.95  3.98  2.47           1400 
+##  8  0.26 Very… H     SI1      61.9    55   337  4.07  4.11  2.53           1296.
+##  9  0.22 Fair  E     VS2      65.1    61   337  3.87  3.78  2.49           1532.
+## 10  0.23 Very… H     VS1      59.4    61   338  4     4.05  2.39           1470.
+## # … with 53,930 more rows
 ```
 
+---
+
+## Diamonds data, glimpse
+
+
+```r
+glimpse(diamonds)
+```
+
+```
+## Rows: 53,940
+## Columns: 11
+## $ carat           &lt;dbl&gt; 0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22, …
+## $ cut             &lt;ord&gt; Ideal, Premium, Good, Premium, Good, Very Good, Very G…
+## $ color           &lt;ord&gt; E, E, E, I, J, J, I, H, E, H, J, J, F, J, E, E, I, J, …
+## $ clarity         &lt;ord&gt; SI2, SI1, VS1, VS2, SI2, VVS2, VVS1, SI1, VS2, VS1, SI…
+## $ depth           &lt;dbl&gt; 61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1, …
+## $ table           &lt;dbl&gt; 55, 61, 65, 58, 58, 57, 57, 55, 61, 61, 55, 56, 61, 54…
+## $ price           &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339,…
+## $ x               &lt;dbl&gt; 3.95, 3.89, 4.05, 4.20, 4.34, 3.94, 3.95, 4.07, 3.87, …
+## $ y               &lt;dbl&gt; 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, …
+## $ z               &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49, …
+## $ price_per_carat &lt;dbl&gt; 1417.391, 1552.381, 1421.739, 1151.724, 1080.645, 1400…
+```
+
+---
+
+## Diamonds help file
+.pull-left[
+&lt;img src="img/03/diamonds_help1.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="img/03/diamonds_help2.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Diamonds: clarity
+
+&lt;img src="img/03/diamond_clarity.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Diamonds: color
+
+&lt;img src="img/03/diamond_colors.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -129,11 +171,35 @@ starwars
 .small[
 
 ```r
-ggplot(data = starwars, mapping = aes(x = height)) +
-  geom_histogram(binwidth = 10)
+ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram()
 ```
 
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-3-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-8-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Histograms
+
+.pull-left[
+
+```r
+ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram(binwidth = 1000)
+```
+
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-9-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram(bins = 12)
+```
+
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-10-1.png" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -143,11 +209,11 @@ ggplot(data = starwars, mapping = aes(x = height)) +
 .small[
 
 ```r
-ggplot(data = starwars, mapping = aes(x = height)) +
+ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_density()
 ```
 
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-4-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-11-1.png" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -157,11 +223,11 @@ ggplot(data = starwars, mapping = aes(x = height)) +
 .small[
 
 ```r
-ggplot(data = starwars, mapping = aes(y = height, x = hair_color)) +
+ggplot(data = diamonds, mapping = aes(y = price, x = cut)) +
   geom_boxplot()
 ```
 
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-5-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-12-1.png" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -177,27 +243,25 @@ class: center, middle
 .small[
 
 ```r
-ggplot(data = starwars, mapping = aes(x = hair_color)) +
+ggplot(data = diamonds, mapping = aes(x = clarity)) + 
   geom_bar()
 ```
 
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-6-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-13-1.png" width="80%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 
 ## Segmented bar plots, counts
 
-
-
 .small[
 
 ```r
-ggplot(data = starwars, mapping = aes(x = hair_color, fill = eye_color2)) +
-  geom_bar()
+ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) + 
+  geom_bar() 
 ```
 
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-14-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -207,12 +271,12 @@ ggplot(data = starwars, mapping = aes(x = hair_color, fill = eye_color2)) +
 .small[
 
 ```r
-ggplot(data = starwars, mapping = aes(x = hair_color, fill = eye_color2)) +
-*        geom_bar(position = "fill") +
-         labs(y = "proportion")
+ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) + 
+* geom_bar(position = "fill") +
+  labs(y = "proportion") 
 ```
 
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-15-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -226,11 +290,11 @@ Which plot is more useful for visualizing the relationship between hair color an
 
 
 .pull-left[
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
 ]
 ---
 
@@ -458,9 +522,9 @@ class: center, middle
 ## Use	color	to	draw	attention
 
 
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-14-1.png" width="500" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-20-1.png" width="500" style="display: block; margin: auto;" /&gt;
 
-&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-15-1.png" width="600" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-data-and-viz2_files/figure-html/unnamed-chunk-21-1.png" width="600" style="display: block; margin: auto;" /&gt;
 
 ---
 

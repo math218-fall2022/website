@@ -62,11 +62,7 @@ library(Tmisc)
 library(patchwork)
 ```
 
-class: middle, center
 
-## [Click for PDF of slides](04-data-and-viz-pt2.pdf)
-
----
 
 class: middle, center
 
@@ -122,23 +118,56 @@ class: center, middle
 
 ---
 
-## Starwars data 
+## Diamonds data 
 
-```{r echo = FALSE}
-starwars <- starwars %>%
-  mutate(hair_color = case_when(
-    hair_color == "black" ~ "black",
-    hair_color == "none" | is.na(hair_color) ~ "none",
-    hair_color %in% c("brown", "brown, grey") ~ "brown", 
-    TRUE ~ "other"
-  ))
+```{r echo=FALSE}
+diamonds <- diamonds %>%
+  mutate(price_per_carat = price/carat)
 ```
 
 
 ```{r message=FALSE}
-starwars
+diamonds
 ```
 
+---
+
+## Diamonds data, glimpse
+
+```{r message = F}
+glimpse(diamonds)
+```
+
+---
+
+## Diamonds help file
+.pull-left[
+```{r echo = F, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("img/03/diamonds_help1.png")
+```
+]
+
+.pull-right[
+```{r echo = F, out.width = "80%", fig.align = "center"}
+knitr::include_graphics("img/03/diamonds_help2.png")
+```
+]
+
+---
+
+## Diamonds: clarity
+
+```{r echo = F, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("img/03/diamond_clarity.png")
+```
+
+---
+
+## Diamonds: color
+
+```{r echo = F, out.width = "60%", fig.align = "center"}
+knitr::include_graphics("img/03/diamond_colors.png")
+```
 
 ---
 
@@ -146,8 +175,26 @@ starwars
 
 .small[
 ```{r out.width = "80%", fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = height)) +
-  geom_histogram(binwidth = 10)
+ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram()
+```
+]
+
+---
+
+## Histograms
+
+.pull-left[
+```{r out.width = "80%", fig.align='center'}
+ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram(binwidth = 1000)
+```
+]
+
+.pull-right[
+```{r out.width = "80%", fig.align='center'}
+ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_histogram(bins = 12)
 ```
 ]
 
@@ -157,7 +204,7 @@ ggplot(data = starwars, mapping = aes(x = height)) +
 
 .small[
 ```{r out.width = "80%", fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = height)) +
+ggplot(data = diamonds, mapping = aes(x = price)) +
   geom_density()
 ```
 ]
@@ -168,7 +215,7 @@ ggplot(data = starwars, mapping = aes(x = height)) +
 
 .small[
 ```{r out.width = "80%", fig.align='center'}
-ggplot(data = starwars, mapping = aes(y = height, x = hair_color)) +
+ggplot(data = diamonds, mapping = aes(y = price, x = cut)) +
   geom_boxplot()
 ```
 ]
@@ -185,7 +232,7 @@ class: center, middle
 
 .small[
 ```{r out.width = "80%", fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = hair_color)) +
+ggplot(data = diamonds, mapping = aes(x = clarity)) + 
   geom_bar()
 ```
 ]
@@ -194,16 +241,10 @@ ggplot(data = starwars, mapping = aes(x = hair_color)) +
 
 ## Segmented bar plots, counts
 
-```{r echo = FALSE}
-starwars <- starwars %>%
-  mutate(eye_color2 = fct_other(eye_color, 
-                                 keep = c("black", "blue", "brown", "yellow")))
-```
-
 .small[
 ```{r out.width = "70%", fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = hair_color, fill = eye_color2)) +
-  geom_bar()
+ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) + 
+  geom_bar() 
 ```
 ]
 
@@ -213,9 +254,9 @@ ggplot(data = starwars, mapping = aes(x = hair_color, fill = eye_color2)) +
 
 .small[
 ```{r out.width = "70%", fig.align='center'}
-ggplot(data = starwars, mapping = aes(x = hair_color, fill = eye_color2)) +
-         geom_bar(position = "fill") + #<<
-         labs(y = "proportion")
+ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) + 
+  geom_bar(position = "fill") + #<<
+  labs(y = "proportion") 
 ```
 ]
 
@@ -231,15 +272,15 @@ Which plot is more useful for visualizing the relationship between hair color an
 
 .pull-left[
 ```{r echo=FALSE, fig.align = "center"}
-ggplot(data = starwars, mapping = aes(x = hair_color, fill = eye_color2)) +
-  geom_bar() 
+ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) + 
+  geom_bar()
 ```
 ]
 
 .pull-right[
 ```{r echo=FALSE, fig.align = "center"}
-ggplot(data = starwars, mapping = aes(x = hair_color, fill = eye_color2)) +
-  geom_bar(position = "fill") +
+ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) + 
+  geom_bar(position = "fill")+
   labs(y = "proportion") 
 ```
 ]

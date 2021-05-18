@@ -12,10 +12,10 @@ library(tidyverse)
 ```
 
 
-## Identify variable type (Zoom poll)
+## Identify variable type
 
 - Favorite food
-- Number of classes you're taking this semester
+- Number of classes you take in a semester
 - Zip code
 
 ## The way data is displayed matters
