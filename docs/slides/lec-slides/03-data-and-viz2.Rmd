@@ -265,7 +265,7 @@ ggplot(data = diamonds, mapping = aes(x = clarity, fill = cut)) +
 ## Which bar plot is more appropriate? 
 
 .question[
-Which plot is more useful for visualizing the relationship between hair color and eye color? Why?
+Which plot is more useful for visualizing the relationship between clarity and cut? Why?
 ]
 
 

@@ -11,7 +11,7 @@
 
 <meta name="author" content="Your Name" />
 
-<meta name="date" content="2021-05-18" />
+<meta name="date" content="2021-05-19" />
 
 <title>AE 03: Airbnbs in Madrid</title>
 
@@ -363,7 +363,7 @@ pre code {
 
 <h1 class="title toc-ignore">AE 03: Airbnbs in Madrid</h1>
 <h4 class="author">Your Name</h4>
-<h4 class="date">2021-05-18</h4>
+<h4 class="date">2021-05-19</h4>
 
 </div>
 
@@ -408,7 +408,7 @@ use_git_config(user.name= &quot;github username&quot;, user.email=&quot;your ema
 </div>
 <div id="practice-with-ggplot" class="section level2">
 <h2>Practice with ggplot</h2>
-<p>The data contains information about Airbnb listings in Madrid, Spain. The data originally come from <a href="https://www.kaggle.com/thoroc/edinburgh-inside-airbnb/version/2">Kaggle</a>, and it has been modified for this exercise.</p>
+<p>The data contains information about Airbnb listings in Madrid, Spain. The data originally come from <a href="https://www.kaggle.com/rusiano/madrid-airbnb-data">Kaggle</a>, and it has been modified for this exercise.</p>
 <p>Use the code below to load the data from the .csv file.</p>
 <pre class="r"><code>madbnb &lt;- read_csv(&quot;data/madbnb.csv&quot;)</code></pre>
 <div id="part-0" class="section level3">
@@ -417,7 +417,7 @@ use_git_config(user.name= &quot;github username&quot;, user.email=&quot;your ema
 </div>
 <div id="part-1" class="section level3">
 <h3>Part 1</h3>
-<p>The <code>madbnb</code> data set set has 19905 observations (rows).</p>
+<p>The <code>madbnb</code> data set has 19905 observations (rows).</p>
 <p>How many columns (variables) does the dataset have? Instead of hard coding the number in your answer, use the function <code>ncol()</code> to write your answer in inline code. <em>Hint: Use the statement above as a guide.</em></p>
 <p>Knit to see the updates.</p>
 </div>
@@ -434,7 +434,7 @@ use_git_config(user.name= &quot;github username&quot;, user.email=&quot;your ema
 <p><em>Hint: Run <code>names(madbnb)</code> in the <b>console</b> to get a list of variable names. Note how the variable for neighborhood is spelled in the data set.</em></p>
 <pre class="r"><code>ggplot(data = ___, mapping = aes(x = ___)) +
   geom_histogram() +
-  facet_wrap(~___, scales = &quot;free_y&quot;) +
+  facet_wrap(~___) +
   labs(x = &quot;______&quot;, 
       title = &quot;_______&quot;, 
       subtitle = &quot;Faceted by ______&quot;)</code></pre>

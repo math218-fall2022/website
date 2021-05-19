@@ -56,7 +56,7 @@ use_git_config(user.name= "github username", user.email="your email")
 
 ## Practice with ggplot
 
-The data contains information about Airbnb listings in Madrid, Spain. The data originally come from [Kaggle](https://www.kaggle.com/thoroc/edinburgh-inside-airbnb/version/2), and it has been modified for this exercise. 
+The data contains information about Airbnb listings in Madrid, Spain. The data originally come from [Kaggle](https://www.kaggle.com/rusiano/madrid-airbnb-data), and it has been modified for this exercise. 
 
 Use the code below to load the data from the .csv file. 
 
@@ -70,7 +70,7 @@ The dataset you’ll be using is called `madbnb`. Run `View(madbnb)` in the **co
 
 ### Part 1
 
-The `madbnb` data set set has `r nrow(madbnb)` observations (rows).
+The `madbnb` data set has `r nrow(madbnb)` observations (rows).
 
 How many columns (variables) does the dataset have? Instead of hard coding the number in your answer, use the function `ncol()` to write your answer in inline code. *Hint: Use the statement above as a guide.*
 
@@ -97,7 +97,7 @@ Fill in the code below to create the faceted histogram with informative labels. 
 ```{r plot-price-facet, eval = FALSE}
 ggplot(data = ___, mapping = aes(x = ___)) +
   geom_histogram() +
-  facet_wrap(~___, scales = "free_y") +
+  facet_wrap(~___) +
   labs(x = "______", 
       title = "_______", 
       subtitle = "Faceted by ______")
