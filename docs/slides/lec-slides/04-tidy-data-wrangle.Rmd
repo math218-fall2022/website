@@ -252,7 +252,7 @@ hotels %>%
 .pull-right[
 - Start with a data frame
 - Pass it to the `select()` function.
-- Second argument is variable we want to select: `lead_time`
+- Argument is variable we want to select: `lead_time`
 - The result is a data frame with 119,300 and 1 column: --dplyr functions always 
 expect a data frame and always yield a data frame.
 ]
@@ -302,6 +302,18 @@ hotels %>%
 ]
 
 ---
+
+## What's happening here?
+
+```{r}
+hotels %>%
+  select(hotel, lead_time) %>%
+  arrange(hotel)
+```
+
+---
+
+
 
 class: middle, center
 
@@ -426,10 +438,11 @@ Use the dot to
 - send results to a function argument other than first one or 
 - use the previous result for multiple arguments
 
-```{r fig.height=1.8, fig.width = 3.75}
+```{r out.height = "50%", fig.align='center'}
 hotels %>%
   filter(hotel == "Resort Hotel") %>%
-  lm(adr ~ lead_time, data = .) #<<
+  ggplot(., aes(x = lead_time)) + #<<
+  geom_histogram(bins = 10)
 ```
 
 ---
@@ -606,7 +619,7 @@ options(dplyr.print_max = 20)
 
 ## `distinct` to filter for unique rows
 
-... and `arrange` to order alphabetically
+... and `arrange` to order alphabetically. Note which variables are kept in the resulting data frame!
 
 .small[
 .pull-left[
@@ -616,6 +629,7 @@ hotels %>%
   arrange(market_segment)
 ```
 ]
+
 .pull-right[
 ```{r}
 hotels %>% 
