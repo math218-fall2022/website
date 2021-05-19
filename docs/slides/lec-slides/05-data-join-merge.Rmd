@@ -1,6 +1,7 @@
 ---
 title: "Joining data from multiple sources"
 author: "Becky Tang"
+date: "05.24.2021"
 output:
   xaringan::moon_reader:
     mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
