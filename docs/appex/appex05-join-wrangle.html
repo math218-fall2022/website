@@ -367,19 +367,6 @@ pre code {
 </div>
 
 
-<div id="announcements" class="section level2">
-<h2>Announcements</h2>
-<ul>
-<li>Lab 01 grading + solutions in Sakai</li>
-<li>Regrade requests
-<ul>
-<li>On Gradescope 24 hours after assignment returned and due within a week</li>
-<li>Consult the solutions + attend office hours</li>
-<li>Only submit if something was incorrectly graded.</li>
-<li>We reserve the right to regrade the entire assignment which could result in a lower grade.</li>
-</ul></li>
-</ul>
-</div>
 <div id="code-styling-workflow" class="section level2">
 <h2>Code styling + workflow</h2>
 <ul>
@@ -406,6 +393,7 @@ pre code {
 <p>Run the following code to configure Git. Fill in your GitHub username and the email address associated with your GitHub account.</p>
 <pre class="r"><code>library(usethis)
 use_git_config(user.name= &quot;your github username&quot;, user.email=&quot;your email&quot;)</code></pre>
+<p><strong>Note:</strong> In each of these exercises you will need to set <code>eval=TRUE</code> in the code chunk header when you’re ready to knit and run the code for that exercise.</p>
 </div>
 <div id="practice-with-data-joins-and-wrangling" class="section level2">
 <h2>Practice with data joins and wrangling</h2>
@@ -426,7 +414,6 @@ continents &lt;- read_csv(&quot;data/continents.csv&quot;)</code></pre>
       ),
     aquaculture_perc = aquaculture / total
     )</code></pre>
-<p><strong>Note:</strong> In each of these exercises you will need to set <code>eval=TRUE</code> in the code chunk header when you’re ready to run the code for that exercise.</p>
 <div id="exercise-1." class="section level3">
 <h3>Exercise 1.</h3>
 <p>Calculate the mean aquaculture percentage (we’ll call it <code>mean_ap</code> for short) for continents in the fisheries data using the <code>summarise()</code> function in dplyr. Note that the function for calculating the mean is <code>mean()</code> in R.</p>

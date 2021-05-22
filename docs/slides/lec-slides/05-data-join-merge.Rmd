@@ -100,12 +100,6 @@ hotels %>%
   select(adults, children,babies, people) 
 ```
 
-```{r}
-hotels %>%
-  count(people)
-```
-
-
 ---
 
 class: middle, center
@@ -256,11 +250,14 @@ continents
 something_join(x, y)
 ```
 
+Mutating joins:
 - `inner_join()`: all rows from x where there are matching values in y, return 
 all combination of multiple matches in the case of multiple matches
 - `left_join()`: all rows from x
 - `right_join()`: all rows from y
 - `full_join()`: all rows from both x and y
+
+Filtering joins:
 - `semi_join()`: all rows from x where there are matching values in y, keeping just columns from x.
 - `anti_join()`: return all rows from x where there are not matching values in y, never duplicate rows of x
 - ...
@@ -292,6 +289,8 @@ y
 
 ## `inner_join()`
 
+Adds columns to `x` from `y`, matching all rows in `x` AND `y`
+
 .pull-left[
 ```{r}
 inner_join(x, y)
@@ -306,6 +305,8 @@ include_graphics("img/05/inner-join.gif")
 ---
 
 ## `left_join()`
+
+Adds columns to `x` from `y`, matching all rows in `x`
 
 .pull-left[
 ```{r}
@@ -322,6 +323,8 @@ include_graphics("img/05/left-join.gif")
 
 ## `right_join()`
 
+Adds columns to `x` from `y`, matching all rows in `y`
+
 .pull-left[
 ```{r}
 right_join(x, y)
@@ -336,6 +339,8 @@ include_graphics("img/05/right-join.gif")
 ---
 
 ## `full_join()`
+
+Adds columns to `x` from `y`, matching all rows in `x` OR `y`
 
 .pull-left[
 ```{r}
@@ -352,6 +357,8 @@ include_graphics("img/05/full-join.gif")
 
 ## `semi_join()`
 
+Returns all rows from `x` with a match in `y` (does not add columns from `y`)
+
 .pull-left[
 ```{r}
 semi_join(x, y)
@@ -366,6 +373,8 @@ include_graphics("img/05/semi-join.gif")
 ---
 
 ## `anti_join()`
+
+Returns all rows from `x` without a match in `y` (does not add columns from `y`)
 
 .pull-left[
 ```{r}
@@ -424,6 +433,15 @@ fisheries %>% select(-continent) %>% names()
 names(continents)
 ```
 
+
+---
+
+## Check the data
+
+```{r}
+fisheries %>%
+  slice(11:20)
+```
 
 ---
 
@@ -536,7 +554,7 @@ ggplot(fisheries_summary,
 
 ```{r eval=FALSE}
 ggplot(fisheries_summary, 
-       aes(y = fct_reorder(continent, mean_ap), x = mean_ap)) +
+       aes(y = fct_reorder(continent, mean_ap), x = mean_ap)) + #<<
   geom_col() +
   labs( #<<
     x = "",  #<<

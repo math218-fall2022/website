@@ -35,6 +35,62 @@ layout: true
 
 
 
+class: middle, center
+
+## `mutate`
+(from May 20 lecture)
+
+---
+
+### `mutate` to add new variables
+
+.small[
+
+```r
+hotels %&gt;% 
+  mutate(people = adults + babies + children)
+```
+]
+---
+
+### "Save" when you `mutate`
+
+Most often when you define a new variable with `mutate` you'll also want to save the resulting data frame, often by writing over the original data frame.
+
+
+```r
+hotels &lt;- hotels %&gt;% 
+  mutate(people = adults + babies + children)
+```
+
+---
+
+### Check before you move on
+
+
+```r
+hotels %&gt;% 
+  select(adults, children,babies, people) 
+```
+
+```
+## # A tibble: 119,390 x 4
+##    adults children babies people
+##     &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+##  1      2        0      0      2
+##  2      2        0      0      2
+##  3      1        0      0      1
+##  4      1        0      0      1
+##  5      2        0      0      2
+##  6      2        0      0      2
+##  7      2        0      0      2
+##  8      2        0      0      2
+##  9      2        0      0      2
+## 10      2        0      0      2
+## # … with 119,380 more rows
+```
+
+---
 
 class: middle, center
 
@@ -286,11 +342,14 @@ continents
 something_join(x, y)
 ```
 
+Mutating joins:
 - `inner_join()`: all rows from x where there are matching values in y, return 
 all combination of multiple matches in the case of multiple matches
 - `left_join()`: all rows from x
 - `right_join()`: all rows from y
 - `full_join()`: all rows from both x and y
+
+Filtering joins:
 - `semi_join()`: all rows from x where there are matching values in y, keeping just columns from x.
 - `anti_join()`: return all rows from x where there are not matching values in y, never duplicate rows of x
 - ...
@@ -338,6 +397,8 @@ y
 
 ## `inner_join()`
 
+Adds columns to `x` from `y`, matching all rows in `x` AND `y`
+
 .pull-left[
 
 ```r
@@ -359,6 +420,8 @@ inner_join(x, y)
 ---
 
 ## `left_join()`
+
+Adds columns to `x` from `y`, matching all rows in `x`
 
 .pull-left[
 
@@ -383,6 +446,8 @@ left_join(x, y)
 
 ## `right_join()`
 
+Adds columns to `x` from `y`, matching all rows in `y`
+
 .pull-left[
 
 ```r
@@ -405,6 +470,8 @@ right_join(x, y)
 ---
 
 ## `full_join()`
+
+Adds columns to `x` from `y`, matching all rows in `x` OR `y`
 
 .pull-left[
 
@@ -430,6 +497,8 @@ full_join(x, y)
 
 ## `semi_join()`
 
+Returns all rows from `x` with a match in `y` (does not add columns from `y`)
+
 .pull-left[
 
 ```r
@@ -451,6 +520,8 @@ semi_join(x, y)
 ---
 
 ## `anti_join()`
+
+Returns all rows from `x` without a match in `y` (does not add columns from `y`)
 
 .pull-left[
 
@@ -562,6 +633,32 @@ Hint:
 
 ```r
 fisheries %&gt;%
+  slice(11:20)
+```
+
+```
+## # A tibble: 10 x 5
+##    country                           capture aquaculture    total continent
+##    &lt;chr&gt;                               &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;    
+##  1 China                            17800000    63700000 81500000 Asia     
+##  2 Colombia                            86344       96970   183314 Americas 
+##  3 Democratic Republic of the Congo   237372        3161   240533 &lt;NA&gt;     
+##  4 Denmark                            670344       36337   706681 Europe   
+##  5 Ecuador                            715495      451090  1166585 Americas 
+##  6 Egypt                              335614     1370660  1706274 Africa   
+##  7 Faroe Islands                      568435       83300   651735 Europe   
+##  8 Finland                            192065       14412   206477 Europe   
+##  9 France                             561173      166640   727813 Europe   
+## 10 Germany                            271185       41721   312906 Europe
+```
+
+---
+
+## Check the data
+
+
+```r
+fisheries %&gt;%
   filter(is.na(continent))
 ```
 
@@ -658,7 +755,7 @@ ggplot(fisheries_summary, aes(x = continent, y = mean_ap)) +
   geom_col()
 ```
 
-![](05-data-join-merge_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+![](05-data-join-merge_files/figure-html/unnamed-chunk-43-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -671,7 +768,7 @@ ggplot(fisheries_summary,
   geom_col()
 ```
 
-![](05-data-join-merge_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+![](05-data-join-merge_files/figure-html/unnamed-chunk-44-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -680,7 +777,7 @@ ggplot(fisheries_summary,
 
 ```r
 ggplot(fisheries_summary, 
-       aes(y = fct_reorder(continent, mean_ap), x = mean_ap)) +
+*      aes(y = fct_reorder(continent, mean_ap), x = mean_ap)) +
   geom_col() +
 * labs(
 *   x = "",
@@ -696,7 +793,7 @@ See next slide...
 
 ---
 
-![](05-data-join-merge_files/figure-html/unnamed-chunk-42-1.png)&lt;!-- --&gt;
+![](05-data-join-merge_files/figure-html/unnamed-chunk-46-1.png)&lt;!-- --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

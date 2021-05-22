@@ -7,15 +7,6 @@ output:
     theme: readable
 ---
 
-## Announcements
-
-- Lab 01 grading +  solutions in Sakai 
-- Regrade requests 
-  - On Gradescope 24 hours after assignment returned and due within a week
-  - Consult the solutions + attend office hours 
-  - Only submit if something was incorrectly graded.
-  - We reserve the right to regrade the entire assignment which could result in a lower grade.
-
 ## Code styling + workflow 
 
 - Avoid long lines of code. 
@@ -40,6 +31,11 @@ Run the following code to configure Git. Fill in your GitHub username and the em
 library(usethis)
 use_git_config(user.name= "your github username", user.email="your email")
 ```
+
+
+**Note:** In each of these exercises you will need to set `eval=TRUE` in the code chunk header when you're
+ready to knit and run the code for that exercise.
+
 
 ## Practice with data joins and wrangling
 
@@ -67,8 +63,7 @@ fisheries <- fisheries %>%
     )
 ```
 
-**Note:** In each of these exercises you will need to set `eval=TRUE` in the code chunk header when you're 
-ready to run the code for that exercise.
+
 
 ### Exercise 1.
 
