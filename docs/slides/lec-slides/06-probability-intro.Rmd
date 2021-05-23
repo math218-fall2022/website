@@ -333,14 +333,15 @@ knitr::include_graphics("img/06/ie.png")
 
 ---
 
-## Practicing with probabilities
+## Practicing with probabilities: Admissions
 
 UC Berkeley admission figures for Fall of 1973:
 
-```{r uc_berkeley, echo = F}
-status <- c(rep("Admit",3738 + 1494), rep("Deny", 4704 +  2827))
-knitr::kable(table(status))
-```
+| | Admit | Deny | Total |
+|----|----|-----|-----|
+|Men | 3738 |  4704 | 8442|
+|Women| 1494 | 2827 | 4321 |
+|Total| 5232 | 7531 | 12763|
 
 <br>
 
@@ -357,77 +358,53 @@ Source: https://homepage.stat.uiowa.edu/~mbognar/1030/Bickel-Berkeley.pdf
 
 UC Berkeley admission figures for Fall of 1973:
 
-```{r uc_berkeley2, echo = F}
-status <- c(rep("Admit",3738 + 1494), rep("Deny", 4704 +  2827))
-knitr::kable(table(status))
-```
+| | Admit | Deny | Total |
+|----|----|-----|-----|
+|Men | 3738 |  4704 | 8442|
+|Women| 1494 | 2827 | 4321 |
+|Total| 5232 | 7531 | 12763|
 
 <br>
 
 .question[
-$P(\text{admission}) = \dfrac{\text{# admitted}}{\text{# applied}} = \dfrac{5232}{5232 + 7531} \approx 0.41$
+$P(\text{admission}) = \dfrac{\text{# admitted}}{\text{# applied}} = \dfrac{5232}{12763} \approx 0.41$
 ]
 
 ---
 
 ## Practicing with probabilities
 
-UC Berkeley admission figures for Fall of 1973, by gender:
-
-.pull-left[
-```{r uc_berkeley_men, echo = F}
-men <- c(rep("Admit",3738), rep("Deny", 4704))
-knitr::kable(table(men))
-```
-]
-
-.pull-right[
-```{r uc_berkeley_women, echo = F}
-women <- c(rep("Admit",1494), rep("Deny", 2827))
-knitr::kable(table(women))
-```
-]
-
-<br>
+| | Admit | Deny | Total |
+|----|----|-----|-----|
+|Men | 3738 |  4704 | 8442|
+|Women| 1494 | 2827 | 4321 |
+|Total| 5232 | 7531 | 12763|
 
 .question[
-- $\small{P(\text{man admitted}) =}$ ?
-- $\small{P(\text{woman admitted})=}$ ? 
+- $\small{P(\text{admit among men}) =}$ ?
+- $\small{P(\text{admit among women})=}$ ? 
 ]
-
 
 ---
 
 ## Practicing with probabilities
 
-UC Berkeley admission figures for Fall of 1973, by gender:
-
-.pull-left[
-```{r echo = F}
-men <- c(rep("Admit",3738), rep("Deny", 4704))
-knitr::kable(table(men))
-```
-]
-
-.pull-right[
-```{r echo = F}
-women <- c(rep("Admit",1494), rep("Deny", 2827))
-knitr::kable(table(women))
-```
-]
-
-<br>
+| | Admit | Deny | Total |
+|----|----|-----|-----|
+|Men | 3738 |  4704 | 8442|
+|Women| 1494 | 2827 | 4321 |
+|Total| 5232 | 7531 | 12763|
 
 .question[
-- $P(\text{man admitted}) = \dfrac{3738}{3738 + 4704} \approx 0.44$ 
-- $P(\text{man admitted}) = \dfrac{1494}{1494 + 2827} \approx 0.35$ 
+- $P(\text{admit among men}) = \dfrac{3738}{8442} \approx 0.44$ 
+- $P(\text{admit among women}) = \dfrac{1494}{4321} \approx 0.35$ 
 ]
 
 
 ---
 
 
-## Practicing with probabilities
+## Practicing with probabilities: Coffee
 
 ```{r gunter, echo=FALSE, out.width = 700, fig.align="center"}
 knitr::include_graphics("img/06/coffee.png")
