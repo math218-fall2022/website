@@ -1,8 +1,8 @@
 ---
-title: "AE 06: Asthma"
+title: 'AE 06: Asthma'
 author: "Your name"
 date: "05.26.2021"
-output: 
+output:
   html_document:
     theme: readable
 ---
@@ -21,7 +21,7 @@ knitr::include_graphics("img/venn-diagram.png")
 
 ## Clone a repo + start a new project
 
-Go to the `ae-06-[GITHUB USERNAME]` repo, clone it, and start a new project in RStudio. See the [Lab 01](https://sta199-fa20-002.netlify.app/labs/lab-01-hello-r.html#getting-started) for more detailed instructions about cloning a repo and starting a new project. 
+Go to the `ae-06-[GITHUB USERNAME]` repo, clone it, and start a new project in RStudio. 
 
 ## Configure git
 
@@ -42,7 +42,7 @@ severe, poorly controlled asthma. The tables present baseline demographic
 information for patients enrolled in the file. **There were 1204 patients in this study.**
 
 You may knit the document to see the tables. "Q4W" means "every four weeks" and 
-"Q8W" means "every eight weeks.
+"Q8W" means "every eight weeks. The two tables represent the same group of people, just different demoraphic information in the columns.
 
 ```{r asthma-data, echo = F}
 trt <- c(rep("Placebo", 407), 
@@ -54,21 +54,57 @@ sex <- c(rep("Male", 138), rep("Female", 269),
 race <- c(rep("White", 302), rep("Black", 16), rep("Asian", 50), rep("Other", 39),
           rep("White", 285), rep("Black", 15), rep("Asian", 54), rep("Other", 45),
           rep("White", 287), rep("Black", 15), rep("Asian", 50), rep("Other", 46))
-knitr::kable(table(trt, sex))
-knitr::kable(table(trt, race))
+knitr::kable(table(trt, sex), caption = "Gender demographics")
+knitr::kable(table(trt, race), caption = "Ethnicity demographics")
 ```
 
 Answer the following questions using the table provided above (knit this
 document first to see the tables!). If a probability cannot be calculated, indicate what 
 additional information is needed in order to do so.
 
-- What is the probability that a randomly selected patient in the trial was 
+## Exercise 1
+
+What is the probability that a randomly selected patient in the trial was 
 assigned to placebo?
-- What is the probability that a randomly selected patient in the trial was 
+
+```{r ex-1}
+
+```
+
+## Exercise 2
+
+What is the probability that a randomly selected patient in the trial was 
 male?
-- What is the probability that a randomly selected patient in the trial was 
+
+```{r ex-2}
+
+```
+
+## Exercise 3
+
+What is the probability that a randomly selected patient in the trial was 
 assigned to placebo **or** was male?
-- What is the probability that a randomly assigned patient in the trial was 
+
+```{r ex-3}
+
+```
+
+## Exercise 4
+
+What is the probability that a randomly assigned patient in the trial was 
 assigned to placebo **and** was male?
-- What is the probability that a randomly assigned patient in the trial was
+
+```{r ex-4}
+
+```
+
+## Exercise 5
+
+What is the probability that a randomly assigned patient in the trial was
 male **or** was white?
+
+```{r ex-5}
+
+```
+
+  

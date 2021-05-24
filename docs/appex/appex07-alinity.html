@@ -367,7 +367,7 @@ pre code {
 
 <div id="clone-a-repo-start-a-new-project" class="section level2">
 <h2>Clone a repo + start a new project</h2>
-<p>Go to the <code>ae-07-[GITHUB USERNAME]</code> repo, clone it, and start a new project in RStudio. See the <a href="https://sta199-fa20-002.netlify.app/labs/lab-01-hello-r.html#getting-started">Lab 01</a> for more detailed instructions about cloning a repo and starting a new project.</p>
+<p>Go to the <code>ae-07-[GITHUB USERNAME]</code> repo, clone it, and start a new project in RStudio.</p>
 </div>
 <div id="configure-git" class="section level2">
 <h2>Configure git</h2>
@@ -392,7 +392,14 @@ use_git_config(user.name = &quot;your github username&quot;, user.email =&quot;y
 <div id="the-abbott-alinity-test" class="section level2">
 <h2>The Abbott Alinity Test</h2>
 <p>The global coronavirus pandemic illustrates the need for accurate testing of COVID-19, as its extreme infectivity poses a significant public health threat. Due to the time-sensitive nature of the situation, the FDA has enacted emergency authorization of a number of serological tests for COVID-19. Full details of these tests may be found on its website <a href="https://www.fda.gov/medical-devices/coronavirus-disease-2019-covid-19-emergency-use-authorizations-medical-devices/eua-authorized-serology-test-performance">here</a>.</p>
-<p>The Abbott Alinity test has an estimated sensitivity of 100% and specificity of 99%.</p>
+<p>The Abbott Alinity test has an estimated sensitivity of 100% and specificity of 99%. Recall from lecture: <span class="math inline">\(D\)</span> is the event that a patient has the disease, and let <span class="math inline">\(T\)</span> is the event that the test is positive for that disease.</p>
+<ul>
+<li>Prevalence: <span class="math inline">\(P(D)\)</span></li>
+<li>Sensitivity: <span class="math inline">\(P(T | D)\)</span></li>
+<li>Specificity: <span class="math inline">\(P(T^c | D^c)\)</span></li>
+<li>Positive predictive value: <span class="math inline">\(P(D | T)\)</span></li>
+<li>Negative predictive value: <span class="math inline">\(P(D^c | T^c)\)</span></li>
+</ul>
 <div id="exercise-3" class="section level3">
 <h3>Exercise 3</h3>
 <p>Suppose the prevalence of COVID-19 in the general population is 2%. What are the positive and negative predictive values of the Abbott Alinity test?</p>
