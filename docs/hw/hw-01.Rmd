@@ -1,6 +1,6 @@
 ---
 title: "HW 01: Gun Violence"
-date: " "
+date: "Due: June 3, 11:59pm"
 author: "Total: 100 points"
 output: 
     html_document: 
@@ -20,7 +20,7 @@ census <- read_csv("data/census.csv")
 
 ## Introduction
 
-Gun violence in the US results in tens of thousands of deaths and injuries annually, and every year it seems as if the number of incidents involving guns increases. At the time of creating this lab, the US has experienced 268 mass shootings that fit the [Mass Shooting Tracker](https://www.massshootingtracker.site/) project criterion in this year alone. Their criterion for a mass shooting is one in which four or more persons shot in one incident, at one location, at roughly the same time. We are going to examine some data from 2013-2018 about gun violence incidents in the US. The data are obtained from [Kaggle](https://www.kaggle.com/jameslko/gun-violence-data), and have been slightly modified. We will also be using data about the [U.S. Census](https://www2.census.gov/programs-surveys/popest/datasets/2010-2017/state/asrh/scprc-est2017-18+pop-res.csv) and [gun laws](https://statefirearmlaws.org/national-data/).
+Gun violence in the US results in tens of thousands of deaths and injuries annually, and every year it seems as if the number of incidents involving guns increases. At the time of creating this lab, the US has experienced 268 mass shootings that fit the [Mass Shooting Tracker](https://www.massshootingtracker.site/) project criterion in this year alone. Their criterion for a mass shooting is one in which four or more persons shot in one incident, at one location, at roughly the same time. We are going to examine some data from 2014-2017 about gun violence incidents in the US. The data are obtained from [Kaggle](https://www.kaggle.com/jameslko/gun-violence-data), and have been slightly modified. We will also be using data about the [U.S. Census](https://www2.census.gov/programs-surveys/popest/datasets/2010-2017/state/asrh/scprc-est2017-18+pop-res.csv) and [gun laws](https://statefirearmlaws.org/national-data/).
 
 ## Getting started
 
@@ -50,47 +50,21 @@ The variable descriptions are as follows:
 
 In which five cities or counties did the most incidents occur? Answer the question using pipes (`%>%`) and the `tidyverse` functions we've discussed. Show your code and output and state your answer in a sentence.
 
-```{r}
-gun_violence %>%
-  count(city_or_county) %>%
-  arrange(desc(n)) %>%
-  slice(1:5)
-```
 
 ## Exercise 2
 
 While there are a variety of definitions of mass shootings, one definition is "any incidents in which four or more people were shot, whether injured or killed". Based on this definition, display the 10 incidents that meet this definition of mass shooting in descending order of number of people shot. Only display the date, state, city or county, and number of people.
 
-```{r}
-gun_violence %>%
-  mutate(total_n = n_killed + n_injured) %>%
-  filter(total_n >= 4) %>%
-  arrange(desc(total_n)) %>%
-  slice(1:10) %>%
-  dplyr::select(date, state, city_or_county, total_n)
-
-```
 
 ## Exercise 3
 
 Let's examine which days of the year are most common for gun violence. Display a table of the top six days of the year with highest number of total incidents, displayed in descending order. Comment on what you notice.
 
-```{r}
-gun_violence %>%
-  count(doy) %>%
-  arrange(desc(n)) %>%
-  slice(1:6)
-```
-
 
 ## Exercise 4
 
-Create a dataset called `state_incidents` where each row is an observation with a state and its total number of incidents.
+Create a data frame called `state_incidents` where each row is an observation with a state and its total number of incidents.
 
-```{r}
-state_incidents <- gun_violence %>%
-  count(state) 
-```
 
 ## Exercise 5
 
@@ -98,13 +72,12 @@ state_incidents <- gun_violence %>%
 *Hint:* Use the `reorder()` function while plotting.
 ```
 
-Let's look at the number of gun violence incidents by state. Plot a bar graph with the counts of gun violent incidents by each state. Display the graph such that the bars run horizontally, and also in descending order.
-
-```{r}
-ggplot(state_incidents, aes(y = reorder(state, n), x = n))+
-  geom_bar(stat = "identity")
-
+```{marginfigure}
+*Hint:* Use the `stat = "identity"` in your `geom_()` function. This lets us override the default option of just plotting the total counts.
 ```
+
+Let's look at the number of gun violence incidents by state. Plot a bar graph with the counts of gun violent incidents by each state. Display the graph such that the bars run horizontally, and also in descending order. Don't forget to adjust the labels on your plot! Briefly comment on what you see.
+
 
 ## Exercise 6
 
@@ -117,21 +90,10 @@ We expect that the more populated states would have a larger number of gun viole
 
 First, let's combine the two datasets together, such that for every observation in `state_incidents`, we add a column for corresponding population. Save this into `state_incidents`.
 
-```{r}
-state_incidents <- state_incidents %>%
-  left_join(., census)
-```
 
 ## Exercise 7
 
-Now let's look at the number of gun violence incidents per 100000 residents in each state, and visualize it. First, create a new variable that is equal to the number of gun violence incidents per 100000 people. This is calculated as taking the number of incidents divided by number of residents, multiplied by 100000. Save this into the same dataset `state_incidents`, then provide a plot of these incidents per 100000 resdients by state, once again displaying in descending order. How does this plot compare to that of Exercise 4?
-
-```{r}
-state_incidents <- state_incidents %>%
-  mutate(inc_per_k = n/population * 100000)
-ggplot(state_incidents, aes(y = reorder(state, inc_per_k), x = inc_per_k))+
-  geom_bar(stat= "identity", )
-```
+Now let's look at the number of gun violence incidents per 100000 residents in each state, and visualize it. First, create a new variable that is equal to the number of gun violence incidents per 100000 people. This is calculated as taking the number of incidents divided by number of residents, multiplied by 100000. Save this into the same data frame `state_incidents`, then provide a plot of these incidents per 100000 resdients by state, once again displaying in descending order. How does this plot compare to that of Exercise 5?
 
 
 ## Exercise 8
@@ -142,22 +104,17 @@ ggplot(state_incidents, aes(y = reorder(state, inc_per_k), x = inc_per_k))+
 
 Let's create groupings for the state populations for easier visualization. Create a new variable called `pop_group` and group the states into the following categories: "small", "medium", "large", "x-large" based on if their populations  are less than 5 million, at least 5 million and less than 10 million, at least 10 million and less than 19 million, and 19 million or more. Save this into the same dataframe `state_incidents`.
 
-```{r}
-state_incidents <- state_incidents %>%
-  mutate(pop_group = case_when(population < 5000000 ~ "small",
-                               population >= 5000000 & population < 10000000 ~ "medium",
-                               population >= 1000000 & population < 19000000 ~ "large",
-                               T ~ "x-large") )
-```
-
-
 ## Exercise 9
 
 Another column in the `census.csv` dataset is the number of gun laws/provisions by state in 2017. Plot the incidents per 10000 residents by the number of gun laws in each state. Color each observation by its `pop_group`. Does there are appear to be a relationship between number of gun laws and number of gun violence incidents per 100000 residents by state? What about between the number of gun laws and population size?
 
-```{r}
-ggplot(state_incidents, aes(x = gun_laws, y = inc_per_k, col = pop_group))+
-  geom_point(size = 2) 
-```
 
+## Wrapping up
 
+Go back through your write up to make sure you followed the coding style guidelines we discussed in class (e.g. no long lines of code, plots nicely labeled).
+ 
+Also, make sure all of your R chunks are properly labeled, and your figures are reasonably sized.
+
+## Submission 
+
+Upload your to Gradescope. Associate the "Overall" graded section with the first page of your PDF, and mark where each answer is  to the exercises. If any answer spans multiple pages, then mark all pages.
