@@ -479,6 +479,8 @@ font-size: 10pt;
 
 <div id="TOC">
 <ul>
+<li><a href="#getting-started">Getting started</a><ul>
+<li><a href="#configure-git">Configure git</a></li>
 <li><a href="#update-yaml">Update YAML</a></li>
 <li><a href="#packages">Packages</a></li>
 <li><a href="#the-data">The data</a></li>
@@ -486,6 +488,7 @@ font-size: 10pt;
 <li><a href="#wrapping-up">Wrapping up</a></li>
 <li><a href="#submission">Submission</a></li>
 <li><a href="#interested-in-how-buzzfeed-made-their-visualizations">Interested in how Buzzfeed made their visualizations?</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -497,6 +500,15 @@ font-size: 10pt;
 <li>Recreate visualizations.</li>
 <li>Summarize data.</li>
 </ul>
+<div id="getting-started" class="section level1">
+<h1>Getting started</h1>
+<p>Go to the course GitHub organization and locate your Lab 03 repo, which should be named <code>lab-03-nobel-laureates-[GITHUB USERNAME]</code>. Grab the URL of the repo, and clone it in RStudio. Refer to Lab 01 for step-by-step for cloning a repo and creating a new RStudio project.</p>
+<div id="configure-git" class="section level2">
+<h2>Configure git</h2>
+<p>Before we can get started we need to do one more thing. Specifically, we need to configure your git so that RStudio can communicate with GitHub. This requires two pieces of information: your email address and your GitHub username.</p>
+<p>To do so, run the following:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">usethis<span class="op">::</span><span class="kw">use_git_config</span>(<span class="dt">user.name =</span> <span class="st">&quot;github username&quot;</span>, <span class="dt">user.email =</span> <span class="st">&quot;your email&quot;</span>)</a></code></pre></div>
+</div>
 <div id="update-yaml" class="section level2">
 <h2>Update YAML</h2>
 <p>Change the author to your name in YAML.</p>
@@ -504,12 +516,12 @@ font-size: 10pt;
 <div id="packages" class="section level2">
 <h2>Packages</h2>
 <p>We’ll use the <strong>tidyverse</strong> package for this analysis. Run the following code in the Console to load this package.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a></code></pre></div>
 </div>
 <div id="the-data" class="section level2">
 <h2>The data</h2>
 <p>The dataset for this assignment can be found as a csv file in the <code>data</code> folder of your repository. You can read it in using the following.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">nobel &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/nobel.csv&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">nobel &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/nobel.csv&quot;</span>)</a></code></pre></div>
 <p>The variable descriptions are as follows:</p>
 <ul>
 <li><code>id</code>: ID number</li>
@@ -571,13 +583,13 @@ font-size: 10pt;
 <p>… says the Buzzfeed article. Let’s see if that’s true.</p>
 <p>First, we’ll create a new variable to identify whether the laureate was in the US when they won their prize. We’ll use the <code>mutate()</code> function for this. The following pipeline mutates the <code>nobel_living</code> data frame by adding a new variable called <code>country_us</code>. We use an if/else statement to create this variable. The first argument in the <code>if_else()</code> function is the condition we’re testing for. If <code>country</code> is equal to <code>&quot;USA&quot;</code>, we set <code>country_us</code> to <code>&quot;USA&quot;</code>. If not, we set the <code>country_us</code> to <code>&quot;Other&quot;</code>.</p>
 <p><label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><span style="display: block;">Note that we can achieve the same result using the <code>fct_other()</code> function (i.e. with <code>country_us = fct_other(country, “USA”)</code>).</span></span></p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">nobel_living &lt;-<span class="st"> </span>nobel_living <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">    <span class="dt">country_us =</span> <span class="kw">if_else</span>(country <span class="op">==</span><span class="st"> &quot;USA&quot;</span>, <span class="st">&quot;USA&quot;</span>, <span class="st">&quot;Other&quot;</span>)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">  )</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">nobel_living &lt;-<span class="st"> </span>nobel_living <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">    <span class="dt">country_us =</span> <span class="kw">if_else</span>(country <span class="op">==</span><span class="st"> &quot;USA&quot;</span>, <span class="st">&quot;USA&quot;</span>, <span class="st">&quot;Other&quot;</span>)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">  )</a></code></pre></div>
 <p>Next, we will limit our analysis to only the following categories: Physics, Medicine, Chemistry, and Economics.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">nobel_living_science &lt;-<span class="st"> </span>nobel_living <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(category <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Physics&quot;</span>, <span class="st">&quot;Medicine&quot;</span>, <span class="st">&quot;Chemistry&quot;</span>, <span class="st">&quot;Economics&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">nobel_living_science &lt;-<span class="st"> </span>nobel_living <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(category <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Physics&quot;</span>, <span class="st">&quot;Medicine&quot;</span>, <span class="st">&quot;Chemistry&quot;</span>, <span class="st">&quot;Economics&quot;</span>))</a></code></pre></div>
 <p><strong>You will work with the <code>nobel_living_science</code> data frame you created above for the remainder of the lab.</strong> This means you’ll need to define this data frame in your R Markdown document.</p>
 <p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Hint:</strong> You can change the orientation of the bars using the <code>coord_flip()</code> function in ggplot2. Click <a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">here</a> to read more about the function.</span></span></p>
 <ol start="3" style="list-style-type: decimal">
@@ -620,6 +632,7 @@ font-size: 10pt;
 <p>The plots in the Buzzfeed article are called waffle plots. You can find the code used for making these plots in Buzzfeed’s GitHub repo (yes, they have one!) <a href="https://buzzfeednews.github.io/2017-01-immigration-and-science/">here</a>. You’re not expected to recreate them as part of your assignment, but you’re welcomed to do so for fun! © 2020 GitHub, Inc.</p>
 <hr>
 <p><em>This lab was adapted from <a href="https://datasciencebox.org">Data Science in a Box</a>.</em></p>
+</div>
 </div>
 
 

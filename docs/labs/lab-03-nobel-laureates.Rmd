@@ -26,6 +26,20 @@ The learning goals of this lab are:
 - Recreate visualizations.
 - Summarize data.
 
+# Getting started
+
+Go to the course GitHub organization and locate your Lab 03 repo, which should be named `lab-03-nobel-laureates-[GITHUB USERNAME]`. Grab the URL of the repo, and clone it in RStudio. Refer to Lab 01 for step-by-step for cloning a repo and creating a new RStudio project.
+
+## Configure git
+
+Before we can get started we need to do one more thing.  Specifically,  we need to configure your git so that RStudio can communicate with GitHub. This requires two pieces of information: your email address and your GitHub username.
+
+To do so, run the following:
+
+```{r eval=FALSE}
+usethis::use_git_config(user.name = "github username", user.email = "your email")
+```
+
 ## Update YAML 
 
 Change the author to your name in YAML.

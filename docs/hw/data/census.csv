@@ -1,0 +1,52 @@
+state,state_code,population,gun_laws
+United States,USA,325719178,
+Alabama,AL,4874747,10
+Alaska,AK,739795,3
+Arizona,AZ,7016270,8
+Arkansas,AR,3004279,11
+California,CA,39536653,106
+Colorado,CO,5607154,30
+Connecticut,CT,3588184,92
+Delaware,DE,961939,40
+Florida,FL,20984400,21
+Georgia,GA,10429379,6
+Hawaii,HI,1427538,81
+Idaho,ID,1716943,2
+Illinois,IL,12802023,65
+Indiana,IN,6666818,12
+Iowa,IA,3145711,24
+Kansas,KS,2913123,4
+Kentucky,KY,4454189,7
+Louisiana,LA,4684333,13
+Maine,ME,1335907,11
+Maryland,MD,6052177,66
+Massachusetts,MA,6859819,101
+Michigan,MI,9962311,21
+Minnesota,MN,5576606,41
+Mississippi,MS,2984100,2
+Missouri,MO,6113532,2
+Montana,MT,1050493,4
+Nebraska,NE,1920076,22
+Nevada,NV,2998039,21
+New Hampshire,NH,1342795,9
+New Jersey,NJ,9005644,75
+New Mexico,NM,2088070,10
+New York,NY,19849399,75
+North Carolina,NC,10273419,30
+North Dakota,ND,755393,10
+Ohio,OH,11658609,16
+Oklahoma,OK,3930864,9
+Oregon,OR,4142776,35
+Pennsylvania,PA,12805537,37
+Rhode Island,RI,1059639,53
+South Carolina,SC,5024369,12
+South Dakota,SD,869666,5
+Tennessee,TN,6715984,22
+Texas,TX,28304596,18
+Utah,UT,3101833,13
+Vermont,VT,623657,6
+Virginia,VA,8470020,13
+Washington,WA,7405743,43
+West Virginia,WV,1815857,18
+Wisconsin,WI,5795483,23
+Wyoming,WY,579315,6

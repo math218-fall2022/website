@@ -1,275 +1,163 @@
 ---
-title: "HW 01 - Pet names"
-subtitle: "Meet the toolkit"
-date: "Due ?"
+title: "HW 01: Gun Violence"
+date: " "
 author: "Total: 100 points"
 output: 
-  tufte::tufte_html:
-    css: "./sta199-hw.css"
-    tufte_variant: "envisioned"
-    highlight: pygments
-link-citations: yes
+    html_document: 
+     css: "./sta199-hw.css"
+     toc: true
+     toc_float: true
+     fig_caption: false
 ---
 
-```{r include = FALSE}
-knitr::opts_chunk$set(
-  eval = FALSE,
-  out.width = "80%",
-  fig.asp = 0.618,
-  fig.width = 10
-)
+```{r setup, include=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
-library(openintro)
-library(ggrepel)
+gun_violence <- read_csv("data/gun_violence.csv")
+census <- read_csv("data/census.csv")
 ```
 
-```{r photo, fig.margin = TRUE, echo = FALSE, fig.width = 3, fig.cap = "Photo by Jovana Askrabic on Unsplash", eval = TRUE}
-knitr::include_graphics("img/01/jovana-askrabic-XYIQXLH_v0o-unsplash.jpeg")
+
+## Introduction
+
+Gun violence in the US results in tens of thousands of deaths and injuries annually, and every year it seems as if the number of incidents involving guns increases. At the time of creating this lab, the US has experienced 268 mass shootings that fit the [Mass Shooting Tracker](https://www.massshootingtracker.site/) project criterion in this year alone. Their criterion for a mass shooting is one in which four or more persons shot in one incident, at one location, at roughly the same time. We are going to examine some data from 2013-2018 about gun violence incidents in the US. The data are obtained from [Kaggle](https://www.kaggle.com/jameslko/gun-violence-data), and have been slightly modified. We will also be using data about the [U.S. Census](https://www2.census.gov/programs-surveys/popest/datasets/2010-2017/state/asrh/scprc-est2017-18+pop-res.csv) and [gun laws](https://statefirearmlaws.org/national-data/).
+
+## Getting started
+
+Go to the course GitHub organization and locate your Lab 03 repo, which should be named `hw-01-gun-violence-[GITHUB USERNAME]`. Grab the URL of the repo, and clone it in RStudio. Don't forget to configure git:
+
+```{r eval=FALSE}
+library(usethis)
+usethis::use_git_config(user.name = "github username", user.email = "your email")
 ```
 
-The goal of this assignment is to introduce you to R, RStudio, Git, and GitHub, which you'll be using throughout the course both to learn the data science concepts discussed in the course and to analyze real data and come to informed conclusions.
 
-# Getting started
-Here are the steps for getting started:
+The variable descriptions are as follows:
 
-- Find the **hw-01-** repo on GitHub
-- Clone this repo into your RStudio Docker container [https://vm-manage.oit.duke.edu/containers](https://vm-manage.oit.duke.edu/containers)
-- Configure git using the `use_git_config()` function
-- Make any changes needed as outlined by the tasks you need to complete for the assignment
-- Make sure all your code chunks are informatively named, there are no spaces in the labels, and these labels re not repeated
-- Periodically commit changes (the more often the better, for example, once per each new task)
-- Push all your changes back to your GitHub repo
+- `incident_id`: ID number
+- `date`: date of incident
+- `state`: state in which incident occurred
+- `city_or_county`: city or county in which incident occurred
+- `address`: address where incident occurred
+- `n_killed`: number of people killed
+- `n_injured`: number of people injured, but not killed
+- `n_guns_involved`: number of guns involved 
+- `doy`: day of year (month/day) of incident
+- `year`: year
+- `month`: month
 
-and voila, you're done! Once you push your changes back you do not need to do anything else to "submit" your work. And you can of course push multiple times throughout the assignment. At the time of the deadline we will take whatever is in your repo and consider it your final submission, and grade the state of your work at that time (which means even if you made mistakes before then, you wouldn't be penalized for them as long as the final state of your work is correct).
+## Exercise 1
 
-
-# Hello RStudio!
-
-RStudio is comprised of four panes.
-
-```{r rstudio-anatomy, fig.fullwidth=TRUE, echo = FALSE, eval = TRUE}
-knitr::include_graphics("img/01/rstudio-anatomy.png")
-```
-
--   On the bottom left is the Console, this is where you can write code that will be evaluated. Try typing `2 + 2` here and hit enter, what do you get?
--   On the bottom right is the Files pane, as well as other panes that will come handy as we start our analysis.
--   If you click on a file, it will open in the editor, on the top left pane.
--   Finally, the top right pane shows your Environment. If you define a variable it would show up there. Try typing `x <- 2` in the Console and hit enter, what do you get in the **Environment** pane? Importantly, this pane is also where the **Git** interface lives. We will be using that regularly throughout this assignment.
-
-# Warm up
-
-Before we introduce the data, let's warm up with some simple exercises.
-
-```{marginfigure}
-The top portion of your R Markdown file (between the three dashed lines) is called **YAML**. It stands for "YAML Ain't Markup Language". It is a human friendly data serialization standard for all programming languages. All you need to know is that this area is called the YAML (we will refer to it as such) and that it contains meta information about your document.
-```
-
-## Step 1. Update the YAML
-
-Open the R Markdown (Rmd) file in your project, change the author name to your name, and knit the document.
-
-```{r yaml-raw-to-rendered, echo = FALSE, eval = TRUE, fig.align = "center"}
-knitr::include_graphics("img/01/yaml-raw-to-rendered.png")
-```
-
-## Step 2: Commit
-
-Then Go to the **Git pane** in your RStudio.
-
-You should see that your Rmd (R Markdown) file and its output, your md file (Markdown), file are listed there as recently changed files.
-
-Next, click on **Diff**.
-This will pop open a new window that shows you the **diff**erence between the last committed state of the document and its current state that includes your changes.
-If you're happy with these changes, click on the checkboxes of all files in the list, and type *"Update author name"* in the **Commit message** box and hit **Commit**.
-
-```{r update-author-name-commit, echo = FALSE, eval = TRUE, fig.align = "left"}
-knitr::include_graphics("img/01/update-author-name-commit.png")
-```
-
-You don't have to commit after every change, this would get quite cumbersome.
-You should consider committing states that are *meaningful to you* for inspection, comparison, or restoration.
-In the first few assignments we will tell you exactly when to commit and in some cases, what commit message to use.
-As the semester progresses we will let you make these decisions.
-
-## Step 3. Push
-
-Now that you have made an update and committed this change, it's time to push these changes to the web!
-Or more specifically, to your repo on GitHub.
-Why?
-So that others can see your changes.
-And by others, we mean the course teaching team (your repos in this course are private to you and us, only).
-In order to push your changes to GitHub, click on **Push**.
-
-```{r ready-to-push, fig.margin = TRUE, echo = FALSE, eval = TRUE}
-knitr::include_graphics("img/01/ready-to-push.png")
-```
-
-This will prompt a dialogue box where you first need to enter your user name, and then your password.
-This might feel cumbersome.
-Bear with me... I *will* teach you how to save your password so you don't have to enter it every time.
-But for this one assignment you'll have to manually enter each time you push in order to gain some experience with it.
-
-**Thought exercise:** Which of the above steps (updating the YAML, committing, and pushing) needs to talk to GitHub?[^hw-01-pet-names-1]
-
-# Packages
-
-R is an open-source language, and developers contribute functionality to R via packages.
-In this assignment we will use the following packages:
-
--   **tidyverse**: a collection of packages for doing data analysis in a "tidy" way
--   **openintro**: a package that contains the datasets from OpenIntro resources
-
-We use the `library()` function to load packages.
-In your R Markdown document you should see an R chunk labelled `load-packages` which has the necessary code for loading both packages.
-You should also load these packages in your Console, which you can do by sending the code to your Console by clicking on the **Run Current Chunk** icon (green arrow pointing right icon).
-
-```{r load-packages-chunk, echo = FALSE, eval = TRUE, fig.align = "left"}
-knitr::include_graphics("img/01/load-packages-chunk.png")
-```
-
-Note that these packages are also get loaded in your R Markdown environment when you **Knit** your R Markdown document.
-
-# Data
-
-The city of [Seattle, WA](https://en.wikipedia.org/wiki/Seattle) has an open data portal that includes pets registered in the city.
-For each registered pet, we have information on the pet's name and species.
-The data used in this exercise can be found in the **openintro** package, and it's called `seattlepets`.
-Since the dataset is distributed with the package, we don't need to load it separately; it becomes available to us when we load the package.
-
-You can view the dataset as a spreadsheet using the `View()` function.
-Note that you should not put this function in your R Markdown document, but instead type it directly in the Console, as it pops open a new window (and the concept of popping open a window in a static document doesn't really make sense...).
-When you run this in the console, you'll see the following **data viewer** window pop up.
-
-```{r view-data}
-View(seattlepets)
-```
-
-```{r data.viewer, echo = FALSE, eval = TRUE, fig.align = "left"}
-knitr::include_graphics("img/01/view-data.png")
-```
-
-You can find out more about the dataset by inspecting its documentation (which contains a **data dictionary**, name of each variable and its description), which you can access by running `?seattlepets` in the Console or using the Help menu in RStudio to search for `seattlepets`.
-
-# Exercises
-
-1.  According to the data dictionary, how many pets are included in this dataset?
-
-🧶 ✅ ⬆️ *Write your answer in your R Markdown document under Exercise 1, knit the document, commit your changes with a commit message that says "Completed Exercise 1", and push. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
-
-2.  Again, according to the data dictionary, how many variables do we have for each pet?
-
-🧶 ✅ ⬆️ *Write your answer in your R Markdown document under Exercise 1, knit the document, commit your changes with a commit message that says "Completed Exercise 2", and push. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
-
-3.  What are the three most common pet names in Seattle? To do this you will need to count the frequencies of each pet name and display the results in descending order of frequency so that you can easily see the top three most popular names. The following code does exactly that.
-
-```{marginfigure}
-The two lines of code can be read as "Start with the seattlepets data frame, and then count the animal_names, and display the results sorted in descending order. The "and then" in the previous sentence maps to %>%, the pipe operator, which takes what comes before it and plugs it in as the first argument of the function that comes after it.
-```
+In which five cities or counties did the most incidents occur? Answer the question using pipes (`%>%`) and the `tidyverse` functions we've discussed. Show your code and output and state your answer in a sentence.
 
 ```{r}
-seattlepets %>%
-  count(animal_name, sort = TRUE)
-```
-
-🧶 ✅ ⬆️ *Write your answer in your R Markdown document under Exercise 3. In this exercise you will not only provide a written answer but also include some code and output. You should insert the code in the code chunk provided for you, knit the document to see the output, and then write your narrative for the answer based on the output of this function, and knit again to see your narrative, code, and output in the resulting document. Then, commit your changes with a commit message that says "Completed Exercise 3", and push. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
-
-Let's also look to see what the most common pet names are for various species.
-For this we need to first `group_by()` the `species`, and then do the same counting we did before.
-
-```{marginfigure}
-Looks like many of those NAs were cats. Poor unnamed kitties…
-```
-
-```{r species-names, eval=TRUE}
-seattlepets %>% 
-  group_by(species) %>%
-  count(animal_name, sort = TRUE)
-```
-
-But this output isn't exactly what we wanted.
-We wanted to know the most common cat and dog names, but there are barely any cats present in this output!
-This is because there are more dogs than cats in the dataset overall.
-We can confirm this by counting the various species in the data.
-
-```{marginfigure}
-6 pigs in the city? Ok… But we'll continue with cats and dogs.
-```
-
-```{r species, eval=TRUE}
-seattlepets %>%
-  count(species, sort = TRUE)
-```
-
-Let's search for the top 5 cat and dog names.
-To do this, we will arrange the counts in descending order using the `arrange()` function. We pass in the name of the variable we want to sort by. Using the `desc()` function specifies that we want to arrange in descending order. Then to obtain the top five, we can use the `slice()` function.
-The argument is the number of rows to select, which is `n = 5` for the top 5.
-
-```{r species-names-top5, eval=TRUE}
-seattlepets %>% 
-  group_by(species) %>%
-  count(animal_name, sort = TRUE) %>% 
+gun_violence %>%
+  count(city_or_county) %>%
   arrange(desc(n)) %>%
-  slice(n = 5)
+  slice(1:5)
 ```
 
-1.  Based on the previous output we can easily identify the most common cat and dog names in Seattle, but the output is sorted by `n` (the frequencies) as opposed to being organized by the `species`. Build on the pipeline to arrange the results so that they're arranged by `species` first, and then `n`. This means you will need to add one more step to the pipeline, and you have two options: `arrange(species, n)` or `arrange(n, species)`. You should try both and decide which one organizes the output by species and then ranks the names in order of frequency for each species.
+## Exercise 2
 
-🧶 ✅ ⬆️ *Write your answer in your R Markdown document under Exercise 4. In this exercise you're asked to complete the code provided for you. You should insert the code in the code chunk provided for you, knit the document to see the output, and then write your narrative for the answer based on the output of this function, and knit again to see your narrative, code, and output in the resulting document. Then, commit your changes with a commit message that says "Completed Exercise 4", and push. Make sure to commit and push all changed files so that your Git pane is cleared up afterwards.*
+While there are a variety of definitions of mass shootings, one definition is "any incidents in which four or more people were shot, whether injured or killed". Based on this definition, display the 10 incidents that meet this definition of mass shooting in descending order of number of people shot. Only display the date, state, city or county, and number of people.
 
-The following visualization plots the proportion of dogs with a given name versus the proportion of cats with the same name.
-The 20 most common cat and dog names are displayed.
-The diagonal line on the plot is the $x = y$ line; if a name appeared on this line, the name's popularity would be exactly the same for dogs and cats.
+```{r}
+gun_violence %>%
+  mutate(total_n = n_killed + n_injured) %>%
+  filter(total_n >= 4) %>%
+  arrange(desc(total_n)) %>%
+  slice(1:10) %>%
+  dplyr::select(date, state, city_or_county, total_n)
 
-```{r eval = TRUE, echo = FALSE, fig.fullwidth = TRUE}
-# data prep
-name_props <- seattlepets %>% 
-  filter(
-    !is.na(animal_name),
-    species %in% c("Dog", "Cat")
-    ) %>%
-  group_by(species) %>% 
-  count(animal_name, sort = TRUE) %>%
-  mutate(prop = n / sum(n))
-    
-cat_name_props <- name_props %>%
-  filter(species == "Cat") %>%
-  rename(cat_prop = prop) %>%
-  slice(1:30)
-dog_name_props <- name_props %>%
-  filter(species == "Dog") %>%
-  rename(dog_prop = prop) %>%
-  slice(1:30)
-    
-comb_name_props <- inner_join(cat_name_props, dog_name_props, 
-                              by = "animal_name") %>%
-  ungroup() %>%
-  select(animal_name, cat_prop, dog_prop)
-    
-# create viz
-ggplot(comb_name_props, aes(x = cat_prop, y = dog_prop)) +
-  geom_abline(intercept = 0, 
-              color = COL["lgray","full"], 
-              alpha = 0.8, 
-              size = 1.5) +
-  geom_text_repel(aes(label = animal_name), 
-                  segment.color = COL["gray","full"], 
-                  seed = 291252, max.iter = 10000) +
-  geom_point(color = COL["blue","full"], alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Proportion of cats", y = "Proportion of dogs") +
-  xlim(0.002, 0.01) +
-  ylim(0.002, 0.01) +
-  ggimage::geom_emoji(
-      image = "1f436", aes(x = 0.003, y = 0.009), size = 0.1
-      ) +
-  ggimage::geom_emoji(
-      image = "1f431", aes(x = 0.009, y = 0.003), size = 0.1
-      )
 ```
 
-1.  What names are more common for cats than dogs? The ones above the line or the ones below the line?
-2.  Is the relationship between the two variables (proportion of cats with a given name and proportion of dogs with a given name) positive or negative? What does this mean in context of the data?
+## Exercise 3
 
-🧶 ✅ ⬆️ *Now is a good time to commit and push your changes to GitHub with an appropriate commit message. Commit and push all changed files so that your Git pane is cleared up afterwards. Make sure that your last push to the repo comes before the deadline. You should confirm that what you committed and pushed are indeed in your repo that we will see by visiting your repo on GitHub.*
+Let's examine which days of the year are most common for gun violence. Display a table of the top six days of the year with highest number of total incidents, displayed in descending order. Comment on what you notice.
 
-[^hw-01-pet-names-1]: Only pushing requires talking to GitHub, this is why you're asked for your password at that point.
+```{r}
+gun_violence %>%
+  count(doy) %>%
+  arrange(desc(n)) %>%
+  slice(1:6)
+```
+
+
+## Exercise 4
+
+Create a dataset called `state_incidents` where each row is an observation with a state and its total number of incidents.
+
+```{r}
+state_incidents <- gun_violence %>%
+  count(state) 
+```
+
+## Exercise 5
+
+```{marginfigure}
+*Hint:* Use the `reorder()` function while plotting.
+```
+
+Let's look at the number of gun violence incidents by state. Plot a bar graph with the counts of gun violent incidents by each state. Display the graph such that the bars run horizontally, and also in descending order.
+
+```{r}
+ggplot(state_incidents, aes(y = reorder(state, n), x = n))+
+  geom_bar(stat = "identity")
+
+```
+
+## Exercise 6
+
+We expect that the more populated states would have a larger number of gun violence incidents. To address this, we want to add in some notion of population size. The dataset `census.csv` provides each state's estimated population in 2017, as well as some other information related to that state. The variables are as follows: 
+
+- `state`: state
+- `state_code`: two-letter postal code
+- `population`: estimated population in 2017 
+- `gun_laws`: number of gun laws in 2017
+
+First, let's combine the two datasets together, such that for every observation in `state_incidents`, we add a column for corresponding population. Save this into `state_incidents`.
+
+```{r}
+state_incidents <- state_incidents %>%
+  left_join(., census)
+```
+
+## Exercise 7
+
+Now let's look at the number of gun violence incidents per 100000 residents in each state, and visualize it. First, create a new variable that is equal to the number of gun violence incidents per 100000 people. This is calculated as taking the number of incidents divided by number of residents, multiplied by 100000. Save this into the same dataset `state_incidents`, then provide a plot of these incidents per 100000 resdients by state, once again displaying in descending order. How does this plot compare to that of Exercise 4?
+
+```{r}
+state_incidents <- state_incidents %>%
+  mutate(inc_per_k = n/population * 100000)
+ggplot(state_incidents, aes(y = reorder(state, inc_per_k), x = inc_per_k))+
+  geom_bar(stat= "identity", )
+```
+
+
+## Exercise 8
+
+```{marginfigure}
+*Hint:* Use the `case_when()` function.
+```
+
+Let's create groupings for the state populations for easier visualization. Create a new variable called `pop_group` and group the states into the following categories: "small", "medium", "large", "x-large" based on if their populations  are less than 5 million, at least 5 million and less than 10 million, at least 10 million and less than 19 million, and 19 million or more. Save this into the same dataframe `state_incidents`.
+
+```{r}
+state_incidents <- state_incidents %>%
+  mutate(pop_group = case_when(population < 5000000 ~ "small",
+                               population >= 5000000 & population < 10000000 ~ "medium",
+                               population >= 1000000 & population < 19000000 ~ "large",
+                               T ~ "x-large") )
+```
+
+
+## Exercise 9
+
+Another column in the `census.csv` dataset is the number of gun laws/provisions by state in 2017. Plot the incidents per 10000 residents by the number of gun laws in each state. Color each observation by its `pop_group`. Does there are appear to be a relationship between number of gun laws and number of gun violence incidents per 100000 residents by state? What about between the number of gun laws and population size?
+
+```{r}
+ggplot(state_incidents, aes(x = gun_laws, y = inc_per_k, col = pop_group))+
+  geom_point(size = 2) 
+```
+
+
