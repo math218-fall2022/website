@@ -50,7 +50,7 @@ lessons:
  - title: "Homework 01 Assigned"
  - date: "Fri, May 28"
    title: "Lab 03: Nobel laureates"
-   slides: "lab-slides/lab-03-nobel-laureates.html"
+   lab: "lab-slides/lab-03-nobel-laureates.html"
  - date: "Week 04"
  - date: "Mon, May 31"
    title: "Memorial Day: No classes"
