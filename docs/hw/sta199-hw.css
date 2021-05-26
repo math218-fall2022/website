@@ -8,11 +8,11 @@
 /* Tufte CSS styles */
 
 html {
-  font-size: 13pt;
+  font-size: 9.5pt;
 }
 
 p {
-	font-size: 13pt;
+	font-size: 9.5pt;
 }
 
 body {
@@ -21,7 +21,6 @@ body {
 	background-color: #fefefe;
 	color: #222;
 	counter-reset: li;
-	font-size: 13pt;
 }
 
 h1.title {

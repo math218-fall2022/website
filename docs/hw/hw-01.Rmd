@@ -3,11 +3,12 @@ title: "HW 01: Gun Violence"
 date: "Due: June 2, 11:59pm"
 author: "Total: 100 points"
 output: 
-    html_document: 
-     css: "./sta199-hw.css"
-     toc: true
-     toc_float: true
-     fig_caption: false
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: "./sta199-hw.css"
+    toc: true
+    toc_depth: 2
 ---
 
 ```{r setup, include=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
