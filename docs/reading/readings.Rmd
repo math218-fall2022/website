@@ -6,4 +6,5 @@ output:
 ---
 
 - [Reading 01: Reproducibility](./reading-01.html), due 5/17
-
+- [Reading 02: Data Visualization & Exploration](./reading-02.html), due 5/24
+- [Reading 03: Probability](./reading-03.html), due 6/2
