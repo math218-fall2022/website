@@ -1,6 +1,6 @@
 ---
 title: "HW 01: Gun Violence"
-date: "Due: June 3, 11:59pm"
+date: "Due: June 2, 11:59pm"
 author: "Total: 100 points"
 output: 
     html_document: 
@@ -93,7 +93,7 @@ First, let's combine the two datasets together, such that for every observation 
 
 ## Exercise 7
 
-Now let's look at the number of gun violence incidents per 100000 residents in each state, and visualize it. First, create a new variable that is equal to the number of gun violence incidents per 100000 people. This is calculated as taking the number of incidents divided by number of residents, multiplied by 100000. Save this into the same data frame `state_incidents`, then provide a plot of these incidents per 100000 resdients by state, once again displaying in descending order. How does this plot compare to that of Exercise 5?
+Now let's look at the number of gun violence incidents per 100000 residents in each state, and visualize it. First, create a new variable that is equal to the number of gun violence incidents per 100000 people. This is calculated as taking the number of incidents divided by number of residents, multiplied by 100000. Save this into the same data frame `state_incidents`, then provide a plot of these incidents per 100000 residents by state, once again displaying in descending order. How does this plot compare to that of Exercise 5?
 
 
 ## Exercise 8
@@ -106,7 +106,7 @@ Let's create groupings for the state populations for easier visualization. Creat
 
 ## Exercise 9
 
-Another column in the `census.csv` dataset is the number of gun laws/provisions by state in 2017. Plot the incidents per 10000 residents by the number of gun laws in each state. Color each observation by its `pop_group`. Does there are appear to be a relationship between number of gun laws and number of gun violence incidents per 100000 residents by state? What about between the number of gun laws and population size?
+Another column in the `census.csv` dataset is the number of gun laws/provisions by state in 2017. Plot the incidents per 10000 residents by the number of gun laws in each state. Color each observation by its `pop_group`. Does there appear to be a relationship between number of gun laws and number of gun violence incidents per 100000 residents by state? What about between the number of gun laws and population size?
 
 
 ## Wrapping up
