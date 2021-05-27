@@ -276,7 +276,7 @@ $$\begin{align}P(A | B) &= \frac{P(A \text{ and } B)}{P(B)}\\[10pt]
 &= \frac{P(B | A)P(A)}{P(B)}\\[15pt]
 &= \frac{P(B | A)P(A)}{P(B | A)P(A) + P(B | A^c)P(A^c)}\end{align}$$
 
-Let's took at an example to see how this works. 
+Let's look at an example to see how this works. 
 
 ---
 

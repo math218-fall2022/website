@@ -1,0 +1,112 @@
+---
+title: "Lab 04: Examining smoking and health outcomes"
+subtitle: "due Tue, June 8 at 11:59p"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: "./sta199-labs.css"
+    toc: true
+    toc_depth: 1
+link-citations: yes
+---
+
+```{r include=FALSE}
+library(tidyverse)
+library(tufte)
+library(knitr)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE,     # for regression output
+  digits = 2
+  )
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+# Introduction 
+
+The goal of today's lab is to practice visualizing and calculating probabilities using the tidyverse. 
+
+# Set-up
+Clone the **lab-04-whickham** assignment repo in RStudio. Don't forget to configure git if you haven't already done so:
+
+```{r eval = FALSE}
+library(usethis)
+use_git_config(user.name="your github username", user.email="your email")
+```
+
+# Packages
+
+In this lab we will work with the `tidyverse` and `mosaicData` packages.
+
+```{r}
+library(tidyverse) 
+library(mosaicData) 
+```
+
+Note that these packages are also loaded in your R Markdown document.
+
+# The data
+
+Today's data comes from a study of conducted in Whickham, England. In this study, the researchers recorded each participant's age, smoking status at the start of the study, and their health outcome 20 years later. 
+
+The data is in the `mosaicData` package. You can load it with
+
+```{r load-data}
+data(Whickham)
+```
+
+Take a peek at the codebook with
+
+```{r eval=FALSE}
+?Whickham
+```
+
+
+# Exercises
+
+**Write all R code according to the style guidelines discussed in class.** Be
+especially careful about staying within the 80 character limit, as demonstrated 
+by your lab TAs! Don't forget to name your code chunks, and commit often!
+
+1. How many observations are in this dataset? What does each observation 
+   represent?
+
+1. How many variables are in this dataset? What type of variable is each? 
+   Display each variable using an appropriate visualization.
+   
+1. What would you expect the relationship between smoking status and health outcome to be?
+
+1. Create a visualization depicting the relationship between smoking status and health outcome.
+
+1. Calculate the conditional probabilities of death for each smoking status, only reporting probabilities for the `outcome` of Dead. Briefly describe the relationship, and evaluate whether or not it is what you expected. Use the visualization from the previous exercise and the conditional probabilities to support your narrative.  
+
+1. Create a new variable called `age_cat` using the following scheme:
+
+    - `age <= 44 ~ "18-44"`
+    - `age > 44 & age <= 64 ~ "45-64"`
+    - `age > 64 ~ "65+"`
+
+1. Re-create the visualization from Exercise 4, this time faceting by `age_cat`.
+
+
+1. Extend the table from Exercise 5 by breaking it down by age category. 
+
+1. Compare the visualization from Exercise 7 and the table from Exercise 8 to what you previously observed in Exercises 4 and 5. What changed, and what might explain the change? Use the table you calculated in Exercise 8 to support your narrative. 
+
+# Submission
+
+Knit to PDF to create a PDF document. Knit and commit all remaining changes, 
+and push your work to GitHub. Make sure all files are updated on your GitHub 
+repo.
+
+Please only upload your PDF document to Gradescope. Associate the "Overall"
+graded section with the first page of your PDF, and mark where each answer is 
+to the exercises. If any answer spans multiple pages, then mark all pages.
+
+<br> 
+
+<hr> 
+
+
+*This lab was adapted from [Data Science in a Box](https://datasciencebox.org).*

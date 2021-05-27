@@ -1,0 +1,83 @@
+---
+title: "06 - Demo"
+author: "Becky Tang"
+date: "5/26/2021"
+output: html_document
+---
+
+```{r packages}
+library(tidyverse, message = F)
+```
+
+```{r setup}
+coffee <- c(rep("Does not drink coffee", 6477), rep("Drinks coffee occasionally", 34152), rep("Drinks coffee regularly", 28535))
+died <- c(rep("Died", 1039), rep("Did not die", 5438), 
+          rep("Died", 4440), rep("Did not die", 29712),
+          rep("Died", 3601), rep("Did not die", 24934))
+coffee_data = tibble(coffee = coffee,
+                     died = died)
+```
+
+Number of people in our dataset:
+
+```{r}
+nrow(coffee_data)
+```
+
+
+Let event A = died and event B = non-coffee drinker. Calculate the following for a randomly selected person in the cohort
+
+```{r prob_A}
+# P(A) = P(died)
+coffee_data %>%
+  count(died) %>%
+  mutate(proportion = n / sum(n))
+
+```
+P(A) = 0.131
+
+```{r prob_B}
+# P(B) = P(non coffee)
+coffee_data %>%
+  count(coffee) %>%
+  mutate(proportion = n / sum(n))
+
+```
+
+P(B) = 0.094
+
+```{r prob_AB}
+# P(A and B) = P(died and non-coffee)
+coffee_data %>%
+  filter(died == "Died",
+         coffee == "Does not drink coffee") %>%
+  nrow()
+
+coffee_data %>%
+  count(died, coffee) %>%
+  mutate(proportion = n / sum(n))
+```
+
+P(A and B) = 0.015
+
+```{r prob_AoB}
+# P(A or B) = P(A) + P(B) - P(A and B) 
+p_a <- 0.131
+p_b <- 0.094
+p_aob <- 0.015
+
+p_a + p_b - p_aob
+```
+
+P(A or B) = 0.21
+
+```{r prob_AoBc}
+# P(A or Bc)
+p_a + (1 - p_b) - (0.064 + 0.052)
+```
+
+P(A or B^c) = P(A) + P(B^c) - P(A and B^c)
+            = P(died) + P(drink coffee) - P(died and drink coffee)
+            = 0.921
+
+
