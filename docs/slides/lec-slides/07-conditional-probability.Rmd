@@ -63,8 +63,9 @@ library(tidyverse)
 ## Conditional probability
 
 The probability an event will occur *given* that another event has already 
-occurred is a .vocab[conditional probability]. The conditional probability of
-event $A$ given event $B$ is:
+occurred is a .vocab[conditional probability]. 
+
+The conditional probability of event $A$ given event $B$ is:
 
 .instructions[
 $$P(A | B) = \frac{P(A \text{ and } B)}{P(B)}$$
@@ -141,7 +142,7 @@ class: center, middle
 
 ## The multiplicative rule
 
-We can write the definition of condition probability
+We can write the definition of conditional probability
 
 .instructions[
 $$P(A | B) = \frac{P(A \text{ and } B)}{P(B)}$$
@@ -166,8 +167,7 @@ $$P(B) \times P(A | B) = P(A \text{ and } B)$$
 Events $A$ and $B$ are said to be .vocab[independent] when
 
 
-$$P(A | B) = P(A) \hspace{10mm} \textbf{OR} \hspace{10mm}
-P(B | A) = P(B)$$
+$$P(A | B) = P(A) \hspace{10mm} \textbf{OR} \hspace{10mm} P(B | A) = P(B)$$
 
 <br> 
 
@@ -182,7 +182,6 @@ We can use the multiplicative rule to see if two events are independent.
 
 .instructions[
 If events $A$ and $B$ are independent, then 
-
 $$P(A \text{ and } B) = P(A) \times P(B)$$
 ]
 
