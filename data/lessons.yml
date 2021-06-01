@@ -57,6 +57,7 @@ lessons:
    title: "Memorial Day: No classes"
  - date: "Wed, June 2"
    title: "Confounding and Simpson's Paradox"
+   slides: "lec-slides/08-confounding.html"
  - date: "Thu, June 3"
    title: "Data Science Ethics"
  - date: "Fri, June 4"
