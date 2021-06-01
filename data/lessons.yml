@@ -62,6 +62,7 @@ lessons:
    title: "Data Science Ethics"
  - date: "Fri, June 4"
    title: "Lab 04: Examining smoking and health outcomes"
+   lab: "lab-04-smoking.html"
  - date: "UNIT 2"
    title: "Making rigorous conclusions"
  - date: "Week 05"
