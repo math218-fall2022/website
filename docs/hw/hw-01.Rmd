@@ -107,7 +107,7 @@ Let's create groupings for the state populations for easier visualization. Creat
 
 ## Exercise 9
 
-Another column in the `census.csv` dataset is the number of gun laws/provisions by state in 2017. Plot the incidents per 10000 residents by the number of gun laws in each state. Color each observation by its `pop_group`. Does there appear to be a relationship between number of gun laws and number of gun violence incidents per 100000 residents by state? What about between the number of gun laws and population size?
+Another column in the `census.csv` dataset is the number of gun laws/provisions by state in 2017. Plot the incidents per 100000 residents by the number of gun laws in each state. Color each observation by its `pop_group`. Does there appear to be a relationship between number of gun laws and number of gun violence incidents per 100000 residents by state? What about between the number of gun laws and population size?
 
 
 ## Wrapping up

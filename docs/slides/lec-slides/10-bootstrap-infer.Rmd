@@ -61,12 +61,6 @@ library(patchwork)
 
 ---
 
-class: middle center
-
-## [Click for PDF of slides](09-bootstrap-infer.pdf)
-
----
-
 class: center, middle
 
 # Inference
@@ -85,7 +79,7 @@ population parameters and be done!
 
 --
 
-**Unfortunately, we usually cannot do this.**
+**Unfortunately, we usually cannot do this. Instead, we work with**
 
 .vocab[Sample]: a subset of our population of interest
 
@@ -128,11 +122,12 @@ class: center, middle
 
 ## Let's \*virtually\* go to Asheville! 
 
-.center[
-![](img/10/asheville.jpg)
+```{r echo=FALSE,out.width=450, fig.align="center"}
+knitr::include_graphics("img/10/asheville.jpg")
+```
 
 **How much should we expect to pay for an Airbnb in Asheville?**
-]
+
 
 ---
 
@@ -161,6 +156,8 @@ sample of 50 Airbnb listings.
 A .vocab[point estimate] is a single value computed from the sample data to serve
 as the "best guess", or estimate, for the population parameter. 
 
+Our point estimate for the population mean price per guest is the observed sample mean:
+
 ```{r}
 abb <- read_csv("data/asheville.csv")
 abb %>% 
@@ -177,7 +174,7 @@ ggplot(data = abb, aes(ppg)) +
                  color = "darkblue",
                  fill = "skyblue") +
   labs(title = "Right-skewed distribution of price per guest",
-       x = "Price per guest per night",
+       x = "Price per guest per night ($)",
        y = "Count") +
   scale_y_continuous(breaks = seq(0, 20, by = 5)) + 
   ylim(0, 20) +
@@ -219,7 +216,7 @@ knitr::include_graphics("img/10/net.png")
 ```
 ]
 
----
+--
 
 - If we report a point estimate, we probably won’t hit the exact population 
 parameter.
@@ -252,8 +249,10 @@ For a confidence interval for the population mean, we need to come up with a
 range of plausible values around our observed sample mean.
 
 - Remember that random samples may differ from each other. If we took another
-random sample of 50 Airbnb listings, we probably wouldn't get the same mean
+random sample of 50 Airbnb listings in Asheville, we probably wouldn't get the same mean
 price per guest.
+
+--
 
 - There is some .vocab[variability] of the sample mean from these listings.
 
@@ -312,7 +311,7 @@ any outside help.
 accomplish it using data from only the given sample.
 
 - This notion of saying something about a population parameter using 
-only information from an observed sample is the crux of statistical inference, 
+only information from an observed sample is the crux of statistical inference;
 it is not limited to bootstrapping.
 
 ---
@@ -336,11 +335,12 @@ mean, the median, the correlation, etc.) computed on the bootstrap sample.
 <br><br>
 
 ```{r, echo = F, out.width = "70%"}
+mean0 <- round(mean(abb$ppg),3)
 ggplot(data = abb, aes(ppg)) +
   geom_histogram(binwidth = 25,
                  color = "darkblue",
                  fill = "skyblue") +
-  labs(caption = "Original sample",
+  labs(caption = paste0("Original sample: mean = ", mean0),
        x = "Price per guest per night",
        y = "Count") +
   scale_y_continuous(breaks = seq(0, 20, by = 5)) + 
@@ -390,11 +390,12 @@ ggplot(data = boot_samp_1, aes(ppg)) +
 using the bootstrap sample:
 
 ```{r, echo = F, out.width = "70%"}
+mean1 <- round(mean(boot_samp_1$ppg), 3)
 ggplot(data = boot_samp_1, aes(ppg)) +
   geom_histogram(binwidth = 25,
                  color = "darkblue",
                  fill = "skyblue") +
-  labs(caption = "Bootstrap sample 1",
+  labs(caption =  paste0("Bootstrap sample 1: mean = ", mean1),
        x = "Price per guest per night",
        y = "Count") +
   scale_y_continuous(breaks = seq(0, 20, by = 5)) + 
@@ -470,10 +471,9 @@ samp4 <- ggplot(data = temp, aes(ppg)) +
 ```
 ]
 
-```{r echo = F, out.width = "75%"}
-(samp1 + samp3) / (samp2 + samp4)
+```{r echo = F, out.width="80%"}
+(samp1 + samp2)/(samp3 + samp4)
 ```
-              
 ---
 
 ## Step-by-step
@@ -490,7 +490,7 @@ for(i in 1:500){
 }
 ggplot(data = boot_dist, aes(boot_mean)) +
   geom_histogram(binwidth = 5, color = "darkred", fill = "pink") +
-  labs(x = "", y = "") +
+  labs(x = "", y = "", title = "Bootstrap distribution of sample means") +
   scale_x_continuous(breaks = seq(0, 250, by = 50)) + 
   xlim(0, 250) +
   theme_minimal()
@@ -498,7 +498,7 @@ ggplot(data = boot_dist, aes(boot_mean)) +
 
 ---
 
-**Here we compare the bootstrap distribution of sample means to that 
+**Here we compare the bootstrap distribution of sample means to the distribution
 of the original data. What do you notice?**
 
 ```{r, echo = F, fig.height = 2.7}
@@ -550,7 +550,8 @@ for(i in 1:500){
 }
 ggplot(data = boot_dist, aes(boot_mean)) +
   geom_histogram(binwidth = 5, color = "darkred", fill = "pink") +
-  labs(x = "", y = "") +
+  labs(x = "", y = "", title = "Bootstrap distribution of sample means",
+       subtitle = "95% confidence interval bounds") +
   scale_x_continuous(breaks = seq(0, 250, by = 50)) + 
   xlim(0, 250) +
   geom_vline(xintercept = quantile(boot_dist$boot_mean, 0.025), 
@@ -690,7 +691,7 @@ ggplot(data = boot_dist, mapping = aes(x = stat)) +
 ## Calculate the confidence interval
 
 A 95% confidence interval is bounded by the middle 95% of the bootstrap 
-distribution.
+distribution. To get middle 95%, we want to omit 2.5% on the left and on the right.
 
 --
 
@@ -698,7 +699,7 @@ Use `dplyr` functions:
 
 ```{r}
 boot_dist %>%
-  summarize(lower_bound = quantile(stat, 0.025),
+  summarise(lower_bound = quantile(stat, 0.025),
             upper_bound = quantile(stat, 0.975))
 ```
 
@@ -733,8 +734,7 @@ ggplot(data = boot_dist, mapping = aes(x = stat)) +
 
 ## Interpreting a confidence interval
 
-Using the 2.5th and 97.5th quantiles as bounds for our confidence interval gives 
-us the middle 95% of the bootstrap means. Our 95% CI is 
+Our 95% confidence interval (CI) is 
 (`r round(lower_bound, 1)`, `r round(upper_bound, 1)`).
 
 .question[
@@ -750,7 +750,7 @@ population is contained in the interval
 class: center, middle
 
 .question[
-No!
+**No!**
 ]
 
 ---
@@ -763,14 +763,14 @@ No!
 --
 
 - The bootstrap distribution captures the variability of the sample mean, but is
-based on our original sample. If we started with a different sample,then maybe our estimated 95% confidence 
-interval would have been different also.
+based on our original sample. If we started with a different sample, then maybe our estimated 95% confidence 
+interval would have also been different.
 
 --
 
 - All we can say is that, if we were to independently take repeated samples from
 this population and calculate a 95% CI for the mean in the exact same way, then
-we would *expect* 95% of these intervals to contian the population mean.
+we would *expect* 95% of these intervals to contain the population mean.
 
 --
 
@@ -781,5 +781,5 @@ we would *expect* 95% of these intervals to contian the population mean.
 ## Interpretation 
 
 .question[
-**We are 95% confident that the mean price per night for Airbnbs in Asheville, NC is between $`r round(lower_bound,1)` and $ `r round(upper_bound,1)`. **
+**We are 95% confident that the mean price per guest per night for Airbnbs in Asheville, NC is between `r round(lower_bound,1)` and `r round(upper_bound,1)` dollars. **
 ]

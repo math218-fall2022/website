@@ -33,12 +33,6 @@ layout: true
 
 ---
 
-class: middle center
-
-## [Click for PDF of slides](09-bootstrap-infer.pdf)
-
----
-
 class: center, middle
 
 # Inference
@@ -57,7 +51,7 @@ population parameters and be done!
 
 --
 
-**Unfortunately, we usually cannot do this.**
+**Unfortunately, we usually cannot do this. Instead, we work with**
 
 .vocab[Sample]: a subset of our population of interest
 
@@ -98,11 +92,10 @@ class: center, middle
 
 ## Let's \*virtually\* go to Asheville! 
 
-.center[
-![](img/10/asheville.jpg)
+&lt;img src="img/10/asheville.jpg" width="450" style="display: block; margin: auto;" /&gt;
 
 **How much should we expect to pay for an Airbnb in Asheville?**
-]
+
 
 ---
 
@@ -131,6 +124,8 @@ sample of 50 Airbnb listings.
 A .vocab[point estimate] is a single value computed from the sample data to serve
 as the "best guess", or estimate, for the population parameter. 
 
+Our point estimate for the population mean price per guest is the observed sample mean:
+
 
 ```r
 abb &lt;- read_csv("data/asheville.csv")
@@ -149,7 +144,7 @@ abb %&gt;%
 
 ## Visualizing our sample
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-3-1.png" width="80%" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-4-1.png" width="80%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -178,7 +173,7 @@ of values the parameter might be in, or a single value?
 &lt;img src="img/10/net.png" width="300" style="display: block; margin: auto;" /&gt;
 ]
 
----
+--
 
 - If we report a point estimate, we probably won’t hit the exact population 
 parameter.
@@ -209,8 +204,10 @@ For a confidence interval for the population mean, we need to come up with a
 range of plausible values around our observed sample mean.
 
 - Remember that random samples may differ from each other. If we took another
-random sample of 50 Airbnb listings, we probably wouldn't get the same mean
+random sample of 50 Airbnb listings in Asheville, we probably wouldn't get the same mean
 price per guest.
+
+--
 
 - There is some .vocab[variability] of the sample mean from these listings.
 
@@ -269,7 +266,7 @@ any outside help.
 accomplish it using data from only the given sample.
 
 - This notion of saying something about a population parameter using 
-only information from an observed sample is the crux of statistical inference, 
+only information from an observed sample is the crux of statistical inference;
 it is not limited to bootstrapping.
 
 ---
@@ -292,7 +289,7 @@ mean, the median, the correlation, etc.) computed on the bootstrap sample.
 
 &lt;br&gt;&lt;br&gt;
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -304,7 +301,7 @@ original sample:
 
 
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-11-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -313,7 +310,7 @@ original sample:
 **Step 2.** Calculate the bootstrap statistic (in this case, the sample mean) 
 using the bootstrap sample:
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-12-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -332,8 +329,7 @@ distribution of sample means:
 
 ]
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-17-1.png" width="75%" style="display: block; margin: auto;" /&gt;
-              
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-18-1.png" width="80%" style="display: block; margin: auto;" /&gt;
 ---
 
 ## Step-by-step
@@ -341,14 +337,14 @@ distribution of sample means:
 **Step 3.** In this plot, we've taken 500 bootstrap samples, calculated the
 sample mean for each, and plotted them in a histogram:
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-18-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-19-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
-**Here we compare the bootstrap distribution of sample means to that 
+**Here we compare the bootstrap distribution of sample means to the distribution
 of the original data. What do you notice?**
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -357,7 +353,7 @@ of the original data. What do you notice?**
 **Step 4.** Calculate the bounds of the bootstrap interval by using percentiles 
 of the bootstrap distribution
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-20-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-21-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -499,14 +495,14 @@ boot_dist
 
 ## Visualize the distribution
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Calculate the confidence interval
 
 A 95% confidence interval is bounded by the middle 95% of the bootstrap 
-distribution.
+distribution. To get middle 95%, we want to omit 2.5% on the left and on the right.
 
 --
 
@@ -515,7 +511,7 @@ Use `dplyr` functions:
 
 ```r
 boot_dist %&gt;%
-  summarize(lower_bound = quantile(stat, 0.025),
+  summarise(lower_bound = quantile(stat, 0.025),
             upper_bound = quantile(stat, 0.975))
 ```
 
@@ -534,15 +530,14 @@ Using `geom_vline()` to mark the bounds of the confidence interval
 
 
 
-&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-33-1.png" width="75%" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-bootstrap-infer_files/figure-html/unnamed-chunk-34-1.png" width="75%" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
 ## Interpreting a confidence interval
 
-Using the 2.5th and 97.5th quantiles as bounds for our confidence interval gives 
-us the middle 95% of the bootstrap means. Our 95% CI is 
+Our 95% confidence interval (CI) is 
 (60.9, 92.1).
 
 .question[
@@ -558,7 +553,7 @@ population is contained in the interval
 class: center, middle
 
 .question[
-No!
+**No!**
 ]
 
 ---
@@ -571,14 +566,14 @@ No!
 --
 
 - The bootstrap distribution captures the variability of the sample mean, but is
-based on our original sample. If we started with a different sample,then maybe our estimated 95% confidence 
-interval would have been different also.
+based on our original sample. If we started with a different sample, then maybe our estimated 95% confidence 
+interval would have also been different.
 
 --
 
 - All we can say is that, if we were to independently take repeated samples from
 this population and calculate a 95% CI for the mean in the exact same way, then
-we would *expect* 95% of these intervals to contian the population mean.
+we would *expect* 95% of these intervals to contain the population mean.
 
 --
 
@@ -589,7 +584,7 @@ we would *expect* 95% of these intervals to contian the population mean.
 ## Interpretation 
 
 .question[
-**We are 95% confident that the mean price per night for Airbnbs in Asheville, NC is between $60.9 and $ 92.1. **
+**We are 95% confident that the mean price per guest per night for Airbnbs in Asheville, NC is between 60.9 and 92.1 dollars. **
 ]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

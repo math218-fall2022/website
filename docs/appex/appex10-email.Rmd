@@ -19,10 +19,10 @@ The General Social Survey (GSS) gathers data on contemporary American society in
 
 The GSS contains a standard core of demographic, behavioral, and attitudinal questions, plus topics of special interest. Among the topics covered are civil liberties, crime and violence, intergroup tolerance, morality, national spending priorities, psychological well-being, social mobility, and stress and traumatic events.
 
-We will analyze data from the 2016 GSS, using to understand how much time US adults spend on email. 
+We will analyze data from the 2018 GSS, using to understand how much time US adults spend on email. 
 
 ```{r load-data, message = FALSE}
-gss_email <- read_csv("data/gss_email.csv")
+gss_email <- read_csv("data/gss_email_2018.csv")
 ```
 
 We'll use the variable `email`: the number of minutes the respondents spend on email weekly. 
@@ -34,7 +34,7 @@ We'll use the variable `email`: the number of minutes the respondents spend on e
 Set a seed to control R's random sampling process.
 
 ```{r}
-set.seed(09132020)
+set.seed(06072021)
 ```
 
 ### Bootstrap distribution

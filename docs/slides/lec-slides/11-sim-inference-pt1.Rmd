@@ -67,12 +67,6 @@ library(openintro)
 
 ---
 
-class: middle center
-
-## [Click for PDF of slides](11-sim-inference-pt1.pdf)
-
----
-
 ## Packages and set seed
 
 ```{r message = FALSE}
@@ -94,7 +88,7 @@ class: center, middle
 
 ## Parameter vs. statistic
 
-A .vocab[parameter] for is the "true" value of interest. We typically estimate the 
+A .vocab[parameter] is the "true" value of interest. We typically estimate the 
 parameter using a .vocab[sample statistic] as a point estimate.
 
 --
@@ -190,13 +184,13 @@ to chance?**
 
 ## Two claims
 
-- .vocab[Null hypothesis:] "There is nothing going on"
+- .vocab[Null hypothesis ($H_0$):] "There is nothing going on"
 
 Complication rate for this consultant is no different than the US average of 10%
 
 --
 
-- .vocab[Alternative hypothesis:] "There is something going on"
+- .vocab[Alternative hypothesis ($H_a$):] "There is something going on"
 
 Complication rate for this consultant is **lower** than the US average of 10%
 
@@ -240,13 +234,13 @@ alternative hypothesis.
 
 --
 
- 3. Figure out how likely it is to see data like what we observed, IF the null 
-hypothesis were in fact true (called a **p-value**)
+ 3. Figure out how likely it is to see data like what we observed, *IF* the null 
+hypothesis $H_0$ was in fact true (called a **p-value**)
 
 --
 
  4. If our data would have been extremely unlikely if the null hypothesis were true, 
-then we reject it in favor of the alternative hypothesis. 
+then we reject the null in favor of the alternative hypothesis. 
 
 Otherwise, we cannot reject the null hypothesis
 
@@ -254,8 +248,8 @@ Otherwise, we cannot reject the null hypothesis
 
 ## Step 1: Defining the hypotheses
 
-Remember, the null and alternative hypotheses are defined for **parameters,**
-not statistics
+Remember, the null and alternative hypotheses are defined for **parameters**,
+not statistics.
 
 What will our null and alternative hypotheses be for this example?
 
@@ -290,7 +284,7 @@ $$\hat{p} = 3/62 \approx 0.048$$
 Next, we calculate the probability of getting data like ours, *or more extreme*, 
 if $H_0$ were in fact actually true.
 
-This is a conditional probability: "given that $H_0$ is true, $p = 0.1$, what would the the probability of observing $\hat{p} = 3/62$ or less?"
+This is a conditional probability: "given that $H_0$: $p = 0.1$ is true, what would the the probability of observing $\hat{p} = 3/62$ or less?"
 
 <br> 
 
