@@ -68,6 +68,7 @@ lessons:
  - date: "Week 05"
  - date: "Mon, June 7"
    title: "Estimation via bootstrapping"
+   reading: "reading-04.html"
  - date: "Wed, June 9"
    #reading: "reading-04.html"
    title: "Simulation-based testing: Part 1"

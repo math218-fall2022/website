@@ -1,5 +1,5 @@
 ---
-title: "Reading 04: Data Science Ethics"
+title: "Reading 04: Bootstrap and Simulation-based Inference"
 output: 
   html_document: 
     theme: yeti
@@ -9,16 +9,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Due Tuesday, October 1
+## Due Monday, June 14
 
 ### Required:
 
-- [OpenIntro Statistics](https://drive.google.com/file/d/0B-DHaDEbiOGkc1RycUtIcUtIelE/view):
-    + 7.1 Line fitting, residuals, and correlation
-    + 7.2 Fitting a line by least squares regression
-    + 7.3 Types of outliers in linear regression
-    + 8.1 Introduction to multiple regression
-    + 8.2 Model selection
+- [https://openintro-ims.netlify.app/intro-stat-inference.html#boot-ci: 5.2](https://openintro-ims.netlify.app/intro-stat-inference.html#boot-ci)
+- [Introduction to Modern Statistics: 5.1](https://openintro-ims.netlify.app/intro-stat-inference.html#inf-rand)
+- [Infer examples](https://infer.netlify.app/articles/observed_stat_examples.html)
+  + optional
     
 <br>
 <br>
