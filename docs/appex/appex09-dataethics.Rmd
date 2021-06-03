@@ -13,9 +13,7 @@ output:
 - Avoid blame, speculation, and inflammatory language.
 - Avoid assumptions about any member of the class or generalizations about social groups.
 
-## Get started
-
-## Data representation (10 min)
+## Data representation 
 
 ### Misleading data visualizations^[Source: https://humansofdata.atlan.com/2019/02/dos-donts-data-visualization/]
 
@@ -56,11 +54,11 @@ knitr::include_graphics("img/spurious-correlation.png")
 - [From data to viz](https://www.data-to-viz.com/): Find appropriate graph for your data
 - [A Reader on Data Visualization - Ethics](https://mschermann.github.io/data_viz_reader/ethics.html)
 
-## Collecting + handling data^[Modified from [*Modern Data Science with R, 2nd Edition*](https://beanumber.github.io/mdsr2e/ch-ethics.html)] (8 min)
+## Discussion questions 
 
 ### Web scraping
 
-A researcher is interested in the relationship of weather to sentiment (positivity or negativity of posts) on Twitter. They want to scrape data from https://www.wunderground.com and join that to Tweets in that geographic area at a particular time. One complication is that Weather Underground limits the number of data points that can be downloaded for free using their API (application program interface). The researcher sets up six free accounts to allow them to collect the data they want in a shorter time-frame. 
+A researcher is interested in the relationship of weather to sentiment (positivity or negativity of posts) on Twitter. They want to scrape data from https://www.wunderground.com and join that to Tweets in that geographic area at a particular time. One complication is that Weather Underground limits the number of data points that can be downloaded for free using their API (application program interface). The researcher sets up six free accounts to allow them to collect the data they want in a shorter time-frame.^[Source: [*Modern Data Science with R, 2nd Edition*](https://beanumber.github.io/mdsr2e/ch-ethics.html)]
 
 - What ethical considerations might be violated by this approach to data scraping? 
 - What can the researcher do to collect the data in an ethical way?
@@ -69,22 +67,20 @@ A researcher is interested in the relationship of weather to sentiment (positivi
 
 A data analyst received permission to post a data set that was scraped from a social
 media site. The full data set included name, screen name, email address, geographic location, IP (Internet protocol) address, demographic profiles, and preferences for relationships.
-The analyst removes name and email address from the data set in effort to deidentify it. 
+The analyst removes name and email address from the data set in effort to deidentify it.^[Source: [*Modern Data Science with R, 2nd Edition*](https://beanumber.github.io/mdsr2e/ch-ethics.html)] 
 
 - Why might it be problematic to post this data set publicly?
 - How can you store the full dataset in a safe and ethical way? 
 - You want to make the data available so your analysis is transparent and reproducible. How can you modify the full data set to make the data available in an ethical way?
   
-## Algorithmic bias: deep dive
+## Developing algorithms
 
-- [Video](https://warpwire.duke.edu/w/_3YEAA/)
-- [Slides](STA_199_Data_Science_Ethics_Deep_Dive.pdf)
+A company uses a machine learning algorithm to determine which job advertisement to display for users searching for technology jobs. Based on past results, the algorithm tends to display lower paying jobs for women than for men (after controlling for other characteristics than gender).^[Source: [*Modern Data Science with R, 2nd Edition*](https://beanumber.github.io/mdsr2e/ch-ethics.html)]
 
-### Discussion questions (10 min)
+- What ethical considerations might be considered when reviewing this algorithm?
 
-- Ezinne mentions a phenomenon called "Simpson's Paradox", where conclusions drawn from analyzing subgroups differ from conclusions drawn when the groups are combined. Where else have you seen Simpson's Paradox in this class? 
+## Case study: Optimizing Schools
 
-- A company uses a machine learning algorithm to determine which job advertisement to display for users searching for technology jobs. Based on past results, the algorithm tends to display lower paying jobs for women than for men (after controlling for other characteristics than gender). What ethical considerations might be considered when reviewing this algorithm?^[Source: [*Modern Data Science with R, 2nd Edition*](https://beanumber.github.io/mdsr2e/ch-ethics.html)]
+[*Princeton Dialogues on AI and Ethics*](https://aiethics.princeton.edu/wp-content/uploads/sites/587/2018/10/Princeton-AI-Ethics-Case-Study-3.pdf)
 
-- As you start working on data analyses for the STA 199 project, internships, research, etc., what are 1 - 2 things you can do to ensure you're doing the analysis in an ethical way? 
 
