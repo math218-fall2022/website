@@ -60,6 +60,7 @@ lessons:
    slides: "lec-slides/08-confounding.html"
  - date: "Thu, June 3"
    title: "Data Science Ethics"
+   slides:  "lec-slides/09-data-ethics.html"
  - date: "Fri, June 4"
    title: "Lab 04: Examining smoking and health outcomes"
    lab: "lab-04-smoking.html"

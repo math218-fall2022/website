@@ -112,9 +112,67 @@ knitr::include_graphics("img/09/election-2016-county.png")
 
 .footnote[Credit: Alberto Cairo, [Visual Trumpery talk](https://visualtrumperytour.wordpress.com/).]
 
+---
 
+.question[
+Is this visualization telling the complete story? What's missing?
+]
+
+```{r echo=FALSE, out.width = "50%"}
+  knitr::include_graphics("img/09/diminishing-return.jpg")
+```
+
+.footnote[Credit: [Statistics How To](https://www.statisticshowto.com/probability-and-statistics/descriptive-statistics/misleading-graphs/)]
 
 ---
+
+.question[
+...smoking cigarettes can help you live longer?
+]
+
+```{r echo=FALSE, out.width = "50%"}
+  knitr::include_graphics("img/09/cigarettes1.png")
+```
+
+.footnote[ [How Charts Lie: Getting Smarter About Visual Information](https://wwnorton.com/books/9781324001560) ]
+
+---
+
+> Missing information
+
+
+```{r echo=FALSE, out.width = "50%"}
+  knitr::include_graphics("img/09/cigarettes2.png")
+```
+
+.footnote[ [How Charts Lie: Getting Smarter About Visual Information](https://wwnorton.com/books/9781324001560) ]
+
+---
+
+
+> Simpson's paradox
+
+
+```{r echo=FALSE, out.width = "50%"}
+  knitr::include_graphics("img/09/cigarettes3.png")
+```
+
+.footnote[ [How Charts Lie: Getting Smarter About Visual Information](https://wwnorton.com/books/9781324001560) ]
+
+---
+
+> Individual level
+
+
+```{r echo=FALSE, out.width = "70%", fig.align='center'}
+  knitr::include_graphics("img/09/cigarettes4.png")
+```
+
+.footnote[ [How Charts Lie: Getting Smarter About Visual Information](https://wwnorton.com/books/9781324001560) ]
+
+---
+
+
 
 class: middle, center
 
@@ -150,7 +208,7 @@ knitr::include_graphics("img/09/okcupid-tweet.png")
 
 ## Facebook & Cambridge Analytica
 
-```{r out.width = "70%", echo = FALSE}
+```{r out.width = "60%", echo = FALSE}
 knitr::include_graphics("img/09/facebook-cambridge-analytica-explained.jpg")
 ```
 
@@ -208,6 +266,51 @@ knitr::include_graphics("img/09/hathaway.png")
 
 ---
 
+## Bias in health care risk algorithm
+
+- Algorithm to target patients for “high-risk care management” programs that seek to improve the care of patients with complex health needs by providing additional resources
+- Such program are considered effective at improving outcomes and satisfaction while reducing costs, but are themselves costly -> want to identify patients who would benefit the most
+- Algorithm’s designers used previous patients’ health care spending as a proxy for medical need
+
+-- 
+
+What happened: Algorithm tended to assign lower risk score to black patients
+
+Obermeyer, Z., Powers, B., Vogeli, C., & Mullainathan, S. (2019). [Dissecting racial bias in an algorithm used to manage the health of populations](https://science.sciencemag.org/content/366/6464/447/tab-figures-data), Science.
+---
+
+## Bias in health care risk algorithm
+
+```{r out.width = "50%"}
+knitr::include_graphics("img/09/illness_expenditure.png")
+```
+
+> Issue: health care spending does not equal need. 
+
+---
+
+## Bias in health care risk algorithm
+
+.pull-left[
+```{r out.width = "70%"}
+knitr::include_graphics("img/09/risk_expenditure.png")
+```
+]
+
+.pull-right[
+```{r out.width = "70%"}
+knitr::include_graphics("img/09/risk_illness.png")
+```
+]
+
+
+
+> Even though black patients tend to have more severe medical conditions, algorithm is built to predict health care costs rather than illness
+
+
+---
+
+
 ## Bias in algorithms used for sentencing
 
 --
@@ -244,11 +347,12 @@ Risk scores assigned to more than 7,000 people arrested in Broward County, Flori
 
 - Algorithm had higher accuracy (61%) when full range of crimes taken into account (e.g. misdemeanors)
 
+- Algorithm was more likely to falsely flag African American defendants as higher risk, at almost twice the rate as Caucasian defendants
+
 ```{r, out.width = "90%"}
 knitr::include_graphics("img/09/propublica-results.png")
 ```
 
-- Algorithm was more likely to falsely flag African American defendants as higher risk, at almost twice the rate as Caucasian defendants
 
 ---
 
