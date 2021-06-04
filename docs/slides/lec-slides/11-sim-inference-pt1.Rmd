@@ -284,7 +284,7 @@ $$\hat{p} = 3/62 \approx 0.048$$
 Next, we calculate the probability of getting data like ours, *or more extreme*, 
 if $H_0$ were in fact actually true.
 
-This is a conditional probability: "given that $H_0$: $p = 0.1$ is true, what would the the probability of observing $\hat{p} = 3/62$ or less?"
+This is a conditional probability: "given that $H_0$: $p = 0.1$ is true, what would be the probability of observing $\hat{p} = 3/62$ or less?"
 
 <br> 
 
@@ -403,7 +403,7 @@ null_dist <- organ_donor %>%
 
 ---
 
-## Specify
+## `specify()`
 
 .midi[
 ```{r}
@@ -417,13 +417,13 @@ null_dist <- organ_donor %>%
 ```
 ]
 
-- .vocab[`response`]: **`outcome`** in the **`organ_donor`** data frame
+- .vocab[`response`]: **`outcome`** variable in the **`organ_donor`** data frame
 
-- .vocab[`success`]: **`"complication"`**, the level of outcome we're interested in studying
+- .vocab[`success`]: **`"complication"`**, the level of **outcome** we're interested in studying
 
 ---
 
-## Hypothesize
+## `hypothesize()`
 
 .midi[
 ```{r}
@@ -437,15 +437,15 @@ null_dist <- organ_donor %>%
 ```
 ]
 
-- .vocab[`null`]: Since we're testing the point null hypothesis that $H_0: p = 0.10$, we
+- .vocab[`null`]: Since we're testing the point null hypothesis that $H_0: p = 0.10$ (an exact value), we
 choose **`"point"`**
-- Next, we provide the probability of "success" and "failure"
+- .vocab[`p`]: We provide the probability of "success" and "failure" under $H_0$
   - **`"complication" = 0.10, "no complication" = 0.90`**
   
 
 ---
 
-## Generate
+## `generate()`
 
 .midi[
 ```{r}
@@ -459,13 +459,14 @@ null_dist <- organ_donor %>%
 ```
 ]
 
-- .vocab[`reps`]: We will generate 100 repetitions here
-- .vocab[`type`]: Choose **`"simulate"`** for testing a point null for categorical data
-    - Choose `bootstrap` for estimation 
-    - Choose `permute` for testing independence 
+- .vocab[`reps`]: the number of repetitions generated; here we generate 100 repetitions
+- .vocab[`type`]: 
+    - Choose **`"simulate"`** for testing a point null for categorical data
+    - Choose **`"bootstrap"`** for estimation (recall from previous lecture)
+    - Choose **`"permute"`** for testing independence 
 ---
 
-## Calculate
+## `calculate()`
 
 .midi[
 ```{r}
@@ -532,7 +533,7 @@ ggplot(data = null_dist, mapping = aes(x = stat)) +
 ## Calculating the p-value, visually
 
 .question[
-What is the p-value (just eyeball it)?
+What is the p-value (just eyeball it)? Recall that we observed a proportion of `r round(3/62, 3)`.
 ]
 
 ```{r, fig.height = 2, fig.width = 5,  echo= F}
@@ -570,6 +571,8 @@ or $\alpha$-level) defined *prior* to conducting the analysis.
 ## Significance level
 
 We often use 5% as the cutoff for whether the p-value is low enough that the data are unlikely to have come from the null model. 
+
+--
 
 - If p-value < $\alpha$, reject $H_0$ in favor of $H_a$:     
   - The data provide convincing 
