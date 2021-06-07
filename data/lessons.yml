@@ -72,7 +72,6 @@ lessons:
    title: "Estimation via bootstrapping"
    slides: "lec-slides/10-bootstrap-infer.html"
    appex: "appex10-email.html"
-   reading: "reading-04.html"
  - date: "Wed, June 9"
    reading: "reading-04.html"
    title: "Simulation-based testing: Part 1"

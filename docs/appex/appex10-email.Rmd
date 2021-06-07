@@ -6,6 +6,19 @@ output:
     theme: readable
 ---
 
+## Announcements 
+
+- No lab this week
+- Exam 01: will be released Friday morning, and is Sunday, June 13 at 11:59pm Eastern. Note: 12-hour grace period will NOT apply for the exam
+  - Material from Weeks 01 - 04 (data viz, data wrangling, probability)
+  - Open book/ open note
+  - You **cannot** discuss the exam with anyone
+  - TA Marc will not have office hours during exam period
+  - Email Becky if you have questions. I will be checking my email consistently
+  - See the Academic honesty policy in the course syllabus.
+  - Will have an Exam 01 repo on GitHub. Exam instructions will be in the README of the repo. Push your changes to the repo, then submit the final PDF on Gradescope. Be sure to mark the pages corresponding to each question.
+  
+
 ## Example: Bootstrap Estimation with `infer`
 
 ```{r load-packages, warning = FALSE, message = FALSE}
