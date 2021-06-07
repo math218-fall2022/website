@@ -47,8 +47,12 @@ null_dist %>%
 
 ## Clone a repo + start a new project
 
-Click on the link provided in the slides to create your own private repo for 
-this exercise, and configure git.
+Clone the **ae-11** repo on [GitHub](https://github.com/sta199-summer2021) and start a new project in RStudio. Be sure to configure git in the RStudio console, so you can so you can push your results back up to GitHub.
+
+```{r eval=FALSE}
+library(usethis)
+use_git_config(user.name= "github username", user.email="your email")
+```
 
 We will be using the `asheville` dataset. You may load in the dataset with the
 following code (be sure to set `eval` to be `TRUE` in the following R chunk!):
@@ -114,9 +118,9 @@ mean_ppg <- asheville %>%
 
 Use the p-value to make your conclusion using a significance level of 0.05. Remember, the conclusion has 3 components 
 
-- How the p-value compare to the significance level 
+- How the p-value compares to the significance level 
 - The decision you make with respect to the hypotheses (reject $H_0$ /fail to reject $H_0$)
-- The conclusion in the context of the research problem. 
+- The conclusion in the context of the research problem 
 
 ### Exercise 5
 

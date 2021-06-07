@@ -87,12 +87,7 @@ The p-value of `r p_val` is greater than $\alpha = 0.05$, so we fail to reject t
 
 ## Clone a repo + start a new project
 
-Clone the **ae-12** repo on [GitHub](https://github.com/sta199-summer2021) and start a new project in RStudio. Be sure to configure git in the RStudio console, so you can so you can push your results back up to GitHub.
-
-```{r eval=FALSE}
-library(usethis)
-use_git_config(user.name= "github username", user.email="your email")
-```
+Clone the **ae-12** repo on [GitHub](https://www.github.com/sta199-fa20-002) and start a new project in RStudio. Be sure to configure git in the RStudio console, so you can so you can push your results back up to GitHub.
 
 ### Exercise 1
 
@@ -100,27 +95,27 @@ Suppose you are interested in whether at least half of the Airbnb listings in As
 
 #### Option 1 
 
-- $H_0$: The median price per guest per night is $50
-- $H_a$: The median price per guest per night is greater than $50
+- Null: The median price per guest per night is 50
+- Alternative: The median price per guest per night is > 50
 
 #### Option 2
 
-- $H_0$: The proportion of Airbnbs less than $50 ppg is 0.5
-- $H_a$: The proportion of Airbnbs less than $50 ppg is less than  0.5
+- Null: The proportion of Airbnbs less than $50 ppg is 0.5
+- Alternative: The proportion of Airbnbs less than $50 ppg is less than  0.5
 
 ### Exercise 2
 
-Simulate the null distribution to test your hypotheses. You can use 1000 reps for the in-class exercise.
+Simulate the null distribution to test your hypotheses. You can use 100 reps for the in-class exercise.
 
 #### Option 1 
 
-```{r, eval = F}
+```{r}
 set.seed(1234)
 null_dist_opt1 <- asheville %>%
-  specify(response = _____) %>%
-  hypothesize(null = _____, ____ = _____) %>%
-  generate(reps = _____, type = _____) %>%
-  calculate(stat = ______ )
+  specify(response = ppg) %>%
+  hypothesize(null = "point", med = 50) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "median")
 ```
 
 #### Option 2
@@ -131,13 +126,13 @@ asheville <- asheville %>%
   mutate(less_50_ppg = if_else(ppg < 50, "Yes", "No"))
 ```
 
-```{r, eval = F}
+```{r}
 set.seed(1234)
 null_dist_opt2 <- asheville %>%
-  specify(response = ______, ____ = ____) %>%
-  hypothesize(null = _____, p = _____) %>%
-  generate(reps = ______, type = _______) %>%
-  calculate(stat = ______)
+  specify(response = less_50_ppg, success = "Yes") %>%
+  hypothesize(null = "point", p = 0.5) %>%
+  generate(reps = 1000, type = "simulate") %>%
+  calculate(stat = "prop")
 ```
 
 
@@ -149,35 +144,41 @@ problem?
 
 #### Option 1
 
-```{r, eval = F}
+```{r}
 #calculate observed statistic
 obs_med <- asheville %>%
- # finish the code
-
+  summarise(med_ppg = median(ppg)) %>%
+  pull()
 obs_med
 ```
 
-```{r, eval = F}
+```{r}
 null_dist_opt1 %>%
-  filter( ______ ) %>%
-  summarise(p_val = _______)
+  filter(stat >= obs_med) %>%
+  summarise(p_val = n() / nrow(null_dist_opt1))
 ```
+
+The p-value is 0.06 which is greater than $\alpha = 0.05$, so we fail to reject the null. There is not sufficient evidence to conclude that at least half of the hotels have a price per guest per night greater than 50.  
 
 
 #### Option 2
 
-```{r, eval = F}
+```{r}
 #calculate observed statistic
 obs_prop <- asheville %>%
-  # finish the code
+  count(less_50_ppg) %>%
+  mutate(prop = n/sum(n)) %>%
+  filter(less_50_ppg == "Yes") %>%
+  pull()
+obs_prop
 ```
 
-```{r, eval = F}
+```{r}
 null_dist_opt2 %>%
-  filter( ______ ) %>%
-  summarise(p_val = _______)
+  filter(stat <=  obs_prop) %>%
+  summarise(p_val = n() / nrow(null_dist_opt2))
 ```
-
+The p-value of 0.064 is greater than $\alpha = 0.05$, so we fail to reject the null. There is not sufficient evidence to conclude that at least half of the hotels have a price per guest per night greater than 50.  
 
 ### Exercise 4
 
@@ -185,12 +186,32 @@ Suppose you are interested in whether the proportion of listings with a price pe
 alternative hypotheses change in this case? Carry out the appropriate
 hypothesis test, and report your p-value, decision, and conclusion in context of the research problem. 
 
-$H_0$: 
+Null: The proportion of Airbnbs greater than $50 ppg is 0.5
+Alternative: The proportion of Airbnbs greater than $50 ppg is not equal to 0.5
 
-$H_a$: 
-
-```{r ex4}
+```{r}
 set.seed(1234)
-
+null_dist_ex4 <- asheville %>%
+  specify(response = less_50_ppg, success = "No") %>%
+  hypothesize(null = "point", p = 0.5) %>%
+  generate(reps = 1000, type = "simulate") %>%
+  calculate(stat = "prop")
 ```
 
+```{r}
+#calculate observed statistic
+obs_prop_ex4 <- asheville %>%
+  count(less_50_ppg) %>%
+  mutate(prop = n/sum(n)) %>%
+  filter(less_50_ppg == "No") %>%
+  pull()
+obs_prop_ex4
+```
+
+```{r}
+null_dist_ex4 %>%
+  filter(stat >= obs_prop_ex4 | stat <= 0.5 - (obs_prop_ex4 - 0.5)) %>%
+  summarise(p_val = n() / nrow(null_dist_ex4))
+```
+
+The p-value of 0.114 is greater than 0.05, so we fail to reject the null hypothesis. The data do not provide sufficient evidence to refute the claim that the proportion of Airbnbs with price per guest per night greater than $50 is different from 0.5. 
