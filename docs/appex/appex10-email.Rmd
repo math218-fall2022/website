@@ -9,7 +9,7 @@ output:
 ## Announcements 
 
 - No lab this week
-- Exam 01: will be released Friday morning, and is Sunday, June 13 at 11:59pm Eastern. Note: 12-hour grace period will NOT apply for the exam
+- Exam 01: will be released Friday morning, and is due Sunday, June 13 at 11:59pm Eastern. Note: 12-hour grace period will NOT apply for the exam
   - Material from Weeks 01 - 04 (data viz, data wrangling, probability)
   - Open book/ open note
   - You **cannot** discuss the exam with anyone
@@ -35,7 +35,8 @@ The GSS contains a standard core of demographic, behavioral, and attitudinal que
 We will analyze data from the 2018 GSS, using to understand how much time US adults spend on email. 
 
 ```{r load-data, message = FALSE}
-gss_email <- read_csv("data/gss_email_2018.csv")
+gss_email <- read_csv("data/gss_email_2018.csv") %>%
+  slice(1:150)
 ```
 
 We'll use the variable `email`: the number of minutes the respondents spend on email weekly. 
@@ -56,7 +57,7 @@ set.seed(06072021)
 boot_dist <- gss_email %>%
   specify(response = email) %>% 
   generate(reps = 1000, type = "bootstrap") %>% 
-  calculate(stat = "mean")
+  calculate(stat = "median")
 ```
 
 - `specify()` is used to specify which variable in our data frame is the relevant response variable (i.e. the variable we're bootstrapping).
