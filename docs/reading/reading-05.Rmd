@@ -9,16 +9,11 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Due Tuesday, October 15
+## Due Monday, June 21
 
 ### Required:
 
-- [OpenIntro Statistics](https://drive.google.com/file/d/0B-DHaDEbiOGkc1RycUtIcUtIelE/view):
-    + 7.1 Line fitting, residuals, and correlation
-    + 7.2 Fitting a line by least squares regression
-    + 7.3 Types of outliers in linear regression
-    + 8.1 Introduction to multiple regression
-    + 8.2 Model selection
+- [Introduction to Modern Statistics: 5.3](https://openintro-ims.netlify.app/intro-stat-inference.html#inf-math)
     
 <br>
 <br>

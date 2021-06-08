@@ -384,7 +384,7 @@ pre code {
 <pre><code>## # A tibble: 1 x 1
 ##   p_value
 ##     &lt;dbl&gt;
-## 1    0.07</code></pre>
+## 1    0.17</code></pre>
 </div>
 <div id="clone-a-repo-start-a-new-project" class="section level2">
 <h2>Clone a repo + start a new project</h2>
@@ -410,8 +410,8 @@ library(infer)</code></pre>
 <h3>Exercise 2</h3>
 <p>Let’s use simulation-based methods to conduct the hypothesis test specified in Exercise 1. We’ll start by generating the null distribution.</p>
 <p>Fill in the code and uncomment the lines below to generate the null distribution.</p>
-<pre class="r"><code>set.seed(092120)</code></pre>
-<pre class="r"><code>#null_dist &lt;- asheville %&gt;%
+<pre class="r"><code>set.seed(060921)</code></pre>
+<pre class="r"><code>null_dist &lt;- asheville # %&gt;%
   #specify(response = ______) %&gt;%
   #hypothesize(null = ______, mu = ______) %&gt;%
   #generate(reps = 100, type = &quot;bootstrap&quot;) %&gt;%
@@ -420,9 +420,9 @@ library(infer)</code></pre>
 <div id="exercise-3" class="section level3">
 <h3>Exercise 3</h3>
 <p>Fill in the code and uncomment the lines below to calculate the p-value using the null distribution from Exercise 2.</p>
-<pre class="r"><code>mean_ppg &lt;- asheville %&gt;% 
-  summarise(mean_ppg = mean(ppg)) %&gt;%
-  pull()</code></pre>
+<pre class="r"><code>mean_ppg &lt;- asheville # %&gt;% 
+  # summarise(mean_ppg = _____ ) %&gt;%
+  # pull()</code></pre>
 <pre class="r"><code>#null_dist %&gt;%
   #filter(______) %&gt;%
   #summarise(p_value = ______)</code></pre>

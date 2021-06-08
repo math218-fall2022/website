@@ -86,12 +86,12 @@ Let's use simulation-based methods to conduct the hypothesis test specified in E
 Fill in the code and uncomment the lines below to generate the null distribution. 
 
 ```{r set-seed}
-set.seed(092120)
+set.seed(060921)
 ```
 
 
-```{r ex-2, eval = F}
-#null_dist <- asheville %>%
+```{r ex-2}
+null_dist <- asheville # %>%
   #specify(response = ______) %>%
   #hypothesize(null = ______, mu = ______) %>%
   #generate(reps = 100, type = "bootstrap") %>%
@@ -102,13 +102,13 @@ set.seed(092120)
 
 Fill in the code and uncomment the lines below to calculate the p-value using the null distribution from Exercise 2.
 
-```{r calc-mean}
-mean_ppg <- asheville %>% 
-  summarise(mean_ppg = mean(ppg)) %>%
-  pull()
+```{r}
+mean_ppg <- asheville # %>% 
+  # summarise(mean_ppg = _____ ) %>%
+  # pull()
 ```
 
-```{r eval = F}
+```{r}
 #null_dist %>%
   #filter(______) %>%
   #summarise(p_value = ______)

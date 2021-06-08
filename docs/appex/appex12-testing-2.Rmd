@@ -7,6 +7,11 @@ output:
     theme: readable
 ---
 
+## Announcements
+- Reminder: Exam 01 posted Friday morning and is due at 11:59pm Eastern Sunday, June 13
+- Open book/open note, but please cite if you find help online
+- Do not talk to anyone except Becky about the exam
+- Instructions will be in the README file in your repo
 
 ## Resource for full examples in infer
 
@@ -114,13 +119,13 @@ Simulate the null distribution to test your hypotheses. You can use 1000 reps fo
 
 #### Option 1 
 
-```{r, eval = F}
+```{r}
 set.seed(1234)
-null_dist_opt1 <- asheville %>%
-  specify(response = _____) %>%
-  hypothesize(null = _____, ____ = _____) %>%
-  generate(reps = _____, type = _____) %>%
-  calculate(stat = ______ )
+null_dist_opt1 <- asheville #%>%
+  # specify(response = _____) %>%
+  # hypothesize(null = _____, ____ = _____) %>%
+  # generate(reps = _____, type = _____) %>%
+  # calculate(stat = ______ )
 ```
 
 #### Option 2
@@ -131,13 +136,13 @@ asheville <- asheville %>%
   mutate(less_50_ppg = if_else(ppg < 50, "Yes", "No"))
 ```
 
-```{r, eval = F}
+```{r}
 set.seed(1234)
-null_dist_opt2 <- asheville %>%
-  specify(response = ______, ____ = ____) %>%
-  hypothesize(null = _____, p = _____) %>%
-  generate(reps = ______, type = _______) %>%
-  calculate(stat = ______)
+null_dist_opt2 <- asheville # %>%
+#   specify(response = ______, ____ = ____) %>%
+#   hypothesize(null = _____, p = _____) %>%
+#   generate(reps = ______, type = _______) %>%
+#   calculate(stat = ______)
 ```
 
 
@@ -149,33 +154,32 @@ problem?
 
 #### Option 1
 
-```{r, eval = F}
+```{r}
 #calculate observed statistic
-obs_med <- asheville %>%
+obs_med <- asheville # %>%
  # finish the code
 
-obs_med
 ```
 
-```{r, eval = F}
-null_dist_opt1 %>%
-  filter( ______ ) %>%
-  summarise(p_val = _______)
+```{r}
+# null_dist_opt1 %>%
+#   filter( ______ ) %>%
+#   summarise(p_val = _______)
 ```
 
 
 #### Option 2
 
-```{r, eval = F}
+```{r}
 #calculate observed statistic
-obs_prop <- asheville %>%
-  # finish the code
+obs_prop <- asheville # %>%
+ # finish the code
 ```
 
-```{r, eval = F}
-null_dist_opt2 %>%
-  filter( ______ ) %>%
-  summarise(p_val = _______)
+```{r}
+# null_dist_opt2 %>%
+#   filter( ______ ) %>%
+#   summarise(p_val = _______)
 ```
 
 

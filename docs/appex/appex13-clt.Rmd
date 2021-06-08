@@ -1,0 +1,47 @@
+---
+title: "AE 13: Bone density"
+date: "06.14.2021"
+author: "Your name"
+output: 
+  html_document:
+    theme: readable
+---
+
+## Announcements 
+
+### Exam
+
+## Getting started 
+
+Clone the **ae-13** repo on [GitHub](https://github.com/sta199-summer2021) and start a new project in RStudio. Be sure to configure git in the RStudio console, so you can so you can push your results back up to GitHub.
+
+```{r eval=FALSE}
+library(usethis)
+use_git_config(user.name= "github username", user.email="your email")
+```
+
+Suppose the mean bone density for a 65-year old woman is normally 
+distributed with mean 809 mg/cm3 and standard deviation of 140 mg/cm3 (these are actually pretty accurate numbers).
+
+### Exercise 1
+
+What bone densities correspond to the 5th, 10th, 50th, and 99th percentiles of this distribution?
+
+### Exercise 2
+
+The densities of three woods are below:
+
+- Plywood: 540 mg/cubic centimeter
+- Pine: 600 mg/cubic centimeter
+- Mahogany: 710 mg/cubic centimeter
+
+What is the probability that a random 65-year old woman has bones less
+dense than each of these three woods?
+
+### Exercise 3
+
+What is the probability that, for a *group* of 10 randomly sampled 65-year old women, the mean bone density of the *group* is less dense than these three woods?
+
+### Exercise 4
+
+Explain the differences between your answers in Exercise 2 and 3.
