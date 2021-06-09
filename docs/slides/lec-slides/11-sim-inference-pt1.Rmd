@@ -184,13 +184,13 @@ to chance?**
 
 ## Two claims
 
-- .vocab[Null hypothesis ($H_0$):] "There is nothing going on"
+- .vocab[Null hypothesis]: "There is nothing going on"
 
 Complication rate for this consultant is no different than the US average of 10%
 
 --
 
-- .vocab[Alternative hypothesis ($H_a$):] "There is something going on"
+- .vocab[Alternative hypothesis]: "There is something going on"
 
 Complication rate for this consultant is **lower** than the US average of 10%
 
@@ -240,9 +240,7 @@ hypothesis $H_0$ was in fact true (called a **p-value**)
 --
 
  4. If our data would have been extremely unlikely if the null hypothesis were true, 
-then we reject the null in favor of the alternative hypothesis. 
-
-Otherwise, we cannot reject the null hypothesis
+then we reject the null in favor of the alternative hypothesis. Otherwise, we cannot reject the null hypothesis
 
 ---
 
@@ -289,6 +287,11 @@ This is a conditional probability: "given that $H_0$: $p = 0.1$ is true, what wo
 <br> 
 
 This probability is known as the .vocab[p-value].
+
+<br> 
+
+How do we define *or more extreme*?
+
 
 ---
 
@@ -550,6 +553,15 @@ ggplot(data = null_dist, mapping = aes(x = stat)) +
 
 ```{r}
 null_dist %>%
+  filter(stat <= (3/62)) 
+```
+
+---
+
+## Calculating the p-value, directly
+
+```{r}
+null_dist %>%
   filter(stat <= (3/62)) %>%
   summarise(p_value = n()/nrow(null_dist))
 ```
@@ -586,11 +598,11 @@ convincing evidence against the null hypothesis.
 
 ## What if $p$-value  $\geq \alpha$?
 
-If p-value $\geq \alpha$ we fail to reject $H_0$.
+If p-value $\geq \alpha$, then we fail to reject $H_0$.
 
 --
 
-Importantly, we never "accept" the null hypothesis. 
+Importantly: we never "accept" the null hypothesis. 
 
 --
 

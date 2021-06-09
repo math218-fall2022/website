@@ -160,13 +160,13 @@ to chance?**
 
 ## Two claims
 
-- .vocab[Null hypothesis ($H_0$):] "There is nothing going on"
+- .vocab[Null hypothesis]: "There is nothing going on"
 
 Complication rate for this consultant is no different than the US average of 10%
 
 --
 
-- .vocab[Alternative hypothesis ($H_a$):] "There is something going on"
+- .vocab[Alternative hypothesis]: "There is something going on"
 
 Complication rate for this consultant is **lower** than the US average of 10%
 
@@ -216,9 +216,7 @@ hypothesis `\(H_0\)` was in fact true (called a **p-value**)
 --
 
  4. If our data would have been extremely unlikely if the null hypothesis were true, 
-then we reject the null in favor of the alternative hypothesis. 
-
-Otherwise, we cannot reject the null hypothesis
+then we reject the null in favor of the alternative hypothesis. Otherwise, we cannot reject the null hypothesis
 
 ---
 
@@ -265,6 +263,11 @@ This is a conditional probability: "given that `\(H_0\)`: `\(p = 0.1\)` is true,
 &lt;br&gt; 
 
 This probability is known as the .vocab[p-value].
+
+&lt;br&gt; 
+
+How do we define *or more extreme*?
+
 
 ---
 
@@ -547,6 +550,37 @@ What is the p-value (just eyeball it)? Recall that we observed a proportion of 0
 
 ```r
 null_dist %&gt;%
+  filter(stat &lt;= (3/62)) 
+```
+
+```
+## # A tibble: 15 x 2
+##    replicate   stat
+##    &lt;fct&gt;      &lt;dbl&gt;
+##  1 1         0.0484
+##  2 8         0.0323
+##  3 11        0.0161
+##  4 13        0.0484
+##  5 19        0.0484
+##  6 29        0.0484
+##  7 35        0.0323
+##  8 41        0.0484
+##  9 43        0.0323
+## 10 52        0.0484
+## 11 53        0.0484
+## 12 61        0.0484
+## 13 63        0.0323
+## 14 71        0.0484
+## 15 90        0.0484
+```
+
+---
+
+## Calculating the p-value, directly
+
+
+```r
+null_dist %&gt;%
   filter(stat &lt;= (3/62)) %&gt;%
   summarise(p_value = n()/nrow(null_dist))
 ```
@@ -590,11 +624,11 @@ convincing evidence against the null hypothesis.
 
 ## What if `\(p\)`-value  `\(\geq \alpha\)`?
 
-If p-value `\(\geq \alpha\)` we fail to reject `\(H_0\)`.
+If p-value `\(\geq \alpha\)`, then we fail to reject `\(H_0\)`.
 
 --
 
-Importantly, we never "accept" the null hypothesis. 
+Importantly: we never "accept" the null hypothesis. 
 
 --
 
