@@ -539,7 +539,8 @@ font-size: 10pt;
 <p>Any variable starting with <code>quality</code> refers to the perceived quality of the listed variable, with 1 being “highly dissatisfied,” 3 being “neutral”, and 5 being “highly satisfied.” A value of 9 indicates that the subject responded with N/A.</p>
 <p>You may load in the data with the following code, where <code>____</code> should be replaced by a meaningful name of your choosing:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">____ &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/durham_survey.csv&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">library</span>(infer)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">____ &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/durham_survey.csv&quot;</span>)</a></code></pre></div>
 </div>
 <div id="exercises" class="section level1">
 <h1>Exercises</h1>
@@ -559,7 +560,7 @@ font-size: 10pt;
 <p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Hint</strong>: If <em>either</em> of the two scores is missing, then that observation cannot be used to calculate the correlation.</span></span></p>
 <ol start="7" style="list-style-type: decimal">
 <li><p>Provide a point estimate of the <em>correlation</em> between survey scores of perceived quality of bike paths (<code>quality_bike_path</code>) and the perceived quality of pedestrian paths (<code>quality_ped_path</code>).</p></li>
-<li><p>Construct a 95% bootstrap interval for the correlation between survey responses for perceived quality of bike paths and pedestrian paths.</p></li>
+<li><p>Construct a 95% bootstrap interval for the correlation between survey responses for perceived quality of bike paths and pedestrian paths. Make sure your interval is <em>reproducible</em>.</p></li>
 <li><p>Construct a <strong>99%</strong> bootstrap interval using the bootstrap distribution from Exercise 8.</p>
 <p>How does the 99% bootstrap interval compare to the 95% bootstrap interval calculated in the previous exercise?</p>
 <p>In general, how does the bootstrap interval change when the confidence level increases?</p></li>

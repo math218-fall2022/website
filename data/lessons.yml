@@ -79,6 +79,8 @@ lessons:
    reading: "reading-04.html"
  - date: "Thu, June 10"
    title: "Simulation-based testing: Part 2"
+   slides: "lec-slides/12-sim-inference-pt2.html"
+   appex: "appex12-testing-2.html"
  - date: "Fri, Jun 11"
    title: "Exam 01 released"
  - title: "No lab: work on Exam 01"
