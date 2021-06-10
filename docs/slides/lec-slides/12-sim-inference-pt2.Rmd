@@ -160,9 +160,21 @@ Though we'd like to know if we're making a correct decision or making a Type I o
 
 ## Equivalency of confidence and significance levels
 
-- In the previous lecture, our hypotheses were $H_0: p = 0.10$ and $H_a: p < 0.10$. 
+- In the previous lecture, our hypotheses were $H_0: p = 0.10$ and $H_a: p < 0.10$.
 
-- How did we decide the form of $H_a$?
+- This form of $H_a$ is a .vocab[one sided] hypothesis
+
+- If instead $H_a: p \neq 0.10$, then we have a .vocab[two sided] hypothesis. 
+
+---
+
+## Hypothesis and p-value
+
+Recall the organ donor example, where we observed $\hat{p} = \frac{3}{62} \approx 0.048$. When calculating the p-value, how does the meaning of "as or more extreme" mean differ for a one sided vs two sided alternative?
+
+- $H_a: p < 0.10$: find proportion of simulations that resulted in sample proportion $\leq 0.048$.
+
+- $H_a: p \neq 0.10$: find proportion of simulations that resulted in sample proportion $\leq 0.048$ OR $\geq 0.10 + (0.10 - 0.048) = 0.152$
 
 ---
 
@@ -305,21 +317,7 @@ that we have from our original sample?
 ]
 
 ---
-## Simulating the null distribution
 
-Let's return to the Asheville data. We know that our sample mean was 76.6, but
-we also know that if we were to take another random sample of size 50 from all
-Airbnb listings, we might get a different sample mean.
-
-There is some variability in the .vocab[sampling distribution] of the mean, and
-we want to make sure we quantify this. 
-
-.question[
-How might we quantify the sampling distribution of the mean using only the data
-that we have from our original sample?
-]
-
----
 
 ## Bootstrap distribution of the mean
 
@@ -437,9 +435,13 @@ If we shifted the bootstrap distribution by `offset`, then it will be centered
 at $\mu_0$: the null-hypothesized value for the mean.
 
 ```{r}
-offset <- ash_boot_mean - 100 #<<
+offset <- ash_boot_mean + 100 #<<
+offset
+```
+
+```{r}
 boot_means <- boot_means %>% 
-  mutate(null_dist_stat = stat - offset ) #<<
+  mutate(null_dist_stat = stat + offset ) #<<
 boot_means %>%
  slice(1:6)
 ```
@@ -558,7 +560,7 @@ What might we conclude at the $\alpha$ = 0.05 level?
 ```{r, echo = F}
 options(scipen=999)
 p_val <- null_dist %>%
-  filter(stat <= 76.6 | stat >= (100 + (100 - 76.6))) %>%
+  filter(stat <= mean_ppg  | stat >= (100 + (100 - mean_ppg ))) %>%
   summarise(p_value = n()/nrow(null_dist)) %>%
   pull() 
 ```

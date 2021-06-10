@@ -129,9 +129,21 @@ Though we'd like to know if we're making a correct decision or making a Type I o
 
 ## Equivalency of confidence and significance levels
 
-- In the previous lecture, our hypotheses were `\(H_0: p = 0.10\)` and `\(H_a: p &lt; 0.10\)`. 
+- In the previous lecture, our hypotheses were `\(H_0: p = 0.10\)` and `\(H_a: p &lt; 0.10\)`.
 
-- How did we decide the form of `\(H_a\)`?
+- This form of `\(H_a\)` is a .vocab[one sided] hypothesis
+
+- If instead `\(H_a: p \neq 0.10\)`, then we have a .vocab[two sided] hypothesis. 
+
+---
+
+## Hypothesis and p-value
+
+Recall the organ donor example, where we observed `\(\hat{p} = \frac{3}{62} \approx 0.048\)`. When calculating the p-value, how does the meaning of "as or more extreme" mean differ for a one sided vs two sided alternative?
+
+- `\(H_a: p &lt; 0.10\)`: find proportion of simulations that resulted in sample proportion `\(\leq 0.048\)`.
+
+- `\(H_a: p \neq 0.10\)`: find proportion of simulations that resulted in sample proportion `\(\leq 0.048\)` OR `\(\geq 0.10 + (0.10 - 0.048) = 0.152\)`
 
 ---
 
@@ -277,21 +289,7 @@ that we have from our original sample?
 ]
 
 ---
-## Simulating the null distribution
 
-Let's return to the Asheville data. We know that our sample mean was 76.6, but
-we also know that if we were to take another random sample of size 50 from all
-Airbnb listings, we might get a different sample mean.
-
-There is some variability in the .vocab[sampling distribution] of the mean, and
-we want to make sure we quantify this. 
-
-.question[
-How might we quantify the sampling distribution of the mean using only the data
-that we have from our original sample?
-]
-
----
 
 ## Bootstrap distribution of the mean
 
@@ -421,9 +419,18 @@ at `\(\mu_0\)`: the null-hypothesized value for the mean.
 
 
 ```r
-*offset &lt;- ash_boot_mean - 100
+*offset &lt;- ash_boot_mean + 100
+offset
+```
+
+```
+## [1] 176.5956
+```
+
+
+```r
 boot_means &lt;- boot_means %&gt;% 
-* mutate(null_dist_stat = stat - offset )
+* mutate(null_dist_stat = stat + offset )
 boot_means %&gt;%
  slice(1:6)
 ```
@@ -432,12 +439,12 @@ boot_means %&gt;%
 ## # A tibble: 6 x 3
 ##   replicate  stat null_dist_stat
 ##       &lt;int&gt; &lt;dbl&gt;          &lt;dbl&gt;
-## 1         1  81.0          104. 
-## 2         2  63.2           86.6
-## 3         3  81.2          105. 
-## 4         4  76.1           99.5
-## 5         5  81.3          105. 
-## 6         6  84.6          108.
+## 1         1  81.0           258.
+## 2         2  63.2           240.
+## 3         3  81.2           258.
+## 4         4  76.1           253.
+## 5         5  81.3           258.
+## 6         6  84.6           261.
 ```
 
 ---
@@ -456,7 +463,7 @@ boot_means %&gt;%
 
 ## Distribution of `\(\bar{x}\)` under `\(H_0\)`
 
-&lt;img src="12-sim-inference-pt2_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="12-sim-inference-pt2_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -545,7 +552,7 @@ null_dist %&gt;%
 
 ## 3. Assessing the evidence
 
-&lt;img src="12-sim-inference-pt2_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="12-sim-inference-pt2_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
