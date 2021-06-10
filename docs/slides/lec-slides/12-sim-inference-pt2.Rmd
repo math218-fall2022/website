@@ -435,7 +435,7 @@ If we shifted the bootstrap distribution by `offset`, then it will be centered
 at $\mu_0$: the null-hypothesized value for the mean.
 
 ```{r}
-offset <- ash_boot_mean + 100 #<<
+offset <- 100 - ash_boot_mean #<<
 offset
 ```
 

@@ -419,12 +419,12 @@ at `\(\mu_0\)`: the null-hypothesized value for the mean.
 
 
 ```r
-*offset &lt;- ash_boot_mean + 100
+*offset &lt;- 100 - ash_boot_mean
 offset
 ```
 
 ```
-## [1] 176.5956
+## [1] 23.40444
 ```
 
 
@@ -439,12 +439,12 @@ boot_means %&gt;%
 ## # A tibble: 6 x 3
 ##   replicate  stat null_dist_stat
 ##       &lt;int&gt; &lt;dbl&gt;          &lt;dbl&gt;
-## 1         1  81.0           258.
-## 2         2  63.2           240.
-## 3         3  81.2           258.
-## 4         4  76.1           253.
-## 5         5  81.3           258.
-## 6         6  84.6           261.
+## 1         1  81.0          104. 
+## 2         2  63.2           86.6
+## 3         3  81.2          105. 
+## 4         4  76.1           99.5
+## 5         5  81.3          105. 
+## 6         6  84.6          108.
 ```
 
 ---

@@ -164,7 +164,20 @@ The p-value is 0.06 which is greater than $\alpha = 0.05$, so we fail to reject 
 #### Option 2
 
 ```{r}
-#calculate observed statistic
+# calculate observed statistic: so many options 
+
+## option a
+obs_prop <- asheville %>%
+  filter(less_50_ppg == "Yes") %>%
+  summarise(prop = n() / nrow(asheville)) %>%
+  pull(prop)
+
+## option b
+obs_prop <- asheville %>%
+  filter(prop = mean(less_50_ppg == "Yes")) %>%
+  pull(prop)
+
+## option c
 obs_prop <- asheville %>%
   count(less_50_ppg) %>%
   mutate(prop = n/sum(n)) %>%
@@ -178,6 +191,7 @@ null_dist_opt2 %>%
   filter(stat <=  obs_prop) %>%
   summarise(p_val = n() / nrow(null_dist_opt2))
 ```
+
 The p-value of 0.064 is greater than $\alpha = 0.05$, so we fail to reject the null. There is not sufficient evidence to conclude that at least half of the hotels have a price per guest per night greater than 50.  
 
 ### Exercise 4
