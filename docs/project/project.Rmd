@@ -8,7 +8,7 @@ output:
      fig_caption: false
 ---
 
-Proposals due **Friday, July 10 at 11:59pm**
+Proposals due **Friday, July 9 at 11:59pm**
 
 Report, slides, and repository due **Tuesday, July 20 at 11:59pm**
 
@@ -37,7 +37,7 @@ two questions you are interested in answering
 - A written, reproducible report detailing your analysis
 - A GitHub repository corresponding to your report
 - A brief set of slides that correspond to your intended oral presentation 
-(ten minutes), which must be recorded and uploaded to PLATFORM. 
+(ten minutes). 
 **No late projects are accepted.**
 
 The grade breakdown is as follows:
@@ -112,7 +112,7 @@ explore. You must include some EDA (ex. univariate or bivariate plots,
 tables of summary statistics, etc), and you must also list at least two questions that you are interested in answering using the data.
 
 There is no page limit or requirement. For submission, submit the .pdf document
-to Gradescope by Friday, July 10 at 11:59pm. The main purpose of this component of the project is to help you get started, and so Becky can give feedback/suggestions about the data and questions of interest.
+to Gradescope by Friday, July 9 at 11:59pm. The main purpose of this component of the project is to help you get started, and so Becky can give feedback/suggestions about the data and questions of interest.
 
 ## Written report
 

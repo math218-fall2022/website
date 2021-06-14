@@ -121,6 +121,10 @@ be used to calculate the correlation.
 perceived quality of bike paths (`quality_bike_path`) and the perceived quality 
 of pedestrian paths (`quality_ped_path`). 
 
+```{marginfigure}
+**Hint**: To simulate the correlation between two variables, use `specify(var1 ~ var2)`. Remember that correlation is still a numerical quantity, so that should help you choose the type of simulation you want to perform.
+```
+
 8. Construct a 95% bootstrap interval for the correlation between
 survey responses for perceived quality of bike paths and pedestrian paths. Make sure your interval is *reproducible*.
 
