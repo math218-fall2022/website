@@ -9,7 +9,17 @@ output:
 
 ## Announcements 
 
+- There will be no class next Wednesday and Thursday, June 23-24. However, there
+will still be lab on Friday, June 25. Use this time to work on HW 02. 
+
+- Becky's Wednesday office hours will be cancelled due to travel, but are re-scheduled
+to Thursday, June 24 at 3:00-4:30pm (and by appointment, as always).
+
 ### Exam
+
+## Comparing CLT- & simulation- based inference
+
+What is similar, and what is different, between CLT based test of means vs. simulation based test?
 
 ## Getting started 
 
@@ -19,6 +29,13 @@ Clone the **ae-13** repo on [GitHub](https://github.com/sta199-summer2021) and s
 library(usethis)
 use_git_config(user.name= "github username", user.email="your email")
 ```
+
+```{r, warning = FALSE, message  = FALSE}
+library(tidyverse)
+library(infer)
+```
+
+## CLT
 
 Suppose the mean bone density for a 65-year old woman is normally 
 distributed with mean 809 mg/cm3 and standard deviation of 140 mg/cm3 (these are actually pretty accurate numbers).
@@ -45,3 +62,33 @@ What is the probability that, for a *group* of 10 randomly sampled 65-year old w
 ### Exercise 4
 
 Explain the differences between your answers in Exercise 2 and 3.
+
+
+## CLT-based inference with Pokemon
+
+We will be using the `pokemon` dataset, which contains information about 45 randomly selected Pokemon (from all generations). You may load in the dataset with the following code: 
+
+```{r load-data, warning = FALSE, message = FALSE, eval = T}
+pokemon <- read_csv("data/pokemon.csv")
+```
+
+**Use the infer package to answer the following exercises.**
+
+### Exercise 5
+
+Construct and interpret a 95% confidence interval for the mean height in meters (`height_m`) of Pokemon species by using the Central Limit Theorem. 
+
+### Exercise 6
+
+The average height of a human is 1.65 meters. Evaluate whether a randomly selected Pokemon species has a *different* mean height by using the Central Limit Theorem. 
+
+In doing so, state your null and alternative hypotheses, the
+distribution of your test statistic under the null hypothesis, your p-value, decision, and conclusion in context of the research problem.
+
+### Exercise 7
+
+Now evaluate whether a randomly-selected Pokemon species has a *lower* mean height by using the Central Limit Theorem. In doing so, state your null and alternative hypotheses, the distribution of your test statistic under the null hypothesis, your p-value, decision, and conclusion in context of the research problem.
+
+### Exercise 8
+
+Suppose the true mean height among Pokemon species is 1.4 meters. In your conclusions from Exercises 6 and 7, did you make the correct decision, a Type 1 error, or a Type 2 error? Explain.

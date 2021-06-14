@@ -1,7 +1,9 @@
 ---
 title: "Exam 1"
 author: "Your name here"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r load-packages, message = F, warning = F}

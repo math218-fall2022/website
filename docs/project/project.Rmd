@@ -1,6 +1,5 @@
 ---
-title: "Showcase your inner data scientist"
-date: " "
+title: "Be a data scientist!"
 output: 
     html_document: 
      css: "./sta199-hw.css"
@@ -9,279 +8,280 @@ output:
      fig_caption: false
 ---
 
-```{r echo=FALSE, fig.align="right", out.width="50%", out.extra='style="float:right"'}
-knitr::include_graphics("img/laptop-3190194_1920.jpg")
-```
+Proposals due **Friday, July 10 at 11:59pm**
 
-# TL;DR
+Report, slides, and repository due **Tuesday, July 20 at 11:59pm**
 
-Pick a dataset, any dataset...
+Presentations will occur on **Wednesday, July 21 and Thursday, July 22 during class**
 
-...and do something with it. That is your final project in a nutshell. More details below.
+# Introduction
 
-PS: Please don't make pie charts for your project.
+**TLDR**: Pick (or create) a dataset and do something with it. That is your 
+final project.
 
-# May be too long, but please do read
+The final project for this class will consist of analysis on a dataset of your 
+own choosing or creation. The dataset may already exist, or you may collect your 
+own data using a survey, by conducting an experiment, or by scraping the web. 
+You can choose the data based on your interests or based on work in other
+courses or research projects. The goal of this project is for you to demonstrate 
+proficiency in the techniques we have covered in this class (and beyond, if you 
+like) and apply them to a dataset in a meaningful way.
 
-The final project for this class will consist of analysis on a dataset of your own 
-choosing. The dataset may already exist, or you may collect your own data using a 
-survey or by conducting an experiment. You can choose the data based on your interests 
-or based on work in other courses or research projects. The goal of this project is for 
-you to demonstrate proficiency in the techniques we have covered in this class (and 
-beyond, if you like) and apply them to a novel dataset in a meaningful way.
-
-## Data
-
-In order for you to have the greatest chance of success with this project it is important that 
-you choose a manageable dataset. This means that the data should be readily accessible and large 
-enough that multiple relationships can be explored. **As such, your dataset must have at least 50 
-observations and between 10 to 20 variables (exceptions can be made but you must speak with me 
-first). The dataset’s variables should include categorical variables and numerical variables (discrete and/or continuous).**
-
-All analyses must be done in RStudio. If you are using a dataset that comes in a format that 
-we haven't encountered in class, make sure that you are able to load it into RStudio as this 
-can be tricky depending on the source. If you are having trouble, ask for help before it is too late.
-
-*Reusing datasets from class:* Do not reuse datasets used in examples / homework in the
-class.
-
-## Components
-
-### Topic ideas: due Wed, Oct 16 at 11:59p
-
-Generating ideas is the first step to starting any project! This is the place for you to generate topic ideas as a group and identify datasets that could be used to explore these topics. As a group, complete the following: 
-
-- Identify 3 - 4 topics of interest for the project. You may think of a lot more as you start generating ideas, but you should narrow the list to the top 3 or 4. This is the first step in the project, so your topics can be general at this point. They should be detailed enough, however, that you have some guidance as you start looking for data. 
-
-    For example, a topic idea may be "characteristics of popular movies."
-
-- Identify datasets that are related to at least two of the topics. Include the name of the dataset, the topic it's related to, and a link to access the data. If you wish to scrape data (optional but not required), provide the link to the website from which the data will be scraped. Be sure the datasets you propose meet the criteria stated previously, "**your dataset must have at least 50 
-observations and between 10 to 20 variables (exceptions can be made but you must speak with me 
-first). The dataset’s variables should include categorical variables and numerical variables (discrete and/or continuous).**"
-
-    For example, dataset to analyze characteristics of popular movies is the IMDB 5000 Movie Dataset: https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset. 
-
-Write the topic and proposed datasets in `topic-ideas` .Rmd file in the GitHub repo for your project. Be sure to knit the files to generate the .md file of your project ideas. 
-
-### Need help finding data? 
-
-The following sites are are good resources for interesting datasets: 
-
-- [www.kaggle.com](https://www.kaggle.com/)
-- [FiveThirtyEight datasets](https://data.fivethirtyeight.com/)
-- ["TidyTuesday" datasets](https://github.com/rfordatascience/tidytuesday)
+# Brief project logistics
 
 
-### Project proposal: due Fri, Oct 25 at 11:59p
+The four deliverables for the final project are
 
-This is a draft of the introduction section and exploratory data analysis for your project. Each section should contain no more than 1 page of text (this does not include figures). Write the topic and proposed datasets in `proposal` .Rmd file in the GitHub repo for your project. Be sure to knit the files to generate the .md file of your project ideas. 
+- A written proposal detailing the data you chose, along with some EDA and at least
+two questions you are interested in answering
+- A written, reproducible report detailing your analysis
+- A GitHub repository corresponding to your report
+- A brief set of slides that correspond to your intended oral presentation 
+(ten minutes), which must be recorded and uploaded to PLATFORM. 
+**No late projects are accepted.**
 
-#### Section 1 - Introduction: 
+The grade breakdown is as follows:
 
-The introduction should introduce your general research 
-topic and your data (where it came from, how it was collected, what 
-are the cases, what are the variables, etc.).
-
-#### Section 2 - Exploratory Data Analysis: 
-
-The exploratory data analysis should include the following: 
-
-- Univariate summary statistics and data visualizations
-- Bivariate and/or multivariate data visualizations and summary statistics if applicable. 
-- Narrative about what you observe in the exploratory data analysis and what you learn about the data from the exploratory data analysis
-
-#### Section 3 - Research Questions
-
-Using what you learn from the exploratory data analysis as a guide, write **two research questions** that you will answer in the project. For <u>**each**</u> question: 
-- Identify the outcome (dependent, response, Y) and predictor (independent, explanatory, X) 
-variables you will use to answer the question.
-- Identify the groups you will compare to answer the question, if applicable. comparison groups you will use, if applicable.
-- Write your hypothesis.
-
-#### Section 4 - Data: 
-
-In Section 4 of the proposal: 
-  - Print out a `glimpse` of the data frame
-  
-In your project repo: 
-- Place your data in the `/data` folder
-- Add the dimensions and codebook for the dataset to the `README` in the `data` folder. Make sure the codebook is neatly formatted and easy to read. 
-
-#### Grading
-
-Total                                                   | 20 pts
+Total                                                   | 125 pts
 --------------------------------------------------------|--------
-Introduction                                            | 5 pts
-Exploratory data analysis                               | 10 pts
-Data and codebook                                       | 3 pts
-Organization, formatting and code quality               | 2 pts
+**Proposal**                                            | 15 pts
+**Written report**                                      | 60 pts
+**Slides**                                              | 15 pts
+**Repository**                                          | 5 pts
+**Presentation**                                        | 15 pts
+**Participation**                                       | 10 pts
+**Overall neatness and presentation style**             | 5 pts
+
+# Data sources
+
+In order for you to have the greatest chance of success with this project it is 
+important that you choose a manageable dataset. This means that the data should 
+be readily accessible and large enough that multiple relationships can be 
+explored. As such, your dataset must have at least 50 observations and at  
+least 10 variables (exceptions can be made but you must speak with me first). 
+The dataset’s variables should include categorical variables, discrete numerical 
+variables, and continuous numerical variables.
+
+All analyses must be done in RStudio, and your final written report and 
+analysis **must be reproducible**. This means that you must create an R Markdown
+document attached to a GitHub repository that will create your written report
+exactly upon knitting.
+
+If you are using a dataset that comes in a 
+format that we haven't encountered in class (for instance, a `.DAT` file), make 
+sure that you are able to load it into RStudio as this can be tricky depending 
+on the source. If you are having trouble, ask for help before it is too late.
+
+**Reusing datasets from class:** Do not reuse datasets used in examples / homework 
+in the class. 
+
+Some resources that may be helpful:
+
+- [R Data Sources for Regression Analysis](https://rfun.library.duke.edu/blog/data-sources-for-regression-analysis/)
+- [kaggle](https://www.kaggle.com/datasets)
+- [FiveThirtyEight data](https://data.fivethirtyeight.com/)
+- [TidyTuesday](https://github.com/rfordatascience/tidytuesday)
 
 
-### Data Analysis: Tue, Dec 3 at 11:59p
+Additions:
 
-The bulk of your project is in the data analysis. This is where you will statistical methods to answer your research questions. The data analysis should include the following: 
+- [World Health Organization](https://www.who.int/gho/database/en/)
+- [The National Bureau of Economic Research](https://data.nber.org/data/)
+- [International Monetary Fund](https://data.imf.org/?sk=388DFA60-1D26-4ADE-B505-A05A558D9A42&sId=1479329328660)
+- [General Social Survey](http://gss.norc.org/)
+- [United Nations Data](http://data.un.org/)
+- [United Nations Statistics Division](https://unstats.un.org/home/)
+- [U.K. Data](https://data.gov.uk/)
+- [U.S. Data](https://www.data.gov/)
+- [U.S. Census Data](https://www.census.gov/data.html)
+- [European Statistics](https://ec.europa.eu/eurostat/)
+- [Statistics Canada](https://www.statcan.gc.ca/eng/start)
+- [Pew Research](https://www.pewresearch.org/download-datasets/)
+- [UNICEF](https://data.unicef.org/)
+- [CDC](https://www.cdc.gov/datastatistics/index.html)
+- [World Bank](https://datacatalog.worldbank.org/)
+- [Election Studies](https://electionstudies.org//)
 
-- The statistical method(s) that you believe will be useful in answering your question(s), including why you chose them. 
-- Results of the methods(s) including all relevant code and output. 
-- Preliminary conclusions from the statistical analysis. Do these results support your hypothesized answer? 
+# Project components
 
-Remember, the goal is not to do an exhaustive 
-data analysis i.e., do not calculate every statistic and procedure you have 
-learned for every variable. The goal is to let me know that you are proficient at 
-asking meaningful questions and answering them with results of data analysis, that
-you are proficient in using R, and that you are proficient at interpreting and 
-presenting the results. Focus on methods that help you begin to answer your research 
-questions. You do not have to apply every statistical procedure we learned.
-Also pay attention to your presentation. Neatness, coherency, and clarity will count.
+## Proposal
 
-The project is very open ended. You should create some kind of compelling 
-visualization(s) of this data in R. There is no limit on what tools or 
-packages you may use, but sticking to packages we learned in class (`tidyverse`)
-is required. You do not need to visualize all of the data at once. A single high quality 
-visualization will receive a much higher grade than a large number of poor quality 
-visualizations.
+Your proposal must be done using R Markdown. You should describe the dataset that
+you would like to use, and define the variables in the dataset that you intend to 
+explore. You must include some EDA (ex. univariate or bivariate plots,
+tables of summary statistics, etc), and you must also list at least two questions that you are interested in answering using the data.
 
-### Writeup & Presentation: due Fri, Dec 13 at 11:59p
+There is no page limit or requirement. For submission, submit the .pdf document
+to Gradescope by Friday, July 10 at 11:59pm. The main purpose of this component of the project is to help you get started, and so Becky can give feedback/suggestions about the data and questions of interest.
 
-#### Write up
+## Written report
 
-The majority of the write up will be the revised results from the proposal and data analysis. 
-After providing the description of your dataset and research questions in the 
-introduction, write up the results of the data analysis, incorporating any feedback you received. Remember to pay attention to your presentation. Neatness, coherency, and clarity will count.
+Your written report must be done using R Markdown. You must 
+contribute to the GitHub repository with regular meaningful commits/pushes. 
+Before you finalize your write up, make sure the printing of code chunks is 
+turned off with the option `echo = FALSE`. 
 
-Your write up must also include a one to two page conclusion and discussion. 
-This will require a summary of what you have learned about your research 
-question along with statistical arguments supporting your conclusions. Also 
-critique your own methods and provide suggestions for improving your analysis. 
-Issues pertaining to the reliability and validity of your data and 
-appropriateness of the statistical analysis should also be discussed here. You should also include a 
-paragraph on what you would do differently if you were able to start over 
-with the project or what you would do next if you were going to continue 
-work on the project should also be included.
+Your final report must match your GitHub repository *exactly*. The mandatory
+components of the report are as follows, but feel free to expand with additional
+sections as necessary. There is no page limit or requirement -- however, you
+must comprehensively address all aspects below. Please be judicious in what you
+decide to include in your final write-up. For submission, submit the .pdf document
+to Gradescope.
 
-Before you finalize your write up, make sure your chunks are turned off 
-with `echo = FALSE`. In other words, there should be no visible code in your final write up, unless there is a piece of code that is important to include as part of your narrative.
+The written report is worth 60 points, broken down as
 
-You can add sections as you see fit to the template in your project repo. Make sure 
-you have a section called Introduction at the beginning and a section called 
-Conclusion at the end. The rest is up to you!
-<br><br>
+Total                                                   | 60 pts
+--------------------------------------------------------|--------
+**Introduction/data**                                   | 10 pts
+**Methodology**                                         | 20 pts
+**Results**                                             | 20 pts
+**Discussion**                                          | 10 pts
 
-#### Grading 
-| **Component** 	| **Total** 	| **Assessment** 	|
-|--------------------------	|-----------	|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| Introduction & EDA 	| 4 	| Is the research question, motivation for the analysis, and data clearly described? Are univariate distributions in the data clearly visualized and described using the appropriate summary statistics? Are relevant and interesting bivariate/multivariate relationships clearly visualized and described using the appropriate summary statistics?
-| Statistical Inference 	| 6	| Are appropriate statistical inference procedures carried out and explained thoroughly and correctly? This includes stating hypotheses (if needed), showing all relevant output, checking appropriate assumptions (if needed). Are the conclusions correct and written in context of the data and research question?
-| Creativity & Critical Thought 	| 4	| Is the project carefully thought out? Are the limitations carefully considered? Does it appear that time and effort went into planning and implementation of project?
-| Discussion & Limitations 	| 4 	| Are interesting findings from the model clearly described? If model is used for prediction, is the model’s predictive power thoroughly explored? Is there thorough discussion on model performance? Are the limitations carefully considered and described? 	|
-| Writing & Organization 	| 2 	| What is the quality of the statistical presentation, writing, and explanations? Does write up tell a unified story? Is the document neatly organized? This includes appropriate section headers, figures appropriately sized with informative labels, all code suppressed in .md document, all R messages and warnings suppressed, narrative and output neatly organized. 
- 	|
-| **Total** 	| **20** 	
+#### Introduction and data
 
-#### Presentation: slides due Fri, Dec 13 at 11:59p
+The introduction should introduce your general research question and your data 
+(where it came from, how it was collected, what are the cases, what are the 
+variables, etc.). 
 
+#### Methodology 
 
-**Your presentation should be no longer than 5 minutes, and each team member should say something substantial.**
+The methodology section should include the variables used to address your 
+research question, as well as any useful visualizations or summary statistics.
+As well, you should introduce and justify the statistical method(s) that you 
+believe will be useful in answering your research question. 
 
-You can use any software you like for your final presentation, including R Markdown
-to create your slides. There isn't a limit to how many slides you can use, just a 
-time limit (5 minutes total). Each team member should get a chance to speak during 
-the presentation. Your presentation should not just be an account of everything you 
-tried ("then we did this, then we did this, etc."), instead it should convey what 
-choices you made, and why, and what you found.
+#### Results 
 
-**Presentation schedule**: All teams will present during the university scheduled time of the final exam for this course, on Saturday, December 14, 7p - 10p. The presentation schedule is below; however, the write up and presentations are due on Fri, Dec 13 at 11:59p for <u>all teams</u>.
+Showcase how you arrived at answers to 
+your question using any techniques we have learned in this class (and some 
+beyond, if you're feeling adventurous). Provide the main results from your
+analysis. The goal is not to do an exhaustive 
+data analysis (i.e., do not calculate every statistic and procedure you have 
+learned for every variable), but rather let me know that you are proficient at 
+asking meaningful questions and answering them with results of data analysis, 
+that you are proficient in using R, and that you are proficient at interpreting 
+and presenting the results. Focus on methods that help you begin to answer your 
+research questions. 
 
-- Section 01L: 7p - 8p
-- Section 02L: 8p - 9p
-- Section 03L: 9p - 10p
-<br>
+#### Discussion
 
-#### Grading
-<br>
+This section is a conclusion and discussion. This will require a 
+summary of what you have learned about your research question along with 
+statistical arguments supporting your conclusions. Also, critique your own 
+methods and provide suggestions for improving your analysis. Issues pertaining 
+to the reliability and validity of your data and appropriateness of the 
+statistical analysis should also be discussed here. A paragraph on what you 
+would do differently if you were able to start over with the project or what you 
+would do next if you were going to continue work on the project should also be 
+included.
 
-**Rubric for presentation grade**
+## Repository
 
+In addition to your Gradescope submissions, we will be checking your GitHub 
+repository. This repository should include:
 
-| Component 	| Total 	| Assessment 	|
-|-----------------	|-------	|-------------------------------------------------------------------------------------------------------------------------------	|
-| Content 	| 5 	| The group told a unified story that highlights the main results from their analysis. 	|
-| Slides 	| 5 	| The presentation slides were organized, included clear and informative visualizations, and were readable (not too much text). 	|
-| Time Management 	| 2 	| Team divided the time well, stayed within the 8 minute time limit, and all team members spoke. 	|
-| Professionalism 	| 3 	| The group's presentation was clear and professional. 	|
-| **Total** 	| **15** 	|  	|
-
-<br>
-
-**Rubric for classmate scores**
-
-| **Component** 	| **Total** 	| **Assessment** 	|
-|-----------------	|-----------	|-------------------------------------------------------------------------------------------------------------------------------	|
-| Slides 	| 3 	| The presentation slides were organized, included clear and informative visualizations, and were readable (not too much text). 	|
-| Professionalism 	| 2 	| The group's presentation was clear and professional. 	|
-| **Total** 	| **5** 	|  	|
-
-
-#### Deliverables
-
-Your submission should include
-
-* RMarkdown file (formatted to clearly present all of your code and results) 
-* md file (able to be viewed on GitHub, with all figures)
-* Dataset(s) (in csv or RData format, in a `/data` folder)
-* Presentation (if using Keynote/PowerPoint/Google Slides, export to PDF and put in repo, in a `/presentation` folder)
+- RMarkdown file (formatted to clearly present all of your code and results)
+that will output the proposal and write-up in one document
+- Meaningful README file on the GitHub repository that contains a *codebook*
+for relevant variables
+- Dataset(s) (in csv or RData format, in a `/data` folder)
+- Presentation (if using Keynote/PowerPoint/Google Slides, export to PDF and put 
+in repo, in a `/presentation` folder)
 
 Style and format does count for this assignment, so please take the time to make 
 sure everything looks good and your data and code are properly formatted.
 
-## Tips
+## Slides
 
-- You're working in the same repo as your teammates now, so merge conflicts will happen, issues will arise, and that’s fine! Commit and push often, and ask questions when stuck.
+In addition to the write-up, you must also create presentation
+slides that summarize and showcase your project. Introduce your research question 
+and dataset, showcase visualizations, and provide some conclusions. These slides
+should serve as a brief visual accompaniment to your write-up and will be graded 
+for content and quality. They can also be used for your Presentation. For submission, convert these slides to a .pdf document
+to be submitted to Gradescope.
 
-- Review the grading guidelines below and ask questions if any of the expectations are unclear.
 
-- Make sure each team member is contributing, both in terms of quality and quantity of contribution (we will be reviewing commits from different team members).
+## Presentation
 
-- Set aside time to work together in the same location and remotely.
+On the last two days of class, **Wednesday, July 21 and Thursday, July 22 during class**, everyone will present their projects. There will be a seven-minute time limit for each presentation followed by three minutes for questions, for a total of ten-minutes per presentation. You may, and should, use the Slides as detailed in the previous section during your presntation.
 
-- When you're done, review the md document on GitHub to make sure you're happy with the final state of your work. Then go get some rest!
+## Participation
 
-- *Code*: In your final write up your code should be hidden (`echo = FALSE`) so that your 
-document is neat and easy to read. However your document should include 
-all your code such that if I re-knit your Rmd file I should be 
-able to obtain the results you presented. **Exception:** If you want to 
-highlight something specific about a piece of code, you're welcomed to show 
-that portion. 
+You are expected to attend both days of presentations, and be actively engaged by
+asking questions and providing feedback.
 
-- *Teamwork*: You are to complete the assignment as a team. All team members are expected 
-to contribute equally to the completion of this assignment and group 
-assessments will be given at its completion - anyone judged to not have sufficient 
-contributed to the final product will have their grade penalized. While different 
-teams members may have different backgrounds and abilities, it is the responsibility 
-of every team member to understand how and why all code and approaches in 
-the assignment works.
 
-## Grading
+# Asynchronous options
 
-Total                          | 100 pts
--------------------------------|--------
-Topic ideas                    | 5 pts
-Proposal                       | 20 pts
-Data analysis                  | 20 pts
-Write up                       | 20 pts
-Presentation                   | 15 pts
-Classmates' presentation scores             | 5 pts
-Team peer evaluation           | 10 pts
-Repo and document organization | 5 pts
+If you cannot attend or give presentations due to taking the course asynchronously, you must let Becky know by **Monday, July 12 at 11:59pm**. Note that only 
+students who enrolled in the asynchornous section of the course may take this option.
 
-**Team peer evaluation:** You will be asked to fill out a survey where you 
-rate the contribution and teamwork of each team member out of 10 points. You will 
-additionally report a contribution percentage for each team member. Filling out the 
-survey is a prerequisite for getting credit on the team member evaluation.
-If you are suggesting that an individual did less than 20% of the work, please
-provide some explanation. If any individual gets an average peer score 
-indicating that they did less than 10% of the work, this person will receive 
-half the grade of the rest of the group.
+You will still be required to complete the final project. The details of the proposal, written report, slides, repository, and overall neatness/presentation style are the same as for the synchronous students. The presentation and participation will be slightly modified as follows:
+
+## Presentation
+
+You will be required to upload a 7-minute video presentation by **Wednesday, July 21 at 10:15am EST**. You will receive questions and feedback from Becky, and you must respond to the questions by e-mail within 24 hours of receiving them. You will post the presentation video in Warpwire, which is accessible from the 
+the course Sakai site (bottom of the left-hand tool bar).
+
+### To post your video on Warpwire:
+
+- Click the Warpwire tab in the course Sakai site.
+- Click the “+” and select “Upload files”.
+- Locate the video on your computer and click to upload.
+- Once you’ve uploaded the video to Warpwire, click to share the video and make
+a copy of the video’s URL. You will need this when you submit the video.
+
+### To post the video for assignment:
+
+- Click the Assignments tab in the course Sakai site.
+- Click the Project assignment.
+- Click the Warpwire icon (between the flag and shopping cart icons). Select your video, then click “Insert 1 item.” This will embed your video in the conversation.
+Under the video, paste the URL to your video.
+- You’re done!
+
+
+For the presentation, you can speak over your slide deck, similar to the lecture 
+content videos. I recommend using Zoom to record your presentation; however, you 
+can use whatever platform works best for your group. Below are a few resources 
+to help you record video presentations:
+
+- [Recording presentations in Zoom](https://kb.siue.edu/61721)
+- [Apple Quicktime for screen recording]( https://support.apple.com/en-gb/guide/quicktime-player/qtp97b08e666/mac)
+- [Windows 10 built-in screen recording functionality](https://www.youtube.com/watch?v=OfPbr1mRDuo)
+## Participation
+
+You are expected to watch each day's recorded lecture/presentations. For each day
+of live presentations, you are required to submit feedback/questions via a provided form by 11:59pm of that night. For example, for presentations that take place on Wednesday, July 21, you should submit the feedback by 11:59pm Wednesday, July 21.
+
+
+# Overall notes
+
+The project is very open ended. For instance, in creating a compelling 
+visualization(s) of your data in R, there is no limit on what tools or 
+packages you may use. You do not need to visualize all of the data at once. A 
+single high quality visualization will receive a much higher grade than a large 
+number of poor quality visualizations.
+
+Before you finalize your write up, make sure the printing of code chunks is 
+turned off with the option `echo = FALSE`. 
+
+Finally, pay attention to details in your write-up and presentation. Neatness, 
+coherency, and clarity will count.
+
+
+# Tips
+
+- Ask questions if any of the expectations are 
+unclear.
+
+- *Code*: In your write up your code should be hidden (`echo = FALSE`) so that 
+your document is neat and easy to read. However your document should include 
+all your code such that if I re-knit your Rmd file I should be able to obtain 
+the results you presented. **Exception:** If you want to highlight something 
+specific about a piece of code, you're welcome to show that portion. 
+
+
+# Grading
 
 Grading of the project will take into account the following:
 
@@ -310,29 +310,8 @@ of many concepts and is unable to put together a cogent argument. Communication
 of results is unclear.
 - *Below 60%*: Student is not making a sufficient effort.
 
-**Late penalty:**
 
-- Late, but within 24 hours of due date/time: -20% (only applies to written portion, there is no option to do your presentation later)
-- Any later: no credit 
+# Late work policy
 
-## Getting started
-
-- Go to the course organization on GitHub: https://github.com/sta199-fa19.
-
-- Find the repo starting with `project` and that has your team name at the end (this should be the only `project` repo available to you).
-
-- In the repo, click on the green **Clone or download** button, select **Use HTTPS** (this might already be selected by default, and if it is, you'll see the text **Clone with HTTPS** as in the image below). Click on the clipboard icon to copy the repo URL.
-
-- Go to RStudio Cloud and into the course workspace. Create a **New Project from Git Repo**. You will need to click on the down arrow next to the **New Project** button to see this option.
-
-- Copy and paste the URL of your assignment repo into the dialog box:
-
-- Hit OK, and you're good to go! 
-
-# Undergraduate Statistics Class Project Competition
-
-The project for this class is eligible for the Undergraduate Statistics Class Project Competition sponsored by The Consortium for the Advancement of Undergraduate Statistics Education ([CAUSE](https://www.causeweb.org/cause/)) and the American Statistical Association ([ASA](https://www.amstat.org/)). Submissions are due on **<u>Friday, December 20, 2019</u>**. 
-
-You can find more information about the project here: https://www.causeweb.org/usproc/usclap
-
-This is a great opportunity to share your work outside of class and potentially win a cash prize! Please let Professor Tackett know if you are interested in submitting your project to the competition.
+**There is no late work accepted on this project.** Be sure to turn in your 
+work early to avoid any technological mishaps.
