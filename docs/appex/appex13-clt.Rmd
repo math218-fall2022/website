@@ -1,6 +1,6 @@
 ---
 title: "AE 13: Bone density"
-date: "06.14.2021"
+date: "06.16.2021"
 author: "Your name"
 output: 
   html_document:
@@ -46,7 +46,7 @@ What bone densities correspond to the 5th, 10th, 50th, and 99th percentiles of t
 
 ### Exercise 2
 
-The densities of three woods are below:
+The densities of three types of wood are below:
 
 - Plywood: 540 mg/cubic centimeter
 - Pine: 600 mg/cubic centimeter
@@ -57,38 +57,8 @@ dense than each of these three woods?
 
 ### Exercise 3
 
-What is the probability that, for a *group* of 10 randomly sampled 65-year old women, the mean bone density of the *group* is less dense than these three woods?
+What is the probability that, for a *group* of 10 randomly sampled 65-year old women, the mean bone density of the *group* is less dense than each of these three woods?
 
 ### Exercise 4
 
 Explain the differences between your answers in Exercise 2 and 3.
-
-
-## CLT-based inference with Pokemon
-
-We will be using the `pokemon` dataset, which contains information about 45 randomly selected Pokemon (from all generations). You may load in the dataset with the following code: 
-
-```{r load-data, warning = FALSE, message = FALSE, eval = T}
-pokemon <- read_csv("data/pokemon.csv")
-```
-
-**Use the infer package to answer the following exercises.**
-
-### Exercise 5
-
-Construct and interpret a 95% confidence interval for the mean height in meters (`height_m`) of Pokemon species by using the Central Limit Theorem. 
-
-### Exercise 6
-
-The average height of a human is 1.65 meters. Evaluate whether a randomly selected Pokemon species has a *different* mean height by using the Central Limit Theorem. 
-
-In doing so, state your null and alternative hypotheses, the
-distribution of your test statistic under the null hypothesis, your p-value, decision, and conclusion in context of the research problem.
-
-### Exercise 7
-
-Now evaluate whether a randomly-selected Pokemon species has a *lower* mean height by using the Central Limit Theorem. In doing so, state your null and alternative hypotheses, the distribution of your test statistic under the null hypothesis, your p-value, decision, and conclusion in context of the research problem.
-
-### Exercise 8
-
-Suppose the true mean height among Pokemon species is 1.4 meters. In your conclusions from Exercises 6 and 7, did you make the correct decision, a Type 1 error, or a Type 2 error? Explain.

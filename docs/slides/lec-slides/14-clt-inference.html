@@ -14,7 +14,7 @@ class: center, middle, inverse, title-slide
 
 # Inference with the CLT
 ### Becky Tang
-### 06.16.2021
+### 06.17.2021
 
 ---
 
@@ -73,119 +73,41 @@ class: center, middle
 
 ---
 
+## The Central Limit Theorem
+
+If necessary conditions are met, for a population with a well-defined mean `\(\mu\)` and standard deviation `\(\sigma\)`,
+these three properties hold for the distribution of sample average `\(\bar{X}\)`,
+assuming certain conditions hold:
+
+--
+
+1. The mean of the sampling distribution of the mean is identical to the 
+population mean `\(\mu\)`.
+
+--
+
+2. The standard deviation of the distribution of the sample averages is
+`\(\sigma/\sqrt{n}\)`.
+  - This is called the .vocab[standard error] (SE) of the mean. 
+ 
+--
+
+3. For `\(n\)` large enough, the shape of the
+sampling distribution of means is approximately .vocab[normally distributed].
+
+--
+
+
+That is, the CLT tells us that `\(\bar{X}\)` approximately has the distribution `\(N\left(\mu, \sigma/\sqrt{n}\right)\)`. 
+
+---
+
+
 ## Inference based on the CLT
 
-If necessary conditions are met, we can also use inference methods based on the CLT. Suppose we know the true population standard deviation. 
-
---
-
-Then the CLT tells us that `\(\bar{X}\)` approximately has the distribution `\(N\left(\mu, \sigma/\sqrt{n}\right)\)`. 
-
-That is,
+If the CLT tells us that `\(\bar{X}\)` approximately has the distribution `\(N\left(\mu, \sigma/\sqrt{n}\right)\)`, then by properties of the normal distribution, we have
 
 `$$Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0, 1)$$`
-
----
-
-## Probabilities under N(0,1) curve
-
-
-```r
-# P(Z &lt; -1.5)
-pnorm(-1.5)
-```
-
-```
-## [1] 0.0668072
-```
-
-&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-## Probability between two values
-
-.question[
-If `\(Z \sim N(0, 1)\)`, what is `\(P(-1 &lt; Z &lt; 2)\)`?
-]
-
---
-
-&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-##  Probability between two values
-
-.question[
-If `\(Z \sim N(0, 1)\)`, what is `\(P(-1 &lt; Z &lt; 2)\)`?
-]
-
-
-&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-## Probability between two values
-
-.question[
-If `\(Z \sim N(0, 1)\)`, what is `\(P(-1 &lt; Z &lt; 2)\)`?
-]
-
-&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-## Probability between two values
-
-.question[
-If `\(Z \sim N(0, 1)\)`, what is `\(P(-1 &lt; Z &lt; 2)\)`?
-]
-
-&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
-
-
-```r
-pnorm(2) - pnorm(-1)
-```
-
-```
-## [1] 0.8185946
-```
-
----
-
-##  Probability between two values
-
-.question[
-If `\(Z \sim N(0, 1)\)`, what is `\(P(-1 &lt; Z &lt; 2)\)`?
-]
-
-
-```r
-pnorm(2) - pnorm(-1)
-```
-
-```
-## [1] 0.8185946
-```
-
----
-
-## Finding cutoff values under N(0,1) curve
-
-
-```r
-# find the median, Q2
-qnorm(0.5)
-```
-
-```
-## [1] 0
-```
-
-
-&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -197,9 +119,16 @@ qnorm(0.5)
 
 ## T distribution
 
-- In practice, we never know the true value of `\(\sigma\)`, and so we estimate it from our data with `\(s\)`.
+In practice, we never know the true value of `\(\sigma\)`, and so we estimate it from our data with `\(s\)`, the .vocab[sample standard deviation].
 
-We can make the following test statistic for testing
+--
+
+We cannot directly substitute `\(s\)` for `\(\sigma\)` and expect to have the same result 
+as in the CLT. After all, `\(s\)` is just an estimate. 
+
+--
+
+But we can make the following test statistic for testing
 a single sample's population mean, which has a .vocab[t-distribution with n-1 degrees of freedom]:
 
 .question[
@@ -211,7 +140,11 @@ $$ T = \frac{\bar{X} - \mu}{s/\sqrt{n}} \sim t_{n-1}$$
 ## T distribution 
 
 
-The t-distribution is also unimodal and symmetric, and is centered at 0
+The t-distribution is also unimodal and symmetric, and is centered at 0.
+
+--
+
+It has one parameter: the degrees of freedom.
 
 --
 
@@ -223,7 +156,7 @@ SE
 
 ## T vs Z distributions
 
-&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -328,7 +261,7 @@ durham %&gt;%
 
 ## Exploratory Data Analysis
 
-&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="14-clt-inference_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -404,7 +337,11 @@ observed sample mean, if in fact the null hypothesis is true?
 
 ## Calculations
 
+As we do not know the true `\(\sigma\)` and we only have `\(s\)`, use the `\(t\)`-distribution.
+
 --
+
+`\(SE = s / \sqrt{n}\)`
 
 
 ```r
@@ -417,6 +354,8 @@ observed sample mean, if in fact the null hypothesis is true?
 
 --
 
+`\(t = \frac{\bar{X} - \mu}{s / \sqrt{n}}\)`
+
 
 ```r
 (t &lt;- (durham_summary$xbar - 3) / se) # Test statistic
@@ -426,7 +365,11 @@ observed sample mean, if in fact the null hypothesis is true?
 ## [1] 24.57372
 ```
 
---
+---
+
+## Calculations
+
+Degrees of freedom for this test is `\(n-1\)`
 
 
 ```r
@@ -438,6 +381,8 @@ observed sample mean, if in fact the null hypothesis is true?
 ```
 
 --
+
+P-value
 
 
 ```r
