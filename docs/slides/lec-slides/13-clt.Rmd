@@ -85,6 +85,7 @@ sample statistic (sample mean, sample proportion, etc.)
 - Today we talk about some of the theory underlying .vocab[sampling distributions],
 particularly as they relate to sample means.
 
+
 ---
 
 ## Statistical inference
@@ -99,6 +100,35 @@ we must calculate statistics from our sample in order to learn about them.
 sample statistic. 
 
 ---
+
+## Random variables and Distributions
+
+A .vocab[random variable] is a variable whose value is the outcome of a random event. 
+
+In statistics, a .vocab[probability distribution] is the mathematical function that gives the probabilities of occurrence of different possible outcomes/events of a random variable.
+
+--
+
+It can be as simple as a list of outcomes and their associated probabilities. For example, let $X$ be a random variable denoting a fair six-sided die.
+
+|X|1|2|3|4|5|6|
+|-------------|
+|Probability| 1/6| 1/6| 1/6| 1/6| 1/6| 1/6|
+
+---
+
+## Random variables and Distributions
+
+However, it's rarely the case that we have random variables that have so few possible outcomes. 
+
+It would be impossible to write a table of probabilites for distributions with (infinitely) many possible outcomes. For example, what if $X$ = height of students at Duke?
+
+--
+
+Instead, we can define a function that defines the distribution of $X$. This is just like the table: for a given outcome of $X$, the function tells you the probability with which that event occurs, according to the distribution.
+
+---
+
 
 ## Sampling distribution of the mean
 
@@ -154,7 +184,7 @@ class: middle
 
 A quick caveat...
 
-For now, let's assume we know the underlying standard deviation, $\sigma$, from our distribution 
+For now, let's assume we know the underlying standard deviation, $\sigma$, from our distribution. This is a measure of the amount of variation in a set of values.
 
 ---
 
@@ -601,9 +631,25 @@ If you want a different mean and standard deviation (ex. $\mu = -2$ and
 $\sigma$ = 0.25), you have to provide these values:
 
 ```{r}
-# value at 75-th percentile of N(2, 0.25) distribution
+# value at 75-th percentile of N(-2, 0.25) distribution
 qnorm(0.75, -2, 0.25)
 ```
 
 
+---
 
+## Different standard deviation
+
+```{r echo = F, fig.height=2.5}
+ggplot(data.frame(x = c(-3, 3)), aes(x = x)) +
+        stat_function(fun = dnorm,
+                      aes(colour = "1")) +
+        stat_function(fun = dnorm, args = list(0, 0.25),
+                      aes(colour = "0.25")) +
+         stat_function(fun = dnorm, args = list(0, 2),
+                      aes(colour = "2")) +
+        scale_x_continuous(name = "x") +
+        scale_y_continuous(breaks = NULL, name = element_blank())+
+        ggtitle("Normal function curves of probabilities") +
+        scale_colour_manual(expression(sigma), values = c("deeppink","black", "dodgerblue3"))
+```
