@@ -1,25 +1,10 @@
 ---
 title: "AE 13: Bone density"
 date: "06.16.2021"
-author: "Your name"
 output: 
   html_document:
     theme: readable
 ---
-
-## Announcements 
-
-- There will be no class next Wednesday and Thursday, June 23-24. However, there
-will still be lab on Friday, June 25. Use this time to work on HW 02. 
-
-- Becky's Wednesday office hours will be cancelled due to travel, but are re-scheduled
-to Thursday, June 24 at 3:00-4:30pm (and by appointment, as always).
-
-### Exam
-
-## Comparing CLT- & simulation- based inference
-
-What is similar, and what is different, between CLT based test of means vs. simulation based test?
 
 ## Getting started 
 

@@ -1,6 +1,6 @@
 ---
 title: "AE 14: Pokemon"
-date: "06.16.2021"
+date: "06.17.2021"
 output: 
   html_document:
     theme: readable
@@ -8,6 +8,10 @@ output:
 
 ## Announcements 
 
+- There will be no class next Wednesday and Thursday, June 23-24. However, there
+will still be lab on Friday, June 25. Use this time to work on HW 02. 
+
+- Becky's Wednesday office hours will be cancelled due to travel, but are re-scheduled to Thursday, June 24 at 3:00-4:30pm (and by appointment, as always).
 
 ## Comparing CLT- & simulation- based inference
 
