@@ -1,0 +1,593 @@
+---
+title: "Two-sample inference"
+author: "Becky Tang"
+date: "06.21.2021"
+output:
+  xaringan::moon_reader:
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+    css: "sta199-slides.css"
+    logo: img/sta199-sticker-icon.png
+    lib_dir: libs/font-awesome
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%" 
+      ratio: "16:9"
+---
+
+
+
+layout: true
+
+<div class="my-footer">
+<span>
+<a href="http://datasciencebox.org" target="_blank">datasciencebox.org</a>
+</span>
+</div> 
+
+```{r setup, include=FALSE}
+# R options
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE,     # for regression output
+  warm = 1
+  )
+# Set dpi and height for images
+knitr::opts_chunk$set(fig.height = 3, fig.width = 5, dpi = 300, 
+                      warning = FALSE, 
+                      message = FALSE, 
+                      fig.align = "center") 
+# ggplot2 color palette with gray
+color_palette <- list(gray = "#999999", 
+                      salmon = "#E69F00", 
+                      lightblue = "#56B4E9", 
+                      green = "#009E73", 
+                      yellow = "#F0E442", 
+                      darkblue = "#0072B2", 
+                      red = "#D55E00", 
+                      purple = "#CC79A7")
+htmltools::tagList(rmarkdown::html_dependency_font_awesome())
+# For magick
+dev.off <- function(){
+  invisible(grDevices::dev.off())
+}
+# For ggplot2
+ggplot2::theme_set(ggplot2::theme_bw())
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(broom)
+library(knitr)
+library(DT)
+library(openintro)
+library(infer)
+library(patchwork)
+library(kableExtra)
+```
+
+---
+
+
+## Recap
+
+So far, we've talked about performing interval estimation and hypothesis 
+testing for means using
+
+- simulation-based methods, such as bootstrap or direct simulation, and
+- the Central Limit Theorem
+
+In all cases so far, we've only compared one sample against a hypothesized 
+value.
+
+.question[
+But what if we wanted to compare two samples against *each other*?
+]
+
+---
+
+class: center, middle
+
+# Difference in means
+
+---
+
+## Two-sample inference for means
+
+Suppose we have two (representative)
+samples, and wanted to either 
+
+- estimate the .vocab[difference in means] in the two
+populations 
+  - confidence interval for $\mu_1 - \mu_2$
+  
+- Test the hypotheses
+
+\begin{align*}
+H_0: \mu_1 = \mu_2 \\
+H_a: \mu_1 \neq \mu_2,
+\end{align*}
+
+where $\mu_1$ and $\mu_2$ are the population means in groups 1 and 2.
+
+---
+
+class: middle
+
+.question[
+How might you calculate a confidence interval and address the above hypothesis test using simulation-based methods? How about the CLT?
+]
+
+---
+
+## Data
+
+```{r fig.align="center",out.width="60%",echo=FALSE}
+knitr::include_graphics("img/15/spectrogram.png")
+```
+
+.footnote[Adapted from Erdogdu Sakar, B., et al. *Collection and Analysis of a Parkinson*
+*Speech Dataset with Multiple Types of Sound Recordings*, IEEE Journal of 
+Biomedical and Health Informatics, vol. 17(4), pp. 828-834, 2013
+(image from [Wikipedia](https://en.wikipedia.org/wiki/Spectrogram))]
+
+---
+
+## Some voice analysis terminology
+
+```{r fig.align="center",out.width="50%",echo=FALSE}
+knitr::include_graphics("img/15/jitter.png")
+```
+
+- .vocab[Jitter]: frequency variation from cycle to cycle
+- .vocab[Shimmer]: amplitude variation of the sound wave
+
+Jitter and shimmer are affected by lack of control of vocal cord vibration, and
+pathological differences from average values may be indicative of Parkinson's
+Disease (PD).
+
+(from Teixeira, Oliveira, and Lopes, 2013)
+
+---
+
+## Question of interest
+
+Is there a difference in average voice jitter between patients with Parkinson's disease (PD) and those who don't have Parkinson's disease (control group)? 
+
+The `parkinsons.csv` we looked at in lab contains repeated voice recordings from a number of patients,
+some with PD and some serving as non-PD controls (Erdogdu B et al.). For now,
+**assume that all samples were taken independently from each other** (this is
+not actually the case, but we'll make this assumption).
+
+Jitter is given in milliseconds (ms), and shimmer is given in decibels (dB).
+
+---
+
+## Bootstrap estimation
+
+Let's construct the bootstrap distribution for the **difference in means**.
+
+```{r, warning = F, message = F}
+set.seed(2020)
+parkinsons <- read_csv("data/parkinsons.csv")
+library(infer)
+boot_diffs <- parkinsons %>% 
+  specify(jitter ~ status) %>% #<<
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "diff in means", #<<
+            order = c("Healthy", "PD")) #<<
+```
+
+---
+
+## Bootstrap estimation
+
+Let's construct the bootstrap distribution for the **difference in means**.
+
+```{r echo = F, fig.height = 2}
+ggplot(boot_diffs, aes(x = stat)) +
+  geom_histogram(binwidth = 0.0001,
+                 fill = "skyblue", 
+                 color = "darkblue") +
+  labs(x = "", y = "")
+```
+
+---
+
+## CI for difference in means
+
+Let's construct the bootstrap distribution for the **difference in means**.
+
+```{r}
+boot_diffs %>% 
+  summarize(lower = quantile(stat, 0.025),
+            upper = quantile(stat, 0.975))
+```
+
+---
+
+## CI for difference in means
+
+```{r echo = F}
+ci <- boot_diffs %>% 
+  summarize(lower = quantile(stat, 0.025),
+            upper = quantile(stat, 0.975))
+ci
+```
+
+.vocab[Interpretation: ]We are 95% confident that the mean voice jitter for people without Parkinson's disease is about 0.002 to 0.004 ms less than the mean voice jitter for those with Parkinson's disease.
+
+--
+
+.question[
+Is there evidence that there is a difference in mean voice jitter between PD patients and healthy patients?
+]
+
+---
+
+## Hypothesis testing
+
+Let $\mu_P$ be the mean voice jitter among PD patients, and $\mu_H$ be the mean
+voice jitter among healthy patients. Let's test
+
+\begin{align*}
+H_0: \mu_P = \mu_H\\
+H_a: \mu_P \neq \mu_H
+\end{align*}
+
+If the two means are truly equal (i.e., if $H_0$ is true), then the difference, $\mu_H - \mu_P$, should be **zero**.
+
+---
+
+## Hypothesis testing
+
+Let's construct the simulated .vocab[null distribution] for the difference in means, $\mu_H - \mu_P$. If the two means are truly equal (i.e., if $H_0$ is true), then this difference should be zero.
+
+```{r}
+null_dist <- parkinsons %>%
+  specify(jitter ~ status) %>%
+  hypothesize(null = "independence") %>% #<<
+  generate(reps = 1000, type = "permute") %>% #<<
+  calculate(stat = "diff in means", 
+            order = c("Healthy", "PD")) #<<
+```
+
+---
+
+## Hypothesis testing
+  
+```{r echo = F, fig.height = 2}
+ggplot(null_dist, aes(x = stat)) +
+  geom_histogram(binwidth = 0.0001,
+                 fill = "skyblue", 
+                 color = "darkblue") +
+ geom_vline(xintercept = 0, color = "red", lwd = 2) +
+  labs(x = "", y = "")
+```
+
+---
+
+## Hypothesis testing
+
+```{r}
+obs_diff <- parkinsons %>% 
+  specify(jitter ~ status) %>% 
+  calculate(stat = "diff in means", order = c("Healthy", "PD")) %>% 
+  pull()
+obs_diff
+```
+
+--
+
+```{r}
+null_dist %>% 
+  filter(abs(stat) >= abs(obs_diff)) %>%
+  summarise(p_val = n() / nrow(null_dist))
+```
+
+---
+
+## Conclusion 
+
+The p-value is very small, so we reject $H_0$. The data provide sufficient evidence that there is a difference in the mean voice jitter between patients who have Parkinson's disease and those who don't have the disease.
+
+---
+
+## Difference in means using CLT
+--
+
+CLT-based inference for a difference in means relies on the 
+.vocab[two-sample t-test for independent samples]. Like the t-test we've seen
+before, the **test statistic** takes on the following form:
+
+--
+
+\begin{align*}
+T = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2) }{\widehat{SE}_{diff}}
+\end{align*}
+
+--
+
+The test statistic depends on whether we can assume that the two groups have the 
+same underlying variability in their observations.
+
+--
+
+The exact form of the test statistic under the null hypothesis, including the
+degrees of freedom, are a complicated fraction that no one calculates by hand. Let's let R handle this! 
+
+---
+
+## CLT: Difference in means
+
+```{r}
+parkinsons %>%
+  t_test(jitter ~ status, 
+         mu = 0,
+         order = c("Healthy", "PD"), 
+         alternative = "two-sided", 
+         conf_int = TRUE, conf_level = 0.95)
+```
+
+---
+
+## CLT: Difference in means 
+
+```{r, echo = F}
+parkinsons %>%
+  t_test(jitter ~ status, 
+         mu = 0,
+         order = c("Healthy", "PD"), 
+         alternative = "two-sided", 
+         conf_int = TRUE, conf_level = 0.95)
+```
+
+.question[
+Comprehensively evaluate the research question by specifying the hypotheses, 
+the test statistic and its the distribution under the null, the p-value,
+and decision at the $\alpha = 0.05$ significance level. Interpret the 
+conclusions from your hypothesis test in context of the original research 
+question.
+]
+
+---
+
+
+class: center, middle
+
+# Permutation tests for independence
+
+---
+
+## Is yawning contagious?
+
+An experiment conducted by the MythBusters tested if a person can be subconsciously influenced into yawning if another person near them yawns.
+
+They recruited 50 people, spoke to each subject one-one-one, and intentially either yawned
+or did not yawn during the session. Each subject sat in a small room for a fixed amount of time, and the Mythbusters secretly observed to see whether they yawned.
+
+---
+
+## Description
+
+Randomly assigned people to two groups: 34 to a group where a person near them yawned (treatment) and 16 to a control group where they didn't see someone yawn (control).
+
+```{r echo = F}
+group <- c(rep("control", 16), rep("treatment", 34))
+outcome <- c(rep("no yawn", 12), rep("yawn", 4), rep("no yawn", 24), rep("yawn", 10))
+mb_yawn <- data.frame(group = group, outcome = outcome) %>%
+  sample_n(size = 50)
+```
+
+```{r}
+glimpse(mb_yawn)
+mb_yawn %>%
+  count(group, outcome)
+```
+
+---
+
+## Proportion of yawners
+
+```{r}
+mb_yawn %>%
+  count(group, outcome) %>%
+  group_by(group) %>%
+  mutate(rel_prop = round(n / sum(n), 2))
+```
+
+The Mythbusters claimed that the difference in proportion of yawners between the two groups (0.04) was significant, based on intuition. Let's see if hypothesis testing agrees...
+
+---
+
+## Independence? 
+
+Based on the proportions we calculated, do you think yawning is really contagious, i.e. are seeing someone yawn and yawning dependent?
+
+```{r echo = F}
+mb_yawn %>%
+  count(group, outcome) %>%
+  group_by(group) %>%
+  mutate(p_hat = round(n / sum(n), 2))
+```
+
+---
+
+## Possible explanations
+
+- The observed differences might suggest that yawning is contagious, i.e. seeing someone yawn and yawning are dependent
+
+- But the differences are small enough that we might wonder if they might simple be **due to chance**
+
+- If we were to repeat the experiment on another group of 50 people, we may see different results. So let's simulate using a **permutation test**
+
+---
+
+## Hypotheses
+
+$H_0$: yawning (outcome) and seeimg someone yawn (treatment vs. control) are independent:
+
+$$p_{treat} = p_{control}$$
+
+$H_{a}$: yawning and seeing someone yawn are not independent (in fact, we will specify that the proportion of yawners is greater in the treatment group than in the control group:
+
+$$p_{treat} > p_{control}$$
+
+where $p_{treat}$ is the true proportion of yawners among those who saw someone else yawn, and similarly for 
+$p_{control}$.
+
+Note, these are equivalent to $H_0: p_{treat} - p_{control} = 0$ and $H_a: p_{treat} - p_{control} > 0$.
+
+---
+
+## Permuting the treatment assignments
+
+We know from our observed data that 14 people yawned and 36 people didn't yawn.
+
+We also know that there were 16 people in the control group (didn't see someone yawn) and 34 people in the treatment group (saw someone yawn), resulting in a test statistic of 0.0441.
+
+```{r}
+p_hat_diff <- mb_yawn %>%
+  count(group, outcome) %>%
+  group_by(group) %>%
+  mutate(p_hat = n / sum(n), 2) %>%
+  filter(outcome == "yawn") %>%
+  pull(p_hat) %>%
+  diff()
+p_hat_diff
+```
+
+
+---
+
+##  Permuting the treatment assignments
+
+While keeping the responses (yawn vs. no yawn) fixed at what we observed, we will *permute* or shuffle the treatment assignments of the observations and recalculate the difference in proportions.
+
+That is, we will recalculate the difference in proportions as if some of the yawners and some of the non-yawners perhaps might have been in a different treatment group.
+
+--
+
+Why do we do this?
+
+---
+
+## The null hypothesis
+
+Recall that under $H_0$, there is no association between seeing someone yawn (treatment vs control) and the act of yawning (outcome).
+
+If there truly is no association between treatment and control, then shuffling whether someone was assigned to watch somebody yawn or not yawn shouldn't matter -- we would expect similar proportions of people who yawn in each group.
+
+--
+
+Because we are in the hypothesis testing framework, we generate our null distribution assuming $H_0$ true. How can we obtain that null distribution?
+
+---
+
+## Repeated permutations
+
+We will do this treatment-shuffling again and again, calculate the difference in proportion for each simulation, and use this as an approximation to the null distribution.
+
+This distribution approximates all the possible differences in proportion we could have seen if 
+$H_0$ were in fact true. 
+
+This is similar in spirit to bootstrap estimation, but here we **sample without replacement**; we merely permute/shuffle the treatment labels of each of our outcomes.
+
+
+---
+
+## Using `infer`
+
+```{r eval = F}
+null_dist <- mb_yawn %>%
+  specify(response = outcome, explanatory = group, success = "yawn") %>%  #<<
+  hypothesize(null = "independence") %>%
+  generate(1000, type = "permute") %>%
+  calculate(stat = "diff in props", order = c("treatment", "control"))
+```
+
+Because we are interested in the whether or not someone yawned, `response = outcome`.
+
+We are comparing the proportions between two levels of the variable `group`, so `explanatory = group`.
+
+Since the response variable is categorical, specify which level should be success
+
+---
+
+## Using `infer`
+
+```{r eval = F}
+null_dist <- mb_yawn %>%
+  specify(response = outcome, explanatory = group, success = "yawn") %>%  
+  hypothesize(null = "independence") %>% #<<
+  generate(1000, type = "permute") %>% 
+  calculate(stat = "diff in props", order = c("treatment", "control"))
+```
+
+Null hypothesis: the outcome and treatment are independent.
+
+---
+
+
+## Using `infer`
+
+```{r eval = F}
+null_dist <- mb_yawn %>%
+  specify(response = outcome, explanatory = group, success = "yawn") %>%  
+  hypothesize(null = "independence") %>% 
+  generate(1000, type = "permute") %>% #<<
+  calculate(stat = "diff in props", order = c("treatment", "control"))
+```
+
+Generate simulated results via pemutation
+
+---
+
+## Using `infer`
+
+```{r}
+set.seed(100)
+null_dist <- mb_yawn %>%
+  specify(response = outcome, explanatory = group, success = "yawn") %>%  
+  hypothesize(null = "independence") %>% 
+  generate(1000, type = "permute") %>% 
+  calculate(stat = "diff in props", order = c("treatment", "control"))#<<
+```
+
+Calculate the sample statistic of interest (difference in proportions). 
+
+Because the explanatory variable `group` is categorical, we need to tell R the
+order in which to take the different in proportions for the calculation: $(\hat{p}_{treat} - \hat{p}_{control})$.
+
+---
+
+## Visualizing the null distirbution
+
+What would you expect the center of the null distribution to be?
+
+
+```{r fig.height=2}
+visualize(null_dist) 
+```
+
+---
+
+## Calculating the p-value
+
+```{r}
+null_dist %>%
+  filter(stat >= p_hat_diff) %>%
+  summarise(p_val = n()/nrow(null_dist))
+```
+
+OR
+
+```{r}
+null_dist %>%
+  get_p_value(obs_stat = p_hat_diff, direction = "greater")
+```
+--
+
+What is the conclusion of our hypothesis test?
+

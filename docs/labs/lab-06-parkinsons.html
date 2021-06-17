@@ -12,7 +12,7 @@
 
 
 
-<title>Lab 06: Hypothesis Testing</title>
+<title>Lab 06 - Parkinsons</title>
 
 <style type="text/css">@font-face {
 font-family: "et-book";
@@ -493,7 +493,7 @@ font-size: 10pt;
 
 
 
-<h1 class="title toc-ignore">Lab 06: Hypothesis Testing</h1>
+<h1 class="title toc-ignore">Lab 06 - Parkinsons</h1>
 <h3 class="subtitle">due Tuesday, June 22 at 11:59p</h3>
 
 
@@ -507,7 +507,7 @@ font-size: 10pt;
 
 <div id="introduction-and-data" class="section level1">
 <h1>Introduction and Data</h1>
-<p>The goal of today’s lab is to practice statistical inference using both simulation procedures and the Central Limit Theorem. The data for today’s lab may be found by cloning your repository available at the class GitHub repository.</p>
+<p>The goal of today’s lab is to practice statistical inference using both simulation procedures and the Central Limit Theorem. The data for today’s lab may be found by cloning your repository available at the class GitHub repository. Use the lecture notes, readings, and application exercises to help you complete the lab. You can also use <a href="img/06-parkinsons/sim-inference-chart.png">this chart on simulation-based inference</a> to help you determine the appropriate sampling scheme when conducting simulation-based inference.</p>
 <p>The dataset is adapted from Little et al. (2007), and contains voice measurements from individuals both with and without Parkinson’s Disease (PD), a progressive neurological disorder that affects the motor system. The aim of Little et al.’s study was to examine whether they could diagnose PD by examining the spectral (sound-wave) properties of patients’ voices.</p>
 <p>147 measurements were taken from patients with PD, and 48 measurements were taken from healthy controls. For the purposes of this lab, you may assume that measurements are representative of the underlying populations (PD vs. healthy).</p>
 <p>The variables in the dataset are as follows:</p>
@@ -537,7 +537,7 @@ At that start of each exercise that requires simulation, set a random seed equal
 </li>
 </ul>
 </div>
-<p>Is there enough evidence to suggest that HNR in the voice recordings of the healthy volunteers is significantly different from 25 at the <span class="math inline">\(\alpha\)</span> = 0.05 significance level? <strong>Conduct this hypothesis test using a simulation method</strong>.</p>
+<p>Is there enough evidence to suggest that the mean HNR in the voice recordings of the healthy patients is significantly different from 25 at the <span class="math inline">\(\alpha\)</span> = 0.05 significance level? <strong>Conduct this hypothesis test using a simulation method</strong>.</p>
 <ol style="list-style-type: decimal">
 <li><p>Write out the null and alternative hypotheses for this question in both words and symbols.</p></li>
 <li><p>Display a visualization of your simulated null distribution, and describe the values that would cause you to reject your null hypothesis (called the <em>rejection region</em>). Does our observed sample mean lie in this rejection region?</p></li>
@@ -559,7 +559,7 @@ At that start of each exercise that requires simulation, set a random seed equal
 <ol start="9" style="list-style-type: decimal">
 <li>Write out the null and alternative hypotheses in words.</li>
 </ol>
-<p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Hint</strong>: To perform a test for independence of two numerical variables, we <code>hypothesize(null = “independence”)</code>. Additionally, the type of simulation that is generated is neither bootstrap nor simulate…</span></span></p>
+<p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Hint</strong>: Refer to Lab 05 for what to <code>specify()</code>. Use <code>hypothesize(null = “independence”)</code>. The type of simulated data we will <code>generate()</code> depends on two quantities/variables; consult the chart.</span></span></p>
 <ol start="10" style="list-style-type: decimal">
 <li><p>Display a visualization of your simulated null distribution, and describe the values that would cause you to reject your null hypothesis. Does the observed sample correlation lie in this rejection region?</p></li>
 <li><p>What is your p-value, decision, and conclusion in context of the research question?</p></li>
