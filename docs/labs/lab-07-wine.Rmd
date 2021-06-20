@@ -1,0 +1,171 @@
+---
+title: "Lab 07: Two-sample inference"
+subtitle: "due Tue, June 29 at 11:59p"
+output: 
+  tufte::tufte_html:
+    highlight: pygments
+    css: "sta199-labs.css"
+link-citations: yes
+---
+
+```{r include=FALSE}
+library(tidyverse)
+library(tufte)
+library(knitr)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE,     # for regression output
+  digits = 2
+  )
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+
+# What makes a good wine?
+
+The goal of today's lab is to practice two-sample statistical inference using
+both simulation- and CLT-based approaches. Use the lecture notes, readings, 
+and application exercises to help you complete the lab.
+
+# The Data
+
+Today's dataset has been adapted from a large data set of wine reviews from
+[Kaggle](https://www.kaggle.com/zynicide/wine-reviews). Reviews were scraped from 
+WineEnthusiast, which contain information about both the wine itself as well as 
+the reviewer's description of that wine. Here, I provide a subset of the data. 
+You may consider each of these observations to be an
+independent, representative sample of all wines.
+
+The variables are as follows
+
+- `country`: the country that the wine is from (France, Italy, US)
+- `points`: the number of points WineEnthusiast rated the wine on a scale of 1-100. 
+- `price`: cost for a bottle (USD)
+- `variety`: type of grapes used to make the wine
+- `type`: red or white wine
+- `title`: title of the wine review
+- `description`: reviewer's description of the wine
+
+The data for today's lab may be found by cloning your repository available at 
+the class GitHub repository. Load the data into your RStudio environment, and
+don't forget to configure GitHub beforehand. Write all R code according to the 
+style guidelines discussed in class. 
+
+
+To following resource provides code needed to make useful symbols. You may use
+the code to typeset the characters of interest in the *narrative* of your
+document:
+
+- $\mu$: `$\mu$`
+- $\alpha$: `$\alpha$`
+- $\ge$: `$\ge$`
+- $\le$: `$\le$`
+- $\neq$: `$\neq$`
+- $H_0$: `$H_0$`
+- $H_a$: `$H_a$`
+
+
+# Configure git
+
+```{r eval=FALSE}
+library(usethis)
+use_git_config(user.name = "github username", user.email = "your email")
+```
+
+
+
+# Exercises
+
+You may load in the data with the following code, where `____` should be
+replaced by a meaningful name of your choosing:
+
+```{r eval=FALSE}
+library(tidyverse)
+library(infer)
+____ <- read_csv("data/wines.csv")
+```
+
+**At the start of each exercise that requires simulation, set a random seed**
+**equal to the exercise number in the R chunk.**
+
+1. Suppose you are interested in knowing if red or white wines in these three countries
+are more rated heigher.
+Comprehensively evaluate the hypothesis that the average `points` of
+white wines is lower than the average `points` of red wines using a simulation-based approach.
+
+
+2. Now suppose you are now interested in how the type of wine (red or white) impacts
+its price. Comprehensively evaluate the hypothesis that
+the average price of red wines is different from the average price of white wines
+in these three countries. Use a CLT-based approach at the $\alpha = 0.05$ level.
+
+
+3. Construct and interpret a a 95% two-sided confidence interval for the 
+difference you investigated in Exercise 2 using a CLT-based approach.
+
+
+4. For this exercise, consider wines from US and Italy only. Evaluate the hypothesis
+that the `country` where the wine is produced is independent of its `type` (red or white).
+Use a simulation-based approach at the $\alpha = 0.05$ level. Visualize your null distribution.
+
+
+5. Maybe we are interested in the point-to-price ratio. Create a new variable which describes this ratio. 
+Wines with higher values for this ratio might indicate that the wine is a good deal.
+
+Let's say I'm doing to a nice dinner party, and I'm told to bring a bottle of wine. 
+I want to bring an acceptable wine, but I don't like these friends enough to spend more 
+than $20 on a bottle of wine, so I have to be strategic. I've been told that a cheap white
+is usually better than a cheap red, but that an expensive red is always better than an expensive white.
+
+Using an appropriate method of your choice, comprehensively evaluate the hypothesis 
+that among wines that are at most $20 per bottle, 
+white wines have a higher average point-to-price ratio compared to red wines. 
+What conclusion would you make at the $\alpha = 0.05$ level? At the $\alpha = 0.10$ level?
+
+
+```{marginfigure}
+**Hint**: refer back to the lectures about probability and the definition of Type I error
+to answer this question! 
+```
+
+6. Suppose you perform 10 independent hypothesis tests at the $\alpha = 0.05$
+level, and further suppose that in reality, the null hypothesis is TRUE for all
+10 tests. What is the probability that you make at least one Type I error?
+
+
+7. Let's say you just really hate white wine and are trying to demonstrate to
+others that it's associated with lower ratings in terms of points. Describe the
+potential ethical ramifications of performing all of these tests and reporting
+only the significant results from the tests that support your narrative. 
+Consider your answer from Exercise 6 in crafting this narrative.
+
+8. Plot and describe the distribution of the `points` of wine.
+
+
+9. From Ex. 4, you should have noticed that the values that `points` takes on lie
+between 80 and 100, even though the points are awarded on the 1-100 scale. 
+This is because WineEnthusiast only provides reviews for wines that are at least 
+considered "Good". They using the following scale for classification of quality:
+
+  - 80-84 = Good
+  - 85-89 = Very good
+  - 90-94 = Outstanding
+  - 95-100 = Classic
+  
+Create a new variable for the quality of each wine based on its points.
+
+Is there evidence to suggest that the quality of a wine and the `country` where its produced
+are associated?
+Comprehensively evaluate this hypothesis using an appropriate method of your choice.
+
+
+# Submission
+
+Knit to PDF to create a PDF document. Knit and commit all remaining changes, 
+and push your work to GitHub. Make sure all files are updated on your GitHub 
+repo.
+
+Please only upload your PDF document to Gradescope. Associate the "Overall"
+graded section with the first page of your PDF, and mark where each answer is 
+to the exercises. If any answer spans multiple pages, then mark all pages.
+

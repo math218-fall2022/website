@@ -1,0 +1,63 @@
+---
+title: "AE 16: Two-sample Inference"
+date: "06.21.2021"
+output: 
+  html_document:
+    theme: readable
+    toc: true
+    toc_depth: 2
+---
+
+### Announcements 
+
+Happy STA 199 break! 
+
+- Tomorrow's lab: Mid-semester feedback + Project proposal work day
+- No class Wednesday or Thursday
+- Becky's Wednesday office hours are cancelled, and rescheduled to Thursday 3:00-4:30
+
+
+Let's look at the diamonds dataset again, this time using a subset of 10000 observations.
+
+
+```{r message = F, warning = F, echo = F}
+library(tidyverse)
+library(infer)
+data(diamonds)
+set.seed(100)
+diamonds_sub <- diamonds %>%
+  sample_n(10000) %>%
+  mutate(cut = as.character(cut),
+         color = as.character(color),
+         clarity = as.character(clarity))
+```
+
+### Exercise 1
+
+Is there evidence that
+the average price of Good diamonds is different from the average price of Ideal diamonds?
+
+Evaluate this question using a simulation based approach. State the null and alternative hypotheses, the p-value, and conclusion in the context of the research problem.  
+
+```{r}
+
+```
+
+### Exercise 2
+
+Answer the same question above using a 95% confidence interval 
+obtained using a CLT-based approach. Don't forget to check your assumptions. How
+does your answer here relate to your conclusion for Ex. 1?
+
+```{r}
+
+  
+```
+
+### Exercise 3
+
+Assess whether there is a relationship between the color of the diamond and its 
+clarity using a hypothesis test at the $\alpha = 0.05$ level. State your hypothesis, 
+provide the test-statistic and its distribution, and evaluate your p-value and 
+decision in the context of the problem.
+

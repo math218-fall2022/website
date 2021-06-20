@@ -362,6 +362,17 @@ class: center, middle
 
 ## Is yawning contagious?
 
+.pull-left[
+![](img/15/yawn1.png)
+]
+.pull-right[
+![](img/15/yawn2.png)
+]
+
+---
+
+## Is yawning contagious?
+
 An experiment conducted by the MythBusters tested if a person can be subconsciously influenced into yawning if another person near them yawns.
 
 They recruited 50 people, spoke to each subject one-one-one, and intentially either yawned
