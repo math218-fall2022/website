@@ -1,6 +1,6 @@
 ---
 title: "HW 02: Statistical inference"
-subtitle: "due Thu, July 1 at 11:59p"
+subtitle: "due Wed, June 30 at 11:59p"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"

@@ -9,6 +9,18 @@ output:
 ## Announcements 
 
 - No class this Wednesday and Thursday, but still lab on Friday!
+- HW 02 will be released this Wednesday, and is due on Wednesday, June 30
+
+### Exam 2
+
+Proposed new schedule: originally, Exam 02 would have been assigned next Friday, July 2. However,
+in order to give you a bit more of a break in between exams, allow you to enjoy your holiday,
+and get feedback in time on HW 02, I am considering moving Exam 02 the following weekend, Friday July 9.
+
+Because the syllabus originally stated the date of Exam 02 as July 2, if this new date 
+does not work for **at least one person**, the exam date will go back to the original.
+**Please email Becky by Wednesday, June 23 if the proposed new date does not work**.
+
 
 
 ### Clone a repo + start a new project
