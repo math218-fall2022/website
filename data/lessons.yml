@@ -110,7 +110,7 @@ lessons:
    slides: "lec-slides/15-two-samp-inf.html"
    appex: "appex15-diff-means.html"
  - title: "More than two groups"
-   slides: "16-chi-sq.html"
+   slides: "lec-slides/16-chi-sq.html"
  - date: "Wed, June 23"
    title: "NO CLASS"
  - title: "Homework 02 Assigned"
