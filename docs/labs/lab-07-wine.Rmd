@@ -145,7 +145,15 @@ potential ethical ramifications of performing all of these tests and reporting
 only the significant results from the tests that support your narrative. 
 Consider your answer from Exercise 6 in crafting this narrative.
 
-8. Plot and describe the distribution of the `points` of wine.
+```{marginfigure}
+**Hint**: if your distribution is skewed, then median and IQR are appropriate 
+summary statistics. If your distribution is symmetric, then mean and standard
+deviation are appropriate.
+```
+
+8. Plot and describe the distribution of the `points` of wine. Also provide 
+appropriate summary statistics when describing your distribution, obtained by
+using the `summarise()` function.
 
 
 9. From Ex. 4, you should have noticed that the values that `points` takes on lie
