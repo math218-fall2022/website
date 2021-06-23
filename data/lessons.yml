@@ -119,6 +119,7 @@ lessons:
    title: "NO CLASS"
  - date: "Fri, June 25"
    title: "Lab 07: Two-sample inference"
+   lab: "lab-07-wine.html"
  - date: "UNIT 3"
    title: "Introductory modeling techniques"
  - date: "Week 08"
