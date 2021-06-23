@@ -534,6 +534,7 @@ font-size: 10pt;
 </div>
 <div id="exercises" class="section level1">
 <h1>Exercises</h1>
+<p><strong>Overall hint:</strong> When performing a hypothesis test, you must provide the significance level of your test, the null and alternative hypotheses, the p-value, your decision, and an interpretation of the p-value in context of the original research question.</p>
 <p>You may load in the data with the following code, where <code>____</code> should be replaced by a meaningful name of your choosing:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(infer)</a>
@@ -544,10 +545,11 @@ font-size: 10pt;
 <li><p>Now suppose you are now interested in how the type of wine (red or white) impacts its price. Comprehensively evaluate the hypothesis that the average price of red wines is different from the average price of white wines in these three countries. Use a CLT-based approach at the <span class="math inline">\(\alpha = 0.05\)</span> level.</p></li>
 <li><p>Construct and interpret a a 95% two-sided confidence interval for the difference you investigated in Exercise 2 using a CLT-based approach.</p></li>
 <li><p>For this exercise, consider wines from US and Italy only. Evaluate the hypothesis that the <code>country</code> where the wine is produced is independent of its <code>type</code> (red or white). Use a simulation-based approach at the <span class="math inline">\(\alpha = 0.05\)</span> level. Visualize your null distribution.</p></li>
-<li><p>Maybe we are interested in the point-to-price ratio. Create a new variable which describes this ratio. Wines with higher values for this ratio might indicate that the wine is a good deal.</p></li>
+<li><p>Let’s say I’m doing to a nice dinner party, and I’m told to bring a bottle of wine. I want to bring an acceptable wine, but I don’t like these friends enough to spend more than $20 on a bottle of wine, so I have to be strategic. I’ve been told that a cheap white is usually better than a cheap red, but that an expensive red is always better than an expensive white. Maybe I should buy a wine based on its points-to-price ratio.</p></li>
 </ol>
-<p>Let’s say I’m doing to a nice dinner party, and I’m told to bring a bottle of wine. I want to bring an acceptable wine, but I don’t like these friends enough to spend more than $20 on a bottle of wine, so I have to be strategic. I’ve been told that a cheap white is usually better than a cheap red, but that an expensive red is always better than an expensive white.</p>
-<p>Using an appropriate method of your choice, comprehensively evaluate the hypothesis that among wines that are at most $20 per bottle, white wines have a higher average point-to-price ratio compared to red wines. What conclusion would you make at the <span class="math inline">\(\alpha = 0.05\)</span> level? At the <span class="math inline">\(\alpha = 0.10\)</span> level?</p>
+<p>Create a new variable for this ratio. Wines with higher values for this ratio might indicate that the wine is a good deal.</p>
+<p>Then, using a CLT-based approach, comprehensively evaluate the hypothesis at the <span class="math inline">\(\alpha = 0.05\)</span> level that among wines that are at most $20 per bottle, white wines have a higher average point-to-price ratio compared to red wines.</p>
+<p>How would your decision and conclusion change if we used <span class="math inline">\(\alpha = 0.10\)</span> instead?</p>
 <p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>Hint</strong>: refer back to the lectures about probability and the definition of Type I error to answer this question!</span></span></p>
 <ol start="6" style="list-style-type: decimal">
 <li><p>Suppose you perform 10 independent hypothesis tests at the <span class="math inline">\(\alpha = 0.05\)</span> level, and further suppose that in reality, the null hypothesis is TRUE for all 10 tests. What is the probability that you make at least one Type I error?</p></li>

@@ -76,6 +76,11 @@ use_git_config(user.name = "github username", user.email = "your email")
 
 # Exercises
 
+**Overall hint:** When performing a hypothesis test, you must provide the 
+significance level of your test, the null and alternative hypotheses, the 
+p-value, your decision, and an interpretation of the p-value in context of the 
+original research question. 
+
 You may load in the data with the following code, where `____` should be
 replaced by a meaningful name of your choosing:
 
@@ -109,18 +114,19 @@ that the `country` where the wine is produced is independent of its `type` (red 
 Use a simulation-based approach at the $\alpha = 0.05$ level. Visualize your null distribution.
 
 
-5. Maybe we are interested in the point-to-price ratio. Create a new variable which describes this ratio. 
-Wines with higher values for this ratio might indicate that the wine is a good deal.
-
-Let's say I'm doing to a nice dinner party, and I'm told to bring a bottle of wine. 
+5. Let's say I'm doing to a nice dinner party, and I'm told to bring a bottle of wine. 
 I want to bring an acceptable wine, but I don't like these friends enough to spend more 
 than $20 on a bottle of wine, so I have to be strategic. I've been told that a cheap white
-is usually better than a cheap red, but that an expensive red is always better than an expensive white.
+is usually better than a cheap red, but that an expensive red is always better than an expensive white. Maybe I should buy a wine based on its points-to-price ratio. 
 
-Using an appropriate method of your choice, comprehensively evaluate the hypothesis 
+Create a new variable for this ratio. 
+Wines with higher values for this ratio might indicate that the wine is a good deal. 
+
+Then, using a CLT-based approach, comprehensively evaluate the hypothesis at the $\alpha = 0.05$ level
 that among wines that are at most $20 per bottle, 
 white wines have a higher average point-to-price ratio compared to red wines. 
-What conclusion would you make at the $\alpha = 0.05$ level? At the $\alpha = 0.10$ level?
+
+How would your decision and conclusion change if we used $\alpha = 0.10$ instead?
 
 
 ```{marginfigure}

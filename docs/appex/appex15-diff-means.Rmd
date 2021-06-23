@@ -25,7 +25,7 @@ does not work for **at least one person**, the exam date will go back to the ori
 
 ### Clone a repo + start a new project
 
-- Clone the **ae-15** repo and start a new project in RStudio. 
+- Clone the **ae-15-real** repo and start a new project in RStudio. 
 
 - Configure git by running the code below in the console. Be sure to fill in your GitHub username and email associated with your Github account. 
 

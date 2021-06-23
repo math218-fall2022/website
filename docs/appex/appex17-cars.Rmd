@@ -1,0 +1,75 @@
+---
+title: "AE 17: Car prices"
+date: "06.28.2021"
+output: 
+  html_document:
+    theme: readable
+---
+## Announcements 
+
+
+```{r load-packages, include = FALSE}
+library(tidyverse)
+library(broom)
+```
+
+The dataset `car_prices.csv` contains attributes of cars offered for sale on 
+cars.com in 2017^[The data is from the `Stat2Data` R package.]. 
+
+- `type`: Model (Accord, Maxima, Mazda6)
+- `age`: Age of the used car (in years)
+- `price`: Price (in thousands of dollars)
+- `mileage`: Previous miles driven (in thousands of miles)
+
+```{r load-data, message = FALSE}
+car_prices <- read_csv("data/car_prices.csv")
+```
+
+## Price and Mileage
+
+Consider a regression model with the response `price` and a single predictor `mileage`. 
+
+### Exercise 1
+
+Create a scatterplot of price and mileage.
+
+### Exercise 2 
+
+Use appropriate functions in `R` to find the fitted model and display the results in tidy format. Write out the equation of the fitted model, then include a visualization of the linear model on the scatterplot from Exercise 1. 
+
+### Exercise 3
+
+Interpret the slope and intercept in the context of the problem.
+
+### Exercise 4
+
+What is the predicted selling price of a car with 50,000 miles?
+
+### Exercise 5
+
+Suppose my friend has a Honda Accord with 225,000 miles. Is it appropriate to use this model to make a prediction for the selling price? Why or why not?
+
+## Price and Type
+
+Consider a regression model with the response `price` and the categorical predictor `type` (Accord, Maxima, Mazda6).
+
+
+### Exercise 6
+
+Use appropriate functions in `R` to find the fitted model and display the results in tidy format. Write out the equation of the fitted model.
+
+### Exercise 7
+
+Interpret the intercept and slope(s) in the context of the problem.
+
+### Exercise 8
+
+How many terms are in the model for `type`? Is this equal to the number of car types in the data set? If not, briefly explain why the number of terms for `type` in the model differs from the number car types in the data set.
+
+### Exercise 9
+
+How does the average price of Maximas compare to the average price of Accords? 
+
+### Exercise 10
+
+What are possible limitations of your two regression models?
