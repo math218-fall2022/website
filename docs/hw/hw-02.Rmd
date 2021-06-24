@@ -69,7 +69,7 @@ intervals.
 surgeries that require intubation. Is there evidence that the mean BMI among
 such patients differs from the mean BMI among all German adults of 26 kg/m$^2$?
 Assess this hypothesis using a simulation-based approach. 
-Provide a visualization of your simulated null distribution and observed data.
+Provide a visualization of your simulated null distribution and observed data (sample statistic).
 
 3. It may be possible that ASA classification may be associated with throat 
 pain after surgery. Create a new binary variable that corresponds to whether
