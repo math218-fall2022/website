@@ -9,4 +9,5 @@ output:
 - [Reading 02: Data Visualization & Exploration](./reading-02.html), due 5/24
 - [Reading 03: Probability](./reading-03.html), due 6/2
 - [Reading 04: Bootstrap and Simulation-based Inference](./reading-04.html), due 6/14
-- [Reading 05: Central Limit Theorem](./reading-05.html), due 6/21
+- [Reading 05: Central Limit Theorem](./reading-05.html), due 6/25
+- [Reading 06: Linear Regression](./reading-06.html), due 7/5

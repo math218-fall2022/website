@@ -1,5 +1,5 @@
 ---
-title: "Reading 06: Model Validation"
+title: "Reading 06: Linear Regression"
 output: 
   html_document: 
     theme: yeti
@@ -9,14 +9,13 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-### Due Thursday, October 24
+## Due Monday, July 5
 
 ### Required:
-     
-- Cross-Validation: [Introduction to Statistical Learning](https://www-bcf.usc.edu/~gareth/ISL/ISLR%20First%20Printing.pdf), pages 175 - 184 
-    
-- Watch: https://www.youtube.com/watch?v=TIgfjmp-4BA
 
+- [Introduction to Modern Statistics: Introduction to Linear Regression (7.1-7.3)](https://openintro-ims.netlify.app/model-slr.html)
+- [Introduction to Modern Statistics: Multiple Linear Regression (8.1-8.4)](https://openintro-ims.netlify.app/model-mlr.html)
+    
 <br>
 <br>
 

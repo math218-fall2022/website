@@ -1,5 +1,5 @@
 ---
-title: "Reading 05: Regression"
+title: "Reading 05: CLT"
 output: 
   html_document: 
     theme: yeti
@@ -9,11 +9,13 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Due Monday, June 21
+## Due Friday, June 25
 
 ### Required:
 
-- [Introduction to Modern Statistics: 5.3](https://openintro-ims.netlify.app/intro-stat-inference.html#inf-math)
+- [Introduction to Modern Statistics: CLT (19.2)](https://openintro-ims.netlify.app/inference-one-mean.html)
+
+- [Introduction to Modern Statistics: Comparing two means (20.1-20.4)](https://openintro-ims.netlify.app/inference-two-means.html)
     
 <br>
 <br>
