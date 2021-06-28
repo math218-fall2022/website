@@ -102,7 +102,7 @@ paris_paintings <- read_csv("data/paris_paintings.csv",
 ```
 
 
-[Click here](https://sta199-fa20-002.netlify.app/slides/paris_codebook.html) for Paris Paintings codebook
+[Click here](https://github.com/sta199-summer2021/website/tree/master/docs/slides/lec-slides/paris_paintings_codebook.html) for Paris Paintings codebook
 
 .pull-left[
 ```{r echo = F, out.width = "30%", fig.cap = "Sandra van Ginhoven"}

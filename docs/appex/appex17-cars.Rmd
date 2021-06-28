@@ -7,6 +7,11 @@ output:
 ---
 ## Announcements 
 
+Exam 2 is moved to Friday, July 9, and there is lab this Friday instead.
+
+**Reminder**: project proposals are due on Friday, July 9 as well. Look to the Project website for more information. A Github repository for your project will soon be made.
+
+## Exercises
 
 ```{r load-packages, include = FALSE}
 library(tidyverse)
