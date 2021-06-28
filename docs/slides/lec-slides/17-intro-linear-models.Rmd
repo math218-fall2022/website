@@ -102,7 +102,7 @@ paris_paintings <- read_csv("data/paris_paintings.csv",
 ```
 
 
-[Click here](https://github.com/sta199-summer2021/website/tree/master/docs/slides/lec-slides/paris_paintings_codebook.html) for Paris Paintings codebook
+[Click here](https://github.com/sta199-summer2021/website/tree/master/docs/slides/lec-slides/paris_paintings_codebook.pdf) for Paris Paintings codebook
 
 .pull-left[
 ```{r echo = F, out.width = "30%", fig.cap = "Sandra van Ginhoven"}
@@ -184,6 +184,7 @@ paris_paintings %>% filter(name == "R1777-89a") %>%
 ```
 
 ---
+## Indicator variables 
 
 ```{r}
 paris_paintings %>% filter(name == "R1777-89a") %>% 
@@ -534,7 +535,10 @@ to be higher, on average, by 0.78 inches.
 - .vocab[Intercept]: Paintings that are 0 inches wide are expected to be 3.62 inches high,
 on average.
     - Does this make sense?
-    
+   
+--
+
+- Why is there a "hat" on the response variable?
 ---
 
 ## The linear model with a single predictor
@@ -544,6 +548,8 @@ and the $\beta_1$ (population parameter for the slope) in the
 following model:
 
 $$ \hat{y} = \beta_0 + \beta_1~x $$
+
+$\beta_1$ is often called the .vocab[coefficient] for the predictor variable $x$
 
 --
 
@@ -638,9 +644,21 @@ class: middle, center
 
 ## Categorical Predictors
 
+
+
 ---
 
 ## What about non-continuous predictors?
+
+```{r echo=FALSE}
+paris_paintings %>% 
+  select(name, price, landsALL) %>% 
+  slice(1:8)
+```
+
+---
+
+## Categorical predictor with 2 levels
 
 Height & landscape features
 
@@ -671,15 +689,7 @@ average, to be 22.68 inches tall.
 
 ---
 
-## Categorical predictor with 2 levels
 
-```{r echo=FALSE}
-paris_paintings %>% 
-  select(name, price, landsALL) %>% 
-  slice(1:8)
-```
-
----
 
 ### Categorical predictors with more than 2 levels
 
