@@ -1,6 +1,8 @@
 ---
 title: "Paris Paintings"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 These data were collected by Hilary Coe Cronheim and Sandra van Ginhoven (Duke Art, Art History & Visual Studies PhD students) as part of the Data Expeditions project sponsored by [iiD](https://bigdata.duke.edu/).
