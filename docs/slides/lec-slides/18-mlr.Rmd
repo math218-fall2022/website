@@ -135,50 +135,46 @@ library(broom)
 ```
 
 ```{r message=FALSE}
-paris_paintings <- read_csv("data/paris_paintings.csv", 
-               na = c("n/a", "", "NA"))
+car_prices <- read_csv("data/car_prices.csv")
 ```
-
-- [Paris Paintings Codebook](https://sta199-fa20-003.netlify.app/slides/lec-slides/paris_codebook.html)
-- Source: Printed catalogues from 28 auction sales held in Paris 1764 - 1780
-- 3,393 paintings, prices, descriptive details, characteristics of the auction 
-and buyer (over 60 variables)
 
 ---
 
 ## Single numerical predictor 
 
 ```{r}
-m_ht_wd <- lm(Height_in ~ Width_in, data = paris_paintings)
-tidy(m_ht_wd)
+m_pr_mi <- lm(price ~ mileage, data = car_prices)
+tidy(m_pr_mi)
 ```
 
-$$\widehat{Height_{in}} = 3.62 + 0.78~Width_{in}$$
-
----
-
-## Single categorical predictor (2 levels)
-
-```{r}
-m_ht_lands <- lm(Height_in ~ factor(landsALL), data = paris_paintings)
-tidy(m_ht_lands)
-```
-
-$$\widehat{Height_{in}} = 22.68 - 5.65~landsALL$$
+$$\widehat{price_{1000}} = 21.37 -0.13~mileage_{per1000}$$
 
 ---
 
 ## Single categorical predictor (> 2 levels)
 
 ```{r}
-m_ht_sch <- lm(Height_in ~ school_pntg, data = paris_paintings)
-tidy(m_ht_sch)
+m_pr_type <- lm(price ~ type, data = car_prices)
+tidy(m_pr_type)
 ```
 
-.tiny[
-$$\widehat{Height_{in}} = 14 + 2.33~sch_{D/FL} + 10.2~sch_F + \\ 1.65~sch_G + 
-10.3~sch_I + 30.4~sch_S + 2.87~sch_X$$
-]
+$$\widehat{price_{1000}} = 14.3 +1.19 ~typeMaxima- 2.77~typeMazda6$$
+
+---
+
+## Single categorical predictor (> 2 levels)
+
+$$\widehat{price_{1000}} = 14.3 +1.19 ~typeMaxima- 2.77~typeMazda6$$
+
+How does the average price of Maximas compare to the average price of Accords?
+
+--
+
+For Maximas: $typeMaxima = 1$ and $typeMazda6 = 0$. The average price of Maximas is 
+$$\widehat{price_{1000}} = 14.3 +1.19 \times 1- 2.77 \times 0 = 14.3 +1.19$$
+
+For Accords: $typeMaxima = 0$ and $typeMazda6 = 0$. The average price of Accords is 
+$$\widehat{price_{1000}} = 14.3 +1.19 \times 0 - 2.77 \times 0 = 14.3 $$
 
 
 
@@ -189,14 +185,16 @@ class: center, middle
 
 ## The linear model with multiple predictors
 
----
 
+---
 
 ## The linear model with multiple predictors
 
 - Population model:
 
 $$ \hat{y} = \beta_0 + \beta_1~x_1 + \beta_2~x_2 + \cdots + \beta_k~x_k $$
+
+where $k$ is the number of explanatory variables.
 
 --
 
@@ -256,6 +254,8 @@ ggplot(data = sports_car_prices,
 
 ## Modeling with main effects 
 
+A .vocab[main effect] is the effect of a single independent variable on a dependent variable
+
 ```{r}
 m_main <- lm(price ~ age + car, data = sports_car_prices)
 m_main %>%
@@ -296,12 +296,12 @@ $$\begin{align}\widehat{price} &= 44310 - 2487~age + 21648 \times 1\\
 .alert[
 **Jaguar**
 
-$$\begin{align}\widehat{price} &= 44310 - 2487~age + 21648 \times 0\\
+$$\begin{align}\widehat{price}_{jaguar} &= 44310 - 2487~age + 21648 \times 0\\
 &= 44310 - 2487~age\\\end{align}$$
 
 **Porsche**
 
-$$\begin{align}\widehat{price} &= 44310 - 2487~age + 21648 \times 1\\
+$$\begin{align}\widehat{price}_{porsche} &= 44310 - 2487~age + 21648 \times 1\\
 &= 65958 - 2487~age\\\end{align}$$
 ]
 

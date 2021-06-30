@@ -365,9 +365,8 @@ pre code {
 </div>
 
 
-<div id="announcements" class="section level2">
-<h2>Announcements</h2>
-<pre class="r"><code>paintings &lt;- read_csv(&quot;data/paris_paintings.csv&quot;)</code></pre>
+<pre class="r"><code>paintings &lt;- read_csv(&quot;data/paris_paintings.csv&quot;, 
+                            na = c(&quot;n/a&quot;, &quot;&quot;, &quot;NA&quot;))</code></pre>
 <p>We will be looking at the Paris Paintings data set in today’s application exercise. We’ll primarily focus on the variables:</p>
 <ul>
 <li><code>Height_in</code>: Height (in inches)</li>
@@ -427,8 +426,7 @@ pre code {
 </div>
 <div id="exercise-10" class="section level3">
 <h3>Exercise 10</h3>
-<p>Interpret <span class="math inline">\(R^2\)</span> for the model chosen in the previous exercise.</p>
-</div>
+<p>Interpret the <span class="math inline">\(R^2\)</span> for the model chosen in the previous exercise.</p>
 </div>
 
 

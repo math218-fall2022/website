@@ -618,6 +618,12 @@ font-size: 10pt;
 </tr>
 </tbody>
 </table>
+<p>To following resource provides code needed to make useful symbols. You may use the code to typeset the characters of interest in the <em>narrative</em> of your document:</p>
+<ul>
+<li><span class="math inline">\(\hat{y}\)</span>: <code>$\hat{y}$</code></li>
+<li><span class="math inline">\(\widehat{long-y}\)</span>: <code>$\widehat{long-y}$</code></li>
+<li><span class="math inline">\(y_{unit}\)</span>: <code>$y_{unit}$</code></li>
+</ul>
 </div>
 </div>
 <div id="exercises" class="section level1">
@@ -636,7 +642,7 @@ font-size: 10pt;
 <h2>Part 2: Exploratory Data Analysis</h2>
 <ol start="2" style="list-style-type: decimal">
 <li><p>Visualize the distribution of <code>life_expectancy</code>. Is the distribution skewed? What does that tell you about the average life expectancy across countries? Is this what you expected to see? Why, or why not? Include any summary statistics and visualizations you use in your response.</p></li>
-<li><p>Visualize and describe the relationship between <code>life_expectancy</code> and <code>infant_mortality</code>.</p></li>
+<li><p>Visualize and describe the relationship between <code>life_expectancy</code> and <code>schooling</code>.</p></li>
 </ol>
 </div>
 <div id="part-3-simple-linear-regression-with-a-numerical-predictor" class="section level2">
@@ -646,9 +652,6 @@ font-size: 10pt;
 <li><p>Let’s see if the apparent trend in the plot is something more than natural variation. Fit a linear model called <code>m_school</code> to predict average <code>life expectancy</code> by average number of years of schooling (<code>schooling</code>). Based on the regression output, write the linear model.</p></li>
 <li><p>Replot your visualization from Exercise 3, and add the regression line to this plot in orange color. Turn off the shading for the uncertainty of the line.</p></li>
 <li><p>Interpret the slope of the linear model in context of the data.</p></li>
-</ol>
-<p>For each additional year of schooling, life expectancy is expected to increase by 2.23 years, on average.</p>
-<ol start="7" style="list-style-type: decimal">
 <li><p>Interpret the intercept of the linear model in context of the data. Comment on whether or not the intercept makes sense in this context.</p></li>
 <li><p>Determine the <span class="math inline">\(R^2\)</span> of the model and interpret it in context of the data.</p></li>
 </ol>

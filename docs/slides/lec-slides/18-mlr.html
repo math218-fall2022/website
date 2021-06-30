@@ -107,14 +107,8 @@ library(broom)
 
 
 ```r
-paris_paintings &lt;- read_csv("data/paris_paintings.csv", 
-               na = c("n/a", "", "NA"))
+car_prices &lt;- read_csv("data/car_prices.csv")
 ```
-
-- [Paris Paintings Codebook](https://sta199-fa20-003.netlify.app/slides/lec-slides/paris_codebook.html)
-- Source: Printed catalogues from 28 auction sales held in Paris 1764 - 1780
-- 3,393 paintings, prices, descriptive details, characteristics of the auction 
-and buyer (over 60 variables)
 
 ---
 
@@ -122,39 +116,19 @@ and buyer (over 60 variables)
 
 
 ```r
-m_ht_wd &lt;- lm(Height_in ~ Width_in, data = paris_paintings)
-tidy(m_ht_wd)
+m_pr_mi &lt;- lm(price ~ mileage, data = car_prices)
+tidy(m_pr_mi)
 ```
 
 ```
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic  p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)    3.62    0.254        14.3 8.82e-45
-## 2 Width_in       0.781   0.00950      82.1 0
+## 1 (Intercept)   21.4     0.609        35.1 1.69e-53
+## 2 mileage       -0.128   0.00874     -14.6 2.55e-25
 ```
 
-`$$\widehat{Height_{in}} = 3.62 + 0.78~Width_{in}$$`
-
----
-
-## Single categorical predictor (2 levels)
-
-
-```r
-m_ht_lands &lt;- lm(Height_in ~ factor(landsALL), data = paris_paintings)
-tidy(m_ht_lands)
-```
-
-```
-## # A tibble: 2 x 5
-##   term              estimate std.error statistic  p.value
-##   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-## 1 (Intercept)          22.7      0.328      69.1 0       
-## 2 factor(landsALL)1    -5.65     0.532     -10.6 7.97e-26
-```
-
-`$$\widehat{Height_{in}} = 22.68 - 5.65~landsALL$$`
+`$$\widehat{price_{1000}} = 21.37 -0.13~mileage_{per1000}$$`
 
 ---
 
@@ -162,27 +136,36 @@ tidy(m_ht_lands)
 
 
 ```r
-m_ht_sch &lt;- lm(Height_in ~ school_pntg, data = paris_paintings)
-tidy(m_ht_sch)
+m_pr_type &lt;- lm(price ~ type, data = car_prices)
+tidy(m_pr_type)
 ```
 
 ```
-## # A tibble: 7 x 5
-##   term            estimate std.error statistic p.value
-##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Intercept)        14.0       10.0     1.40  0.162  
-## 2 school_pntgD/FL     2.33      10.0     0.232 0.816  
-## 3 school_pntgF       10.2       10.0     1.02  0.309  
-## 4 school_pntgG        1.65      11.9     0.139 0.889  
-## 5 school_pntgI       10.3       10.0     1.02  0.306  
-## 6 school_pntgS       30.4       11.4     2.68  0.00744
-## 7 school_pntgX        2.87      10.3     0.279 0.780
+## # A tibble: 3 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)    14.3      0.977    14.6   3.94e-25
+## 2 typeMaxima      1.19     1.38      0.858 3.93e- 1
+## 3 typeMazda6     -2.77     1.38     -2.01  4.79e- 2
 ```
 
-.tiny[
-`$$\widehat{Height_{in}} = 14 + 2.33~sch_{D/FL} + 10.2~sch_F + \\ 1.65~sch_G + 
-10.3~sch_I + 30.4~sch_S + 2.87~sch_X$$`
-]
+`$$\widehat{price_{1000}} = 14.3 +1.19 ~typeMaxima- 2.77~typeMazda6$$`
+
+---
+
+## Single categorical predictor (&gt; 2 levels)
+
+`$$\widehat{price_{1000}} = 14.3 +1.19 ~typeMaxima- 2.77~typeMazda6$$`
+
+How does the average price of Maximas compare to the average price of Accords?
+
+--
+
+For Maximas: `\(typeMaxima = 1\)` and `\(typeMazda6 = 0\)`. The average price of Maximas is 
+`$$\widehat{price_{1000}} = 14.3 +1.19 \times 1- 2.77 \times 0 = 14.3 +1.19$$`
+
+For Accords: `\(typeMaxima = 0\)` and `\(typeMazda6 = 0\)`. The average price of Accords is 
+$$\widehat{price_{1000}} = 14.3 +1.19 \times 0 - 2.77 \times 0 = 14.3 $$
 
 
 
@@ -193,14 +176,16 @@ class: center, middle
 
 ## The linear model with multiple predictors
 
----
 
+---
 
 ## The linear model with multiple predictors
 
 - Population model:
 
 $$ \hat{y} = \beta_0 + \beta_1~x_1 + \beta_2~x_2 + \cdots + \beta_k~x_k $$
+
+where `\(k\)` is the number of explanatory variables.
 
 --
 
@@ -229,7 +214,7 @@ on cars.com.
 
 ## Price, age, and make
 
-&lt;img src="18-mlr_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="18-mlr_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -241,11 +226,13 @@ on cars.com.
 Does the relationship between age and price depend on the make of the car?
 ]
 
-&lt;img src="18-mlr_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="18-mlr_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ## Modeling with main effects 
+
+A .vocab[main effect] is the effect of a single independent variable on a dependent variable
 
 
 ```r
@@ -297,12 +284,12 @@ $$ \widehat{price} = 44310 - 2487~age + 21648~carPorsche $$
 .alert[
 **Jaguar**
 
-`$$\begin{align}\widehat{price} &amp;= 44310 - 2487~age + 21648 \times 0\\
+`$$\begin{align}\widehat{price}_{jaguar} &amp;= 44310 - 2487~age + 21648 \times 0\\
 &amp;= 44310 - 2487~age\\\end{align}$$`
 
 **Porsche**
 
-`$$\begin{align}\widehat{price} &amp;= 44310 - 2487~age + 21648 \times 1\\
+`$$\begin{align}\widehat{price}_{porsche} &amp;= 44310 - 2487~age + 21648 \times 1\\
 &amp;= 65958 - 2487~age\\\end{align}$$`
 ]
 
@@ -316,7 +303,7 @@ make of car (.vocab[same slopes])
 
 ## Interpretation of main effects
 
-&lt;img src="18-mlr_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="18-mlr_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -361,7 +348,7 @@ Why is our linear regression model different from what we got from `geom_smooth(
 
 ]
 
-&lt;img src="18-mlr_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="18-mlr_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -412,7 +399,7 @@ ggplot(data = sports_car_prices,
   labs(x = "Age (years)", y = "Price (USD)", color = "Car Make")
 ```
 
-&lt;img src="18-mlr_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="18-mlr_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -485,7 +472,7 @@ of the car (.vocab[different slopes]).
 ---
 
 
-&lt;img src="18-mlr_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="18-mlr_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 `$$\widehat{price} = 56988 - 5040~age + 6387~carPorsche + 2969~age \times carPorsche$$`
 

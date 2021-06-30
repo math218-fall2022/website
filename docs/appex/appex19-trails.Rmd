@@ -8,23 +8,20 @@ output:
 ---
 ## Announcements 
 
-### Project - Draft due Oct 28
+No class next Monday, July 5. Enjoy your long weekend! 
 
-- Write the draft in the `written-report.Rmd` file in the project repo. 
+Monday office hours are cancelled, and rescheduled to Tuesday, July 6 from 9:00-10:30am.
 
-- Draft should include 
-   - the research context and motivation
-   - exploratory data analysis
-   - any inference, modeling, or conclusions.
+### Project proposal due in a week from tomorrow (July 9)
 
+- Write the proposal in the `proposal.Rmd` file in the project repo, and upload your data into the `data` folder. See the [project description](https://sta199-summer2021.github.io/website/project/project.html) for more information.
 
-## Exam 02 
+- Proposal should include:
+   - a description of the data
+   - defintion of the variables you intend to explore
+   - EDA
+   - at least two questions that you are interested in answering using the data
 
-- Released Thursday, Oct 22 at 9a
-- Due Sunday, Oct 25 at 11:59p
-- Covers statistical inference weeks 05 - 08
-- No office hours + Piazza will be inactive during the exam
-- If you have questions, email Prof. Tackett (maria.tackett@duke.edu)
 
 ## Exercises 
 
@@ -33,13 +30,13 @@ library(tidyverse)
 library(broom)
 ```
 
-The Pioneer Valley Planning Commission collected data in Florence, MA for 90 days from April 5 to November 15, 2005 using a laser sensor, with breaks in the laser beam recording when a rail-trail user passed the data collection station.
+The Pioneer Valley Planning Commission collected data in Florence, MA for 90 days from April 5 to November 15, 2005 using a laser sensor, with breaks in the laser beam recording when a rail-trail user passed the data collection station. The dataset is called `RailTrail`, and we will be examining the following variables:
 
 - `hightemp`: daily high temperature (in degrees Fahrenheit)
 - `volume`: estimated number of trail users that day (number of breaks recorded)
 - `fall`: 1: season is Fall, 0: season is not Fall
 
-```{r}
+```{r warning = F}
 library(mosaicData)
 data(RailTrail)
 ```

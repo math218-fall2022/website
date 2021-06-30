@@ -5,8 +5,6 @@ output:
   html_document:
     theme: readable
 ---
-## Announcements 
-
 
 ```{r load-packages, include = FALSE}
 library(tidyverse)
@@ -14,7 +12,8 @@ library(broom)
 ```
 
 ```{r load-data, message = FALSE}
-paintings <- read_csv("data/paris_paintings.csv")
+paintings <- read_csv("data/paris_paintings.csv", 
+                            na = c("n/a", "", "NA"))
 ```
 
 We will be looking at the Paris Paintings data set in today's application exercise. We'll primarily focus on the variables: 
@@ -77,4 +76,4 @@ Based on your answer to the previous exercise, which model is a better fit for t
 
 ### Exercise 10
 
-Interpret $R^2$ for the model chosen in the previous exercise.
+Interpret the $R^2$ for the model chosen in the previous exercise.

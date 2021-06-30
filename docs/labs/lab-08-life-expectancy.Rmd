@@ -103,6 +103,17 @@ life_expect <- read_csv("data/life_expectancy.csv")
 | `income_composition`    | Human Development Index in terms of income composition of resources (index ranging from 0 to 1)
 | `schooling`    | Number of years of schooling
 
+
+
+To following resource provides code needed to make useful symbols. You may use
+the code to typeset the characters of interest in the *narrative* of your
+document:
+
+- $\hat{y}$: `$\hat{y}$`
+- $\widehat{long-y}$: `$\widehat{long-y}$`
+- $y_{unit}$: `$y_{unit}$`
+
+
 # Exercises
 
 ## Part 1: Data Manipulation 
@@ -122,7 +133,7 @@ life_expect <- read_csv("data/life_expectancy.csv")
     you use in your response.
 
 
-3.  Visualize and describe the relationship between `life_expectancy` and `infant_mortality`. 
+3.  Visualize and describe the relationship between `life_expectancy` and `schooling`. 
     
 ## Part 3: Simple linear regression with a numerical predictor
 
@@ -140,7 +151,6 @@ Linear model is in the form $\hat{y} = b_0 + b_1 x$.
 
 6.  Interpret the slope of the linear model in context of the data.
 
-For each additional year of schooling, life expectancy is expected to increase by 2.23 years, on average.
 
 7.  Interpret the intercept of the linear model in context of the data. Comment on whether 
     or not the intercept makes sense in this context.

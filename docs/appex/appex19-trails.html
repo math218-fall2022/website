@@ -368,40 +368,32 @@ pre code {
 
 <div id="announcements" class="section level2">
 <h2>Announcements</h2>
-<div id="project---draft-due-oct-28" class="section level3">
-<h3>Project - Draft due Oct 28</h3>
+<p>No class next Monday, July 5. Enjoy your long weekend!</p>
+<p>Monday office hours are cancelled, and rescheduled to Tuesday, July 6 from 9:00-10:30am.</p>
+<div id="project-proposal-due-in-a-week-from-tomorrow-july-9" class="section level3">
+<h3>Project proposal due in a week from tomorrow (July 9)</h3>
 <ul>
-<li><p>Write the draft in the <code>written-report.Rmd</code> file in the project repo.</p></li>
-<li>Draft should include
+<li><p>Write the proposal in the <code>proposal.Rmd</code> file in the project repo, and upload your data into the <code>data</code> folder. See the <a href="https://sta199-summer2021.github.io/website/project/project.html">project description</a> for more information.</p></li>
+<li>Proposal should include:
 <ul>
-<li>the research context and motivation</li>
-<li>exploratory data analysis</li>
-<li>any inference, modeling, or conclusions.</li>
+<li>a description of the data</li>
+<li>defintion of the variables you intend to explore</li>
+<li>EDA</li>
+<li>at least two questions that you are interested in answering using the data</li>
 </ul></li>
 </ul>
 </div>
 </div>
-<div id="exam-02" class="section level2">
-<h2>Exam 02</h2>
-<ul>
-<li>Released Thursday, Oct 22 at 9a</li>
-<li>Due Sunday, Oct 25 at 11:59p</li>
-<li>Covers statistical inference weeks 05 - 08</li>
-<li>No office hours + Piazza will be inactive during the exam</li>
-<li>If you have questions, email Prof. Tackett (<a href="mailto:maria.tackett@duke.edu" class="email">maria.tackett@duke.edu</a>)</li>
-</ul>
-</div>
 <div id="exercises" class="section level2">
 <h2>Exercises</h2>
-<p>The Pioneer Valley Planning Commission collected data in Florence, MA for 90 days from April 5 to November 15, 2005 using a laser sensor, with breaks in the laser beam recording when a rail-trail user passed the data collection station.</p>
+<p>The Pioneer Valley Planning Commission collected data in Florence, MA for 90 days from April 5 to November 15, 2005 using a laser sensor, with breaks in the laser beam recording when a rail-trail user passed the data collection station. The dataset is called <code>RailTrail</code>, and we will be examining the following variables:</p>
 <ul>
 <li><code>hightemp</code>: daily high temperature (in degrees Fahrenheit)</li>
 <li><code>volume</code>: estimated number of trail users that day (number of breaks recorded)</li>
 <li><code>fall</code>: 1: season is Fall, 0: season is not Fall</li>
 </ul>
-<pre class="r"><code>library(mosaicData)</code></pre>
-<pre><code>## Warning: package 'mosaicData' was built under R version 3.6.2</code></pre>
-<pre class="r"><code>data(RailTrail)</code></pre>
+<pre class="r"><code>library(mosaicData)
+data(RailTrail)</code></pre>
 <div id="exercise-1" class="section level3">
 <h3>Exercise 1</h3>
 <p>Fit a linear model using the daily high temperature to predict the estimated number of trail users. Calculate the <span class="math inline">\(R^2\)</span> and <span class="math inline">\(Adj. R^2\)</span> for the model.</p>
