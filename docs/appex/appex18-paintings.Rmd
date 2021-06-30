@@ -6,6 +6,13 @@ output:
     theme: readable
 ---
 
+## Announcements
+
+Your project Github repositories have been created. Reminder that your project proposal is due next Friday, July 9 at 11:59pm. Use the file `project-proposal.Rmd` to write your proposal.
+
+
+## Exercises 
+
 ```{r load-packages, include = FALSE}
 library(tidyverse)
 library(broom)
