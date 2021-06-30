@@ -126,7 +126,9 @@ $$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$
 
 ## AE 18: Review
 
-.alert[$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$]
+.alert[
+$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$
+]
 
 - Intercept: Paintings that are 0 inches wide and do not have landscape elements are expected to be 5.62 inches tall, on average.
 
@@ -322,6 +324,14 @@ where $t^*_{n-2}$ is calculated using a $t$ distribution with $n-2$ degrees of f
 tidy(m_age_miles, conf.int = TRUE, conf.level = 0.95)
 ```
 
+```{r}
+est <- tidy(m_age_miles) %>%
+  filter(term == "age") %>%
+  pull(estimate)
+se <- tidy(m_age_miles) %>%
+  filter(term == "age") %>%
+  pull(std.error)
+```
 ---
 
 ## Calculating the 95% CI manually
@@ -342,8 +352,9 @@ A 95% confidence interval for $\beta_1$ can be calculated as
 
 --
 
+
 ```{r}
-(ci <- 3837 + c(-1,1) * tstar *403)
+(ci <- est + c(-1,1) * tstar *se)
 ```
 
 ---
@@ -356,7 +367,7 @@ tidy(m_age_miles, conf.int = TRUE, conf.level = 0.95) %>%
   select(conf.low, conf.high)
 ```
 
-.vocab[We are 95% confident that for every additional year of a car's age, the 
+.alert[We are 95% confident that for every additional year of a car's age, the 
 mileage is expected to increase, on average, between about 3030 and 4643 miles.]
 
 ---
@@ -462,6 +473,18 @@ other.*
 
 ---
 
+## Examples 
+
+```{r, echo=FALSE, out.width = "50%", fig.align="center"}
+knitr::include_graphics("img/19/violated_conds.png")
+```
+
+Top row: scatterplot of $x$ vs $y$
+
+Bottom row: residual plot 
+
+---
+
 ## `augment` data with model results
 
 - `.fitted`: Predicted value of the response variable
@@ -522,3 +545,124 @@ ggplot(m_age_miles_aug, mapping = aes(x = .resid)) +
   geom_histogram(bins = 15) + labs(x = "Residuals")
 ```
 ]
+
+---
+
+class: center, middle
+
+## Multiple linear regression: inference
+
+---
+
+## Hypothesis testing
+
+For null hypotheses, we now condition on each of the other remaining variables in model.
+
+For example, let's say I want to create a linear model:
+
+$$\widehat{price} = \beta_0 + \beta_{1} ~ mileage + \beta_{2}~ age$$
+
+--
+
+We can write two different null hypotheses:
+
+1. $H_{0}: \beta_{1} = 0$, given `age` is included in the model
+
+2. $H_{0}: \beta_{2} = 0$, given `mileage` is included in the model
+
+---
+
+## Hypothesis tests
+
+```{r}
+m_mult <- lm(price ~ mileage + age, data = sports_car_prices)
+tidy(m_mult)
+```
+
+The p-value for testing $H_{0}: \beta_{1} = 0$, given `age` is included in the model is almost 0.
+
+The p-value for testing $H_{0}: \beta_{2} = 0$, given `mileage` is included in the model is 0.39.
+
+---
+
+## Assessing conditions
+
+```{r}
+m_mult_aug <- augment(m_mult)
+```
+
+Because we have multiple predictors, we also need to check the condition that the explanatory variables are not too correlated.
+
+.vocab[Multicollinearity] occurs when the predictor variables are correlated within themselves. If we have multicollinearity, the coefficients in a multiple regression model can be difficult to interpret.
+
+
+```{r}
+cor(sports_car_prices %>% 
+      select(mileage, age))
+```
+
+---
+
+## Assessing conditions
+
+```{r eval = F}
+corrplot::corrplot(sports_car_prices %>%
+                     dplyr::select(-car) %>%
+                     cor(),
+                   type = "lower")
+```
+
+```{r fig.height = 2, echo = F}
+corrplot::corrplot(sports_car_prices %>%
+                     dplyr::select(-car) %>%
+                     cor(),
+                   type = "lower",
+                   tl.cex=0.5,
+                   method = "color",
+                   cl.pos = "r",
+                   cl.cex = 0.5)
+```
+
+---
+
+## Residuals vs fitted plot
+
+Check .vocab[**L**inearity] and .vocab[**E**qual variance.]
+
+.midi[
+```{r, fig.height = 1.5}
+ggplot(m_mult_aug, mapping = aes(x = .fitted, y = .resid)) +
+  geom_point() + geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
+  labs(x = "Predicted Price", y = "Residuals") 
+```
+]
+
+---
+
+## Residuals in order of collection
+
+Check .vocab[**I**ndependence]
+
+.midi[
+```{r, fig.height = 1.5}
+ggplot(data = m_mult_aug, 
+       aes(x = 1:nrow(sports_car_prices), 
+           y = .resid)) + 
+  geom_point() + geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
+  labs(x = "Index", y = "Residual")
+```
+]
+
+---
+
+## Histogram of residuals
+
+Use to check .vocab[**N**ormality]
+
+.midi[
+```{r fig.height= 1.75}
+ggplot(m_mult_aug, mapping = aes(x = .resid)) +
+  geom_histogram(bins = 15) + labs(x = "Residuals")
+```
+]
+

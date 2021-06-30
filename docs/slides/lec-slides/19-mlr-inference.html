@@ -103,7 +103,9 @@ tidy(m_main)
 
 ## AE 18: Review
 
-.alert[$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$]
+.alert[
+`$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$`
+]
 
 - Intercept: Paintings that are 0 inches wide and do not have landscape elements are expected to be 5.62 inches tall, on average.
 
@@ -334,6 +336,15 @@ tidy(m_age_miles, conf.int = TRUE, conf.level = 0.95)
 ## 2 age            3837.      403.      9.52 1.86e-13    3030.     4643.
 ```
 
+
+```r
+est &lt;- tidy(m_age_miles) %&gt;%
+  filter(term == "age") %&gt;%
+  pull(estimate)
+se &lt;- tidy(m_age_miles) %&gt;%
+  filter(term == "age") %&gt;%
+  pull(std.error)
+```
 ---
 
 ## Calculating the 95% CI manually
@@ -365,12 +376,13 @@ A 95% confidence interval for `\(\beta_1\)` can be calculated as
 --
 
 
+
 ```r
-(ci &lt;- 3837 + c(-1,1) * tstar *403)
+(ci &lt;- est + c(-1,1) * tstar *se)
 ```
 
 ```
-## [1] 3030.308 4643.692
+## [1] 3029.838 4643.199
 ```
 
 ---
@@ -391,7 +403,7 @@ tidy(m_age_miles, conf.int = TRUE, conf.level = 0.95) %&gt;%
 ## 1    3030.     4643.
 ```
 
-.vocab[We are 95% confident that for every additional year of a car's age, the 
+.alert[We are 95% confident that for every additional year of a car's age, the 
 mileage is expected to increase, on average, between about 3030 and 4643 miles.]
 
 ---
@@ -515,6 +527,16 @@ other.*
 
 ---
 
+## Examples 
+
+&lt;img src="img/19/violated_conds.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+Top row: scatterplot of `\(x\)` vs `\(y\)`
+
+Bottom row: residual plot 
+
+---
+
 ## `augment` data with model results
 
 - `.fitted`: Predicted value of the response variable
@@ -557,7 +579,7 @@ ggplot(m_age_miles_aug, mapping = aes(x = .fitted, y = .resid)) +
   labs(x = "Predicted Mileage", y = "Residuals") 
 ```
 
-&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -576,7 +598,7 @@ ggplot(data = m_age_miles_aug,
   labs(x = "Index", y = "Residual")
 ```
 
-&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -592,7 +614,146 @@ ggplot(m_age_miles_aug, mapping = aes(x = .resid)) +
   geom_histogram(bins = 15) + labs(x = "Residuals")
 ```
 
-&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+class: center, middle
+
+## Multiple linear regression: inference
+
+---
+
+## Hypothesis testing
+
+For null hypotheses, we now condition on each of the other remaining variables in model.
+
+For example, let's say I want to create a linear model:
+
+`$$\widehat{price} = \beta_0 + \beta_{1} ~ mileage + \beta_{2}~ age$$`
+
+--
+
+We can write two different null hypotheses:
+
+1. `\(H_{0}: \beta_{1} = 0\)`, given `age` is included in the model
+
+2. `\(H_{0}: \beta_{2} = 0\)`, given `mileage` is included in the model
+
+---
+
+## Hypothesis tests
+
+
+```r
+m_mult &lt;- lm(price ~ mileage + age, data = sports_car_prices)
+tidy(m_mult)
+```
+
+```
+## # A tibble: 3 x 5
+##   term         estimate std.error statistic  p.value
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept) 62950.     3176.       19.8   3.03e-27
+## 2 mileage        -0.695     0.122    -5.68  4.75e- 7
+## 3 age           516.      601.        0.859 3.94e- 1
+```
+
+The p-value for testing `\(H_{0}: \beta_{1} = 0\)`, given `age` is included in the model is almost 0.
+
+The p-value for testing `\(H_{0}: \beta_{2} = 0\)`, given `mileage` is included in the model is 0.39.
+
+---
+
+## Assessing conditions
+
+
+```r
+m_mult_aug &lt;- augment(m_mult)
+```
+
+Because we have multiple predictors, we also need to check the condition that the explanatory variables are not too correlated.
+
+.vocab[Multicollinearity] occurs when the predictor variables are correlated within themselves. If we have multicollinearity, the coefficients in a multiple regression model can be difficult to interpret.
+
+
+
+```r
+cor(sports_car_prices %&gt;% 
+      select(mileage, age))
+```
+
+```
+##           mileage       age
+## mileage 1.0000000 0.7808789
+## age     0.7808789 1.0000000
+```
+
+---
+
+## Assessing conditions
+
+
+```r
+corrplot::corrplot(sports_car_prices %&gt;%
+                     dplyr::select(-car) %&gt;%
+                     cor(),
+                   type = "lower")
+```
+
+&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Residuals vs fitted plot
+
+Check .vocab[**L**inearity] and .vocab[**E**qual variance.]
+
+.midi[
+
+```r
+ggplot(m_mult_aug, mapping = aes(x = .fitted, y = .resid)) +
+  geom_point() + geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
+  labs(x = "Predicted Price", y = "Residuals") 
+```
+
+&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Residuals in order of collection
+
+Check .vocab[**I**ndependence]
+
+.midi[
+
+```r
+ggplot(data = m_mult_aug, 
+       aes(x = 1:nrow(sports_car_prices), 
+           y = .resid)) + 
+  geom_point() + geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
+  labs(x = "Index", y = "Residual")
+```
+
+&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Histogram of residuals
+
+Use to check .vocab[**N**ormality]
+
+.midi[
+
+```r
+ggplot(m_mult_aug, mapping = aes(x = .resid)) +
+  geom_histogram(bins = 15) + labs(x = "Residuals")
+```
+
+&lt;img src="19-mlr-inference_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
 ]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
