@@ -1,0 +1,79 @@
+---
+title: "AE 20: Spam filters"
+subtitle: "Logistic regression"
+date: "07.07.2021"
+output: 
+  html_document:
+    theme: readable
+---
+
+```{r echo = F}
+knitr::opts_chunk$set(warning = F, message = F)
+```
+
+```{r echo  = F}
+library(tidyverse)
+```
+
+## Announcements
+
+### Exam 02
+
+Will be released this Friday, and will be due Sunday, July 11 at 11:59pm, with the same format as Exam 01.
+
+No lab or TA office hours this Friday.
+
+### Project - Proposal due this Friday!
+
+Write the proposal in the `project-proposal.Rmd` file in the project repo. 
+
+
+## Exercises 
+
+Let's filter spam emails! We'll examine a data set of 3921 emails and use logistic regression to determine which ones are potentially spam. 
+
+We'll use the following variables in the analysis: 
+
+- `spam` - 1: email is spam, 0: email is not spam
+- `winner` - yes: "winner" appeared in the email, no: "winner" did not appear in email
+- `num_char` - Number of characters in the email  (in thousands)
+
+```{r}
+email <- read_csv("data/email.csv") %>%
+    mutate(spam = factor(spam))
+```
+
+
+### Exercise 1
+
+Visualize the relationship between (1) `spam` and `winner`, and (2) `spam` and `num_char`. Use these plots to describe the relationship between the response variable and each of the explanatory variables. 
+
+### Exercise 2
+
+Fit a logistic regression model with `spam` as the response and `winner` and `num_char` as explanatory variables. Use the tidy function to display the model output. *Hint: You need to use the glm function and `family = "binomial"` for the model.*
+
+### Exercise 3
+
+Write the model equation. You can use "log-odds-spam" as the response variable.
+
+### Exercise 4
+
+Interpret $\hat{\beta}_{num\_char}$ in terms of the log odds an email is spam. 
+
+### Exercise 5
+
+Interpret $\hat{\beta}_{winner}$ in terms of the log odds an email is spam. 
+
+### Exericse 6
+
+Calculate the predicted log odds that an email that has 400 words and contains the word "winner" is spam. 
+
+
+### Exercise 7
+
+Calculate the predicted probability that an email that has 400 words and contains the word "winner" is spam. 
+
+
+### Exercise 8
+
+Suppose your model is used to identify which emails should be classified as spam and moved to the junk folder. Should the email from the previous question be classified as spam? Briefly explain your decision. 

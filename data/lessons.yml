@@ -136,6 +136,7 @@ lessons:
    title: "MLR: Inference + conditions"
  - date: "Fri, July 2"
    title: "Lab: Regression"
+   lab: "lab-08-life-expectancy.html"
  - date: "Week 09"
  - date: "Mon, July 5"
    title: "NO CLASS: Independence Day"
