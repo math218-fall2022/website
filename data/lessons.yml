@@ -134,7 +134,7 @@ lessons:
    appex: "appex18-paintings.html"
  - date: "Thu, July 1"
    title: "MLR: Inference + conditions"
-   slides: "19-mlr-inference.html"
+   slides: "lrc-slides/19-mlr-inference.html"
    appex: "appex19-trails.html"
  - date: "Fri, July 2"
    title: "Lab: Regression"
