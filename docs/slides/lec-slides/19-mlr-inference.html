@@ -73,7 +73,140 @@ $$ \hat{y} = b_0 + b_1~x_1 + b_2~x_2 + \cdots + b_k~x_k $$
 
 ---
 
+## AE 18: Review
 
+
+```r
+paintings &lt;- read_csv("data/paris_paintings.csv", 
+                            na = c("n/a", "", "NA"))
+```
+
+.question[Fit a main effects model using width and whether the painting has landscape elements to predict the height.]
+
+
+```r
+m_main &lt;- lm(Height_in ~ Width_in + landsALL, data = paintings)
+tidy(m_main)
+```
+
+```
+## # A tibble: 3 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)    5.62    0.269        20.9 1.24e-90
+## 2 Width_in       0.777   0.00909      85.4 0       
+## 3 landsALL      -5.02    0.292       -17.2 3.70e-63
+```
+
+`$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$`
+---
+
+## AE 18: Review
+
+.alert[$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$]
+
+- Intercept: Paintings that are 0 inches wide and do not have landscape elements are expected to be 5.62 inches tall, on average.
+
+- Coefficient for width: Holding all else constant, if we increase the width of a painting by one inch, we expect, on average, for the height of the painting to increase by 0.78 inches.
+
+- Coefficient for landsALL:  Holding all else constant, paintings that have landscape elements are expected to be, on average, 5.02 inches shorter than paintings without landscape elements.
+
+---
+
+## AE 18: Review
+
+.alert[
+`$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$`
+]
+
+Equation for paintings with landscape elements:
+
+`$$\begin{align}\widehat{height}_{in} &amp;= 5.62 + 0.78 ~ width_{in} - 5.02 \times 1 \\
+&amp;= 0.6 +  0.78 ~ width_{in}\\
+\end{align}$$`
+
+Equation for paintings without landscape elements:
+
+`$$\begin{align}\widehat{height}_{in} &amp;= 5.62 + 0.78 ~ width_{in} - 5.02 \times 0 \\
+&amp;= 5.62 +  0.78 ~ width_{in}
+\end{align}$$`
+
+---
+
+## AE 18: Review
+
+.question[Fit a linear model using width, whether the painting has landscape elements, and the interaction between the two variables to predict the height.]
+
+
+```r
+m_int&lt;- lm(Height_in ~ Width_in + landsALL + Width_in * landsALL, data = paintings)
+tidy(m_int) %&gt;%
+  select(term, estimate)
+```
+
+```
+## # A tibble: 4 x 2
+##   term              estimate
+##   &lt;chr&gt;                &lt;dbl&gt;
+## 1 (Intercept)         5.15  
+## 2 Width_in            0.798 
+## 3 landsALL           -3.47  
+## 4 Width_in:landsALL  -0.0725
+```
+
+`$$\widehat{height}_{in} = 5.15 + 0.80 ~ width_{in} - 3.47 ~ landsALL - 0.07 ~ width \times landsALL$$`
+
+---
+
+## AE 18: Review
+
+.alert[
+`$$\widehat{height}_{in} = 5.15 + 0.80 ~ width_{in} - 3.47 ~ landsALL - 0.07 ~ width_{in} \times landsALL$$`
+]
+
+Equation for paintings with landscape elements:
+
+`$$\begin{align} \widehat{height}_{in} &amp;= 5.15 + 0.80 ~ width_{in} - 3.47 \times 1 - 0.07 ~ width_{in} \times 1 \\
+&amp;= 1.7 + 0.73 ~ width_{in}\\
+\end{align}$$`
+
+Equation for paintings without landscape elements:
+
+`$$\begin{align} \widehat{height}_{in} &amp;= 5.15 + 0.80 ~ width_{in} - 3.47 \times 0 - 0.07 ~ width_{in} \times 0 \\
+&amp;= 5.15 + 0.80 ~ width_{in}
+\end{align}$$`
+
+---
+
+## AE 18: Review
+
+
+```r
+glance(m_main)$adj.r.squared
+```
+
+```
+## [1] 0.7100106
+```
+
+
+```r
+glance(m_int)$adj.r.squared
+```
+
+```
+## [1] 0.7111417
+```
+
+---
+
+class: center, middle
+
+## Inference in linear regression
+
+
+
+---
 ## Data and Packages
 
 

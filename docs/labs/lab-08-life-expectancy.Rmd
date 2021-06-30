@@ -59,16 +59,22 @@ library(broom)
 
 # The data
 
-In this lab you will first download the data, then upload it to the `data/` folder in your RStudio project.
-
-```{r data-upload, fig.margin = TRUE, echo = FALSE, eval=TRUE, fig.width=3}
-knitr::include_graphics("img/08-life-expectancy/data-upload.png")
-```
+In this lab you will upload the data yourself!
 
 - Go to Sakai $\Rightarrow$ Resources and click on the file called `life_expectancy.csv`. This should 
 automatically download the data file. Locate this file on your local computer, usually found in your `Downloads` folder.
 
-- Navigate to the data folder in your Rstudio project and upload the `life_expectancy.csv` file.
+- Create a `data/` folder in your RStudio project.
+
+```{r data-folder, fig.margin = TRUE, echo = FALSE, eval=TRUE, fig.width=3}
+knitr::include_graphics("img/08-life-expectancy/create_folder.png")
+```
+
+- Navigate to the `data/` folder and upload the `life_expectancy.csv` file.
+
+```{r data-upload, fig.margin = TRUE, echo = FALSE, eval=TRUE, fig.width=3}
+knitr::include_graphics("img/08-life-expectancy/data-upload.png")
+```
 
 Then, you can load the data as usual using the following.
 

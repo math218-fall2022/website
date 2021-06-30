@@ -107,7 +107,108 @@ $$ \hat{y} = b_0 + b_1~x_1 + b_2~x_2 + \cdots + b_k~x_k $$
 
 ---
 
+## AE 18: Review
 
+```{r load-data-ae, message = FALSE}
+paintings <- read_csv("data/paris_paintings.csv", 
+                            na = c("n/a", "", "NA"))
+```
+
+.question[Fit a main effects model using width and whether the painting has landscape elements to predict the height.]
+
+```{r paintings_main}
+m_main <- lm(Height_in ~ Width_in + landsALL, data = paintings)
+tidy(m_main)
+```
+
+$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$
+---
+
+## AE 18: Review
+
+.alert[$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$]
+
+- Intercept: Paintings that are 0 inches wide and do not have landscape elements are expected to be 5.62 inches tall, on average.
+
+- Coefficient for width: Holding all else constant, if we increase the width of a painting by one inch, we expect, on average, for the height of the painting to increase by 0.78 inches.
+
+- Coefficient for landsALL:  Holding all else constant, paintings that have landscape elements are expected to be, on average, 5.02 inches shorter than paintings without landscape elements.
+
+---
+
+## AE 18: Review
+
+.alert[
+$$\widehat{height}_{in} = 5.62 + 0.78 ~ width_{in} - 5.02 ~ landsALL$$
+]
+
+Equation for paintings with landscape elements:
+
+$$\begin{align}\widehat{height}_{in} &= 5.62 + 0.78 ~ width_{in} - 5.02 \times 1 \\
+&= 0.6 +  0.78 ~ width_{in}\\
+\end{align}$$
+
+Equation for paintings without landscape elements:
+
+$$\begin{align}\widehat{height}_{in} &= 5.62 + 0.78 ~ width_{in} - 5.02 \times 0 \\
+&= 5.62 +  0.78 ~ width_{in}
+\end{align}$$
+
+---
+
+## AE 18: Review
+
+.question[Fit a linear model using width, whether the painting has landscape elements, and the interaction between the two variables to predict the height.]
+
+```{r paintings_int}
+m_int<- lm(Height_in ~ Width_in + landsALL + Width_in * landsALL, data = paintings)
+tidy(m_int) %>%
+  select(term, estimate)
+```
+
+$$\widehat{height}_{in} = 5.15 + 0.80 ~ width_{in} - 3.47 ~ landsALL - 0.07 ~ width \times landsALL$$
+
+---
+
+## AE 18: Review
+
+.alert[
+$$\widehat{height}_{in} = 5.15 + 0.80 ~ width_{in} - 3.47 ~ landsALL - 0.07 ~ width_{in} \times landsALL$$
+]
+
+Equation for paintings with landscape elements:
+
+$$\begin{align} \widehat{height}_{in} &= 5.15 + 0.80 ~ width_{in} - 3.47 \times 1 - 0.07 ~ width_{in} \times 1 \\
+&= 1.7 + 0.73 ~ width_{in}\\
+\end{align}$$
+
+Equation for paintings without landscape elements:
+
+$$\begin{align} \widehat{height}_{in} &= 5.15 + 0.80 ~ width_{in} - 3.47 \times 0 - 0.07 ~ width_{in} \times 0 \\
+&= 5.15 + 0.80 ~ width_{in}
+\end{align}$$
+
+---
+
+## AE 18: Review
+
+```{r paints_r2_main}
+glance(m_main)$adj.r.squared
+```
+
+```{r paints_r2_int}
+glance(m_int)$adj.r.squared
+```
+
+---
+
+class: center, middle
+
+## Inference in linear regression
+
+
+
+---
 ## Data and Packages
 
 ```{r eval = FALSE}
