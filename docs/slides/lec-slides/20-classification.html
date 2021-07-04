@@ -35,6 +35,276 @@ layout: true
 
 
 
+---
+
+class: middle center
+
+## Model Selection
+
+---
+
+## Multiple linear regression
+
+Let's say that we have 3 explanatory variables that we can use to predict the response variable `\(y\)`. Should I use all 3? What about interactions?
+
+`$$\begin{align} &amp;\hat{y} = \beta_{0} + \beta_{1}x_{1} + \beta_2 x_{2}\\
+ &amp;\hat{y} = \beta_{0} + \beta_{1}x_{1} + \beta_2 x_{2} + \beta_{3} x_{3}\\
+&amp;\hat{y} = \beta_{0} + \beta_{1}x_{1} + \beta_2 x_{2} + \beta_{3} x_{1}x_{2}\\
+&amp; \quad \vdots
+\end{align}$$`
+
+--
+
+Use Adjusted `\(R^2\)` to help us determine best fitting linear model. 
+
+
+---
+
+## Backwards elimination
+
+- Start with full model (including all candidate explanatory variables and all candidate interactions)
+
+- Remove one variable at a time, and select the model with the highest adjusted `\(R^2\)`
+
+- Continue until adjusted `\(R^2\)` does not increase
+
+
+---
+
+## Forward elimination
+
+- Start with empty model (only an intercept)
+
+- Add one variable (or interaction effect) at a time, and select the model with the highest adjusted `\(R^2\)`
+
+- Continue until adjusted `\(R^2\)` does not increase
+
+--
+
+Note: adjusted `\(R^2\)` is just one criterion; can use other metrics
+
+---
+## Backwards elimination
+
+
+```r
+sports_car_prices &lt;- read_csv("data/sports_cars.csv")
+```
+
+
+```r
+m_full &lt;- lm(mileage ~ price + age + car + price*car + age*car, data = sports_car_prices)
+```
+
+
+```r
+round(glance(m_full)$adj.r.squared, 2)
+```
+
+```
+## [1] 0.77
+```
+
+--
+
+Current model: `\(\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche +\beta_{4} ~price*carPorsche + \beta_{5} ~age*carPorsche\)` 
+
+Current adjusted `\(R^2\)`: 0.77
+
+
+---
+
+## Backwards elimination
+
+Current model: `\(\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche +\beta_{4} ~price*carPorsche + \beta_{5} ~age*carPorsche\)` 
+
+Current adjusted `\(R^2\)`: 0.77
+
+
+```r
+m_cand1 &lt;- lm(mileage ~ price + age + car + price*car, data = sports_car_prices)
+m_cand2 &lt;- lm(mileage ~ price + age + car + age*car, data = sports_car_prices)
+
+round(glance(m_cand1)$adj.r.squared, 2)
+```
+
+```
+## [1] 0.76
+```
+
+```r
+round(glance(m_cand2)$adj.r.squared, 2)
+```
+
+```
+## [1] 0.77
+```
+--
+New model: `\(\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche + \beta_{4} ~age*carPorsche\)`
+
+New adjusted `\(R^2\)`: 0.77
+
+---
+
+## Backwards elimination
+
+Current model: `\(\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche + \beta_{4} ~age*carPorsche\)`
+
+Current adjusted `\(R^2\)`: 0.77
+
+
+
+```r
+m_cand1 &lt;- lm(mileage ~ price + age + car, data = sports_car_prices)
+m_cand2 &lt;- lm(mileage ~ age + car + age*car, data = sports_car_prices)
+round(glance(m_cand1)$adj.r.squared, 2)
+```
+
+```
+## [1] 0.77
+```
+
+```r
+round(glance(m_cand2)$adj.r.squared, 2)
+```
+
+```
+## [1] 0.67
+```
+
+--
+
+New model: $\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche $
+
+New adjusted `\(R^2\)`: 0.77
+
+---
+
+## Backwards elimination
+
+Current model: `\(\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche\)`
+
+Current adjusted `\(R^2\)`: 0.77
+
+
+
+```r
+m_cand1 &lt;- lm(mileage ~ price + age, data = sports_car_prices)
+m_cand2 &lt;- lm(mileage ~ age + car, data = sports_car_prices)
+m_cand3 &lt;- lm(mileage ~ price + car, data = sports_car_prices)
+
+round(glance(m_cand1)$adj.r.squared, 2)
+```
+
+```
+## [1] 0.74
+```
+
+```r
+round(glance(m_cand2)$adj.r.squared, 2)
+```
+
+```
+## [1] 0.61
+```
+
+```r
+round(glance(m_cand3)$adj.r.squared, 2)
+```
+
+```
+## [1] 0.67
+```
+
+---
+
+## Backwards elimination
+
+Adjusted `\(R^2\)` stopped increasing, so we have our final model.
+
+
+```r
+m_final &lt;- lm(mileage ~ price + age + car, data = sports_car_prices)
+tidy(m_final)
+```
+
+```
+## # A tibble: 4 x 5
+##   term         estimate std.error statistic  p.value
+##   &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept) 48960.     5822.         8.41 1.64e-11
+## 2 price          -0.735     0.119     -6.18 7.60e- 8
+## 3 age          2100.      430.         4.89 8.94e- 6
+## 4 carPorsche  10035.     3781.         2.65 1.03e- 2
+```
+
+$\widehat{mileage} = 48960.15 -0.73 ~ price + 2100.21 ~ age + 10034.86 ~ carPorsche $
+
+---
+
+## `step()` function
+
+- Automate the process of model selection using the `step` function.
+
+- Note: the criterion the `step()` uses to compare models is Akaike information criterion (AIC)
+
+
+```r
+m_final &lt;- step(m_full, direction = "backward")
+```
+
+---
+
+## `step()` function
+
+
+```
+## Start:  AIC=1116.75
+## mileage ~ price + age + car + price * car + age * car
+## 
+##             Df Sum of Sq        RSS    AIC
+## - price:car  1 147257329 6097924111 1116.2
+## &lt;none&gt;                   5950666782 1116.8
+## - age:car    1 376369525 6327036307 1118.4
+## 
+## Step:  AIC=1116.21
+## mileage ~ price + age + car + age:car
+## 
+##           Df  Sum of Sq        RSS    AIC
+## &lt;none&gt;                  6097924111 1116.2
+## - age:car  1  229960767 6327884878 1116.4
+## - price    1 2970101807 9068025918 1138.0
+```
+
+---
+
+
+## `step()` function
+
+
+```r
+tidy(m_final)
+```
+
+```
+## # A tibble: 5 x 5
+##   term            estimate std.error statistic    p.value
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 (Intercept)    39802.     8585.         4.64 0.0000223 
+## 2 price             -0.663     0.128     -5.18 0.00000330
+## 3 age             3478.     1047.         3.32 0.00160   
+## 4 carPorsche     15627.     5395.         2.90 0.00541   
+## 5 age:carPorsche -1393.      967.        -1.44 0.155
+```
+
+---
+
+class: middle center
+
+## Logistic Regression
+
+---
+
 ## Introduction
 
 Multiple regression allows us to relate a numerical response variable to one or
@@ -108,7 +378,7 @@ glimpse(titanic)
 
 
 
-&lt;img src="20-classification_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="20-classification_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -174,7 +444,7 @@ tidy(lm_survival)
 
 
 
-&lt;img src="20-classification_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="20-classification_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
 
 
 --

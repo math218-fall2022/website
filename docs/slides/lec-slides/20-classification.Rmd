@@ -69,6 +69,187 @@ library(kableExtra)
 ```
 
 
+---
+
+class: middle center
+
+## Model Selection
+
+---
+
+## Multiple linear regression
+
+Let's say that we have 3 explanatory variables that we can use to predict the response variable $y$. Should I use all 3? What about interactions?
+
+$$\begin{align} &\hat{y} = \beta_{0} + \beta_{1}x_{1} + \beta_2 x_{2}\\
+ &\hat{y} = \beta_{0} + \beta_{1}x_{1} + \beta_2 x_{2} + \beta_{3} x_{3}\\
+&\hat{y} = \beta_{0} + \beta_{1}x_{1} + \beta_2 x_{2} + \beta_{3} x_{1}x_{2}\\
+& \quad \vdots
+\end{align}$$
+
+--
+
+Use Adjusted $R^2$ to help us determine best fitting linear model. 
+
+
+---
+
+## Backwards elimination
+
+- Start with full model (including all candidate explanatory variables and all candidate interactions)
+
+- Remove one variable at a time, and select the model with the highest adjusted $R^2$
+
+- Continue until adjusted $R^2$ does not increase
+
+
+---
+
+## Forward elimination
+
+- Start with empty model (only an intercept)
+
+- Add one variable (or interaction effect) at a time, and select the model with the highest adjusted $R^2$
+
+- Continue until adjusted $R^2$ does not increase
+
+--
+
+Note: adjusted $R^2$ is just one criterion; can use other metrics
+
+---
+## Backwards elimination
+
+```{r message=FALSE}
+sports_car_prices <- read_csv("data/sports_cars.csv")
+```
+
+```{r}
+m_full <- lm(mileage ~ price + age + car + price*car + age*car, data = sports_car_prices)
+```
+
+```{r}
+round(glance(m_full)$adj.r.squared, 2)
+```
+
+--
+
+Current model: $\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche +\beta_{4} ~price*carPorsche + \beta_{5} ~age*carPorsche$ 
+
+Current adjusted $R^2$: 0.77
+
+
+---
+
+## Backwards elimination
+
+Current model: $\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche +\beta_{4} ~price*carPorsche + \beta_{5} ~age*carPorsche$ 
+
+Current adjusted $R^2$: 0.77
+
+```{r}
+m_cand1 <- lm(mileage ~ price + age + car + price*car, data = sports_car_prices)
+m_cand2 <- lm(mileage ~ price + age + car + age*car, data = sports_car_prices)
+
+round(glance(m_cand1)$adj.r.squared, 2)
+round(glance(m_cand2)$adj.r.squared, 2)
+```
+--
+New model: $\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche + \beta_{4} ~age*carPorsche$
+
+New adjusted $R^2$: 0.77
+
+---
+
+## Backwards elimination
+
+Current model: $\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche + \beta_{4} ~age*carPorsche$
+
+Current adjusted $R^2$: 0.77
+
+
+```{r}
+m_cand1 <- lm(mileage ~ price + age + car, data = sports_car_prices)
+m_cand2 <- lm(mileage ~ age + car + age*car, data = sports_car_prices)
+round(glance(m_cand1)$adj.r.squared, 2)
+round(glance(m_cand2)$adj.r.squared, 2)
+```
+
+--
+
+New model: $\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche $
+
+New adjusted $R^2$: 0.77
+
+---
+
+## Backwards elimination
+
+Current model: $\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche$
+
+Current adjusted $R^2$: 0.77
+
+
+```{r}
+m_cand1 <- lm(mileage ~ price + age, data = sports_car_prices)
+m_cand2 <- lm(mileage ~ age + car, data = sports_car_prices)
+m_cand3 <- lm(mileage ~ price + car, data = sports_car_prices)
+
+round(glance(m_cand1)$adj.r.squared, 2)
+round(glance(m_cand2)$adj.r.squared, 2)
+round(glance(m_cand3)$adj.r.squared, 2)
+```
+
+---
+
+## Backwards elimination
+
+Adjusted $R^2$ stopped increasing, so we have our final model.
+
+```{r}
+m_final <- lm(mileage ~ price + age + car, data = sports_car_prices)
+tidy(m_final)
+```
+
+$\widehat{mileage} = 48960.15 -0.73 ~ price + 2100.21 ~ age + 10034.86 ~ carPorsche $
+
+---
+
+## `step()` function
+
+- Automate the process of model selection using the `step` function.
+
+- Note: the criterion the `step()` uses to compare models is Akaike information criterion (AIC)
+
+```{r, eval = F}
+m_final <- step(m_full, direction = "backward")
+```
+
+---
+
+## `step()` function
+
+```{r echo = F}
+m_final <- step(m_full, direction = "backward")
+```
+
+---
+
+
+## `step()` function
+
+```{r}
+tidy(m_final)
+```
+
+---
+
+class: middle center
+
+## Logistic Regression
+
+---
+
 ## Introduction
 
 Multiple regression allows us to relate a numerical response variable to one or
