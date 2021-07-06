@@ -19,7 +19,7 @@ library(tidyverse)
 
 ### Exam 02
 
-Will be released this Friday, and will be due Sunday, July 11 at 11:59pm, with the same format as Exam 01.
+Will be released this Friday at 9:00am, and will be due Sunday, July 11 at 11:59pm, with the same format as Exam 01. Exam 02 will cover Inference, as well as Simple Linear Regression.
 
 No lab or TA office hours this Friday.
 

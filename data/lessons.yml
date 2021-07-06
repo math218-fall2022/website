@@ -144,6 +144,8 @@ lessons:
    title: "NO CLASS: Independence Day"
  - date: "Wed, July 7"
    title: "Classification"
+   slides: "lec-slides/20-classification.html"
+   appex: "appex20-email.html"
  - date: "Thu, July 8"
    title: "Text analysis"
  - title: "Strings"

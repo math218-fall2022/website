@@ -177,7 +177,7 @@ round(glance(m_cand2)$adj.r.squared, 2)
 
 --
 
-New model: $\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche $
+New model: $\widehat{mileage} = \beta_{0} + \beta_{1}~ price + \beta_{2} ~ age + \beta_{3} ~ carPorsche$
 
 New adjusted $R^2$: 0.77
 
@@ -211,7 +211,7 @@ m_final <- lm(mileage ~ price + age + car, data = sports_car_prices)
 tidy(m_final)
 ```
 
-$\widehat{mileage} = 48960.15 -0.73 ~ price + 2100.21 ~ age + 10034.86 ~ carPorsche $
+$\widehat{mileage} = 48960.15 -0.73 ~ price + 2100.21 ~ age + 10034.86 ~ carPorsche$
 
 ---
 
