@@ -315,7 +315,7 @@ describe string patterns. We use them to search for patterns.
 
 ## Regular Expressions
 
-To demonstrate will will use a vector of all of the states bordering North 
+To demonstrate, we will use a vector of all of the states bordering North 
 Carolina.
 
 ```{r}

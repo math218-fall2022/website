@@ -553,7 +553,8 @@ $$\frac{\hat{p}}{1-\hat{p}} = e^{1.11 - 2.50~sex - 0.00206~age}$$
 <br> 
 
 --
-
+$$e^{x+1} = e^{x} \times e^{1} \Rightarrow e^{1.11 - 2.50sex -0.00206(age + 1)} = e^{1.11 - 2.50sex -0.00206age} \times e^{-0.0026}$$
+--
 
 Holding sex constant, for every one year increase in age, the **odds** of survival are expected to multiply by a factor of $e^{-0.00206} = 0.998$. 
 

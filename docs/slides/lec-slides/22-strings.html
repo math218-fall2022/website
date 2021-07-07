@@ -24,13 +24,8 @@ class: center, middle, inverse, title-slide
 
 
 
-class: middle center
-
-## [Click for PDF of slides](22-strings.pdf)
 
 
-
----
 
 
 
@@ -429,7 +424,7 @@ describe string patterns. We use them to search for patterns.
 
 ## Regular Expressions
 
-To demonstrate will will use a vector of all of the states bordering North 
+To demonstrate, we will use a vector of all of the states bordering North 
 Carolina.
 
 
@@ -456,8 +451,8 @@ We can match exactly.
 str_view_all(nc_states, "in")
 ```
 
-<div id="htmlwidget-7d279ad45790cb48b9d9" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7d279ad45790cb48b9d9">{"x":{"html":"<ul>\n  <li>North Carol<span class='match'>in<\/span>a<\/li>\n  <li>South Carol<span class='match'>in<\/span>a<\/li>\n  <li>Virg<span class='match'>in<\/span>ia<\/li>\n  <li>Tennessee<\/li>\n  <li>Georgia<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-f09ca64ef1da94bbcf50" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f09ca64ef1da94bbcf50">{"x":{"html":"<ul>\n  <li>North Carol<span class='match'>in<\/span>a<\/li>\n  <li>South Carol<span class='match'>in<\/span>a<\/li>\n  <li>Virg<span class='match'>in<\/span>ia<\/li>\n  <li>Tennessee<\/li>\n  <li>Georgia<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 
 ---
@@ -472,8 +467,8 @@ Match any character using `.`
 str_view_all(nc_states, "i.")
 ```
 
-<div id="htmlwidget-a3f37c370885e8330af7" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a3f37c370885e8330af7">{"x":{"html":"<ul>\n  <li>North Carol<span class='match'>in<\/span>a<\/li>\n  <li>South Carol<span class='match'>in<\/span>a<\/li>\n  <li>V<span class='match'>ir<\/span>g<span class='match'>in<\/span><span class='match'>ia<\/span><\/li>\n  <li>Tennessee<\/li>\n  <li>Georg<span class='match'>ia<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-478af1ca74157e51b0c0" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-478af1ca74157e51b0c0">{"x":{"html":"<ul>\n  <li>North Carol<span class='match'>in<\/span>a<\/li>\n  <li>South Carol<span class='match'>in<\/span>a<\/li>\n  <li>V<span class='match'>ir<\/span>g<span class='match'>in<\/span><span class='match'>ia<\/span><\/li>\n  <li>Tennessee<\/li>\n  <li>Georg<span class='match'>ia<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -486,8 +481,8 @@ Match the start of a string using `^`
 str_view_all(nc_states, "^G")
 ```
 
-<div id="htmlwidget-2ae872fe6f0f9c365bad" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-2ae872fe6f0f9c365bad">{"x":{"html":"<ul>\n  <li>North Carolina<\/li>\n  <li>South Carolina<\/li>\n  <li>Virginia<\/li>\n  <li>Tennessee<\/li>\n  <li><span class='match'>G<\/span>eorgia<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-446c2fe5174c5a921539" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-446c2fe5174c5a921539">{"x":{"html":"<ul>\n  <li>North Carolina<\/li>\n  <li>South Carolina<\/li>\n  <li>Virginia<\/li>\n  <li>Tennessee<\/li>\n  <li><span class='match'>G<\/span>eorgia<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
@@ -501,8 +496,8 @@ Match the end of a string using `$`
 str_view_all(nc_states, "a$")
 ```
 
-<div id="htmlwidget-61f1757efe7448f4335d" style="width:960px;height:100%;" class="str_view html-widget"></div>
-<script type="application/json" data-for="htmlwidget-61f1757efe7448f4335d">{"x":{"html":"<ul>\n  <li>North Carolin<span class='match'>a<\/span><\/li>\n  <li>South Carolin<span class='match'>a<\/span><\/li>\n  <li>Virgini<span class='match'>a<\/span><\/li>\n  <li>Tennessee<\/li>\n  <li>Georgi<span class='match'>a<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-e53f5151a82638f86bfb" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e53f5151a82638f86bfb">{"x":{"html":"<ul>\n  <li>North Carolin<span class='match'>a<\/span><\/li>\n  <li>South Carolin<span class='match'>a<\/span><\/li>\n  <li>Virgini<span class='match'>a<\/span><\/li>\n  <li>Tennessee<\/li>\n  <li>Georgi<span class='match'>a<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
 
 ---
 
