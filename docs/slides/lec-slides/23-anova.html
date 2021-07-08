@@ -37,25 +37,30 @@ layout: true
 ## Data 
 
 
+
+
 ```r
-library(tidyverse)
-rat_feed &lt;- read.csv("data/rat_feed.csv")
-glimpse(rat_feed)
+rat_feed %&gt;%
+  head()
 ```
 
+
 ```
-## Rows: 60
-## Columns: 3
-## $ wt_gain &lt;int&gt; 118, 117, 111, 107, 104, 102, 100, 87, 81, 73, 120, 108, 105, …
-## $ amt     &lt;fct&gt; high, high, high, high, high, high, high, high, high, high, hi…
-## $ type    &lt;fct&gt; beef, beef, beef, beef, beef, beef, beef, beef, beef, beef, po…
+##   wt_gain  type
+## 1      82  pork
+## 2      85 grain
+## 3      81  pork
+## 4      67 grain
+## 5     107  beef
+## 6      57 grain
 ```
+
+.question[How do we compare across three groups? Which groups are different?]
 
 ---
 
 ## Group means
 
-.question[How do we compare across three groups? Which groups are different?]
 
 
 ```r
@@ -69,15 +74,11 @@ rat_feed %&gt;%
 ##   type   xbar
 ##   &lt;fct&gt; &lt;dbl&gt;
 ## 1 beef   89.6
-## 2 grain  84.9
+## 2 grain  74.9
 ## 3 pork   89.1
 ```
 
----
-
-.question[How do we compare across three groups? Which groups are different?]
-
-&lt;img src="23-anova_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="23-anova_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -110,7 +111,7 @@ being performed.
 
 ## Multiple comparisons
 
-- Suppose all means are actually equal ($H_0$ is true), and we conduct all three pairwise tests
+- Suppose all means are actually equal, i.e. `\(H_0\)` is true, and we conduct all three pairwise tests
 
 - Suppose the tests are independent, and conducted at `\(\alpha = 0.05\)` significance level
 
@@ -119,7 +120,340 @@ This probability is `\((1-0.05)^3 = 0.95^3 = 0.857\)`.
 
 - Thus, the probability of reject **at least** one of the three nulls = 
 1 - probability of failing to reject all three = `\(1-0.857 = 0.143 &gt; 0.05 = \alpha\)`. 
-This is calld the .vocab[family-wise error rate].
+This is called the .vocab[family-wise error rate]
+
+---
+
+## Multiple comparisons
+
+- In reality, this is a little more complicated, but the issue of an inflated Type I 
+error rate still exists
+
+- ANOVA extends the `\(t\)`-test  and is one way to control the
+overall Type I error rate at a fixed level `\(\alpha\)`
+
+---
+
+## ANOVA
+
+.vocab[ANOVA] is short for .vocab[analysis of variance]. We use ANOVA to compare means for more 
+than two groups.
+
+ANOVA extends the two-sample `\(t\)`-test to more than `\(K \geq 2\)` groups.
+
+`\begin{align}
+&amp; H_{0}: \mu_{1} = \mu_{2} = \ldots = \mu_{K}\\
+&amp; H_{a}: \text{ at least one group's mean is different}
+\end{align}`
+
+---
+
+## ANOVA testing procedure
+
+In ANOVA, we typically follow this testing procedure. First, we
+conduct an *overall* test of the null hypothesis that the means of all
+of the groups are equal.
+
+- If we reject this null, then we usually proceed to see which means are different from each other.
+A .vocab[multiple comparisons correction] is sometimes used for these pairwise comparisons of means.
+
+--
+
+- If we fail to reject this null, we usually stop testing.
+
+---
+
+## ANOVA alternate hypothesis
+
+In our example, our null is `\(H_{0}: \mu_{b} = \mu_{g} = \mu_{p}\)`. 
+What could happen under the alternative?
+
+- `\(\mu_{b} \neq \mu_{g} \neq \mu_{p}\)`
+- `\(\mu_{b} = \mu_{g}\)`,  but `\(\mu_{p}\)` different
+- `\(\mu_{b} = \mu_{p}\)`, but `\(\mu_{g}\)` different
+- `\(\mu_{g} = \mu_{p}\)`, but `\(\mu_{b}\)` different
+
+--
+
+If we reject the null hypothesis, any of these situations could be
+true, and we may wish to conduct further tests to discover what
+setting we are in. 
+
+Conducting further tests without rejecting the
+overall test of `\(H_{0}\)`  will lead to an inflated Type I error rate unless
+we use another method to adjust for multiple comparisons.
+
+
+---
+
+## Setup
+
+- `\(H_{0}: \mu_{1} = \mu{2} = \ldots = \mu_{K}\)`
+
+- `\(H_{a}\)`: at least one of the means is different
+
+- `\(n_{k}\)`: number of subjects/observations in the `\(k\)`-th group
+
+- `\(y_{ik}\)`: response of subject `\(i\)` in group `\(k\)`, where `\(i = 1,\ldots, n_{k}\)` and `\(k = 1, \ldots, K\)`. 
+
+
+---
+
+## Setup
+
+- The ANOVA model is 
+`$$y_{ik} = \mu_{k} + \epsilon_{ik}$$`
+where we assume the `\(\epsilon_{ik}\)` are independent and normally distributed with mean 0 and variance `\(\sigma^2\)`
+
+- If `\(y_{ik}\)` comes from group `\(k\)`, we expect its observation to be similar to the observations of other 
+subjects in the same group `\(k\)`. However, there will be some variability within the group.
+
+- This is equivalent to saying the `\(y_{ik} \sim N(\mu_{k}, \sigma)\)`
+
+---
+
+## Assumptions
+
+1. Outcomes within groups are normally distributed
+
+2. Homoscedastic variance (the within-group variance is the
+same for all groups)
+
+3. Independent samples
+
+---
+
+## Rat feed data: assumptions
+
+&lt;img src="23-anova_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Rat feed data: assumptions
+
+
+```r
+rat_feed %&gt;%
+  group_by(type) %&gt;%
+  summarise(n = n(), var = var(wt_gain))
+```
+
+```
+## # A tibble: 3 x 3
+##   type      n   var
+##   &lt;fct&gt; &lt;int&gt; &lt;dbl&gt;
+## 1 beef     20  314.
+## 2 grain    20  225.
+## 3 pork     20  300.
+```
+
+In our example, `\(K = 3\)` and `\(n_{1} = n_{2} = n_{3} = 20\)` subjects in each group.
+---
+
+## ANOVA
+
+Obtain `\(\bar{y}\)`, the overall mean of all observations. Then for each group `\(k\)`, 
+calculate group mean and variance:
+
+- beef: `\(\bar{y}_{1}\)` and `\(s_{1}^2\)`
+
+- grain: `\(\bar{y}_{2}\)` and `\(s_{2}^2\)`
+
+- pork: `\(\bar{y}_{3}\)` and `\(s_{3}^2\)`
+
+--
+
+.question[Why is ANOVA called analysis of variance?]
+
+- .vocab[Within-groups variance]: variance of individual observations around
+their respective group means
+
+- .vocab[Between-groups variance]: variance of the group means around the overall 
+mean of all observations `\(\bar{y}\)`
+
+---
+
+## Within-groups variance
+
+`$$s_{k}^2 = \dfrac{\sum_{i=1}^{n_{k}} (y_{ik} - \bar{y}_{k})^2}{n_{k}-1}$$`
+`\(s_{k}^2\)` is a measure of the variance of the individuals around the group mean.
+
+
+To get a pooled estimate of the common variance of individuals
+around their respective group means, we calculate
+
+`$$s_{W}^2 = \dfrac{(n_{1} - 1) s_{1}^2 + (n_{2}-1)s_{2}^2 + \ldots + (n_{K} - 1)s_{K}^2}{N-K}$$`
+where `\(N = n_{1} + n_{2} + \ldots + n_{K}\)`.
+
+We can think of the within-groups variance as the inherent variability
+in the population.
+
+---
+
+## Between-groups variance
+
+`$$s_{B}^2 = \dfrac{n_{1}(\bar{y}_{1} - \bar{y})^2 + n_{2}(\bar{y}_{2} - \bar{y})^2  + \ldots + n_{K}(\bar{y}_{K} - \bar{y})^2}{K-1}$$`
+
+We can think of the between-groups variance as the sum of
+inherent variability **and** any kind of systematic variability due to
+the group effect.
+
+---
+
+## Analysis of variance to compare means
+
+- If the sample means `\(\bar{y}_{k}\)` vary around the overall mean `\(\bar{y}\)` more than
+the individual observations `\(y_{ik}\)` vary around the sample means `\(\bar{y}_{k}\)`, then
+we have evidence that the corresponding population means are in fact different
+
+- This is achieved by comparing the between-groups variance `\(s_{B}^2\)` to the within-groups 
+variance `\(s_{W}^2\)`
+
+- Want to see if the between-groups variance is much larger than the within-groups variance `\((s_{B}^2 &gt; &gt; s_{W}^2)\)`
+
+---
+
+## `\(F\)`-test
+
+- Consider the `\(F\)` statistic given by `$$F = \dfrac{s_{B}^2}{s_{W}^2}$$`
+
+- If `\(H_{0}\)` true, this `\(F\)` statistic has an `\(F\)` distribution with `\(K-1\)` and `\(N-1\)`
+degrees of freedom, associated with `\(s_{B}^2\)` and `\(s_{W}^2\)`, respectively.
+
+- The `\(F\)`-distribution only takes on non-negative values.
+
+&lt;img src="23-anova_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## `\(F\)`-test
+
+- The F-test for ANOVA is inherently one-tailed. We reject `\(H_{0}\)` only if our `\(F\)` statistics
+is considerably larger than one `\((s_{B}^2 &gt; &gt; s_{W}^2)\)`
+
+- If we only have `\(K=2\)` groups, then the F-test yields the same result as the two-sample `\(t\)`-test
+
+- This does not mean we have a one-sided alternative;
+we just look at one tail of the `\(F\)` distribution to get the p-value
+
+---
+
+## `aov()`
+
+
+```r
+mod_aov &lt;- aov(wt_gain ~ type, data = rat_feed)
+tidy(mod_aov)
+```
+
+```
+## # A tibble: 2 x 6
+##   term         df  sumsq meansq statistic p.value
+##   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 type          2  2787.  1393.      4.98  0.0101
+## 2 Residuals    57 15932.   280.     NA    NA
+```
+
+Here, the grouping variable `type` is the "between", and `Residuals` is the "within". Why?
+
+---
+
+## `\(F\)`-test for rat feed data
+
+
+```r
+tidy(mod_aov)
+```
+
+```
+## # A tibble: 2 x 6
+##   term         df  sumsq meansq statistic p.value
+##   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 type          2  2787.  1393.      4.98  0.0101
+## 2 Residuals    57 15932.   280.     NA    NA
+```
+
+Our `\(F\)` statistic is `\(s_{B}^2/s_{W}^2 = 1393/280 = 4.98\)` with `\(3-1 = 2\)` and `\(60-3 = 57\)` degrees of freedom. 
+
+&lt;img src="23-anova_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## `\(F\)`-test for rat feed data
+
+
+```r
+tidy(mod_aov)
+```
+
+```
+## # A tibble: 2 x 6
+##   term         df  sumsq meansq statistic p.value
+##   &lt;chr&gt;     &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 type          2  2787.  1393.      4.98  0.0101
+## 2 Residuals    57 15932.   280.     NA    NA
+```
+
+This corresponds to a p-value of 0.01. At `\(\alpha = 0.05\)`, we reject the null hypothesis. 
+There is sufficient evidence that at least one of the three types of feed comes
+from a population with a different mean from the others.
+
+--
+
+.question[What group/groups is/are different?]
+
+---
+
+## Bonferroni correction
+
+As we showed earlier, conducting multiple tests on a data set
+increases the **family-wise error rate**.  One very conservative way to
+ensure this is not the case is to simply divide `\(\alpha\)` by the number of
+tests to be done, and to use that as the significance level.
+
+This is known as the .vocab[Bonferroni correction].
+
+
+---
+
+## Bonferroni correction
+
+For example, if we want to conduct three pairwise tests, in order to preserve an overall `\(0.05\)`
+Type I error rate, the Bonferroni correction would use `\(\alpha^* = 0.05/3 = 0.017\)` for each test. 
+
+Bonferroni is a conservative correction, making it harder to reject
+the null hypothesis, but it is a safe bet in controlling the Type I
+error rate.
+
+---
+
+## Rat feed data: group differences
+
+Using a Bonferroni correction, we can conduct three pairwise tests to test the following null hypotheses:
+
+1. `\(H_{0}: \mu_{B} = \mu_{G}\)`
+
+2. `\(H_{0}: \mu_{B} = \mu_{P}\)`
+
+3. `\(H_{0}: \mu_{P} = \mu_{G}\)`
+
+
+
+
+
+```
+## # A tibble: 3 x 3
+##   test    statistic p_value
+##   &lt;chr&gt;       &lt;dbl&gt;   &lt;dbl&gt;
+## 1 B vs. G    2.83   0.00743
+## 2 B vs. P    0.0903 0.929  
+## 3 G vs. P   -2.77   0.00865
+```
+
+These are the raw/uncorrected p-values for the pairwise t-tests. 
+
+What do we conclude?
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
