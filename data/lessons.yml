@@ -150,7 +150,7 @@ lessons:
    title: "Text analysis"
    slides: "lec-slides/21-text-analysis.html"
  - title: "Strings"
-   slide: "lec-slides/22-strings.html"
+   slides: "lec-slides/22-strings.html"
    #reading: "reading-07.html"
  - date: "Fri, July 9"
    title: "No lab: work on Exam 02"
