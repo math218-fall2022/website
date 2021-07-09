@@ -398,27 +398,30 @@ Let's incorporate these variables into our plot using `ggplot`.
 
 ## Choropleth map
 
-.panelset[
-.panel[.panel-name[Plot]
-```{r ref.label = "choropleth-1", echo = FALSE, warning = FALSE, out.width = "100%", fig.width = 8}
-```
-]
-
-
-.panel[.panel-name[Code]
-
-```{r choropleth-1, fig.show = "hide"}
+```{r choropleth-1-code, eval = F}
 ggplot(nc) +
   geom_sf(aes(fill = voted)) + #<<
   labs(title = "Higher population counties have more votes cast",
        fill = "Total votes cast") 
 ```
-]
-]
 
-It is sometimes helpful to pick diverging colors,
+
+---
+
+## Choropleth map
+
+```{r choropleth-1, echo = F}
+ggplot(nc) +
+  geom_sf(aes(fill = voted)) + 
+  labs(title = "Higher population counties have more votes cast",
+       fill = "Total votes cast") 
+```
+
+
+It is sometimes helpful to pick diverging colors;
 [colorbrewer2](http://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3)
 can help.
+
 
 ---
 
@@ -426,23 +429,29 @@ can help.
 
 One way to set fill colors is with `scale_fill_gradient()`.
 
-.panelset[
-.panel[.panel-name[Plot]
-```{r ref.label = "choropleth-2", echo = FALSE, warning = FALSE, out.width = "100%", fig.width = 8}
-```
-]
-
-
-.panel[.panel-name[Code]
-```{r choropleth-2, fig.show = "hide"}
+```{r choropleth-2-code, eval = F}
 ggplot(nc) +
   geom_sf(aes(fill = voted)) +
   scale_fill_gradient(low = "#fee8c8", high = "#7f0000") + #<<
   labs(title = "Higher population counties have more votes cast",
        fill = "Total votes cast") 
 ```
-]
-]
+
+---
+
+## Choropleth map
+
+One way to set fill colors is with `scale_fill_gradient()`.
+
+```{r choropleth-2, echo = F}
+ggplot(nc) +
+  geom_sf(aes(fill = voted)) +
+  scale_fill_gradient(low = "#fee8c8", high = "#7f0000") + #<<
+  labs(title = "Higher population counties have more votes cast",
+       fill = "Total votes cast") 
+```
+
+
 
 ---
 
@@ -462,23 +471,28 @@ ggplot(nc) +
 
 ## Let's make it more informative 
 
-.panelset[
-.panel[.panel-name[Plot]
-```{r ref.label = "choropleth-3", echo = FALSE, warning = FALSE, out.width = "100%", fig.width = 8}
-```
-]
 
-.panel[.panel-name[Code]
-
-```{r choropleth-3, fig.show = "hide"}
+```{r choropleth-3-code, eval = F}
 ggplot(nc) +
   geom_sf(aes(fill = voted/regstrd)) +#<<
   scale_fill_gradient(low = "#fff7f3", high = "#49006a") +
   labs(fill = "Votes cast per registered voter", 
        title = "Early vote turnout varies by county")
 ```
-]
-]
+
+---
+
+## Let's make it more informative 
+
+
+```{r choropleth-3, echo = F}
+ggplot(nc) +
+  geom_sf(aes(fill = voted/regstrd)) +#<<
+  scale_fill_gradient(low = "#fff7f3", high = "#49006a") +
+  labs(fill = "Votes cast per registered voter", 
+       title = "Early vote turnout varies by county")
+```
+
 
 
 ---
@@ -486,6 +500,7 @@ ggplot(nc) +
 class: center, middle
 
 # Map layers
+
 
 ---
 
@@ -513,7 +528,7 @@ nc_game
 
 ## Visualize `nc_game`
 
-```{r fig.height = 2, cache=TRUE}
+```{r nc_game, fig.height = 2, cache=TRUE}
 ggplot(nc_game) +
   geom_sf() +
   labs(title = "North Carolina gamelands")
@@ -523,7 +538,7 @@ ggplot(nc_game) +
 
 ## Visualize `nc_game`
 
-```{r fig.height = 2, cache=TRUE}
+```{r nc_game_fill, fig.height = 2, cache=TRUE}
 ggplot(nc_game) +
   geom_sf(fill = "#ff6700") +
   labs(title = "North Carolina gamelands")
@@ -535,7 +550,7 @@ ggplot(nc_game) +
 ## Add layers
 
 .midi[
-```{r fig.height = 2, cache=TRUE}
+```{r nc_game_layer, fig.height = 2, cache=TRUE}
 ggplot(nc) +
   geom_sf() +
   geom_sf(data = nc_game, fill = "#ff6700", alpha = .5) +
@@ -548,7 +563,7 @@ ggplot(nc) +
 ## Add layers and aesthetics
 
 .midi[
-```{r fig.height = 2, cache=TRUE}
+```{r nc_game_aes, fig.height = 2, cache=TRUE}
 ggplot(nc) +
   geom_sf() +
   geom_sf(data = nc_game, aes(alpha = SUM_ACRES), fill = "#ff6700") +
