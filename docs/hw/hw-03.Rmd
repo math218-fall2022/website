@@ -1,0 +1,117 @@
+---
+title: "HW 03: Multiple Linear Regression"
+subtitle: "due Friday, July 16 at 11:59p"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: "sta199-hw.css"
+link-citations: yes
+---
+
+# Clone assignment repo + start new project
+
+- Go to [course organization](https://github.com/sta199-summer2021) on GitHub.
+
+- In addition to your private individual repositories, you should now see a repo with the prefix **hw-03-life-expectancy-**. Go to that repository.
+  
+- Clone the repo and start a new project in RStudio.
+
+- Don't forget to configure git:
+
+```{r eval=FALSE}
+library(usethis)
+usethis::use_git_config(user.name = "github username", user.email = "your email")
+```
+
+# Data
+
+In Lab 08, we considered simple linear regression models where we estimated the average `life_expectancy` of each country using each one of the following variables: the number of years of `schooling`, `adult_mortality`, and average BMI category (`BMI_cat`). In this homework, we will now fit multiple linear regression models for `life_expectancy`. The data were modified from this [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who) dataset, and are available in Sakai. Upload the data just like you did in Lab 08. Once you have done so, you can run the following code to load the packages and data to get started.
+
+```{r packages, eval = F}
+library(tidyverse)
+library(broom)
+life_expect <- read_csv("data/life_expectancy.csv") 
+```
+
+## Codebook
+
+| Variable name    | Description 
+|:--------|:-------------------------------
+| `country` 		     | Country
+| `year` 		       | Year (2000-2015)
+| `status` 	   | Developed or Developing country status
+| `life_expectancy` 		       | life expentancy in age
+| `adult_mortality` 	     | Adult Mortality Rates of both sexes (probability of dying between 15 and 60 years per 1000 population)
+| `infant_deaths` 		       | Number of Infant Deaths per 1000 population
+| `alcohol`  | Alcohol, recorded per capita (15+) consumption (in litres of pure alcohol)
+| `percentage_expenditure`   | Expenditure on health as a percentage of Gross Domestic Product per capita (%)
+| `hepB`   | Hepatitis B immunization coverage among 1-year-olds (%)
+| `measles` 	   | Number of reported cases of Measles per 1000 population
+| `BMI` 	   | Average Body Mass Index (BMI) of entire population
+| `under_five_deaths`    | Number of under-five deaths per 1000 population
+| `polio`    | Polio immunization coverage among 1-year-olds (%)
+| `total expenditure`    | General government expenditure on health as a percentage of total government expenditure (%)
+| `diphtheria`    | Diphtheria tetanus toxoid and pertussis immunization coverage among 1-year-olds (%)
+| `HIV_AIDS`    | Deaths per 1000 live births HIV/AIDS (0-4 years)
+| `GDP`    | Gross Domestic Product per capita (in USD)
+| `population`    | Population of the country
+| `thinness_10_19`    | Prevalence of thinness among children and adolescents for Age 10 to 19 (% )
+| `thinness_5_9`    | Prevalence of thinness among children for Age 5 to 9(%)
+| `income_composition`    | Human Development Index in terms of income composition of resources (index ranging from 0 to 1)
+| `schooling`    | Number of years of schooling
+
+# Exercises
+
+## Part 1: Data Manipulation 
+
+1.  Identical to Lab 08, we will be focusing on a single year of data. Filter the data to only retain observations from 2015. Additionally, create the following new variable:
+
+- `BMI_cat`: the category that each BMI falls into, where BMI < 18.5 is "underweight", 
+18.5 $\leq$ BMI $<$ 25 is "normal", 25 $\leq$ BMI $<$ 30 is "overweight", and BMI $\geq 30$ is "obese".
+
+Once you have created these variable, createa new dataset that retains only the following variables: `country`, `life_expectancy`, `schooling`, `adult_mortality`, `BMI_cat`, and `status`.  Then omit all NAs. This is the dataset you will use for the remainder of the exercises.
+
+
+## Part 2: Exploratory Data Analysis
+
+2. Visualize the relationship between the number of years of `schooling`, `life_expectancy`, and the `BMI_cat` of each country. Describe what you see.
+
+## Part 3: Multiple linear regression
+
+3. Fit a linear main effects model to predict average `life expectancy` using the following variables: `schooling`, `status`, `GDP`, `adult_morality`. Write out the equation of the fitted model, and interpret all the coefficients.
+
+4. Obtain and interpet the $R^2$ for the main effects model.
+
+5. Fit a linear model to predict average `life expectancy` using the same main effects as above, but now with the addition of an interaction between `BMI_cat` and `schooling`.  Write out the equation of the fitted model.
+
+6. Write the regression equations for each level of `BMI_cat`.
+
+7. Compare the adjusted $R^2$ for both models. Which model do you prefer and why?
+
+### Part 4: Inference
+
+8. Use the model you ultimately selected in Exercise 7 for the remainder of this section. Examine if the conditions to perform inference on the regression coefficients are satisfied.
+
+9. Conduct a hypothesis test evaluating whether or not `adult_mortality` is associated with `life_expectancy`.
+
+10. Compute the mean schooling for each BMI category. Replace the dashes in the following code with the mean schooling for each respective `BMI_cat`. This code creates a new data frame to predict average life expectancy for hypothetical countries with the corresponding values for the explanatory variables.
+
+```{marginfigure}
+**Hint**: Remember, we use the `augment()` function to predict from a fitted model. You can use `augment(<model>, newdata = <data_frame_for_prediction>)` to obtain predictions.
+```
+
+What are the predicted life expectancies for these hypothetical countries?
+
+
+```{r eval = F}
+new_country <- tibble(
+  schooling = c(9.9, 14.2, 10.9, 12.3),
+  adult_mortality = c(___, ___, ___, ____),
+  BMI_cat = c("normal", "obese", "overweight", "underweight"),
+  status = c("developed", "developed", "developed", "developed")
+)
+```
+
+
+
