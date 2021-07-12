@@ -163,7 +163,7 @@ lessons:
    slides: "lec-slides/23-anova.html"
    appex: "appex23-anova.html"
  - title: "Homework 03 assigned"
-   #hw: "hw-03.html"
+   hw: "hw-03.html"
  - date: "Wed, July 14"
    title: "Spatial data and visualization"
  - date: "Thu, July 15"
