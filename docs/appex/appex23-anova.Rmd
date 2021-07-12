@@ -18,6 +18,13 @@ library(infer)
 
 ## Announcements
 
+- Homework 3 is assigned today, and due Friday, July 16 at 11:59pm.
+
+- Project proposals returned with feedback. Final write-ups due next Tuesday, July 20.
+
+- Project presentation order will be assigned randomly. 
+
+- No lab this Friday- use this time to work on Homework 3 and/or project proposal.
 
 ## Exercises 
 
