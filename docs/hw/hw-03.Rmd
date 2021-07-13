@@ -79,7 +79,7 @@ Once you have created these variable, createa new dataset that retains only the 
 
 ## Part 3: Multiple linear regression
 
-3. Fit a linear main effects model to predict average `life expectancy` using the following variables: `schooling`, `status`, `GDP`, `adult_morality`. Write out the equation of the fitted model, and interpret all the coefficients.
+3. Fit a linear main effects model to predict average `life expectancy` using the following variables: `schooling`, `status`, `BMI_cat`, `adult_morality`. Write out the equation of the fitted model, and interpret all the coefficients.
 
 4. Obtain and interpet the $R^2$ for the main effects model.
 
