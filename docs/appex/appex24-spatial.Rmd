@@ -9,6 +9,11 @@ output:
 
 ## Announcements
 
+- Exam 02 grades will be released today
+
+- Order and time slots of project presentations will be sent out today via a Sakai announcement
+
+- No formal lab on Friday. Treat it as drop-in office hours for help on the project
 
 ## Exercises 
 
@@ -17,7 +22,7 @@ library(tidyverse)
 library(sf)
 ```
 
-Today's data set comes from the [US Elections Project](https://electproject.github.io/Early-Vote-2020G/NC.html). We will focus specifically on early voting data for North Carolina as of November 1, 2020.
+Today's data set comes from the [US Elections Project](https://electproject.github.io/Early-Vote-2020G/NC.html). We will focus specifically on early voting data for North Carolina through November 1, 2020.
 
 The variables are 
 
@@ -54,7 +59,7 @@ corresponding to the percentage of requested mail-in ballots that have been retu
 
 ### Exercise 3
 
-4. Create a map of North Carolina where the counties have a fill color corresponding to the percentage of votes that were cast by mail. Include informative labels, colors and any other aesthetics.
+Create a map of North Carolina where the counties have a fill color corresponding to the percentage of votes that were cast by mail. Include informative labels, colors and any other aesthetics.
 
 ### Exercise 4
 

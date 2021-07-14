@@ -51,12 +51,18 @@ class: center, middle
 &lt;img src="img/24/napoleon.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 
+---
 
+## Bird abundances
+
+
+&lt;img src="img/24/space_map.png" width="35%" style="display: block; margin: auto;" /&gt;
 
 --
 
 **Many others!**
 
+- [Mapping biodiversity habitats](https://pbgjam.env.duke.edu/web-mapper)
 - [Migrations](http://maps.tnc.org/migrations-in-motion/#4/43.26/-112.02)
 - [World Population Density](https://luminocity3d.org/WorldPopDen/#3/12.00/10.00)
 - [Global Power](https://www.gocompare.com/gas-and-electricity/what-powers-the-world/)
@@ -163,7 +169,7 @@ Simple features have a geometry type. Common choices are below.
 
 
 
-&lt;img src="24-spatial_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="24-spatial_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -225,7 +231,7 @@ class: center, middle
 ## `nc_votes`
 
 This data was pulled from the [North Carolina Early Voting Statistics](https://electproject.github.io/Early-Vote-2020G/NC.html) website and
-is current as of 10-28-2020.
+is through 10-28-2020.
 
 The dataset contains the following variables:
 
@@ -294,22 +300,8 @@ ggplot(nc) +
   labs(title = "North Carolina counties")
 ```
 
-&lt;img src="24-spatial_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-## A look at some aesthetics
-
-
-```r
-ggplot(nc) +
-* geom_sf(color = "green") +
-  labs(title = "North Carolina counties with theme and aesthetics") 
-```
-
 &lt;img src="24-spatial_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
 
-
 ---
 
 ## A look at some aesthetics
@@ -317,12 +309,13 @@ ggplot(nc) +
 
 ```r
 ggplot(nc) +
-* geom_sf(color = "green", size = 1.5) +
-  labs(title = "North Carolina counties with theme and aesthetics")
+* geom_sf(color = "lightblue") +
+  labs(title = "North Carolina counties with theme and aesthetics") 
 ```
 
 &lt;img src="24-spatial_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
+
 ---
 
 ## A look at some aesthetics
@@ -330,12 +323,25 @@ ggplot(nc) +
 
 ```r
 ggplot(nc) +
-* geom_sf(color = "green", size = 1.5, fill = "purple") +
+* geom_sf(color = "lightblue", size = 1.5) +
   labs(title = "North Carolina counties with theme and aesthetics")
 ```
 
 &lt;img src="24-spatial_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
 
+---
+
+## A look at some aesthetics
+
+
+```r
+ggplot(nc) +
+* geom_sf(color = "lightblue", size = 1.5, fill = "purple") +
+  labs(title = "North Carolina counties with theme and aesthetics")
+```
+
+&lt;img src="24-spatial_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
 
 ---
 
@@ -344,11 +350,11 @@ ggplot(nc) +
 
 ```r
 ggplot(nc) +
-* geom_sf(color = "green", size = 1.5, fill = "purple", alpha = 0.50) +
+* geom_sf(color = "lightblue", size = 1.5, fill = "purple", alpha = 0.50) +
   labs(title = "North Carolina counties with theme and aesthetics")
 ```
 
-&lt;img src="24-spatial_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="24-spatial_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -447,7 +453,7 @@ One way to set fill colors is with `scale_fill_gradient()`.
 
 ## "...it's just a population map!"
 
-&lt;img src="24-spatial_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="24-spatial_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -725,7 +731,7 @@ nc %&gt;%
 ```r
 nc %&gt;% 
   summarize(mean_registered  = mean(regstrd),
-            mean_voted = median(voted))
+            median_voted = median(voted))
 ```
 
 ```
@@ -735,8 +741,8 @@ nc %&gt;%
 ## bbox:           xmin: -84.32385 ymin: 33.88199 xmax: -75.45698 ymax: 36.58965
 ## epsg (SRID):    4267
 ## proj4string:    +proj=longlat +datum=NAD27 +no_defs
-##   mean_registered mean_voted                       geometry
-## 1        73183.36      16217 MULTIPOLYGON (((-76.54427 3...
+##   mean_registered median_voted                       geometry
+## 1        73183.36        16217 MULTIPOLYGON (((-76.54427 3...
 ```
 
 

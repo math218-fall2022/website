@@ -87,12 +87,20 @@ knitr::include_graphics("img/24/napoleon.png")
 ```
 
 
+---
 
+## Bird abundances
+
+
+```{r, echo=FALSE, out.width="35%"}
+knitr::include_graphics("img/24/space_map.png")
+```
 
 --
 
 **Many others!**
 
+- [Mapping biodiversity habitats](https://pbgjam.env.duke.edu/web-mapper)
 - [Migrations](http://maps.tnc.org/migrations-in-motion/#4/43.26/-112.02)
 - [World Population Density](https://luminocity3d.org/WorldPopDen/#3/12.00/10.00)
 - [Global Power](https://www.gocompare.com/gas-and-electricity/what-powers-the-world/)
@@ -304,7 +312,7 @@ class: center, middle
 ## `nc_votes`
 
 This data was pulled from the [North Carolina Early Voting Statistics](https://electproject.github.io/Early-Vote-2020G/NC.html) website and
-is current as of 10-28-2020.
+is through 10-28-2020.
 
 The dataset contains the following variables:
 
@@ -345,7 +353,7 @@ ggplot(nc) +
 
 ```{r fig.height=2}
 ggplot(nc) +
-  geom_sf(color = "green") + #<<
+  geom_sf(color = "lightblue") + #<<
   labs(title = "North Carolina counties with theme and aesthetics") 
 ```
 
@@ -356,7 +364,7 @@ ggplot(nc) +
 
 ```{r fig.height=2}
 ggplot(nc) +
-  geom_sf(color = "green", size = 1.5) + #<<
+  geom_sf(color = "lightblue", size = 1.5) + #<<
   labs(title = "North Carolina counties with theme and aesthetics")
 ```
 
@@ -366,7 +374,7 @@ ggplot(nc) +
 
 ```{r fig.height = 2}
 ggplot(nc) +
-  geom_sf(color = "green", size = 1.5, fill = "purple") + #<<
+  geom_sf(color = "lightblue", size = 1.5, fill = "purple") + #<<
   labs(title = "North Carolina counties with theme and aesthetics")
 ```
 
@@ -377,7 +385,7 @@ ggplot(nc) +
 
 ```{r  fig.height=2}
 ggplot(nc) +
-  geom_sf(color = "green", size = 1.5, fill = "purple", alpha = 0.50) + #<<
+  geom_sf(color = "lightblue", size = 1.5, fill = "purple", alpha = 0.50) + #<<
   labs(title = "North Carolina counties with theme and aesthetics")
 ```
 
@@ -644,7 +652,7 @@ nc %>%
 ```{r}
 nc %>% 
   summarize(mean_registered  = mean(regstrd),
-            mean_voted = median(voted))
+            median_voted = median(voted))
 ```
 
 

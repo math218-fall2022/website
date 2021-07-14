@@ -166,6 +166,8 @@ lessons:
    hw: "hw-03.html"
  - date: "Wed, July 14"
    title: "Spatial data and visualization"
+   slides: "lec-slides/24-spatial.html"
+   appex: "appex24-spatial.Rmd"
  - date: "Thu, July 15"
    title: "Web scraping"
  - date: "Fri, July 16"
