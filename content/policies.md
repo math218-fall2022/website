@@ -1,6 +1,7 @@
 ---
 title: "Policies"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 markup: mmark
@@ -138,7 +139,6 @@ Everyone will sign up to share a data visualization that they find meaningful an
 The final grade will be calculated as follows:
  
 
-{.table .table2 .table-condensed .table-striped .text-left}
  <span></span>     | <span></span>  
 -----------|---------------------------------
 Homework | 17.5%

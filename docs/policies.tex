@@ -34,6 +34,9 @@
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
 \usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs}
+% Fix footnotes in tables (requires footnote package)
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{longtable}}{}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -328,13 +331,20 @@ details will be provided before the first presentation.
 
 The final grade will be calculated as follows:
 
-\{.table .table2 .table-condensed .table-striped .text-left\} {}
-\textbar{} {}\\
------------\textbar{}--------------------------------- Homework
-\textbar{} 17.5\% Labs \textbar{} 15\% Exam 1 \textbar{} 17.5\% Exam 2
-\textbar{} 17.5\% Final Project \textbar{} 17.5\% Participation \&
-Application Exercises \textbar{} 10\% Data Visualization Examples
-\textbar{} 5\%
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+{} & {}\tabularnewline
+\midrule
+\endhead
+Homework & 17.5\%\tabularnewline
+Labs & 15\%\tabularnewline
+Exam 1 & 17.5\%\tabularnewline
+Exam 2 & 17.5\%\tabularnewline
+Final Project & 17.5\%\tabularnewline
+Participation \& Application Exercises & 10\%\tabularnewline
+Data Visualization Examples & 5\%\tabularnewline
+\bottomrule
+\end{longtable}
 
 Class attendance in lecture and lab is a firm expectation; frequent
 absences or tardiness will be considered a legitimate cause for grade
