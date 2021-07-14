@@ -1,6 +1,8 @@
 ---
 title: "Policies"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 markup: mmark
 ---
 
