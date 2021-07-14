@@ -109,7 +109,7 @@ new_country <- tibble(
   schooling = c(9.9, 14.2, 10.9, 12.3),
   adult_mortality = c(___, ___, ___, ____),
   BMI_cat = c("normal", "obese", "overweight", "underweight"),
-  status = c("developed", "developed", "developed", "developed")
+  status = c("Developed", "Developed", "Developed", "Developed")
 )
 ```
 

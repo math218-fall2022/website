@@ -151,6 +151,8 @@ Class attendance in lecture and lab is a firm expectation; frequent absences or 
 
 If you have a cumulative numerical average of 90 - 100, you are guaranteed at least an A-, 80 - 89 at least a B-, and 70 - 79 at least a C-. The exact ranges for letter grades will be determined after Exam 2.
 
+Students are required to enroll in both Summer Sessions I and II in order to obtain credit for the course.
+
 ### Regrade Requests
 
 Regrade requests should be submitted through the regrade request from on Gradescope. **Requests for a regrade must be made within a week of when the assignment is returned.** Due to the time consuming nature of regrades, requests submitted later will not be regraded. Requests will be honored if there is an error in the grade calculation or a correct answer was mistakenly marked as incorrect. Please note that by submitting a regrade request, your entire assignment may be regraded and you may potentially lose points. Therefore, you should attend office hours to ask a member of the teaching team about your grading feedback before submitting a regrade request.  
@@ -182,7 +184,6 @@ If there are extenuating circumstances that prevent you from completing an assig
 **Late work will not be accepted for the exams or the final project.**
 <br> 
 <br>
-
 
 
 
