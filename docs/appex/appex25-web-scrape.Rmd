@@ -9,7 +9,10 @@ output:
 
 ## Announcements
 
-### Assignments
+- Reminder: HW 03 due tomorrow Friday, July 16 at 11:59pm
+
+- You will soon be receive an email invitation to complete a course evaluation
+
 
 ## Web scraping 
 

@@ -170,6 +170,8 @@ lessons:
    appex: "appex24-spatial.html"
  - date: "Thu, July 15"
    title: "Web scraping"
+   slides: "lec-slides/25-web-scraping.html"
+   appex: "appex25-web-scrape.html"
  - date: "Fri, July 16"
    title: "Project work day"
  - date: "Week 11"

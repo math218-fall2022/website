@@ -416,7 +416,16 @@ imdb_top_250
 
 ---
 .small[
-```{r}
+```{r eval = F}
+imdb_top_250 %>%
+  DT::datatable(options(list(dom = "p"))) #<<
+```
+]
+
+---
+
+.small[
+```{r echo= F}
 imdb_top_250 %>%
   DT::datatable(options(list(dom = "p"))) #<<
 ```
@@ -499,14 +508,9 @@ imdb_top_250 %>%
 How would you go about creating this visualization: Visualize the average yearly score for movies that made it on the top 250 list over time.
 ]
 
-.panelset[
-.panel[.panel-name[Plot]
-```{r ref.label = "imdb-plot", echo = FALSE, warning = FALSE, fig.width = 8, fig.height = 4}
-```
-]
+Code:
 
-.panel[.panel-name[Code]
-```{r imdb-plot, fig.show = "hide"}
+```{r imdb-plot-code, eval = F}
 imdb_top_250 %>% 
   group_by(year) %>%
   summarise(avg_score = mean(score)) %>%
@@ -515,8 +519,18 @@ imdb_top_250 %>%
     geom_smooth(method = "lm") +
     labs(x = "Year", y = "Average score")
 ```
-]
-]
+
+---
+
+```{r imdb-plot, echo = F}
+imdb_top_250 %>% 
+  group_by(year) %>%
+  summarise(avg_score = mean(score)) %>%
+  ggplot(aes(y = avg_score, x = year)) +
+    geom_point() +
+    geom_smooth(method = "lm") +
+    labs(x = "Year", y = "Average score")
+```
 
 ---
 
