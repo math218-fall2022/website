@@ -95,7 +95,7 @@ Once you have created these variable, createa new dataset that retains only the 
 
 9. Conduct a hypothesis test evaluating whether or not `adult_mortality` is associated with `life_expectancy`.
 
-10. Compute the mean schooling for each BMI category. Replace the dashes in the following code with the mean schooling for each respective `BMI_cat`. This code creates a new data frame to predict average life expectancy for hypothetical countries with the corresponding values for the explanatory variables.
+10. Compute the mean adult mortality for each BMI category. Replace the dashes in the following code with the mean adult mortality for each respective `BMI_cat`. This code creates a new data frame to predict average life expectancy for hypothetical countries with the corresponding values for the explanatory variables.
 
 ```{marginfigure}
 **Hint**: Remember, we use the `augment()` function to predict from a fitted model. You can use `augment(<model>, newdata = <data_frame_for_prediction>)` to obtain predictions.
