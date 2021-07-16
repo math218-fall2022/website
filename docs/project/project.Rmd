@@ -180,13 +180,14 @@ included.
 In addition to your Gradescope submissions, we will be checking your GitHub 
 repository. This repository should include:
 
-- RMarkdown file (formatted to clearly present all of your code and results)
-that will output the proposal and write-up in one document
+- RMarkdown files (formatted to clearly present all of your code and results)
+that will output the proposal and final write-up in two separate documents
 - Meaningful README file on the GitHub repository that contains a *codebook*
 for relevant variables
 - Dataset(s) (in csv or RData format, in a `/data` folder)
 - Presentation (if using Keynote/PowerPoint/Google Slides, export to PDF and put 
-in repo, in a `/presentation` folder)
+in repo, in a `/presentation` folder). To do this, create a folder in your file environment in
+Rstudio called `presentation` and upload the slides there.
 
 Style and format does count for this assignment, so please take the time to make 
 sure everything looks good and your data and code are properly formatted.
