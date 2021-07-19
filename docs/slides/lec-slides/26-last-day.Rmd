@@ -53,6 +53,8 @@ class: middle
 
 - Upload slides to Github reposistory (demo)
 
+- Remember to set `echo = FALSE` in the R chunks in the .Rmd file so your PDF only displays results and text, and no code
+
 ---
 
 ## Evaluation and survey
