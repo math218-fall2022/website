@@ -178,6 +178,7 @@ lessons:
  - date: "Week 11"
  - date: "Mon, July 19"
    title: "Project work day"
+   slides: "lec-slides/26-last-day.html"
    project: "project.html"
  - date: "Tuesday, July 20"
    title: "Project write-ups due at 11:59pm"
