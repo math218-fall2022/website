@@ -2,7 +2,7 @@
 
 Course website for Math 118 - Intro to Data Science at Middlebury College (Fall 2022)
 
-Website address: https://sta199-summer2021.github.io/website/.
+Website address: https://math118-fall2022.github.io/website/.
 
 # Attribution
 
