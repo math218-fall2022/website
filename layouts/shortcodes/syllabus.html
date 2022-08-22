@@ -4,11 +4,10 @@
 
 <table class="table" style="max-width:900px;margin-left:auto;margin-right:auto">
   <tr>
-    <th style="width:15%;text-align:right">Date</th>
+    <th style="width:20%;text-align:right">Date</th>
     <th style="width:45%">Lesson</th>
     <th style="width:5%;text-align:center">Slides</th>
     <th style="width:5%;text-align:center">Reading</th>
-    <th style="width:5%;text-align:center">Lab</th>
     <th style="width:5%;text-align:center">AE</th>
     <th style="width:5%;text-align:center">HW</th>
     <!-- <th style="width:5%;text-align:center">EC</th> -->
@@ -38,14 +37,7 @@
           <i class="fa fa-book fa-lg"></i></font></td>
       {{ end }}
 
-      {{ if .lab }}
-      <td align="center"><a href="{{ .Site.baseurl }}/labs/{{ .lab }}">
-          <i class="fa fa-file-code-o fa-lg"></i></a></td>
-      {{ else }}
-        <td align="center"><font color="f1f1f1">
-          <i class="fa fa-file-code-o fa-lg"></i></font></td>
-      {{ end }}
-      
+  
       {{ if .appex }}
       <td align="center"><a href="{{ .Site.baseurl }}/appex/{{ .appex }}">
           <i class="fa fa-cloud-download fa-lg"></i></a></td>
