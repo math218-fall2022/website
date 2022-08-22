@@ -1,11 +1,11 @@
 baseurl = "/"
 languageCode = "en-us"
 defaultContentLanguage = "en-us"
-title = "STA 199"
+title = "Math 118"
 theme = "material"
 #disqusShortname = ""
 # googleAnalytics = ""
-paginate = 7
+paginate = 3
 relativeURLs = true
 uglyURLs = true
 publishDir = "docs"
@@ -21,14 +21,14 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   archive = "archives"
 
 [author]
-  name = "Dr. Maria Tackett"
+  name = "Dr. Becky Tang"
   bio = ""
-  job = "Assistant Professor of the Practice"
-  location = "Duke University"
-  gravatarEmail = "maria.tackett@duke.edu"
+  job = "Assistant Professor of Statistics"
+  location = "Middlebury College"
+  gravatarEmail = "btang@middlebury.edu"
   # Your profile picture
 #  picture = ""
-  twitter = "MT_statistics"
+  #twitter = "MT_statistics"
  
 # Menu Configuration
 [[menu.main]]
@@ -43,56 +43,18 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   name = "schedule"
   pre = "<i class=\"material-icons\">calendar_today</i>"
   url = "/schedule.html"
+
 [[menu.main]]
   weight = 3
-  identifier = "policies"
-  name = "Policies"
-  pre = "<i class=\"material-icons\">dashboard</i>"
-  url = "/policies.html"
-[[menu.main]]
-  weight = 4
-  identifier = "gradescope"
-  name = "Gradescope"
-  pre = "<i class=\"material-icons\">grading</i>"
-  url = "https://www.gradescope.com/"
-[[menu.main]]
-  weight = 5
   identifier = "github"
   name = "GitHub"
   pre = "<i class='fab fa-github fa-lg'></i>"
-  url = "https://github.com/sta199-summer2021"
+  url = "https://github.com/math118-fall2022"
   
-[[menu.main]]
-  weight = 6
-  identifier = "sakai"
-  name = "Sakai"
-  pre = "<i class=\"material-icons\">school</i>"
-  url = "http://sakai.duke.edu"
 
-[[menu.main]]
-  weight = 7
-  identifier = "help"
-  name = "Help"
-  pre = "<i class=\"material-icons\">help</i>"
-  url = "https://piazza.com"
-
-
-[[menu.footer]]
-  weight = 1
-  identifier = "Duke"
-  name = "Duke StatSci"
-  pre = "<i class=\"button-icon fa fa-2x fa-map-marker\"></i>"
-  url = "http://stat.duke.edu/"
-[[menu.footer]]
-  weight = 2
-  identifier = "GitHub"
-  name = "GitHub"
-  pre = "<i class=\"button-icon fa fa-2x fa-github\"></i>"
-  url = "https://github.com/sta199-summer2021"
-[[menu.footer]]
 
 
 [params]
   dateFormat = "January 2, 2006"
   background = "http://www2.stat.duke.edu/courses/Spring19/sta199.001/img/bikeshare-plots.png"
-  favicon = "img/sta199-sticker.png"
+  favicon = "img/hex118.png"
