@@ -264,7 +264,7 @@ class: middle, center
 
 --
 
-- <font class="vocab">Exams</font>: One take-home exam, scheduled for **Wednesday, Oct. 12, 2022**.
+- <font class="vocab">Exams</font>: One take-home midterm exam, scheduled for **Wednesday, Oct. 12, 2022**.
 
 --
 
@@ -310,7 +310,7 @@ class: middle, center
 ## Late Work &amp; Regrade Requests
 
 - Homework assignments: 
-    - After the assigned deadline, there is a 20% penalty for each day the assignment is late
+    - After the assigned deadline, there is a 10% penalty for each day the assignment is late
     - Please communicate with me early if you will need a homework extension!
     
 - Late work will not be accepted for the take-home exams or final project. 

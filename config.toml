@@ -5,7 +5,7 @@ title = "Math 118"
 theme = "material"
 #disqusShortname = ""
 # googleAnalytics = ""
-paginate = 3
+paginate = 4
 relativeURLs = true
 uglyURLs = true
 publishDir = "docs"
@@ -50,8 +50,13 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   name = "GitHub"
   pre = "<i class='fab fa-github fa-lg'></i>"
   url = "https://github.com/math118-fall2022"
-  
 
+[[menu.main]]
+  weight = 4
+  identifier = "canvas"
+  name = "Canvas"
+  pre = "<i class=\"material-icons\">grading</i>"
+  url = "https://middlebury.instructure.com/"
 
 
 [params]
