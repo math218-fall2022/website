@@ -1,7 +1,7 @@
 baseurl = "/"
 languageCode = "en-us"
 defaultContentLanguage = "en-us"
-title = "Math 118"
+title = "Math 218"
 theme = "material"
 #disqusShortname = ""
 # googleAnalytics = ""
@@ -49,7 +49,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
   identifier = "github"
   name = "GitHub"
   pre = "<i class='fab fa-github fa-lg'></i>"
-  url = "https://github.com/math118-fall2022"
+  url = "https://github.com/math218-fall2022"
 
 [[menu.main]]
   weight = 4
@@ -61,5 +61,5 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [params]
   dateFormat = "January 2, 2006"
-  background = "http://www2.stat.duke.edu/courses/Spring19/sta199.001/img/bikeshare-plots.png"
-  favicon = "img/hex118.png"
+  background = "img/flea_plots.png"
+  favicon = "img/math218-sticker-icon.png"

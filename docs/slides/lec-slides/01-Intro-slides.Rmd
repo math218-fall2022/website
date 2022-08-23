@@ -1,0 +1,122 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Introduction"
+date: "9/12/2022"
+output: 
+   xaringan::moon_reader:
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+    
+
+---
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(NHANES)
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+```
+
+class: center, middle
+
+# Welcome!
+
+---
+
+## What is statistical learning?
+
+- Learning (well) from data
+
+---
+
+```{r echo = F}
+vars <- c("Age","AlcoholDay", "SmokeNow", "BMI", "BPDiaAve")
+nhanes <- NHANES %>%
+  dplyr::select(all_of(vars)) %>%
+  na.omit() 
+cols <- rep("blue", nrow(nhanes))
+cols[which(nhanes$SmokeNow == "Yes")] <- "orange"
+pairs(nhanes %>% dplyr::select(-SmokeNow), col = cols)
+
+```
+
+---
+
+```{r fig.align="center",out.height = "70%",echo=FALSE}
+library(ISLR)
+attach(Wage) #Mid-Atlantic Wage Data
+p1 <- Wage %>%
+  ggplot(., aes(x = age , y = wage))+
+  geom_point()+
+  geom_smooth()+
+  theme_classic()
+p2 <- Wage %>%
+  ggplot(., aes(x = education, y = wage, fill = education)) + 
+  geom_boxplot()+
+  theme_classic() +
+  theme(axis.text.x = element_blank())
+gridExtra::grid.arrange(p1,p2, nrow =1)
+```
+
+---
+
+## Identify numbers 
+
+```{r fig.align="center",out.width="70%",echo=FALSE}
+knitr::include_graphics("figs/01-intro/mnist2.jpeg")
+```
+
+---
+
+```{r fig.align="center",out.width="70%",echo=FALSE}
+knitr::include_graphics("figs/01-intro/landsat.jpg")
+```
+.footnote[
+*Source: [A comparative study of ALOS-2 PALSAR and landsat-8 imagery for land cover classification using maximum likelihood classifier](https://www.sciencedirect.com/science/article/pii/S1110982317301205)
+]
+---
+
+## Examples of statistical learning problems
+
+- Classification
+- Learning relationships
+- Prediction
+
+---
+
+## Supervised Learning
+
+- Notation: let $i = 1,\ldots, n$ index the observation
+- For each observation $i$, we have:
+  - Outcome/response: $y_{i}$
+  - Vector of $p$ predictors/covariates: $\mathbf{x}_{i} = (x_{i1}, x_{i2}, \ldots, x_{ip})'$
+- **Regression**: the $y_{i}$ are quantitative (e.g. height, price)
+- **Classficiation**: the $y_{i}$ are categorical/qualitative (e.g. education level, diagnosis)
+- Goal: relate response $y_{i}$ to the various predictors
+
+
+---
+
+## Objectives
+
+1. Explanatory: understand which predictors affect the response, and how 
+2. Prediction: accurately predict unobserved cases for new measurements of predictors
+3. Assessment: quantify the quality of our predictions and inference
+
+---
+
+## Unsupervised Learning
+
+- We only observe the $\mathbf{x}_{i}$, but no associated response $y_{i}$
+- ''Unsupervised" because there is no response variable guiding the analysis!
+- Objective may not be as clearly defined
+- Difficult to assess how well your are doing
+
+---
+
+# Course logistics
+
+--- 

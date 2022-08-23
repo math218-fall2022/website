@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Math 118: Introduction to Data Science on Math 118</title>
+    <title>Math 218: Introduction to Data Science on Math 218</title>
     <link>/</link>
-    <description>Recent content in Math 118: Introduction to Data Science on Math 118</description>
+    <description>Recent content in Math 218: Introduction to Data Science on Math 218</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
@@ -27,7 +27,7 @@
       <guid>/schedule.html</guid>
       <description>Note: This schedule may be updated as the semester progresses. Due dates for the exams and project will not be changed.
 
- Date Lesson Slides Reading AE HW Exam Project   Week 01          Monday, Sep. 12 Welcome to Data Science         Wednesday, Sep. 15 Meet the Toolkit         UNIT 1 Collecting, wrangling, &amp;amp; visualizing data         Friday, Sep.</description>
+ Date Lesson Slides Labs HW Exam Project   Week 01         Monday, Sep. 12 Welcome to Data Science        Wednesday, Sep. 15 Meet the Toolkit        UNIT 1 Collecting, wrangling, &amp;amp; visualizing data        Friday, Sep.</description>
     </item>
     
     <item>
