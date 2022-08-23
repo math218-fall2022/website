@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="" xml:lang="">
   <head>
-    <title>Welcome to Intro to Data Science</title>
+    <title>Welcome to Intro to Statistical Learning</title>
     <meta charset="utf-8" />
     <meta name="author" content="Becky Tang" />
     <meta name="date" content="2022-09-12" />
-    <link rel="stylesheet" href="math118-slides.css" type="text/css" />
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
 .title[
-# Welcome to Intro to Data Science
+# Welcome to Intro to Statistical Learning
 ]
 .author[
 ### Becky Tang
@@ -32,27 +32,12 @@ class: center, middle
 
 # Welcome!
 
----
-
-## What is Data Science?
-
-*"Data science is a concept to unify statistics, data analysis, machine learning and their related methods in order to understand and analyze actual phenomena with data. It employs techniques and theories drawn from many fields within the context of &lt;font class="vocab"&gt;mathematics, statistics, information science, and computer science&lt;/font&gt;."*
-
-.pull-right[
-[-Wikipedia](https://en.wikipedia.org/wiki/Data_science)
-]
-
-We will be leveraging the programming language R to introduce ourselves to data science.
----
-
 
 ## Necessary background
 
-We assume ZERO background in data science, statistics, and coding. We will help you get started with learning statistics, but this course will *not* be your typical intro stats course.
+I assume you have taken Math 118 prior to this course, and are comfortable with R and RStudio. There is a large emphasis on computing.
 
-There is a large emphasis on computing, so all we need is an openness to learn! (and a laptop)
-
-That being said, there is a lot of material in this course! 
+This is not a theory course. We will focus more on applications and developing intuition. The goal is to develop a toolbox of methods that you may use in future analyses.
 
 ---
 
@@ -63,73 +48,40 @@ class: regular
 [Becky Tang](https://beckytang.rbind.io/)
 
 &lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[becky.tang@duke.edu](mailto:btang@midlebury.edu)&lt;br&gt;
-&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp; T 3-5pm, F 10:30am-12:00pm (and by appointment)
+&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp;  W 3:00-5:00pm; Su 6:00-8:00pm (and by appointment)
 
 --
 
 .pull-left[
-&lt;img src="img/00/eBird.png" width="100%" style="display: block; margin: auto;" /&gt;
+
 ]
 
 --
 
 .pull-right[
-&lt;img src="img/00/restio.jpg" width="100%" style="display: block; margin: auto;" /&gt;
+
 ]
 ---
 
 
 ## Where to find information
 
-- Course website: [https://math118-fall2022.github.io/website/](https://math118-fall2022.github.io/website/)
+- Course website: [https://math218-fall2022.github.io/website/](https://math218-fall2022.github.io/website/)
 
-- GitHub (assignments): [https://github.com/math118-fall2022](https://github.com/math118-fall2022)
+- GitHub (assignments): [https://github.com/math218-fall2022](https://github.com/math218-fall2022)
 
 
 ---
 
 ## Course Objectives
 
-- Learn to explore, visualize, and analyze data in a reproducible and shareable manner
+- Introduce fundamental tools for building predictive models, including some "state-of-the-art" methods in data science
 
-- Gain experience in data wrangling and munging, exploratory data analysis, predictive modeling, and data visualization
+- Understand the role of model assessment, comparison, and selection 
 
-- Work on problems and case studies inspired by and based on real-world questions and data
+- Learn how to use the vast collection of tools in R to implement the methods learned
 
-- Learn to effectively communicate results through written assignments and final project presentation
-
----
-
-class: middle, center
-
-## Examples of Data Science
-
----
-
-## Billboard Hot 100 Analytics
-
-Analysis: 
-&lt;small&gt;[https://towardsdatascience.com/billboard-hot-100-analytics-using-data-to-understand-the-shift-in-popular-music-in-the-last-60-ac3919d39b49](https://towardsdatascience.com/billboard-hot-100-analytics-using-data-to-understand-the-shift-in-popular-music-in-the-last-60-ac3919d39b49)&lt;/small&gt;
-&lt;br&gt;&lt;br&gt;
-
-[GitHub repository with data and R  scripts](https://github.com/RosebudAnwuri/TheArtandScienceofData/tree/master/The%20Making%20of%20Great%20Music)
-
----
-
-## Atlas of Redistricting
-
-[https://projects.fivethirtyeight.com/redistricting-maps/north-carolina/](https://projects.fivethirtyeight.com/redistricting-maps/north-carolina/)
-
----
-
-## A Year as Told by Fitbit
-
-[https://livefreeordichotomize.com/2017/12/27/a-year-as-told-by-fitbit/](https://livefreeordichotomize.com/2017/12/27/a-year-as-told-by-fitbit/)
-
----
-
-## TED Talk
-[https://www.youtube.com/watch?v=hVimVzgtD6w](https://www.youtube.com/watch?v=hVimVzgtD6w)
+- Have fun!
 
 ---
 
@@ -146,7 +98,7 @@ class: center, middle
 &lt;small&gt;
 
 .instructions[
-Go to https://github.com/, and create an account (unless you already have one). After you create your account, click [here](https://forms.gle/CzeyScmzudMTbMTQ6) and enter your GitHub username.
+Go to https://github.com/, and create an account (unless you already have one). After you create your account, click [here](https://forms.gle/9McLQvHGTzWoqAeM7) and enter your GitHub username.
 ]
 
 Tips for creating a username from [Happy Git with R](http://happygitwithr.com/github-acct.html#username-advice).
@@ -165,12 +117,6 @@ Tips for creating a username from [Happy Git with R](http://happygitwithr.com/gi
 Raise your hand if you have any questions.
 ]
 
----
-
-## Time for an analysis!
-
-- Let's take a look at the [UN Votes](https://math118-fall2022.github.io/website/appex/00-unvotes.html) analysis
-
 
 ---
 
@@ -179,13 +125,6 @@ Raise your hand if you have any questions.
 Share with the class!
 
 1. Start by introducing yourself! Name, year, major/ academic interest, favorite hobby.
-
-2. Consider the plot in Part 1. Describe how the voting behaviors of the five countries have changed over time.
-
-3. Consider the plot in Part 2. 
-    - On which issues have the three countries voted most similarly in recent years?  
-    - On which issues have they voted most differently in recent years? 
-    - Has this changed over time?
 
 ---
 
@@ -200,7 +139,7 @@ class: middle, center
 --
 
 &lt;font class="vocab"&gt;Lecture&lt;/font&gt; 
-- Focus on concepts behind data analysis
+- Focus on concepts behind statistical learning techniques
 - Interactive lecture that includes examples and hands-on exercises
 - Bring fully-charged laptop to every lecture
     - Please let me know as soon as possible if you do not have access to a laptop
@@ -208,21 +147,18 @@ class: middle, center
 --
 
 &lt;font class="vocab"&gt;Lab&lt;/font&gt;
-- Focus on computing using R `tidyverse` syntax
+- Typically occurs on Fridays
+- Focus on computing in R
 - Apply concepts from lecture to case study scenarios
-- Bring fully-charged laptop to every lab
 
 ---
 
 ## Textbooks
 
-- [OpenIntro Statistics, 4th Edition](https://www.openintro.org/stat/textbook.php?stat_book=os)
+- [Introduction to Statistical Learning, 2nd Edition](https://www.statlearning.com/)
     - Free PDF available online. Hard copy available for purchase.
-    - Assigned readings about statistical content
+    - Optional supplement
   
-- [R for Data Science](http://r4ds.had.co.nz/)
-    - Free online version. Hard copy available for purchase.
-    - Assigned readings and resource for R coding using `tidyverse` syntax.
 
 ---
 
@@ -232,15 +168,12 @@ class: middle, center
 
 --
 
-- &lt;font class="vocab"&gt;Application Exercises&lt;/font&gt;: Exercises usually started in class and when assigned, due by the next class. Graded based on a good-faith effort has been made in attempting all parts. Successful on-time completion of at least 90% will result in full points for that AE; anything lower than that will be assigned points accordingly. *Lowest two scores will be dropped.*
+- &lt;font class="vocab"&gt;Labs&lt;/font&gt;: *Lowest score will be dropped.*
+
 
 --
 
-- &lt;font class="vocab"&gt;Data Visualization Examples&lt;/font&gt;: Share a visualization that you find interesting. Around two presentations per week.
-
---
-
-- &lt;font class="vocab"&gt;Exams&lt;/font&gt;: One take-home exam, scheduled for **Wednesday, Oct. 12, 2022**.
+- &lt;font class="vocab"&gt;Exams&lt;/font&gt;: One take-home midterm exam, scheduled for **Wednesday, Oct. 12, 2022**.
 
 --
 
@@ -254,15 +187,15 @@ class: middle, center
 
 | Component | Weight |
 |---------------|--------|
-| Homework | 30%|
-| Application Exercises | 15% |
+| Homework | 35%|
+| Labs | 15% |
 | Midterm Exam | 20% |
-| Final Project | 30% |
+| Final Project | 25% |
 | Participation | 5% |
 
 --
 
-- If you have a cumulative numerical average of 90 - 100, you are guaranteed at least an A-, 80 - 89 at least a B-, and 70 - 79 at least a C-. The exact ranges for letter grades will be determined after Exam 2.
+- If you have a cumulative numerical average of 90 - 100, you are guaranteed at least an A-, 80 - 89 at least a B-, and 70 - 79 at least a C-. 
 
 - You are expected to attend all lectures. Excessive absences can impact your final course grade.
 
@@ -286,7 +219,7 @@ class: middle, center
 ## Late Work &amp;amp; Regrade Requests
 
 - Homework assignments: 
-    - After the assigned deadline, there is a 20% penalty for each day the assignment is late
+    - After the assigned deadline, there is a 10% penalty for each day the assignment is late
     - Please communicate with me early if you will need a homework extension!
     
 - Late work will not be accepted for the take-home exams or final project. 
@@ -298,8 +231,6 @@ class: middle, center
 ## Academic Honesty
 
 All work for this class should be done in accordance with the Middlebury Honor code.
-
-Any violations will automatically result in a grade of 0 on the assignment and will be reported to [Office of Student Conduct](https://studentaffairs.duke.edu/conduct) for further action.
 
 ---
 
@@ -343,56 +274,7 @@ class: center, middle
 
 - Fill out the **Getting To Know You Survey on Canvas** - due Wednesday, 9/14 at 11:59pm
 
-- Please make sure you have access to the course Canvas
-
----
-
-## Installing R
-
-Please be patient! This process may be time-consuming and stressful, but it is necessary for the rest of the course!
-
-1. Go to the [CRAN website](http://lib.stat.cmu.edu/R/CRAN/) and click on the appropriate link under "Download and Install R"
-
-  1.1 If you are Windows, click "Install R for the first time", then "Download R-4.2.1 for Windows"
-  
-  1.1 If you use a Mac, check your Mac OS system (Apple icon -&gt; About this Mac -&gt; Overview -&gt; Version xxx). Then on the website, click the newest release that supports your current OS version. 
-  
-  For example, if I have Version 10.14.6, I will choose the "R-3.6.3.nnpkg" because is it "for OS X 10.11 (El Capitan) and higher, whereas the next version is for macOS 11.
-  
----
-
-## Installing R (cont.)
-
-&lt;ol start = 2&gt;
-&lt;li&gt; A file will download (most likely to your *Downloads* folder). Run the file by clicking on it. Allow the app to make changes to your device if prompted.
-
-&lt;li&gt; Follow the installation instructions, until you click on "Finish" to exit the installation setup. 
-
-At this point, R should be successfully installed.
-
----
-
-## Installing RStudio Desktop
-
-1. Go to the [RStudio](https://www.rstudio.com/) website
-
-2. Click on "Download" in the top-right corner
-
-3. Click on "Download" under the RStudio Desktop Open Source License (Free)
-
-4. Download RStudio Desktop recommended for your computer
-
-  4.1 For Mac users: If you have macOS 10.15+, you can click the corresponding download button on this page. Otherwise, if you have at least macOS 10.12, click on "older version of Rstudio", find "2022.02.3" and click "Installers". Click on the link next to "MacOS" 
-  
-5. Run the downloaded RStudio Executable file until you hit the "Finish" button
-  
----
-
-## Opening RStudio
-
-- For ease of access, put the RStudio shortcut onto your dock or homescreen (*Applications* folder -&gt; Drag the icon for **RStudio** to your dock or homescreen)
-
-- To use, simply click on the RStudio icon (you do not need to click on the **R** icon)
+- Please make sure you have access to the course Canvas, and fill out the [form](https://forms.gle/9McLQvHGTzWoqAeM7) with your Github username
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
