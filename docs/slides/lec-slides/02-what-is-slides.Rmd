@@ -1,0 +1,788 @@
+---
+title: "Math 218: Statistical Learning"
+author: "What is statistical learning?"
+date: "9/14/2022"
+output: 
+   xaringan::moon_reader:
+
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(NHANES)
+library(class)
+library(truncnorm)
+library(splines)
+
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+
+set.seed(1)
+abalone <- read.table("data/abalone_data.txt", sep = ",",header = T)
+abalone <- abalone %>%
+  mutate_at(vars(-rings, - sex), function(x){x*200}) %>% 
+  mutate(rings = rings + runif(nrow(abalone), -0.5,0.5),
+         age = rings + 1.5,
+         weight = whole_wt)
+```
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Abalone
+
+
+---
+
+```{r fig.align="center",out.height="50%"}
+abalone %>%
+  dplyr::select(c(age, length, height, weight)) %>%
+  pivot_longer(cols = -1, names_to = "variable") %>%
+  ggplot(.,aes(x = value, y  = age))+
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~variable, scales = "free", nrow = 1)
+```
+
+- $\color{blue}{\text{age}}$ of abalone plotted against $\color{blue}{\text{height}}$, $\color{blue}{\text{length}}$, $\color{blue}{\text{weight}}$.
+
+- Goal: can we predict $\color{blue}{\text{age}}$ of an abalone using these variables?
+
+
+---
+
+- Maybe $\color{blue}{\text{age}} = f(\color{blue}{\text{height}} + \color{blue}{\text{length}} + \color{blue}{\text{weight}})$?
+
+- Or $\color{blue}{\text{age}} \approx f(\color{blue}{\text{height}} + \color{blue}{\text{length}} + \color{blue}{\text{weight}})$?
+
+- Using notation from previous lecture, what is $Y$? What is $X$?
+
+--
+
+  - $Y = \color{blue}{\text{age}}$
+  - $X = \begin{pmatrix} X_{1} \\ X_{2}  \\ X_{3} \end{pmatrix}$ where $X_{1} = \color{blue}{\text{height}}, X_{2}= \color{blue}{\text{length}}, X_{3} = \color{blue}{\text{weight}}$
+  
+--
+
+- Then our model can be written as $$Y = f(X) + \epsilon,$$ where $\epsilon$ represents random measurement error
+- What does this equation mean?
+
+---
+
+## What care about $f(x)$?
+
+$$Y = f(X) + \epsilon$$
+- The function $f(X)$ represents the systematic information that $X$ tells us about $Y$. 
+
+- If $f$ is "good", then we can make reliable predictions of $Y$ at new points $X = x$
+- If $f$ is "good", then we can identify which components of $X$ are important to explaining $Y$
+-- Depending on $f$, we may be able to learn how each component $X_{j}$ of $X$ affects $Y$
+
+---
+
+## Why care about $f$?
+
+- We assume that $f$ is fixed but unknown
+- Goal of statistical learning: how to estimate $f$?
+  - Subgoals: **prediction** and **inference**
+
+- The subgoal may affect the kind of $f$ we choose
+
+---
+
+## Prediction
+
+- We have a set of inputs or predictors $X$ and want to predict a corresponding $Y$
+- Assuming the error $\epsilon$ is 0 on average, obtain predictions of $Y$ as 
+$$\hat{Y} = \hat{f}(X)$$
+
+- If we knew the true $Y$, we could evaluate the accuracy of the prediction $\hat{Y}$
+- Generally, $Y \neq \hat{Y}$. Why?
+
+--
+
+  1. $\hat{f}$ will not be perfect estimate of $f$
+  2. $Y$ is a function of $\epsilon$, which cannot be predicted using $X$
+  
+---
+
+## Types of error
+
+- Irreducible error: $\epsilon$
+  - Even if we knew $f$ perfectly, there is still some inherent variability
+  - $\epsilon$ may also contained unmeasured variables that are not available to us
+- Reducible error: how far $\hat{f}$ is from the true $f$
+  
+---
+
+## Prediction errors
+
+- Ways to quantify error
+  - Difference/error = $Y - \hat{Y}$
+  - Absolute error = $|Y - \hat{Y}|$
+  - Squared error = $(Y - \hat{Y})^2$
+  
+
+
+---
+
+## Prediction errors
+
+- Given $\hat{f}$ and $X$, we can obtain a prediction $\hat{Y} = \hat{f}(X)$ for $Y$
+- Mean-squared prediction error:
+\begin{align*}
+\mathsf{E}[(Y - \hat{Y})^2] &= \mathsf{E}[( f(X) + \epsilon - \hat{f}(X))^2] \\
+&= \underbrace{[f(X) - \hat{f}(X)]^2}_\text{reducible} + \underbrace{\text{Var}(\epsilon)}_\text{irreducible}
+\end{align*}
+
+--
+
+- We cannot do much to decrease the irreducible error 
+- But we *can* potentially minimize the reducible error by choosing better $\hat{f}$!
+
+---
+
+## Inference
+
+- We are often interested in learning how $Y$ and the $X_{1}, \ldots, X_{p}$ are related or associated
+- In this mindset, we want to estimate $f$ to learn the relationships, rather than make predictions
+
+--
+
+  - In the prediction setting, estimate $\hat{f}$ for the purpose of $\hat{Y}$ and $Y$. 
+  - In the inference setting, estimate $\hat{f}$ for the purpose of $X$ and $Y$
+
+--
+
+- Some problems will call for prediction, inference, or both
+
+---
+
+class: center, middle
+
+# How to estimate $f$?
+
+---
+
+## Parametric methods
+
+1. Make an assumption about the functional form (shape) of $f$
+
+2. Fit/train the model to estimate the *parameters* that specifically determine the behavior of $f$
+
+--
+
+For example, 
+
+1. I might assume the linear model $$f(X) = \beta_{0} + \beta_{1} X_{1} + \beta_{2}X_{2} + \ldots + \beta_{p}X_{p}$$
+
+2. Estimate the $\beta_{0}, \beta_{1}, \ldots, \beta_{p}$
+
+---
+
+## Parametric methods
+
+- Consider again the abalone data, and assume $X = \color{blue}{\text{length}}$. 
+
+- Assuming a linear model: $$\color{blue}{\text{age}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{length}}$$
+
+```{r fig.align = "center", fig.height=4, fig.width=6}
+p_rand <- ggplot(abalone, aes(x = weight, y = age))+
+  geom_point()+
+  geom_abline(intercept = 7, slope = 3, col = "orange", lwd = 1)
+
+p_ols <- ggplot(abalone, aes(x = weight, y = age))+
+  geom_point()+
+  geom_smooth(method = "lm", se = F)
+
+gridExtra::grid.arrange(p_rand, p_ols, nrow = 1, top = "Linear models with different parameter estimates")
+```
+
+---
+
+## Nonparametric methods
+
+- Do not make explicit assumptions about the functional form of $f$
+
+- Seek $\hat{f}$ that gets as close to the data points as possible
+
+  - Often more flexible
+
+```{r fig.align='center', fig.height=4, fig.width=6}
+ggplot(abalone, aes(x = weight, y = age))+
+  geom_point()+
+  geom_smooth(method = "gam", se = F) +
+  ggtitle("GAM fit")
+```
+
+---
+
+## Trade-offs
+
+- Prediction accuracy vs. interpretability
+
+  - More restrictive models may be easier to interpret (better for inference)
+  
+- Good fit vs. over- or under-fit
+
+- Parsimony vs. black box
+
+  - A simpler model is often preferred over a very complex one
+
+---
+
+## Assessing model accuracy
+
+- No single method is superior over all possible data sets
+
+- How can we know how well a chosen $\hat{f}$ is performing? 
+
+- In regression setting, we often use **mean squared error (MSE)**
+
+$$MSE=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{f}(x_{i}))^2$$ 
+
+--
+
+- MSE will be small if predictions $\hat{f}(x_{i})$ are very close to the true $y_{i}$
+
+---
+
+## Training vs. test data
+
+- In practice, we split our data into **training** and **test** sets
+
+  - Training set is used to fit the model
+  - Test set is used to assess model fit
+  
+--
+
+- We are often most interested in accuracy of our predictions when applying the method to *previously unseen* data. Why? 
+
+
+---
+## Training vs. test data
+
+- We can compute the MSE for the training and test data. 
+
+- Let $n_{train}$ and $n_{test}$ be number of observations in train and test sets, respectively.
+
+$$MSE_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$
+$$MSE_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$
+
+---
+
+--- 
+## Example 1
+
+```{r mse_dat1}
+set.seed(24)
+f_true <- function(x){
+  (100 + 5*x - 0.5*(x-30)^2  )/10
+}
+n <- 50; n_test <- 30
+x <- runif(n, 10, 50)
+sd <- 3
+eps <- rnorm(n, 0,sd)
+y <- f_true(x) + eps
+
+xx <- seq(10, 50, 0.2)
+fit_lm <- lm(y ~ x ) # p+1
+pred_lm <- predict(fit_lm, newdata = list(x=xx))
+fit_bs <- lm(y ~ bs(x, knots = c(20,40))) # defaults to cubic spline with 4 + K df
+pred_bs <- predict(fit_bs, newdata = list(x = xx))
+
+fit_bs2 <- lm(y ~ bs(x, knots = c(15, 20,25,30,35,40,45) )) 
+pred_bs2 <- predict(fit_bs2, newdata = list(x = xx))
+
+point_df <- data.frame(x = x, y = y)
+fit_df <- data.frame(x = xx, lm = pred_lm, bs = pred_bs, bs2 = pred_bs2) %>%
+  pivot_longer(cols = -1, names_to = "mod")
+
+
+
+x_test <- runif(n_test,10,50)
+eps_test <- rnorm(n_test, 0, sd)
+y_test <- f_true(x_test) +  eps_test
+
+mse_train <- c(mean((predict(fit_lm, newdata = list(x = x)) - y)^2),
+               mean((predict(fit_bs, newdata = list(x = x)) - y)^2),
+               mean((predict(fit_bs2, newdata = list(x = x)) - y)^2))
+
+mse_test <- c(mean((predict(fit_lm, newdata = list(x = x_test)) - y_test)^2),
+              mean((predict(fit_bs, newdata = list(x = x_test)) - y_test)^2),
+              mean((predict(fit_bs2, newdata = list(x = x_test)) - y_test)^2))
+
+mse_df <- data.frame(train = mse_train, test = mse_test)%>%
+  mutate( mod = c("lm", "bs", "bs2"), 
+                     flexibility = c(2, 6, 11))
+```
+
+```{r plot_mse1, fig.align="center", fig.width=8, fig.height=5}
+
+p_fit <- ggplot()+
+  geom_point(data = point_df, aes(x = x, y=y))+
+  geom_line(data = fit_df, aes(x = x, y = value, col= mod), lwd = 1) +
+  guides(col = "none") +
+  ggtitle("Various fits to observed data")
+                    
+p_mse <- ggplot(data = mse_df %>%
+         pivot_longer(cols = 1:2, values_to = "MSE", names_to = "set"),
+       aes(x = flexibility, y = MSE, col = mod, group = set))+
+  stat_smooth( aes(linetype = set), col = "gray40") +
+  geom_point(size = 3) +
+  guides(col= "none") +
+  labs(y = "Mean squared error")+
+  geom_hline(yintercept = sd^2) +
+  ggtitle("Mean squared error for test and train data")
+
+
+gridExtra::grid.arrange(p_fit, p_mse, nrow = 1)
+```
+
+---
+## Example 2
+
+```{r mse_dat2}
+library(splines)
+set.seed(24)
+f_true_lin <- function(x){
+  (100 + 5*x   )/10
+}
+n <- 50; n_test <- 30
+x <- runif(n, 10, 50)
+eps <- rnorm(n, 0,sd)
+y <- f_true_lin(x) + eps
+
+
+
+xx <- seq(10, 50, 0.2)
+fit_lm <- lm(y ~ x ) # p+1
+pred_lm <- predict(fit_lm, newdata = list(x=xx))
+fit_bs <- lm(y ~ bs(x, knots = c(20,40))) # defaults to cubic spline with 4 + K df
+pred_bs <- predict(fit_bs, newdata = list(x = xx))
+
+fit_bs2 <- lm(y ~ bs(x, knots = c(15, 20,25,30,35,40,45) )) 
+pred_bs2 <- predict(fit_bs2, newdata = list(x = xx))
+
+point_df <- data.frame(x = x, y = y)
+fit_df <- data.frame(x = xx, lm = pred_lm, bs = pred_bs, bs2 = pred_bs2) %>%
+  pivot_longer(cols = -1, names_to = "mod")
+
+
+
+x_test <- runif(n_test,10,50)
+eps_test <- rnorm(n_test, 0, sd)
+y_test <- f_true_lin(x_test) +  eps_test
+
+mse_train <- c(mean((predict(fit_lm, newdata = list(x = x)) - y)^2),
+               mean((predict(fit_bs, newdata = list(x = x)) - y)^2),
+               mean((predict(fit_bs2, newdata = list(x = x)) - y)^2))
+
+mse_test <- c(mean((predict(fit_lm, newdata = list(x = x_test)) - y_test)^2),
+              mean((predict(fit_bs, newdata = list(x = x_test)) - y_test)^2),
+              mean((predict(fit_bs2, newdata = list(x = x_test)) - y_test)^2))
+
+mse_df <- data.frame(train = mse_train, test = mse_test)%>%
+  mutate( mod = c("lm", "bs", "bs2"), 
+                     flexibility = c(2, 6, 11))
+```
+
+```{r plot_mse2, fig.align="center", fig.width=8, fig.height=5}
+
+p_fit <- ggplot()+
+  geom_point(data = point_df, aes(x = x, y=y))+
+  geom_line(data = fit_df, aes(x = x, y = value, col= mod), lwd = 1) +
+  guides(col = "none") +
+  ggtitle("Various fits to observed data")
+                    
+p_mse <- ggplot(data = mse_df %>%
+         pivot_longer(cols = 1:2, values_to = "MSE", names_to = "set"),
+       aes(x = flexibility, y = MSE, col = mod, group = set))+
+  stat_smooth(aes(linetype = set), col = "gray40") +
+  geom_point(size = 3) +
+  guides(col= "none") +
+  labs(y = "Mean squared error")+
+  geom_hline(yintercept = sd^2) +
+  ggtitle("Mean squared error for test and train data")
+
+
+gridExtra::grid.arrange(p_fit, p_mse, nrow = 1)
+```
+
+---
+## Bias-Variance trade-off
+
+- As model flexibility increases, the training MSE will decrease but test MSE may not.
+
+- Flexible models may **overfit** the data, which leads to low train MSE and high test MSE
+  - The supposed patterns in train data do not exist in test data
+  
+  
+---
+
+## Bias-Variance trade-off
+
+- Let us consider a test observation $(x_{0}, y_{0})$. 
+
+- The expected test MSE for given $x_{0}$ can be decomposed as follows:
+
+$$\mathsf{E}[(y_{0} - \hat{f}(x_{0}))^2] = \text{Var}(\hat{f}(x_{0})) + [\text{Bias}(\hat{f}(x_{0}))]^2 + \text{Var}(\epsilon)$$
+where $\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0})$.
+
+```{r bv1, cache =T}
+get_bias <- function(estimate, truth) {
+  mean(estimate) - truth
+}
+
+get_mse = function(estimate, truth) {
+  mean((estimate - truth) ^ 2)
+}
+
+n_sims <- 1000
+n_models <- 3
+
+set.seed(1)
+# xx <- seq(15, 45, 5)
+bias_mat <- variance_mat<- mse_mat <- matrix(NA, ncol = n_models, nrow = length(x_test))
+for(j in 1:length(x_test)){
+  # x0 <- xx[j]
+  x0 <- x_test[j]
+  predictions = matrix(0, nrow = n_sims, ncol = n_models)
+  for (i in 1:n_sims) {
+    
+    eps <- rnorm(n, 0,sd)
+    y <- f_true(x) + eps
+    
+    fit_lm <- lm(y ~ x ) # p+1
+    fit_bs <- lm(y ~ bs(x, knots = c(20,40))) # defaults to cubic spline with 4 + K df
+    
+    fit_bs2 <- lm(y ~ bs(x, knots = c(15, 20,25,30,35,40,45) )) 
+    
+    
+    predictions[i, ] = c(
+      predict(fit_lm, newdata = data.frame(x = x0)),
+      predict(fit_bs, newdata = data.frame(x = x0)),
+      predict(fit_bs2, newdata = data.frame(x = x0))
+    )
+  }
+  eps <- rnorm(n = n_sims, mean = 0, sd = sd)
+  y0 <- f_true(x0) + eps
+  bias_mat[j,] <- apply(predictions, 2, get_bias, f_true(x0))
+  variance_mat[j,]  <- apply(predictions, 2, var)
+  mse_mat[j,]  <- apply(predictions, 2, get_mse, y0)
+}
+
+bv_df1 <- data.frame(bias = colMeans(bias_mat^2), variance = colMeans(variance_mat), 
+                     mse = colMeans(mse_mat)) %>%
+  mutate(flexibility = c(2,6,11),
+         scenario = "Example 1")
+```
+
+```{r bv2, cache = T}
+bias_mat <- variance_mat<- mse_mat <- matrix(NA, ncol = n_models, nrow = length(x_test))
+for(j in 1:length(x_test)){
+  # x0 <- xx[j]
+  x0 <- x_test[j]
+  predictions = matrix(0, nrow = n_sims, ncol = n_models)
+  for (i in 1:n_sims) {
+    
+    eps <- rnorm(n, 0,sd)
+    y <- f_true_lin(x) + eps
+    
+    fit_lm <- lm(y ~ x ) # p+1
+    fit_bs <- lm(y ~ bs(x, knots = c(20,40))) # defaults to cubic spline with 4 + K df
+    
+    fit_bs2 <- lm(y ~ bs(x, knots = c(15, 20,25,30,35,40,45) )) 
+    
+    
+    predictions[i, ] = c(
+      predict(fit_lm, newdata = data.frame(x = x0)),
+      predict(fit_bs, newdata = data.frame(x = x0)),
+      predict(fit_bs2, newdata = data.frame(x = x0))
+    )
+  }
+  eps <- rnorm(n = n_sims, mean = 0, sd = sd)
+  y0 <- f_true_lin(x0) + eps
+  bias_mat[j,] <- apply(predictions, 2, get_bias, f_true_lin(x0))
+  variance_mat[j,]  <- apply(predictions, 2, var)
+  mse_mat[j,]  <- apply(predictions, 2, get_mse, y0)
+}
+
+
+bv_df2 <- data.frame(bias = colMeans(bias_mat^2), variance = colMeans(variance_mat), 
+                     mse = colMeans(mse_mat)) %>%
+  mutate(flexibility = c(2,6,11),
+         scenario = "Example 2")
+```
+
+---
+
+## Bias-Variance trade-off
+
+
+
+```{r fig.align='center', fig.width=8, fig.height=5}
+rbind(bv_df1, bv_df2) %>%
+  # mutate(bias = bias^2) %>%
+  pivot_longer(cols = 1:3, names_to = "quantity") %>%
+  mutate(quantity = factor(quantity, c("mse", "bias", "variance"))) %>%
+  ggplot(., aes(x = flexibility, y = value, col = quantity))+
+  stat_smooth(method = "loess", formula = y ~ x,se = F) +
+  geom_hline(yintercept = sd^2, linetype = "dashed")+
+  facet_wrap(~scenario, scales = "free")+
+  scale_color_manual(labels = c("MSE", "Squared bias", "Variance"), values = c("blue", "red", "orange"))  +
+  ggtitle( bquote( "Test MSE components"))+
+  theme(text = element_text(size = 12))
+```
+
+
+---
+
+## Classification
+
+- Up until now, we have focused on quantiative responses $y_{i}$
+
+- What happens when $y_{i}$ is qualitative? Examples include:
+
+  - Medical diagnosis: $\mathcal{C} = \{\text{yes}, \text{no}\}$
+  
+  - Education level: $\mathcal{C} = \{\text{high school}, \text{college}, \text{graduate}\}$
+  
+- Each category in $\mathcal{C}$ is also known as a *label*
+
+- In this setting, we want our model to be **classifier**, i.e. given predictors $X$, predict a label from the pool of all possible categories $\mathcal{C}$
+
+---
+
+## Classification
+
+- We will still have to estimate $f$ 
+
+- $\hat{y}_{i}$ is the predicted class label for observation $i$ using estimate $\hat{f}$
+
+- How to assess model accuracy? Error is more intuitive: we have error if we predict the incorrect label, and no error otherwise
+
+--
+
+- This can be represented using an *indicator* variable or function. $\mathbf{I}(y_{i} = \hat{y}_{i})$:
+
+$$\mathbf{I}(y_{i} = \hat{y}_{i}) = \begin{cases} 1 & \text{ if } y_{i} = \hat{y}_{i}\\ 0 & \text{ if } y_{i} \neq \hat{y}_{i} \end{cases}$$
+---
+
+## CLassification error rate
+
+- To quantify accuracy of estimated classifier $\hat{f}$, can calculate the *error rate*, which is the proportion of mistakes we make in labeling: $$\frac{1}{n} \sum_{i=1}^{n} \mathbf{I}(y_{i} \neq \hat{y}_{i})$$
+
+-- 
+
+- Small error rate is preferred 
+
+- As with MSE, can calculate the error rate for train and test data sets
+
+---
+
+## Classifiers
+
+- How do we choose which label to predict for a given observation? 
+
+- Assume we have a total of $J$ possible labels in $\mathcal{C}$
+
+- For a given observation $i$, can calculate the following probability for each possible label $j$:
+$$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$
+
+- These probabilities are called *conditional class probabilities* at $x_{i}$
+
+---
+
+## Bayes optimal classifier
+
+- The **Bayes optimal** classifier will assign/predict the label which has the largest conditional class probability
+
+  - It can be shown that the *test* error rate $\frac{1}{n_{test}} \sum_{i=1}^{n_{test}} \mathbf{I}(y_{i} \neq \hat{y}_{i})$ is minimized when using the Bayes optimal classifier
+  
+--
+
+- For example, consider a binary problem with levels "yes" and "no".
+
+- For observation $i$, if $Pr(y_{i} = \text{yes} | X = x_{i}) > 0.5$, then $\hat{y}_{i} = \text{yes}$. 
+
+--
+
+- The $x_{i}$ where $Pr(y_{i} = \text{yes} | X = x_{i}) = Pr(y_{i} = \text{no} | X = x_{i})= 0.5$ is called the *Bayes decision boundary*
+
+
+---
+
+## Example
+
+```{r fig.align = "center", fig.height=4, fig.width=6}
+set.seed(1)
+n <- 100
+lb <- -2; ub = 2
+x <- cbind(rtruncnorm(n, a = lb, b = ub), runif(n, lb, ub))
+beta <- c(1, 0.5)
+
+true_probs <- pnorm(x%*%beta - 0.5*x[,2]^2)
+labels <- purrr::rbernoulli(n, true_probs)*1
+
+
+points_df <- data.frame(x) %>%
+         mutate(class = factor(labels))
+
+
+x_grid <- expand.grid(x = seq(lb,ub,0.1), y = seq(lb, ub, 0.1))
+probs <- pnorm(as.matrix(x_grid)%*% beta - 0.5*x_grid[,2]^2)
+
+plot_df_bayes <- data.frame(probs, X1=x_grid[,1], X2 = x_grid[,2]) %>%
+  mutate(class = case_when(probs <= 0.50 ~ 0,
+                           probs > 0.5 ~ 1)) %>%
+  mutate(class = factor(class))
+
+
+
+ggplot() +
+  geom_point(data = points_df, aes(x = X1, y = X2, col = class), size = 2) +
+  geom_point(data = plot_df_bayes, aes(x = X1, y = X2, col = class), size = 0.05)+
+  geom_contour(data = plot_df_bayes, aes(x = X1, y=X2, z = as.numeric(class == 0)),
+               breaks = 0.1,
+               col = "black")+
+  theme_bw()+
+  guides(col = "none")
+
+
+
+```
+
+---
+
+## $K$-Nearest Neighbors
+
+- Bayes classifier is "gold standard"
+
+- In practice, we cannot compute $p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$ because we do know the conditional distribution of $y$ given $x$
+
+- Instead, we need to estimate these $p_{ij}(x_{i})$
+
+- One method to estimate the probabilities is the **KNN** ($K$-nearest neighbors) classifier
+
+---
+
+## $K$-Nearest Neighbors
+
+0. Choose a positive integer $K$
+
+Then, for a given test observation $x_{0}$:
+
+1. Identify the $K$ points in the training data that are closes to $x_{0}$. Call this set $\mathcal{N}_{0}$.
+
+2. Estimate the conditional probability for class $j$:
+
+$$\widehat{p}_{j}(x_{0}) = Pr(Y = j | X = x_{0}) = \frac{1}{K}\sum_{i \in \mathcal{N}_{0}} \mathbf{I}(y_{i} = j)$$
+
+3. Classify/predict $\hat{y}_{0}$ to have label with largest estimated probability
+
+---
+
+## $K$-Nearest Neighbors
+
+```{r fig.align='center', fig.width=5, fig.height=5}
+x0 <- -0.30
+y0 <- -0.7
+r <- 0.135
+circle_df <- data.frame(x0 = x0, y0 = y0, r=r)
+ggplot() +
+    ggforce::geom_circle(data =circle_df, mapping = aes(x0 = x0, y0 = y0, r=r), fill = "yellow", alpha = 0.3) +
+  geom_point(data = points_df %>%
+  filter(X1 > -1, X1 < 0, X2 > -1, X2 < 0 ), 
+  aes(x = X1, y = X2, col = class), size = 3) +
+  geom_point(data = circle_df, aes(x =  x0, y = y0), col = "black", pch = 4, size =3)+
+  guides(col ="none")+
+  theme_bw()
+```
+
+- Suppose we are interested in classifying the test observation as blue or red.
+  
+  - What is the estimated conditional probability for each class?
+
+  - Would this point be classified as blue or red?
+  
+  
+---
+
+```{r fig.align="center", fig.width=12, fig.height=8}
+k <- 1
+knn4 <- knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = F)
+knn4_probs <-  knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = T)
+plot_df_knn4 <-  data.frame(class = knn4, X1=x_grid[,1], X2 = x_grid[,2], probs = attributes(knn4_probs)$prob) 
+
+boundary_df <- data.frame(probs = attributes(knn4_probs)$prob, x =x_grid[,1], y = x_grid[,2]) %>%
+  filter(probs == 0.5)
+p_knn1 <- ggplot() +
+  geom_point(data = points_df, aes(x = X1, y = X2, col = class), size = 2) +
+  geom_point(data = plot_df_knn4, aes(x = X1, y = X2, col = class), size = 0.05)+
+ geom_contour(data = plot_df_knn4, aes(x = X1, y=X2, z = as.numeric(class == 0)),
+               breaks = 0.1,
+               col = "purple")+
+  geom_contour(data = plot_df_bayes, aes(x = X1, y=X2, z = as.numeric(class == 0)),
+               breaks = 0.1,
+               col = "black")+
+  theme_bw()+
+  guides(col = "none") +
+  ggtitle(paste0("K = ", k))
+
+k <- 50
+knn4 <- knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = F)
+knn4_probs <-  knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = T)
+plot_df_knn4 <-  data.frame(class = knn4, X1=x_grid[,1], X2 = x_grid[,2], probs = attributes(knn4_probs)$prob) 
+
+boundary_df <- data.frame(probs = attributes(knn4_probs)$prob, x =x_grid[,1], y = x_grid[,2]) %>%
+  filter(probs == 0.5)
+p_knn2 <- ggplot() +
+  geom_point(data = points_df, aes(x = X1, y = X2, col = class), size = 2) +
+  geom_point(data = plot_df_knn4, aes(x = X1, y = X2, col = class), size = 0.05)+
+ geom_contour(data = plot_df_knn4, aes(x = X1, y=X2, z = as.numeric(class == 0)),
+               breaks = 0.1,
+               col = "purple")+
+  geom_contour(data = plot_df_bayes, aes(x = X1, y=X2, z = as.numeric(class == 0)),
+               breaks = 0.1,
+               col = "black")+
+  theme_bw()+
+  guides(col = "none") +
+  ggtitle(paste0("K = ", k))
+
+k <- 15
+knn4 <- knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = F)
+knn4_probs <-  knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = T)
+plot_df_knn4 <-  data.frame(class = knn4, X1=x_grid[,1], X2 = x_grid[,2], probs = attributes(knn4_probs)$prob) 
+
+boundary_df <- data.frame(probs = attributes(knn4_probs)$prob, x =x_grid[,1], y = x_grid[,2]) %>%
+  filter(probs == 0.5)
+p_knn3 <- ggplot() +
+  geom_point(data = points_df, aes(x = X1, y = X2, col = class), size = 2) +
+  geom_point(data = plot_df_knn4, aes(x = X1, y = X2, col = class), size = 0.05)+
+ geom_contour(data = plot_df_knn4, aes(x = X1, y=X2, z = as.numeric(class == 0)),
+               breaks = 0.1,
+               col = "purple")+
+  geom_contour(data = plot_df_bayes, aes(x = X1, y=X2, z = as.numeric(class == 0)),
+               breaks = 0.1,
+               col = "black")+
+  theme_bw()+
+  guides(col = "none") +
+  ggtitle(paste0("K = ", k))
+
+gridExtra::grid.arrange(p_knn1, p_knn2, p_knn3, nrow = 1, ncol = 3)
+
+```
+  
+
+

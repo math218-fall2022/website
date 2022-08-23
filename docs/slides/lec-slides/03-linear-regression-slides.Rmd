@@ -1,0 +1,1150 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Linear Regression"
+date: "9/14/2022"
+output: 
+   xaringan::moon_reader:
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+
+library(tidyverse)
+library(broom)
+library(ISLR)
+set.seed(1)
+abalone <- read.table("data/abalone_data.txt", sep = ",",header = T)
+abalone <- abalone %>%
+  mutate_at(vars(-rings, - sex), function(x){x*200}) %>%
+  mutate(rings = rings + runif(nrow(abalone), -0.5,0.5),
+         age = rings + 1.5,
+         weight = whole_wt)
+```
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+class: center, middle
+
+# Linear regression
+
+---
+
+## Linear regression
+
+- A simple, widely used approach to supervised learning
+
+- Assumes that the dependence of $Y$ on the predictors $X_{1}, \ldots, X_{p}$ is linear
+
+--
+
+```{r fig.align="center",fig.width=8, fig.height=5}
+abalone %>%
+  dplyr::select(c(age, length, height, weight)) %>%
+  pivot_longer(cols = -1, names_to = "variable") %>%
+  ggplot(.,aes(x = value, y  = age))+
+  geom_point() +
+  geom_smooth(method = "lm") +
+  facet_wrap(~variable, scales = "free", nrow = 1) +
+  theme(text = element_text(size = 14))
+```
+
+---
+
+## Linear regression for abalone data
+
+Questions we can ask:
+
+- Is there a relationship between the age and physical characteristics of abalone?
+
+- How strong is the relatinships between abalone age and the physical attributes?
+
+- Which physical attributes are associated with age? What is the strength of the association?
+
+- How accurately can we predict abalone age?
+
+- Is the relationship linear?
+
+---
+
+## Simple linear regression
+
+- **Simple linear regression** assumes a linear model for a quantative response using a single predictor:
+
+$$Y = \beta_{0} + \beta_{1} X + \epsilon,$$
+
+  where $\beta_{0}, \beta_{1}$ are unknown **coefficients** or **parameters** and $\epsilon$ is the error term
+
+- $\beta_{0}$ is commonly referred to as the **intercept**, and $\beta_{1}$ as the **slope**
+
+
+--
+
+- For example,  $\qquad \color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{length}} +\epsilon$
+
+
+--
+
+- We use training data to obtain estimates of the coefficients, $\hat{\beta}_{0}$ and $\hat{\beta}_{1}$
+
+- Once we have stimates for the coefficients, can predict future responses at $X = x$ using $$\hat{y} = \hat{\beta}_{0} + \hat{\beta}_{1}x$$
+
+---
+
+## Estimation of parameters by least squares
+
+- In practice, $\beta_{0}$ and $\beta_{1}$ are unknown, so we must estimate them!
+
+- Assuming $n$ observations, we have data of the form $(x_{1}, y_{1}), (x_{2}, y_{2}), \ldots, (x_{n}, y_{n})$
+
+- Goal: obtain estimates $\hat{\beta}_{0}$ and $\hat{\beta}_{1}$ such that $y_{i} \approx \hat{\beta}_{0} + \hat{\beta}_{1}x_{i}$
+
+- To measure how close a resulting line is to the $n$ data points, we will minimize the *least squares* criterion
+
+--
+
+- Let $\hat{y}_{i} =  \hat{\beta}_{0} + \hat{\beta}_{1}x_{i}$ be prediction for $Y$ based on $i$-th value of $X$
+
+- Then $i$-th **residual** is: $e_{i} = y_{i} - \hat{y}_{i}$
+
+---
+
+## Estimation of parameters by least squares
+
+- Define **residual sum of squares** (RSS) as $$RSS = e_{1}^{2} + e_{2}^{2} + \ldots + e_{n}^{2}$$
+
+- This is equivalent to $$RSS = (y_{1} - \hat{\beta}_{0}  - \hat{\beta}_{1}x_{1})^2 + (y_{2} - \hat{\beta}_{0}  - \hat{\beta}_{1}x_{2})^2 + \ldots (y_{n} - \hat{\beta}_{0}  - \hat{\beta}_{1}x_{n})^2$$ 
+
+--
+
+- Least square approach selects the pair $(\hat{\beta}_{0}, \hat{\beta}_{1})$ that minimize the RSS. Can be shown that the minimizing values are:
+
+\begin{align*}
+\hat{\beta}_{1} &= \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{n}(x_{i} - \bar{x})^2}\\
+\hat{\beta}_{0} &= \bar{y} - \hat{\beta}_{1} \bar{x}
+\end{align*}
+
+where $\bar{y} = \frac{1}{n}\sum_{i=1}^{n}y_{i}$ and $\bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_{i}$
+
+---
+
+## Abalone example
+
+Least squares fit for regression of $\color{blue}{\text{age}}$ on $\color{blue}{\text{length}}$, with selected residuals.
+
+```{r fig.align = "center", fig.height=5, fig.width=8}
+m1 <- lm(age ~ length, data = abalone)
+abalone_pred <- abalone %>%
+  mutate(age_pred = m1$coefficients[1] + m1$coefficients[2]*length) %>%
+  dplyr::select(age,  age_pred, length) %>%
+  mutate(group = row_number()) %>%
+  pivot_longer(cols = 1:2, names_to = "mod" )
+ggplot() +
+  geom_line(data = abalone_pred %>%
+              filter(length < 0.175 | length > 0.75 ), 
+            aes(x = length, y = value, group = group), col = "orange") +
+      geom_point(data = abalone, aes(x = length, y = age))+
+    geom_smooth(data = abalone, aes(x = length, y = age), method = "lm", se = F) +
+labs(y = "age")+
+  theme(text = element_text(size = 14))
+
+```
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+$$Y = \beta_{0} + \beta_{1} X + \epsilon$$
+
+- $\beta_{0}$ is the expected value of $Y$ when $X = 0$
+
+- $\beta_{1}$ is the average increase in $Y$ for one-unit increase in $X$
+
+- $\epsilon$ is error
+
+- This equation is the *population regression line*
+
+--
+
+- When using the least squares estimates for the coefficients, $\hat{Y} = \hat{\beta}_{0} + \hat{\beta}_{1} X$ is the *least squares line*
+
+- Note: the estimates of $\beta_{0}$ and $\beta_{1}$ will depend on the observed data!
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+- Simulated example: true model is $Y = 1 + 3X + \epsilon$, where $\epsilon$ is error from mean-zero normal distribution
+
+- We will generate $n = 100$ data points from this model and fit the least squares line to these data
+
+```{r fig.align="center", fig.height=4, fig.width=6}
+set.seed(121)
+n <- 100
+beta_true <- c(1,3)
+
+x <- cbind(1, rnorm(n,0,1))
+eps <- rnorm(n, 0, 3)
+y <- x %*% beta_true + eps
+
+x_range <- range(x); y_range <- range(y)
+lm_orig <- lm(y ~ -1+ x)
+beta_est_orig <- lm_orig$coefficients
+
+p1 <- data.frame(y = y, x=x[,2]) %>%
+  ggplot(., aes(x =x ,y=y)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = F, col = "orange")+
+  # geom_abline(slope = beta_est_orig[2], )
+  geom_abline(slope = beta_true[2], intercept = beta_true[1], col = "blue")+
+  xlim(x_range[1], x_range[2])+
+  ylim(y_range[1], y_range[2]) 
+  
+p1
+```
+
+--
+
+- We can continue to simulate datasets of $n=100$ observations. Below are the least squares lines for each separate set of simulated data.
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+
+```{r fig.align="center", fig.height=5, fig.width=8}
+J <- 10
+beta_est_mat <- matrix(NA, nrow = J + 1, ncol = 2)
+for(j in 1:J){
+  x <- cbind(1, rnorm(n,0,1))
+  eps <- rnorm(n, 0, 3)
+  y <- x %*% beta_true + eps
+  beta_est_mat[j,] <- lm(y ~ -1+ x)$coefficients
+}
+beta_est_mat[J+1,] <- beta_est_orig
+
+p2 <- data.frame(beta_est_mat) %>%
+  rename( "intercept" =1 ,  "slope" = 2) %>%
+  mutate(group = c(rep("other",J), "orig"),
+         group = factor(group, c("orig", "other"))) %>%
+  ggplot(.)+
+  xlim(x_range[1], x_range[2])+
+  ylim(y_range[1], y_range[2]) +
+  geom_abline(aes(slope = slope, intercept = intercept, col = group))+
+  scale_color_manual(values = c("orange", "lightblue"))+
+  geom_abline(slope = beta_true[2], intercept = beta_true[1], col= "blue")+
+  guides(col = "none") +
+  labs(x = "x", y = "y")
+
+gridExtra::grid.arrange(p1,p2, nrow =1, ncol = 2)
+```
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+- Estimates $\hat{\beta}_{0}$ and $\hat{\beta}_{1}$ on the basis of a particular data set will not exactly equal the true parameters
+
+- But averaging estimates over a large number of data sets would lead to perfect estimation
+
+- Then, how accurate are our estimates $\hat{\beta}_{0}$ and $\hat{\beta}_{1}$?
+
+--
+
+- *Standard error* (SE) of an estimator reflects how it varies under repeated sampling. For simple linear regression:
+
+$$\text{SE}(\hat{\beta}_{0}) = \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^{n}(x_{i} - \bar{x})^2}\right], \qquad \text{SE}(\hat{\beta}_{1}) = \frac{\sigma^2}{\sum_{i=1}^{n}(x_{i} - \bar{x})^2}$$
+
+where $\sigma^2 = \text{Var}(\epsilon)$
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+- Typically $\sigma^2$ is not known, but can be estimated from the data. Estimate $\hat{\sigma}$ is residual standard error (RSE) given by:
+
+$$\hat{\sigma}= \text{RSE} = \sqrt{\text{RSS}/(n-2)}$$
+
+- We use this estimate to calculate $\text{SE}(\hat{\beta}_{0})$ and $\text{SE}(\hat{\beta}_{1})$
+
+--
+
+- Standard errors can be used to compute **confidence intervals** for the coefficients! A 95% confidence interval (CI) is the range of values such that with 95% probability, the range will contain the true value of the parameter.
+
+---
+
+## Confidence Intervals
+
+- For linear regression, the 95% CI for $\beta_{1}$ is approximately 
+$$\hat{\beta}_{1} \pm 2 \cdot \text{SE}(\hat{\beta}_{1})$$
+- So, there is approximately a 95% chance that the true value of $\beta_{1}$ falls between $\hat{\beta}_{1} - 2 \cdot \text{SE}(\hat{\beta}_{1})$ and $\hat{\beta}_{1} + 2 \cdot \text{SE}(\hat{\beta}_{1})$.
+
+- Similarly, the 95% CI for the intercept is 
+$$\hat{\beta}_{0} \pm 2 \cdot \text{SE}(\hat{\beta}_{0})$$
+
+--
+
+```{r}
+lm_abalane <- lm(age~length, abalone)
+```
+- In the abalone example, the 95% CI for $\beta_{0}$ is (`r round(confint(lm_abalane)[1,1],2)`, `r round(confint(lm_abalane)[1,2],2)`), and the 95% CI for $\beta_{1}$ is (`r round(confint(lm_abalane)[2,1],2)`, `r round(confint(lm_abalane)[2,2],2)`).
+
+---
+
+## Hypothesis Testing
+
+- **Hypothesis testing** is a method of statistical inference to determine whether the data at hand sufficiently support a particular hypothesis
+
+  - Helps test the results of an experiment or survey to see if you have meaningful results
+  
+  - Helps draw conclusions about a population parameter
+  
+- Standard errors can be used to perform hypothesis tests on the coefficients
+
+--
+
+- **Null hypothesis** $H_{0}$: there is no relationship between $X$ and $Y$ versus
+
+- **Alternative hypothesis** $H_{A}$: there is some relationship between $X$ and $Y$
+
+--
+
+- Mathematically, corresponds to testing $$H_{0}: \beta_{1} = 0 \quad \text{ vs. } \quad H_{A}: \beta_{1} \neq 0$$
+
+because if $H_{0}$ true, then the model would reduce to $Y = \beta_{0} + \epsilon$
+
+---
+
+## Hypothesis Testing
+
+- To test this null hypothesis, want to determine if $\hat{\beta}_{1}$ is sufficiently far from zero 
+
+  - How much is 'sufficiently far'? Depends on $\text{SE}(\hat{\beta}_{1})$
+  
+- Compute **t-statistic**: $$t = \frac{\hat{\beta}_{1} - 0}{\text{SE}(\hat{\beta}_{1})}$$
+
+--
+
+- Follows a $t$-distribution with $n-2$ degrees of freedom, assuming $\beta_{1} = 0$
+
+--
+
+- $t$ is very large (positive or negative) when $\hat{\beta}_{1}$ is very far from 0 and standard error is not too large
+
+- Can calculate **p-value**, which is the probability of observaing any value equal to $|t|$ or larger
+
+---
+
+## Hypothesis testing
+
+```{r}
+tidy(lm_abalane)
+```
+
+--
+
+- For abalone example, $t =$ `r round(tidy(lm_abalane) %>% filter(term == "length") %>% pull(statistic), 2)` with a p-value essentially equal to 0
+
+- Compare $p$-value to a pre-determine rejection level $\alpha$ (often $\alpha = 0.05$). If $p$-value $< \alpha$, reject $H_{0}$
+
+---
+
+## Assessing Model Accuracy
+
+- How well does the model fit the data?
+
+- **Residual standard error** (RSE) $$\text{RSE} = \sqrt{\frac{1}{n-2}\text{RSS}} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_{i} - \hat{y}_{i})^2}$$
+
+  - Recall that $RSE$ is estimate of the standard deviation of $\epsilon$
+  
+--
+  
+  - Considered a measure of the *lack of fit* of the model
+  
+  - Measured in the units of $Y$
+  
+--
+
+- **R-squared** $(R^2)$ is the proportion of variance in $Y$ explained by $X$:
+$$R^2 = \frac{\text{TSS} - \text{RSS}}{\text{TSS}} = 1 - \frac{\text{RSS}}{\text{TSS}},$$ where $\text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2$ is the *total sum of squares*
+
+--
+
+  - It can be shown that in the case of simple linear regression, $R^2 = \rho^2$, where $\rho$ is correlation between $X$ and $Y$
+  
+```{r}
+# Unitless. R^2 is between 0 and 1. R2 = 1 means all variation explained by X
+```
+
+---
+
+## Assessing Model Accuracy
+
+```{r}
+metrics_df <- abalone_pred %>%
+  pivot_wider(names_from = mod) %>%
+  mutate(error = age - age_pred)
+n <- nrow(abalone)
+RSS <- sum(metrics_df$error^2)
+TSS <- sum( (metrics_df$age - mean(metrics_df$age))^2)
+RSE <- sqrt(RSS/(n-2))
+R2 <- 1 - RSS/TSS
+```
+
+- For the RSE from regressing age on length is `r round(RSE, 3)`, and the $R^2$ is `r round(R2, 3)`
+
+
+---
+
+# Multiple Linear Regression
+
+---
+
+## Multiple Linear Regression
+
+- In practice, we often have more than one predictor.
+
+- With $p$ predcitors, the model is $$Y = \beta_{0} + \beta_{1}X_{1} + \beta_{2}X_{2} + \ldots + \beta_{p}X_{p}$$
+
+--
+
+- For abalone example, the model is $$\color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{height}} + \beta_{2}\color{blue}{\text{length}} + \beta_{3}\color{blue}{\text{weight}} + \epsilon$$
+
+--
+
+- Interpret $\beta_{j}$ as the *average* effect on $Y$ for a one-unit increase in $X_{j}$, **holding all other predictors** fixed/constant
+
+---
+
+## Multiple Linear Regression
+
+- Given estimates $\hat{\beta}_{0}, \hat{\beta}_{1}, \ldots, \hat{\beta}_{p}$, can make predictions $$\hat{y} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{1} +\hat{\beta}_{2}x_{2} + \ldots + \hat{\beta}_{p}x_{p}$$
+
+- Once again, estimate the coefficients as the values that minimize the sum of squared residuals $$RSS = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2$$
+
+
+---
+
+## Interpreting regression coefficients
+
+- The ideal scenario is when the predictors are uncorrelated
+
+- Correlations amongst predictors cause problems
+
+  - Difficulty in interpretation -- when one predictor changes, the other correlated predictors will also change
+  
+--
+
+- Fitting coefficients for abalone data:
+
+```{r}
+abalone_mlr <- lm(age ~ height + length + weight, abalone)
+tidy(abalone_mlr) %>%
+  mutate(p.value = round(p.value,3))
+```
+
+--
+
+- Correlations for abalone data:
+
+```{r}
+round(cor(abalone[,c("age", "height", "length", "weight")]), 3)
+```
+
+---
+
+## Questions
+
+1. Is at least one of the predictors useful in explaining the response? 
+
+--
+
+2. Do all the predictors help to expalin $Y$, or is only a subset useful?
+
+--
+
+3. How well does the model fit the data?
+
+--
+
+4. Given a set of predictors $X =x$, what is the predicted response? How accurate is our prediction?
+
+---
+
+## 1. Is at least one predictor useful?
+
+- Can extend the hypothesis test from simple linear regression to the multiple predictors setting:
+
+$$H_{0}: \beta_{1} = \beta_{2} = \ldots = \beta_{p} = 0$$ versus
+
+$$H_{A}: \text{ at least one } \beta_{j} \text{ is non-zero}$$
+
+--
+
+- Test this hypothesis using the $F$-statistic: $$F = \frac{(\text{TSS}-\text{RSS})/p}{\text{RSS}/(n-p-1)} \sim F_{p.n-p-1}$$
+
+  - If $H_{0}$ true, we expect $F$ close to 1. Otherwise, we expect $F$ to be much larger than 1
+  
+- If we reject $H_{0}$ and conclude that at least one of the predictors is related to $Y$, we will naturally ask which one(s)?
+  
+--
+
+```{r}
+p <- 3
+RSS_mlr <- sum(abalone_mlr$residuals^2)
+F_stat <- ((TSS - RSS_mlr)/p)/(RSS_mlr / (n-p-1))
+```
+
+- For abalone data, the $F$ statistic for this hypothesis is `r round(F_stat, 2)`
+
+---
+
+## 2. Deciding on important predictors
+
+- Task of determining subset of important predictors from full set of available predictors is known as *variable selection*
+
+- Ideally, we would want to compare different models, each containing one of the possible subsets of predictors.
+
+- However, we often cannot examine all possible models
+
+  - With $p$ predictors, there are $2^p$ possible models! 
+  
+- Rather than consider each one, it is common to use an automated and efficient approach
+
+---
+
+## Forward selection
+
+1. Begin with *null model*, the model that contains an intercept but zero predictors
+
+--
+
+2. Fit $p$ simple linear regression models (one for each predictors). Add to the null model the variable that results in lowest RSS
+
+--
+
+3. Fit $p-1$ two-variable models, all of which contain an intercept and the predictor selected from step 2. Add to the model that variable that results in lowest RSS
+
+--
+
+Continue until some stopping rule is satisfied
+
+---
+
+## Backward selection
+
+1. Begin with *full model*, the model that contains all variables
+
+--
+
+2. Remove from the full model the variable with the largest $p$-value
+
+--
+
+3. Fit the new model, and remove the variable with the largest $p$-value
+
+--
+
+Continue until some stopping rule is satsfied
+
+---
+
+## 3. Assessing model fit
+
+- Can generalize the RSE and $R^2$ from simple linear regression setting to multiple linear regression
+
+$$\text{RSE} = \sqrt{\frac{1}{n-p-1} \text{RSS}}$$
+
+- Note that $R^2$ will *always* increase when new predictors are added to the model
+  
+  - More predictors always results in decreasing $\text{RSS}$
+  
+- Therefore, when comparing models with more than one predictor, we use **adjusted** $R^2$
+
+---
+
+## 4. Predictions
+
+---
+
+# Other considerations in regression
+
+---
+
+## Qualitative predictors
+
+- Thus far, we have assumed that all predictors in linear model are quantitative. In practice, we often have qualitative/categorical predictors
+
+- Our abalone data has the $\color{blue}{\text{sex}}$ of each observation: Male, Female, and Infant
+
+--
+
+- Let's begin with the simplest case: predictor with two categories
+
+---
+
+## Qualitative predictors
+
+- If a qualitative predictors only has two *levels* (possible values), it is very simple to incorporate!
+
+- Create an *indicator* or dummy variable 
+
+- We will first consider the subset of the abalone data where $\color{blue}{\text{sex}}$ is either Male or Female
+
+```{r}
+abalone_mf <- abalone %>% filter(sex != "I")
+```
+
+- Based on the $\color{blue}{\text{sex}}$ variable, create a new variable as follows:
+
+$$x_{i} = \begin{cases} 1 & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
+0 & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \end{cases}$$
+--
+
+- Use this new dummy variable as a predictor
+
+---
+
+## Qualitative predictors: Abalone data
+
+- For example, a simple linear regression model for $\color{blue}{\text{age}}$ would be
+
+$$y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} = \begin{cases} \beta_{0} + \beta_{1} + \epsilon_{i} & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
+\beta_{0} + \epsilon_{i} & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \end{cases}$$
+
+--
+
+- How to interpet?
+
+--
+
+Results for model fit on subsetted data:
+
+```{r}
+tidy(lm(age ~ sex, abalone_mf %>% mutate(sex = factor(sex, c("F", "M", "I")))))
+coeffs <- round(lm(age ~ sex, abalone_mf %>% mutate(sex = factor(sex, c("F", "M", "I"))))$coefficients, 3)
+```
+
+
+---
+
+## Qualitative predictors: Abalone data
+
+- Fitted model is: $$\hat{\color{blue}{\text{age}_{i}}} = `r coeffs[1]` + `r coeffs[2]` \color{blue}{\text{Male}_{i}}$$
+
+  - Notice notation: $\color{blue}{\text{Male}_{i}}$ is shorthand for $\color{blue}{\mathbf{1}(\text{sex}_{i} = \text{Male})}$
+  
+```{r fig.align= "center", fig.height=4, fig.width=6}
+ggplot()+
+  geom_hline(yintercept = coeffs[1], col = "red") +
+  geom_hline(yintercept = coeffs[1] + coeffs[2], col = "blue") +
+  labs(y = "age")
+```
+
+---
+
+## Qualitative predictors
+
+- With more than two levels, we simply create additional dummy variables
+
+- Returning to full set of abalone data where $\color{blue}{\text{sex}}$ has three levels (Male, Female, or Infant), we create two dummy variables:
+
+--
+
+$$x_{i1} = \begin{cases} 1 & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
+0 & \text{ if } \color{blue}{\text{sex}_{i}} = \text{not Male} \end{cases}$$
+
+--
+
+$$x_{i2} = \begin{cases} 1 & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \\
+0 & \text{ if } \color{blue}{\text{sex}_{i}} = \text{not Female} \end{cases}$$
+
+--
+
+Results in the regression model: 
+\begin{align*}
+y_{i} &= \beta_{0} + \beta_{1} x_{i1} + \beta_{2} x_{i2} + \epsilon_{i}\\
+&= \begin{cases}  \beta_{0} + \beta_{1} & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
+\beta_{0} + \beta_{2} & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \\
+\beta_{0} & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Infant} \end{cases}
+\end{align*}
+
+---
+
+## Qualitative predictors
+
+- There will always be one fewer dummy variables than levels
+
+  - Level with no dummy variable is known as *baseline*
+  
+  - Does the coding scheme matter? 
+  
+--
+
+```{r}
+tidy(lm(age~sex, abalone %>% mutate(sex = factor(sex, c("I", "M", "F")))))
+```
+
+---
+
+## Extensions of linear model
+
+- Linear model is widely used and works quite well, but has several highly restrictive assumptions
+
+  - Relationship between $X$ and $Y$ is additive
+  - Relationship between $X$ and $Y$ is linear
+  
+- There are common approaches to loosen these assumptions
+
+---
+
+## Interactions
+
+- Additive assumption: the association between a predictor $X_{j}$ and the repsonse $Y$ does not depend on the value of any other predictors
+
+$$Y = \beta_{0} + \beta_{1} X_{1} + \beta_{2} X_{2} + \epsilon$$
+
+versus 
+
+$$Y = \beta_{0} + \beta_{1} X_{1} + \beta_{2} X_{2} + \beta_{3}\color{orange}{X_{1}X_{2}} + \epsilon$$
+
+--
+
+- This third predictor $\color{X_{1}X_{2}}$ is known as an **interaction** term or effect
+
+- The total effect of $X_{1}$ on $Y$ also depends on the value of $X_{2}$ through the interaction
+
+---
+
+## Interactions -- Abalone data
+
+Model: 
+$$\color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{height}} + \beta_{2}\color{blue}{\text{length}} + \beta_{3} \color{blue}{\text{height}}\times \color{blue}{\text{length}} + \epsilon$$
+
+Results:
+
+```{r}
+non_int_mod <- lm(age ~ height + length, data = abalone)
+int_mod <- lm(age ~ height + length +  height*length, data = abalone)
+tidy(int_mod)
+```
+
+--
+
+Interpretations:
+
+  - Results suggest that the interaction is important
+  
+  - However, adjusted $R^2$ for model with interaction is `r round(summary(int_mod)$adj.r.squared, 3)` compared to `r round(summary(int_mod)$adj.r.squared, 3)` from model without interaction 
+  
+  
+---
+
+## Interactions -- Abalone data
+
+```{r}
+tidy(int_mod)
+coeffs <- round(int_mod$coefficients, 3)
+```
+
+- Fitted model takes the form:
+
+$$\hat{\color{blue}{\text{age}}} = `r coeffs[1]` + `r coeffs[2]`\color{blue}{\text{height}} + `r coeffs[3]`\color{blue}{\text{length}} + `r coeffs[4]`\color{blue}{\text{height}}\times\color{blue}{\text{length}}$$
+
+--
+
+- Estimates suggest that a 1 mm increase in the \color{blue}{\text{height}} of an abalone is associated with an increased age of `r coeffs[2]` + `r coeffs[4]` $\times \color{blue}{\text{length}}$ years
+
+- A 1 mm increase in the \color{blue}{\text{length}} of an abalone is associated with an increased age of `r coeffs[3]` + `r coeffs[4]` $\times \color{blue}{\text{height}}$ years
+
+---
+
+## Interactions 
+
+- Can also have interactions involving categorical variables! 
+
+- In particular, interaction between a quantitative and a categorical variable has nice interpretation
+
+--
+
+- Consider again subset of abalone data where we remove the observations $\color{blue}{\text{sex}} = \text{Infant}$. Consider the effects of $\color{blue}{\text{height}}$ and  $\color{blue}{\text{sex}}$ on $\color{blue}{\text{age}}$.
+
+- Model with no interactions:
+
+$$\color{blue}{\text{age}_{i}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{height}_{i}} + \beta_{2} \color{blue}{\mathbf{1}(\text{sex}_{i} = \text{Male})}$$
+
+- Can be re-written as
+
+$$\color{blue}{\text{age}_{i}} \approx \begin{cases}
+\beta_{0} + \beta_{1}\color{blue}{\text{height}_{i}} & \text{ if } \color{blue}{\text{sex}_{i} = \text{Female}} \\
+(\beta_{0} + \beta_{2}) + \beta_{1}\color{blue}{\text{height}_{i}} & \text{ if } \color{blue}{\text{sex}_{i} = \text{Male}} 
+\end{cases}$$
+
+
+
+---
+
+## Interactions 
+
+- With interactions, the model takes the form:
+
+$$\color{blue}{\text{age}_{i}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{height}_{i}} + \beta_{2} \color{blue}{\mathbf{1}(\text{sex}_{i} = \text{Male})} + \beta_{3}\color{blue}{\text{height}_{i}} \times \color{blue}{\mathbf{1}(\text{sex}_{i} = \text{Male})}$$
+
+- Can be re-written as
+
+$$\color{blue}{\text{age}_{i}} \approx \begin{cases}
+\beta_{0} + \beta_{1}\color{blue}{\text{height}_{i}} & \text{ if } \color{blue}{\text{sex}_{i} = \text{Female}} \\
+(\beta_{0} + \beta_{2}) + (\beta_{1} + \beta_{3})\color{blue}{\text{height}_{i}} & \text{ if } \color{blue}{\text{sex}_{i} = \text{Male}} 
+\end{cases}$$
+
+---
+
+## Interactions -- Abalone data
+
+Estimated regression lines
+
+```{r fig.align="center", fig.height=6, fig.width=10}
+height_range <- seq(min(abalone_mf$height), max(abalone_mf$height))
+
+# mod no_int: female
+v1 <- data.frame(age = cbind(1, height_range, 0) %*% coefficients(lm(age ~ height + sex, data = abalone_mf))) %>%
+  mutate(height = height_range, sex= "Female", mod  = "Non-Interaction")
+# mod no_int: male
+v2 <- data.frame(age = cbind(1, height_range, 1) %*% coefficients(lm(age ~ height + sex, data = abalone_mf))) %>%
+  mutate(height = height_range, sex= "Male", mod  = "Non-Interaction")
+
+# mod int: female
+v3 <- data.frame(age = cbind(1, height_range, 0, 0) %*% coefficients(lm(age ~ height + sex + height*sex, data = abalone_mf))) %>%
+  mutate(height = height_range, sex= "Female", mod  = "Interaction")
+# mod int: male
+v4 <- data.frame(age = cbind(1, height_range, 1, height_range) %*% coefficients(lm(age ~ height + sex + height*sex, data = abalone_mf))) %>%
+  mutate(height = height_range, sex= "Male", mod  = "Interaction")
+
+p1 <- data.frame(rbind(v1,v2,v3,v4))  %>%
+  mutate(mod = factor(mod, c("Non-Interaction", "Interaction"))) %>%
+  ggplot(., aes(x = height, y = age, col = sex))+
+  geom_line() +
+  facet_wrap(~mod)+
+  theme(text = element_text(size = 14)) +
+  ggtitle("Full range of height")
+
+p2 <- data.frame(rbind(v1,v2,v3,v4))  %>%
+  mutate(mod = factor(mod, c("Non-Interaction", "Interaction"))) %>%
+  filter(height > 10, height < 30 ) %>%
+  ggplot(., aes(x = height, y = age, col = sex))+
+  geom_line() +
+  facet_wrap(~mod)+
+  theme(text = element_text(size = 14)) +
+  ggtitle("Subset of height")
+
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
+
+---
+
+## Nonlinear Relationships
+
+- Linear assumption: change in $Y$ associated with a one-unit change in $X_{j}$ is constant
+
+- In some cases, true relationship between a predictor and response may be nonlinear 
+
+- Consider some new data about cars:
+
+```{r fig.align="center", fig.height=4, fig.width=6}
+Auto %>%
+  ggplot(., aes(x = horsepower, y = mpg))+
+  geom_point()
+```
+
+
+---
+
+## Nonlinear Relationships
+
+```{r fig.align="center", fig.height=5, fig.width=8}
+Auto %>%
+  ggplot(., aes(x = horsepower, y = mpg))+
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  geom_smooth(method = lm, formula = y ~ x + I(x^2), se = F, col = "orange")
+```
+
+--
+
+- Data suggest a curved relationship between $\color{blue}{\text{horsepower}}$ and $\color{blue}{\text{mpg}}$
+
+- Can include transformed versions of the predictors
+
+---
+
+## Nonlinear Relationships
+
+- Figure suggests a *quadratic* shape, which can be accomodated in the following model:
+
+$$\color{blue}{\text{mpg}} = \beta_{0} + \beta_{1}\color{blue}{\text{horsepower}} + \beta_{2}\color{blue}{\text{horsepower}}^2+ \epsilon$$
+```{r}
+tidy(lm(mpg ~ horsepower + I(horsepower^2), Auto))
+```
+
+--
+
+- Approach of including polynomials of predictors is known as **polynomial regression**
+
+--
+
+- Note: Non-linear in $\color{blue}{\text{horsepower}}$, but still linear model for $\color{blue}{\text{mpg}}$
+
+---
+
+## Model checking for linear regression
+
+- Can always fit a linear regression model for quantiative $Y$, but should assess whether the linear model is appropriate
+
+--
+
+- Check if our assumptions are met:
+
+  1. Linearity between predictors and response
+  2. Error terms are uncorrelated
+  3. Error terms have constant variance
+  
+--
+
+- Additionally, check for potential problems that may influene model fit:
+
+  1. Outliers
+  2. High-leverage points
+  3. Collinearity in predictors
+  
+---
+
+## 1. Assumption: linearity
+
+- *Residual plots* are useful for diagnosing non-linearity
+  
+  - For simple linear regression, plot the residuals $e_{i} = y_{i} - \hat{y}_{i}$ versus a predictor $x_{i}$
+  - For multiple linear regression, plot residuals $e_{i}$ versus fitted $\hat{y}_{i}$
+  
+```{r fig.align="center", fig.height=4, fig.width=6}
+auto_lm <- lm(mpg~ horsepower, Auto)
+auto_poly <- lm(mpg~ horsepower + I(horsepower^2), Auto)
+auto_df <- rbind(data.frame(horsepower = Auto$horsepower,
+                            fitted = auto_lm$fitted.values, residuals = auto_lm$residuals, model = "Linear"),
+                 data.frame(horsepower = Auto$horsepower, 
+                            fitted = auto_poly$fitted.values, residuals = auto_poly$residuals, model = "Quadratic"))
+
+ggplot(auto_df, aes(x = fitted, y = residuals)) +
+  geom_point()+
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  facet_wrap(~ model, scales = "free") +
+  labs(x = "Fitted values", y = "Residuals")+
+  ggtitle("Residuals vs. Fitted values")
+```
+
+---
+
+## 2. Assumption: uncorrelated errors
+
+- Important assumption in linear regression is that errors $\epsilon_{1}, \epsilon_{2}, \ldots, \epsilon_{n}$ are uncorrelated
+
+  - Often occur in time-series data
+
+- Often assessed by identifiying *tracking* in the data. Plot residuals in the order they appear in the data
+
+```{r fig.align="center", fig.height=4, fig.width=6}
+ggplot(auto_df %>% mutate(order = row_number()), aes(x = order, y = residuals)) +
+  geom_point()+
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  facet_wrap(~ model, scales = "free") +
+  labs(x = "Observation", y = "Residuals")+
+  ggtitle("Residuals plotted in order of data collection")
+```
+
+---
+
+## 3. Assumption: constant variance
+
+- Assumption: $Var(\epsilon_{i}) = \sigma^2$ for all observations $i$
+
+- **Heteroscedasticity** is when the variances are non-constant
+
+  - Funnel-shapes in residual plots help diagnosis heteroscedasticity
+
+```{r fig.align='center', fig.height=5, fig.width=8}
+auto_poly_log <- lm(log(mpg)~ horsepower + I(horsepower^2), Auto)
+auto_df <- rbind(data.frame( fitted = auto_poly$fitted.values, residuals = auto_poly$residuals, model = "Response: Y"),
+                 data.frame( fitted = auto_poly_log$fitted.values, residuals = auto_poly_log$residuals, model = "Response: logY"))
+
+ggplot(auto_df, aes(x = fitted, y = residuals)) +
+  geom_point()+
+  facet_wrap(~model, scales = "free")+
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  labs(x = "Fitted values", y = "Residuals") +
+  theme(text = element_text(size = 14))
+```
+
+---
+
+## 1. Problem: outliers
+
+- **Outliers** are points for which the true $y_{i}$ is very far from the estimated/fitted $\hat{y}_{i}$
+
+  - i.e. response $y_{i}$ is unusual given corresponding $x_{i}$
+
+
+```{r fig.align='center', fig.height=5, fig.width=5}
+set.seed(222)
+n <- 50
+x <- rnorm(n, 0, 1)
+beta_true <- c(1,-0.5) 
+y <- cbind(1,x) %*% beta_true + rnorm(n, 0, 1) 
+y[n] <- y[n] + 3.5
+
+mod_all <- lm(y ~ x)
+rse_all <- round(sqrt((sum(mod_all$residuals^2))/(n-2)), 3)
+mod_no_out <- lm(y[-n] ~ x[-n])
+rse_no_out <- round(sqrt((sum(mod_no_out$residuals^2))/(n-2-1)), 3)
+
+coeffs_all <- coefficients(mod_all)
+coeffs_no_out <- coefficients(mod_no_out)
+
+data.frame(x=x, y =y) %>%
+  mutate(outlier = c(rep("N", n-1), "Y")) %>%
+  ggplot(., aes(x=x,y=y, col = outlier))+
+  geom_point(size = 2)+
+  geom_abline(slope = coeffs_all[2], intercept = coeffs_all[1], col = "blue") +
+  geom_abline(slope = coeffs_no_out[2], intercept = coeffs_no_out[1], col = "purple", linetype = "dashed")+
+  scale_color_manual(values = c("black", "purple"))+
+  guides(col = "none")+
+  ggtitle("Examining outliers")
+
+```
+
+- Blue line fit to all data points, purple line fit to data removing outlier
+
+---
+
+## 1. Problem: outliers
+
+- May not have too large an impact on estimated regression line, but can impact overall accuracy of model
+
+- Residual standard error $(\hat{\sigma})$:
+  - Model fit on all data: `r rse_all`
+  - Model fit after removing outlier: `r rse_no_out`
+  
+- $R^2$:
+  - Model fit on all data: `r round(summary(mod_all)$r.squared, 3)`
+  - Model fit after removing outlier: `r round(summary(mod_no_out)$r.squared, 3)`
+
+---
+
+## 2. Problem: high leverage points
+
+- **High leverage** points have an unusual value for $x_{i}$
+
+- Same data as previous slide + one additional point in orange
+
+```{r fig.align="center", fig.height=5, fig.width=5}
+x_lev <- -4
+y_lev <- c(cbind(1, x_lev) %*% beta_true) + rnorm(1, 0,1) + 2.5
+
+x2 <- c(x, x_lev)
+y2 <- c(y,y_lev)
+n2 <- n+1
+mod_all <- lm(y2 ~ x2)
+mod_no_out <- lm(y2[-n] ~ x2[-n])
+mod_no_lev <- lm(y2[-n2] ~ x2[-n2])
+# rse_no_out <- round(sqrt((sum(mod_no_out$residuals^2))/(n-2-1)), 3)
+coeffs_all <- coefficients(mod_all)
+coeffs_no_out <- coefficients(mod_no_out)
+coeffs_no_lev <- coefficients(mod_no_lev)
+
+
+data.frame(x=x2, y =y2) %>%
+  mutate(type = c(rep("N", n2-2), "outlier" , "leverage"),
+         type = factor(type, c("N", "outlier", "leverage"))) %>%
+  ggplot(., aes(x=x,y=y, col = type))+
+  geom_point(size = 2)+
+  geom_abline(slope = coeffs_all[2], intercept = coeffs_all[1], col = "blue") +
+  geom_abline(slope = coeffs_no_lev[2], intercept = coeffs_no_lev[1], col = "orange", linetype = "dashed")+
+    geom_abline(slope = coeffs_no_out[2], intercept = coeffs_no_out[1], col = "purple", linetype = "dashed")+
+  scale_color_manual(values = c("black", "purple", "orange"))+
+  guides(col = "none")+
+  ggtitle("Examining high leverage points")
+
+h_out <- (x2[n] - mean(x) )^2/sum((x2 - mean(x2))^2) + 1/n2
+
+h_lev <- (x2[n2] - mean(x) )^2/sum((x2 - mean(x2))^2) + 1/n2
+
+```
+
+- Blue line is fit to all data
+- Purple point is outlier from before. Purple line is fitted line omitting this point
+- Orange line is fitted line omitting the orange point
+
+
+---
+
+## 2. Problem: high leverage points
+
+- High leverage observations tend to have a non-negligable impact on estimated regression line
+
+- Calculate *leverage statistic* $(h_{i})$ of a point. For simple linear regression:
+
+$$h_{i} = \frac{1}{n} + \frac{(x_{i} - \bar{x})^2}{\sum_{i'=1}^{n}(x_{i'} - \bar{x})^2}$$
+
+--
+
+  - $h_{i}$ is always between $1/n$ and $1$
+  - Average leverage for all observations is $(p+1)/n$
+  
+--
+
+- In simulated data:
+  - Average leverage: $(1+1)/`r n2` =$ `r round((1+1)/n2, 3)`
+  - Leverage of purple point: `r round(h_out, 3)`
+  - Leverage of orange point: `r round(h_lev, 3)`
+  
+---
+
+## Problem: collinearity
+
+- As mentioned before, **collinearity** occurs when two or more predictors are closely related to one another
+
+```{r fig.align="center", fig.height=4, fig.width=5}
+abalone %>%
+  ggplot(., aes(x = length, y = weight))+
+  geom_point()
+```
+
+- Can be hard to separate the individual effects of $\color{blue}{\text{weight}}$ and $\color{blue}{\text{length}}$ on $\color{blue}{\text{age}}$
+
+  - Reduces accuracy of the associated regression coefficients, causing the $SE$ to grow
+  
+---
+
+## Problem: collinearity
+
+Model $$\color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{length}} + \epsilon$$
+
+```{r}
+tidy(lm(age~ length, abalone ))
+```
+
+Model $$\color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{length}} + \beta_{1}\color{blue}{\text{weight}} + \epsilon$$
+
+```{r}
+tidy(lm(age~ length + weight, abalone ))
+
+```

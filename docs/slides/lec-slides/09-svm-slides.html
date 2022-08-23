@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Math 218: Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Support Vector Machines" />
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Math 218: Statistical Learning
+]
+.author[
+### Support Vector Machines
+]
+.date[
+### 9/14/2022
+]
+
+---
+
+
+
+
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Support Vector Machines
+
+- Approach the binary classification problem in a direct way
+
+- Support vector machines (SVM) perform well in a variety of settings
+
+---
+
+## Hyperplane
+
+- In `\(p\)`-dimensions, a **hyperplane** is a flat affine subspace of dimension `\(p-1\)`
+
+ - In `\(p = 2\)` dimensions? `\(p = 3\)`?
+ 
+--
+
+- In 2-D, a hyperplane is defined by 
+
+`$$\beta_{0} + \beta_{1}X_{1} + \beta_{2}X_{2} = 0$$`
+
+ - Any `\(X = (X_{1}, X_{2})'\)` for which the above holds is a point on the hyperplane
+ 
+--
+
+- More generally,
+
+`$$\beta_{0} + \beta_{1}X_{1} + \beta_{2}X_{2} + \ldots \beta_{p}X_{p} = 0$$`
+
+--
+
+- `\(\beta = (\beta_{1}, \ldots, \beta_{p})\)` is called the normal vector, and points in a direction orthogonal to surface of hyperplane
+
+---
+
+## Hyperplane in 2D
+
+&lt;img src="09-svm-slides_files/figure-html/hyperplane1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Hyperplane in 2D
+
+&lt;img src="09-svm-slides_files/figure-html/hyperplane2-1.png" style="display: block; margin: auto;" /&gt;
+
+- The green point does not satisfy the equation, but rather: `\(\beta_{1} \times 2 + \beta_{2} \times 1  -4 = -2 &lt; 0\)`
+
+---
+
+## Simulated data
+
+- So the hyperplane divides the `\(p\)`-dimensional space into parts. If `\(f(X) = \beta_{0} + \beta_{1}X_{1} + \ldots + \beta_{p} X_{p}\)`:
+
+ - `\(f(X) &lt; 0\)` on one side 
+ 
+ - `\(f(X) &gt; 0\)` on other side
+ 
+ 
+&lt;img src="09-svm-slides_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Separating hyperplanes
+
+- Let `\(y_{i} = 1\)` for the orange points, and `\(y_{i} = -1\)` for the blue
+
+- Hyperplanes that separate the training observations perfectly into their class labels are called **separating hyperplanes** 
+
+--
+
+ - Let `\(y_{i} =-1\)` when `\(f(x) &lt; 0\)` and `\(y_{i} = 1\)` when `\(f_{x} &gt; 0\)`
+ 
+ - If `\(y_{i} \times f(x_{i}) &gt; 0\)` for all `\(i\)`, then `\(f(x) = 0\)` is a separating hyperplane
+ 
+--
+
+- If a separating hyperplane exists, a natural classifier comes to mind!
+
+---
+
+## Maximal margin hyperplane
+
+- If data can be perfectly separated by a hyperplane, there will be infinitely many such hyperplanes
+
+--
+
+- **Maximal margin hyperplane** (MMH) is the separating hyperplane farthest from the training observations
+
+ - Has farthest minimium distance to the training observations
+
+&lt;img src="09-svm-slides_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+- Two training observations equidistant from the MMH on edges of margin are the **support vectors**
+
+ - "Support" the MMH
+ 
+ - MMH depends directly on the support vectors, but not on any other observations
+ 
+--
+
+ - Could have more than two equidistant
+
+---
+
+## Maximal marginal classifier
+
+- *Maximal marginal classifier* if we classify according to the maximal marginal hyperplane
+
+- Hope that the classifier that has a large margin for training data also has large margin for test data
+
+--
+
+- Construction: assume we have `\(n\)` training observations `\(x_{1},\ldots, x_{n}\)` with associated class labels `\(y_{i} \in \{-1, 1\}\)`. MMH is solution to
+
+`$$\max_{\beta_{0},\ldots, \beta_{p}, M} M \qquad \text{ subject to }$$`
+
+1. `\(\sum_{j=1}^{p} \beta_{j}^2 = 1\)` 
+
+2.  `\(y_{i}(\beta_{0} + \beta_{1} x_{i1} + \beta_{2} x_{i2} + \ldots + \beta_{p}x_{ip}) \geq M  \ \forall \ i = 1,\ldots, n\)`
+
+--
+
+ - `\(M\)` represents the margin of our hyperplane, and solution chooses the `\(\beta\)`'s to maximize `\(M\)`
+
+
+---
+
+## Non-separable data
+
+
+&lt;img src="09-svm-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+- Data are not separable by a linear boundary! This is often the case unless `\(n &lt; p\)`
+
+
+---
+
+## Noisy data
+
+&lt;img src="09-svm-slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+- Here, data are separable but noisy
+
+- Can lead to poor solution for maximal marginal classifier (resulting margin is tiny!)
+
+---
+
+## Support vector classifier
+
+- Develop a hyperplane that *almost* separates the classes to address non-separable and/or noisy data
+
+--
+
+- Gain robustness to individual observations and better classification for *most* of training observations
+
+--
+
+- **Support vector classifier** (or *soft* margin classifier) does this
+
+ - Allows some observations to be on incorrect side of margin (or even the hyperplane)
+ 
+---
+
+## Support vector classifier
+
+&lt;img src="09-svm-slides_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+- Plot on right is same data as on left, plus points 13 and 14
+
+---
+
+## Support vector classifier
+
+- Classifies a test observation depending on which side of hyperplane it lies, where the hyperplane is solution to the optimization problem
+
+`$$\max_{\beta_{0}, \ldots, \beta_{p}, \epsilon_{1}, \ldots, \epsilon_{n}, M} M \quad \text{ subject to }$$`
+
+ 1. `\(\sum_{j=1}^{p} \beta_{j}^2 = 1\)`
+ 
+ 2. `\(y_{i}(\beta_{0} + \beta_{1} x_{i1} + \beta_{2} x_{i2} + \ldots + \beta_{p}x_{ip}) \geq M (1- \epsilon_{i})\)`
+ 
+ 3. `\(\epsilon_{i} \geq 0\)`
+ 
+ 4. `\(\sum_{i=1}^{n} \epsilon_{i} \leq C\)`
+
+--
+
+- The `\(\epsilon_{i}\)` are *slack variables* that allow indiviudal observations to be on wrong side 
+
+ - `\(\epsilon_{i} = 0\)` vs `\(&gt; 0\)` vs `\(&gt;1\)`
+ 
+--
+
+- `\(C\)` is a nonnegative tuning parameter
+
+ - Interpretation of `\(C\)`?
+ 
+--
+
+ - Often selected using cross-validation
+
+---
+
+## Varying `\(C\)`
+
+&lt;img src="09-svm-slides_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Remarks
+
+- Support vector classifier's decision rule is based only on a potentially small subset of training observations
+
+ - Robust to observations far away from hyperplane
+ 
+--
+
+- What happens when a linear boundary is unsatisfactory, no matter the choice of `\(C\)`?
+
+&lt;img src="09-svm-slides_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

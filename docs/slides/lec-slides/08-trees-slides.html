@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Math 218: Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Tree-Based Methods" />
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Math 218: Statistical Learning
+]
+.author[
+### Tree-Based Methods
+]
+.date[
+### 9/14/2022
+]
+
+---
+
+
+
+
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Tree-based methods
+
+- These methods use a series of if-then rules to divide/segment the predictor space into a number of simple regions
+
+- The splitting rules can be summarized in a tree, so these approaches are known as **decision-tree** methods
+
+- Can be simple and useful for interpretation
+
+- Decision trees can be applied to both regression and classification problems
+
+
+--
+
+- Typically not competitive with the best supervised learning approaches in terms of prediction accuracy
+
+--
+
+- We will discuss **bagging**, **random forests**, and **boosting**
+
+---
+
+## Diabetes data
+
+- Diabetes disease progression colored from low (purple) to high (red)
+
+&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Diabetes data: decision tree 
+
+- A regression tree for predicting diabetes progression based on a person's age and total cholesterol
+
+&lt;img src="08-trees-slides_files/figure-html/diabetes_simple_tree-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+### Diabetes data: decision tree 
+
+
+- Top split: observations with `\(\color{blue}{\text{total cholesterol}} &gt; 0.126\)` are assigned to right branch
+
+ - Predicted progression is mean response value for observations with `\(\color{blue}{\text{total cholesterol}} &gt; 0.126\)`: `\(\hat{y} =\)` 174.6
+ 
+- Observations with `\(\color{blue}{\text{total cholesterol}} &lt; 0.126\)` assigned to left branch, and further subdivided by `\(\color{blue}{\text{age}}\)`
+
+--
+
+- This tree has two *internal nodes* and three *terminal nodes*
+
+ - The number in each terminal nodes is the mean of `\(Y\)` for the observations that fall there
+ 
+---
+
+## Terminology
+
+- **Internal nodes**: points along the tree where the predictor space is split
+
+ - First node is often referred to as **root node**
+
+- **Terminal nodes** or **leaves**: regions where there is no further splitting
+
+ - Decision trees are typically drawn upside down (leaves at bottom)
+ 
+--
+
+- What are the internal nodes and terminal nodes for these data?
+
+---
+
+
+### Diabetes data: results
+
+- The tree stratifies the individuals into three regions of predictor space: `\(R_{1} = \{ X | \color{blue}{\text{total_chol} &gt; 0.126}\}\)`, `\(R_{2} = \{ X | \color{blue}{\text{total_chol}} &lt; 0.126, \color{blue}{\text{age}} &lt; 0.075\}\)`, and `\(R_{3} = \{ X | \color{blue}{\text{total_chol}} &lt; 0.126, \color{blue}{\text{age}} &gt; 0.075\}\)`
+
+&lt;img src="08-trees-slides_files/figure-html/diabetes_regions-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Diabetes data: interpretation of results
+
+- `\(\color{blue}{\text{total cholesterol}}\)` is the most important factor for determining `\(\color{blue}{\text{diabetes progression}}\)`, and younger patients have less progression than older patients
+
+--
+
+- Given that a patient has higher `\(\color{blue}{\text{total cholesterol}}\)`, their age seems to play little role in their `\(\color{blue}{\text{diabetes progression}}\)`
+
+- But among those who have cholesterol levels less than 0.126, the `\(\color{blue}{\text{age}}\)` of a patient does affect `\(\color{blue}{\text{diabetes progression}}\)`
+
+
+--
+
+- Likely an over-simplification of the true relationships between `\(\color{blue}{\text{total cholesterol}}\)`, `\(\color{blue}{\text{age}}\)`, and `\(\color{blue}{\text{diabetes progression}}\)`
+
+ - But easy to display and interpret
+ 
+---
+
+## Building a regression tree
+
+1. Divide predictor space (the set of possible values for `\(X_{1}, \ldots, X_{p}\)`) into `\(L\)` distinct and non-overlapping regions, `\(R_{1}, \ldots, R_{L}\)`
+
+--
+
+2. For every observation that fall in `\(R_{l}\)`, we output the same prediction: the mean of the training responses in `\(R_{l}\)`, `\(\hat{y}_{R_{l}} = \frac{1}{n_{l}} \sum_{i \in R_{l}} y_{i}\)`
+
+--
+
+- What does these `\(R_{l}\)` look like?
+
+---
+
+## Building a regression tree
+
+- In theory, regions `\(R_{1},\ldots, R_{L}\)` could have any shape. For simplicity, we divde predictor space into high-dimensional rectangle or *boxes*
+
+--
+
+- Goal: find boxes `\(R_{1},\ldots, R_{L}\)` that minimize RSS, given by
+
+`$$\sum_{l=1}^{L} \sum_{i\in R_{l}} (y_{i} - \hat{y}_{R_{l}})^2$$`
+
+--
+
+- However, it is computationally infeasible to consider every possible partition of the feature space into `\(L\)` boxes
+
+---
+
+
+## Building a regression tree
+
+- We take a **top-down, greedy** approach known as *recursive binary splitting*
+
+ - "Top-down": we begin at the top of tree where all observations belong to a single region, and then succesively partition
+ 
+ - "Greedy": at each step, the *best* split is made rather than looking ahead and picking a split that would be better in some future step
+ 
+--
+
+- Making splits on the data as we go
+
+---
+
+## Details
+
+- First, select the predictor `\(X_{j}\)` and the cutpoint `\(s\)` such that splitting the predictor space into the regions `\(\{X | X_{j} &lt; s\}\)` and `\(\{X | X_{j} \geq s\}\)` leads to greatest possible reduction in RSS
+
+ - In the diabetes example, the predictor was `\(\color{blue}{\text{total cholesterol}}\)` and `\(s = 0.126\)`
+ 
+--
+
+- Then, repeat the process of looking for the best predictor and best cutpoint in order to split the data further so as to minimize RSS within each of the resulting regions
+
+ - Instead of splitting entire predictor space, we split one of the two previously identified regions
+ 
+ - Now we have three regions
+ 
+--
+
+- Again, split one of these further so as to minimize RSS. We continue this process until a stopping criterion is reached
+
+---
+
+## Splitting example
+
+&lt;img src="figs/08-trees/tree_ex.png" width="66%" style="display: block; margin: auto;" /&gt;
+
+.footnote[Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani (2013). An introduction to statistical learning : with applications in R. New York :Springer]
+
+---
+
+## Possible issues
+
+- This process may produce good predictions on the training set, but is likely to overfit the data. Why?
+
+--
+
+- A smaller tree with fewer splits/regions might lead to lower variance and better interpretation, at the cost of a little bias
+
+--
+
+- One possibile fix: build the tree only so long as the decrease in the RSS due to each split exceeds some (high) threshold
+
+ - Will result in smaller trees, but may be short-sighted
+ 
+---
+
+## Tree pruning
+
+- A better strategy is to grow a very large tree `\(T_{0}\)`, and then **prune** it back in order to obtain a smaller **subtree**
+
+ - Idea: remove sections of `\(T_{0}\)` that are non-critical
+ 
+--
+
+ - How to best prune the tree? A CV approach might be intuitive, but is expensive
+ 
+-- **Cost complexity pruning** or weakest link pruning: consider a sequence of trees indexed by a nonnegative tuning parameter `\(\alpha\)`. For each value of `\(\alpha\)`, there is a subtree `\(T \subset T_{0}\)` such that 
+
+`$$\sum_{l=1}^{|T|} \sum_{i: x_{i} \in R_{l}} (y_{i} - \hat{y}_{R_{l}})^2 + \alpha |T|$$`
+ is as small as possible. 
+ 
+--
+
+ - `\(|T|\)` = number of terminal nodes of tree `\(T\)`
+ 
+ - `\(R_{l}\)` is the rectangle corresponding to the `\(l\)`-th terminal node
+ 
+---
+
+## Cost-complexity pruning cont.
+
+- `\(\alpha\)` controls trade-off between subtree's complexity and fit to the training data
+
+--
+
+ - What is the resultant tree `\(T\)` when `\(\alpha = 0\)`?
+
+--
+ - What happens as `\(\alpha\)` increases? 
+
+  - Feels similar to the Lasso, maybe?
+
+--
+
+- Select an optimal `\(\hat{\alpha}\)` using cross-validation, then return to full data set and obtain the subtree corresponding to  `\(\hat{\alpha}\)`
+
+---
+
+## Algorithm for building tree
+
+0. Split data into train and validation sets
+
+--
+
+1. Using recursive binary splitting to grow a large tree on the training data, stopping according to a pre-determined stopping rule
+
+--
+
+2. Apply cost complexity pruning to the large tree in order to obtain a sequence of best trees as a function of `\(\alpha\)`
+
+--
+
+3. Use `\(k\)`-fold CV to choose `\(\alpha\)`: divide training data into `\(K\)` folds. For each `\(k = 1,\ldots, K\)`:
+
+ a) Repeat Steps 1 and 2 on all but the `\(k\)`-th fold
+ 
+ b) Evaluate mean squared prediction error on the data in held-out `\(k\)`-th fold, as a function of `\(\alpha\)`
+ 
+--
+
+ Average the result for each `\(\alpha\)`, and pick `\(\hat{\alpha}\)` that minimizes the average error
+ 
+--
+
+4. Return the subtree from Step 2 that corresponds to `\(\hat{\alpha}\)`
+
+---
+
+## Diabetes example
+
+- Split data into 50/50 train and validation set
+
+- Use all predictors to build the large tree
+
+
+```
+## 
+## Regression tree:
+## tree(formula = y ~ ., data = diabetes[train_ids, ], control = tree.control(nobs = length(train_ids), 
+##     mindev = 0))
+## Variables actually used in tree construction:
+## [1] "ltg"        "bmi"        "hdl"        "total_chol" "age"       
+## [6] "ldl"        "bp"         "glu"        "sex"       
+## Number of terminal nodes:  35 
+## Residual mean deviance:  1579 = 293700 / 186 
+## Distribution of residuals:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## -112.9000  -18.4300   -0.5556    0.0000   21.0000  116.2000
+```
+
+---
+
+## Diabetes example cont.
+
+&lt;img src="08-trees-slides_files/figure-html/diabetes_cv-1.png" style="display: block; margin: auto;" /&gt;
+
+- `\(K\)`-fold CV with `\(K = 5\)`. Best CV MSE at 6 leaves
+
+- Note: while the CV error is computed as a function of `\(\alpha\)`, we often display as a function of `\(|T|\)`, the number of leaves
+
+---
+
+## Diabetes example: final result
+
+&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Classification trees
+
+- Very similar to regression tree, but now we are predicting a qualitative response
+
+- Now, we predict that each observation belongs to the *most commonly occurring class* of training observations in the region to which it belongs
+
+ - Often time, also interested in class proportions among training observations that fall in the region
+ 
+---
+
+## Classification trees
+
+- Just like regression trees, use recursive binary splitting to grow the classification tree
+
+- Now, RSS cannot be used as a criterion for making the splits
+
+- Alternative: **classification error rate**, the fraction of training observations in the region that belong to the most common class:
+
+`$$E = 1 - \max_{k}(\hat{p}_{lk})$$`
+ where `\(\hat{p}_{lk}\)` is the proportion of training observations in the region `\(R_{l}\)` that are from class `\(k\)`
+ 
+--
+
+- However, classification error is not sufficiently sensitive to tree-growing
+
+---
+
+## Gini index
+
+- The **Gini index** is a measure of the total variance across the `\(K\)` classes
+
+`$$G_{l} = \sum_{k=1}^{K} \hat{p}_{lk} (1 - \hat{p}_{lk})$$`
+
+- `\(G_{l}\)` is small if all the `\(\hat{p}_{lk}\)`'s are close zero or one
+
+--
+
+- For this reason, Gini index is referred to as a measure of node *purity*
+ 
+ - A small `\(G_{l}\)` indicates that the node contains predominantly observations from a single class
+ 
+
+---
+
+## Entropy
+
+- Alternative to Gini index is **cross-entropy**:
+
+`$$D_{l} = -\sum_{k=1}^{K} \hat{p}_{lk} \log\hat{p}_{lk}$$`
+
+- Very similar to Gini index, so cross-entropy is also a measure of node purity
+
+--
+
+
+
+- If `\(K = 4\)` and `\((\hat{p}_{l1}, \hat{p}_{l2},\hat{p}_{l3},\hat{p}_{l4})\)` = (0.25, 0.25, 0.25, 0.25), then `\(G_{l} = 0.75\)` and `\(D_{l} = 1.386\)`
+
+- If `\((\hat{p}_{l1}, \hat{p}_{l2},\hat{p}_{l3},\hat{p}_{l4})\)` = (0.1, 0.1, 0.2, 0.6), then `\(G_{l} = 0.58\)` and `\(D_{l} = 1.089\)`
+ 
+- If `\((\hat{p}_{l1}, \hat{p}_{l2},\hat{p}_{l3},\hat{p}_{l4})\)` = (0, 0, 0.05, 0.95), then `\(G_{l} = 0.095\)` and `\(D_{l} = 0.199\)`
+
+---
+
+## Seeds data: full tree
+
+- Recall the seeds data, where we have seven characteristics of three different grains: Kama, Rosa, and Canadian
+
+&lt;img src="08-trees-slides_files/figure-html/seeds-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Seeds data: pruned tree
+
+&lt;img src="08-trees-slides_files/figure-html/seeds_cv-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Remarks
+
+- The full classification tree for the seeds data has surprising characteristic: some splits yield two terminal nodes with the same predicted value
+
+  - Why? The split increases node purity even if it may not reduce classification error
+  
+--
+
+- We can also split on qualitative predictors. Consider again the abalone data, and we want to create a regression tree for `\(\color{blue}{\text{age}}\)` using the predictor `\(\color{blue}{\text{age}} \in \{I, F, M\}\)`
+
+&lt;img src="08-trees-slides_files/figure-html/abalone_tree-1.png" style="display: block; margin: auto;" /&gt;
+---
+
+## Remarks cont.
+
+- Trees vs. linear models: which is better? Depends on the true relationships between the response and the predictors
+
+
+&lt;img src="figs/08-trees/tree_linear.png" width="66%" style="display: block; margin: auto;" /&gt;
+
+.footnote[Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani (2013). An introduction to statistical learning : with applications in R. New York :Springer]
+---
+
+## Remarks cont.
+
+- Advantages: 
+
+ - Easy to explain 
+ 
+ - May more closely mirror human decision-making than other approaches we've seen
+ 
+ - Can be displayed graphically and interpreted by non-expert
+ 
+ - Can easily handle qualitative predictors without the need to create dummy variables
+ 
+--
+
+- Disadvantages:
+
+ - Lower levels of predictive accuracy compared to some other approaches
+ 
+ - Can be non-robust 
+ 
+--
+
+However, we will see that aggregating many trees can improve predictie performance!
+
+---
+
+## Bagging
+
+- An **ensemble** method combines many simple "building block" models in order to obtain a single final model
+
+- The decision trees described previously suffer from *high variance*, whereas linear regression tends to have low variance (when `\(n &gt;&gt; p\)`)
+
+--
+
+- **Bootstrap aggregation** or **bagging** is a general-purpose procedure for reducing the variance of a statistical-learning method
+
+- Recall that given a set of `\(n\)` independent observations `\(Z_{1}, \ldots, Z_{n}\)`, each with variance `\(\sigma^2\)`, then `\(\text{Var}(\bar{Z}) = \sigma^2/n\)`
+
+--
+
+ - i.e. averaging a set of observations reduces variance. However, we typically don't have access to multiple training sets
+
+--
+
+## Bagging
+
+- Instead, we can bootstrap! Take repeated samples from the single training set we have
+
+- **Bagging**:
+
+ 1. Generate `\(B\)` different bootstrapped training datasets
+ 
+ 2. Train our model on the `\(b\)`-th bootstrapped training set in order to get `\(\hat{f}^{*b}(x)\)` for `\(b = 1,\ldots, B\)`
+ 
+ 3. Average all the predictions to obtain 
+ 
+ `$$\hat{f}_{\text{bag}}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat{f}^{*b}(x)$$`
+
+---
+
+## Bagging for decision trees
+
+- To apply bagging to regression trees: 
+
+ - Construct `\(B\)` regression trees using `\(B\)` bootstrapped training sets and average the resulting predictions
+ 
+ - Trees are grown deep but not pruned
+ 
+--
+
+- For classification trees:
+
+ - For each test observation, record the class `\(k\)` predicted by each of the `\(B\)` trees, and take a *majority vote*; the overall prediction is the most commonly occurring class among the B predictions
+ 
+---
+
+## Out-of-bag error estimation
+
+- Estimating test error of bagged model is quite easy without performing CV
+
+- On average, each bagged tree is fit using about 2/3 of the observations. Remaining 1/3 are **out-of-bag** (OOB) observations
+
+--
+
+- Can predict the response for `\(i\)`-th observation using each of the trees in which that observation was OOB
+
+  - Yields about `\(B/3\)` observations for observation `\(i\)`
+  
+--
+
+  - Average or majority vote for OOB prediction for `\(i\)`
+  
+--
+
+- When `\(B\)` sufficiently large, OOB error is virtually equivalent to LOOCV
+
+
+---
+
+&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+- Dashed line is test error rate for a single decision tree
+
+---
+
+## Variable importance measures
+
+- Bagging can result in difficulty in interpretation
+
+  - No longer clear which predictors are most important to the procedure
+
+--
+
+- Overall summary of important of each predictor using RSS or Gini index
+
+  - Bagging regression trees: record total amount that RSS is decreased due to splits over a given predictor, averaged over B
+  
+  - Bagging classification trees: add up total amount that Gini indesx is decreased by splits over a given predictor, averaged over B
+
+
+---
+
+## Seeds data: importance 
+
+&lt;img src="08-trees-slides_files/figure-html/importance-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Random forests
+
+- **Random forests** provide improvement over bagged trees by providing small tweak that *decorrelates* the trees
+
+- Like bagging, we build a number of decision trees on bootstrapped training samples
+
+--
+
+- Each time a split is considered, a *random sample* of `\(m\)` predictors is chosen as splits candidates from the full set of `\(p\)` predictors. Split on one of these `\(m\)`
+
+--
+
+  - At every split, we choose a new sample of `\(m\)` predictors
+  
+  - Typically choose `\(m \approx \sqrt{p}\)`
+  
+---
+
+## Random forests
+
+- At each split, algorithm is *not allowed* to consider a majority of the available predictors
+
+- Intuition for why?
+
+--
+
+- Bagged trees may be highly correlated, and averaging correlated quantities does not reduce variance as much as average uncorrelated
+
+--
+
+- What happens when `\(m = p\)`?
+
+--
+
+- Small `\(m\)` typically helpful when we have a large number of correlated predictors
+
+---
+
+## Seeds example
+
+&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+- Here, `\(m \approx \sqrt{7} \approx 3\)`
+
+---
+
+## Boosting
+
+- **Boosting**, like bagging, is a general approach that can be applied to many methods
+
+- In bagging, each tree is built on a bootstrap data set, independent of the other `\(B-1\)` trees
+
+  - Then we combine all trees
+
+--
+
+
+- In boosting, the trees are grown *sequentially* -- each tree is grown using information from previously grown trees
+
+--
+
+- We do *not* take bootstrap samples; each tree is fit on a modified version of original data
+
+---
+
+## Boosting for regression treeds
+
+1. Set `\(\hat{f}(x) = 0\)` and `\(r_{i} = y_{i}\)` for all `\(i\)` in the dataset
+
+2. For `\(b = 1, 2,\ldots, B\)`, repeat:
+
+  a) Fit a tree `\(\hat{f}^{b}(x)\)` with `\(d\)` splits ($d+1$ terminal nodes) to training data `\((X,r)\)`
+  
+  b) Update `\(\hat{f}\)` by adding a shrunken version of the new tree:
+  
+  `$$\hat{f}(x) \leftarrow \hat{f}(x) + \lambda\hat{f}^{b}(x)$$`
+  
+  c) Update residuals: 
+  
+  `$$r_{i} \leftarrow r_{i} -\lambda\hat{f}^{b}(x)$$`
+  
+3. Output boosted model
+
+`$$\hat{f}(x) = \sum_{b=1}^{B}\lambda\hat{f}^{b}(x)$$`
+
+---
+
+## Boosting tuning parameters
+
+1. Number of trees `\(B\)`: can overfit if `\(B\)` too large (though occurs slowly)
+
+  - Can use CV to select `\(B\)`
+
+--
+
+2. Shrinkage parameter `\(\lambda &gt; 0\)` control rate at which boosting learns
+
+  - Typically, `\(\lambda = 0.01\)` or `\(0.001\)`
+  
+--
+
+3. Number `\(d\)` of splits in each trees control complexity
+
+  - Often `\(d=1\)` works well, resulting in each tree being a *stump*
+  
+  - More generally, `\(d\)` is interaction depth
+  
+---
+
+## Boosting
+
+- Boosting approach *learns slowly*
+
+- Given current model, fit a decision tree to the residuals of that model. Add this new decision tree into fitted function to update residuals
+
+--
+
+- Fitting small trees to residuals allows slowly improving `\(\hat{f}\)` in areas where it does not perform well
+
+  - `\(\lambda\)` slows the process down even further
+
+--
+
+- Boosting for classification trees is not discussed here
+
+---
+
+&lt;img src="08-trees-slides_files/figure-html/boost_rf_heart-1.png" style="display: block; margin: auto;" /&gt;
+
+- plot with better data
+
+
+---
+
+## BART?
+
+---
+
+## Summary
+
+- Decision trees are simple and interpretable methods of regression and classification
+
+- May not be as competitive with other methods w.r.t. predictive accuracy
+
+- Bagging, random forests, and boosting are methods for improving predictive accuracy
+
+  - Ensemble methods
+  
+  - Random forests and boosting are among state-of-the-art for supervised learning, but are less interpretable
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

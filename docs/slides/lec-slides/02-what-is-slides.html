@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Math 218: Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="What is statistical learning?" />
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Math 218: Statistical Learning
+]
+.author[
+### What is statistical learning?
+]
+.date[
+### 9/14/2022
+]
+
+---
+
+
+
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Abalone
+
+
+---
+
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-1-1.png" height="50%" style="display: block; margin: auto;" /&gt;
+
+- `\(\color{blue}{\text{age}}\)` of abalone plotted against `\(\color{blue}{\text{height}}\)`, `\(\color{blue}{\text{length}}\)`, `\(\color{blue}{\text{weight}}\)`.
+
+- Goal: can we predict `\(\color{blue}{\text{age}}\)` of an abalone using these variables?
+
+
+---
+
+- Maybe `\(\color{blue}{\text{age}} = f(\color{blue}{\text{height}} + \color{blue}{\text{length}} + \color{blue}{\text{weight}})\)`?
+
+- Or `\(\color{blue}{\text{age}} \approx f(\color{blue}{\text{height}} + \color{blue}{\text{length}} + \color{blue}{\text{weight}})\)`?
+
+- Using notation from previous lecture, what is `\(Y\)`? What is `\(X\)`?
+
+--
+
+  - `\(Y = \color{blue}{\text{age}}\)`
+  - `\(X = \begin{pmatrix} X_{1} \\ X_{2}  \\ X_{3} \end{pmatrix}\)` where `\(X_{1} = \color{blue}{\text{height}}, X_{2}= \color{blue}{\text{length}}, X_{3} = \color{blue}{\text{weight}}\)`
+  
+--
+
+- Then our model can be written as `$$Y = f(X) + \epsilon,$$` where `\(\epsilon\)` represents random measurement error
+- What does this equation mean?
+
+---
+
+## What care about `\(f(x)\)`?
+
+`$$Y = f(X) + \epsilon$$`
+- The function `\(f(X)\)` represents the systematic information that `\(X\)` tells us about `\(Y\)`. 
+
+- If `\(f\)` is "good", then we can make reliable predictions of `\(Y\)` at new points `\(X = x\)`
+- If `\(f\)` is "good", then we can identify which components of `\(X\)` are important to explaining `\(Y\)`
+-- Depending on `\(f\)`, we may be able to learn how each component `\(X_{j}\)` of `\(X\)` affects `\(Y\)`
+
+---
+
+## Why care about `\(f\)`?
+
+- We assume that `\(f\)` is fixed but unknown
+- Goal of statistical learning: how to estimate `\(f\)`?
+  - Subgoals: **prediction** and **inference**
+
+- The subgoal may affect the kind of `\(f\)` we choose
+
+---
+
+## Prediction
+
+- We have a set of inputs or predictors `\(X\)` and want to predict a corresponding `\(Y\)`
+- Assuming the error `\(\epsilon\)` is 0 on average, obtain predictions of `\(Y\)` as 
+`$$\hat{Y} = \hat{f}(X)$$`
+
+- If we knew the true `\(Y\)`, we could evaluate the accuracy of the prediction `\(\hat{Y}\)`
+- Generally, `\(Y \neq \hat{Y}\)`. Why?
+
+--
+
+  1. `\(\hat{f}\)` will not be perfect estimate of `\(f\)`
+  2. `\(Y\)` is a function of `\(\epsilon\)`, which cannot be predicted using `\(X\)`
+  
+---
+
+## Types of error
+
+- Irreducible error: `\(\epsilon\)`
+  - Even if we knew `\(f\)` perfectly, there is still some inherent variability
+  - `\(\epsilon\)` may also contained unmeasured variables that are not available to us
+- Reducible error: how far `\(\hat{f}\)` is from the true `\(f\)`
+  
+---
+
+## Prediction errors
+
+- Ways to quantify error
+  - Difference/error = `\(Y - \hat{Y}\)`
+  - Absolute error = `\(|Y - \hat{Y}|\)`
+  - Squared error = `\((Y - \hat{Y})^2\)`
+  
+
+
+---
+
+## Prediction errors
+
+- Given `\(\hat{f}\)` and `\(X\)`, we can obtain a prediction `\(\hat{Y} = \hat{f}(X)\)` for `\(Y\)`
+- Mean-squared prediction error:
+`\begin{align*}
+\mathsf{E}[(Y - \hat{Y})^2] &amp;= \mathsf{E}[( f(X) + \epsilon - \hat{f}(X))^2] \\
+&amp;= \underbrace{[f(X) - \hat{f}(X)]^2}_\text{reducible} + \underbrace{\text{Var}(\epsilon)}_\text{irreducible}
+\end{align*}`
+
+--
+
+- We cannot do much to decrease the irreducible error 
+- But we *can* potentially minimize the reducible error by choosing better `\(\hat{f}\)`!
+
+---
+
+## Inference
+
+- We are often interested in learning how `\(Y\)` and the `\(X_{1}, \ldots, X_{p}\)` are related or associated
+- In this mindset, we want to estimate `\(f\)` to learn the relationships, rather than make predictions
+
+--
+
+  - In the prediction setting, estimate `\(\hat{f}\)` for the purpose of `\(\hat{Y}\)` and `\(Y\)`. 
+  - In the inference setting, estimate `\(\hat{f}\)` for the purpose of `\(X\)` and `\(Y\)`
+
+--
+
+- Some problems will call for prediction, inference, or both
+
+---
+
+class: center, middle
+
+# How to estimate `\(f\)`?
+
+---
+
+## Parametric methods
+
+1. Make an assumption about the functional form (shape) of `\(f\)`
+
+2. Fit/train the model to estimate the *parameters* that specifically determine the behavior of `\(f\)`
+
+--
+
+For example, 
+
+1. I might assume the linear model `$$f(X) = \beta_{0} + \beta_{1} X_{1} + \beta_{2}X_{2} + \ldots + \beta_{p}X_{p}$$`
+
+2. Estimate the `\(\beta_{0}, \beta_{1}, \ldots, \beta_{p}\)`
+
+---
+
+## Parametric methods
+
+- Consider again the abalone data, and assume `\(X = \color{blue}{\text{length}}\)`. 
+
+- Assuming a linear model: `$$\color{blue}{\text{age}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{length}}$$`
+
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Nonparametric methods
+
+- Do not make explicit assumptions about the functional form of `\(f\)`
+
+- Seek `\(\hat{f}\)` that gets as close to the data points as possible
+
+  - Often more flexible
+
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Trade-offs
+
+- Prediction accuracy vs. interpretability
+
+  - More restrictive models may be easier to interpret (better for inference)
+  
+- Good fit vs. over- or under-fit
+
+- Parsimony vs. black box
+
+  - A simpler model is often preferred over a very complex one
+
+---
+
+## Assessing model accuracy
+
+- No single method is superior over all possible data sets
+
+- How can we know how well a chosen `\(\hat{f}\)` is performing? 
+
+- In regression setting, we often use **mean squared error (MSE)**
+
+`$$MSE=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{f}(x_{i}))^2$$` 
+
+--
+
+- MSE will be small if predictions `\(\hat{f}(x_{i})\)` are very close to the true `\(y_{i}\)`
+
+---
+
+## Training vs. test data
+
+- In practice, we split our data into **training** and **test** sets
+
+  - Training set is used to fit the model
+  - Test set is used to assess model fit
+  
+--
+
+- We are often most interested in accuracy of our predictions when applying the method to *previously unseen* data. Why? 
+
+
+---
+## Training vs. test data
+
+- We can compute the MSE for the training and test data. 
+
+- Let `\(n_{train}\)` and `\(n_{test}\)` be number of observations in train and test sets, respectively.
+
+`$$MSE_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$`
+`$$MSE_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$`
+
+---
+
+--- 
+## Example 1
+
+
+
+&lt;img src="02-what-is-slides_files/figure-html/plot_mse1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## Example 2
+
+
+
+&lt;img src="02-what-is-slides_files/figure-html/plot_mse2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+## Bias-Variance trade-off
+
+- As model flexibility increases, the training MSE will decrease but test MSE may not.
+
+- Flexible models may **overfit** the data, which leads to low train MSE and high test MSE
+  - The supposed patterns in train data do not exist in test data
+  
+  
+---
+
+## Bias-Variance trade-off
+
+- Let us consider a test observation `\((x_{0}, y_{0})\)`. 
+
+- The expected test MSE for given `\(x_{0}\)` can be decomposed as follows:
+
+`$$\mathsf{E}[(y_{0} - \hat{f}(x_{0}))^2] = \text{Var}(\hat{f}(x_{0})) + [\text{Bias}(\hat{f}(x_{0}))]^2 + \text{Var}(\epsilon)$$`
+where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0})\)`.
+
+
+
+
+
+---
+
+## Bias-Variance trade-off
+
+
+
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Classification
+
+- Up until now, we have focused on quantiative responses `\(y_{i}\)`
+
+- What happens when `\(y_{i}\)` is qualitative? Examples include:
+
+  - Medical diagnosis: `\(\mathcal{C} = \{\text{yes}, \text{no}\}\)`
+  
+  - Education level: `\(\mathcal{C} = \{\text{high school}, \text{college}, \text{graduate}\}\)`
+  
+- Each category in `\(\mathcal{C}\)` is also known as a *label*
+
+- In this setting, we want our model to be **classifier**, i.e. given predictors `\(X\)`, predict a label from the pool of all possible categories `\(\mathcal{C}\)`
+
+---
+
+## Classification
+
+- We will still have to estimate `\(f\)` 
+
+- `\(\hat{y}_{i}\)` is the predicted class label for observation `\(i\)` using estimate `\(\hat{f}\)`
+
+- How to assess model accuracy? Error is more intuitive: we have error if we predict the incorrect label, and no error otherwise
+
+--
+
+- This can be represented using an *indicator* variable or function. `\(\mathbf{I}(y_{i} = \hat{y}_{i})\)`:
+
+`$$\mathbf{I}(y_{i} = \hat{y}_{i}) = \begin{cases} 1 &amp; \text{ if } y_{i} = \hat{y}_{i}\\ 0 &amp; \text{ if } y_{i} \neq \hat{y}_{i} \end{cases}$$`
+---
+
+## CLassification error rate
+
+- To quantify accuracy of estimated classifier `\(\hat{f}\)`, can calculate the *error rate*, which is the proportion of mistakes we make in labeling: `$$\frac{1}{n} \sum_{i=1}^{n} \mathbf{I}(y_{i} \neq \hat{y}_{i})$$`
+
+-- 
+
+- Small error rate is preferred 
+
+- As with MSE, can calculate the error rate for train and test data sets
+
+---
+
+## Classifiers
+
+- How do we choose which label to predict for a given observation? 
+
+- Assume we have a total of `\(J\)` possible labels in `\(\mathcal{C}\)`
+
+- For a given observation `\(i\)`, can calculate the following probability for each possible label `\(j\)`:
+`$$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$`
+
+- These probabilities are called *conditional class probabilities* at `\(x_{i}\)`
+
+---
+
+## Bayes optimal classifier
+
+- The **Bayes optimal** classifier will assign/predict the label which has the largest conditional class probability
+
+  - It can be shown that the *test* error rate `\(\frac{1}{n_{test}} \sum_{i=1}^{n_{test}} \mathbf{I}(y_{i} \neq \hat{y}_{i})\)` is minimized when using the Bayes optimal classifier
+  
+--
+
+- For example, consider a binary problem with levels "yes" and "no".
+
+- For observation `\(i\)`, if `\(Pr(y_{i} = \text{yes} | X = x_{i}) &gt; 0.5\)`, then `\(\hat{y}_{i} = \text{yes}\)`. 
+
+--
+
+- The `\(x_{i}\)` where `\(Pr(y_{i} = \text{yes} | X = x_{i}) = Pr(y_{i} = \text{no} | X = x_{i})= 0.5\)` is called the *Bayes decision boundary*
+
+
+---
+
+## Example
+
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## `\(K\)`-Nearest Neighbors
+
+- Bayes classifier is "gold standard"
+
+- In practice, we cannot compute `\(p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})\)` because we do know the conditional distribution of `\(y\)` given `\(x\)`
+
+- Instead, we need to estimate these `\(p_{ij}(x_{i})\)`
+
+- One method to estimate the probabilities is the **KNN** ($K$-nearest neighbors) classifier
+
+---
+
+## `\(K\)`-Nearest Neighbors
+
+0. Choose a positive integer `\(K\)`
+
+Then, for a given test observation `\(x_{0}\)`:
+
+1. Identify the `\(K\)` points in the training data that are closes to `\(x_{0}\)`. Call this set `\(\mathcal{N}_{0}\)`.
+
+2. Estimate the conditional probability for class `\(j\)`:
+
+`$$\widehat{p}_{j}(x_{0}) = Pr(Y = j | X = x_{0}) = \frac{1}{K}\sum_{i \in \mathcal{N}_{0}} \mathbf{I}(y_{i} = j)$$`
+
+3. Classify/predict `\(\hat{y}_{0}\)` to have label with largest estimated probability
+
+---
+
+## `\(K\)`-Nearest Neighbors
+
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+- Suppose we are interested in classifying the test observation as blue or red.
+  
+  - What is the estimated conditional probability for each class?
+
+  - Would this point be classified as blue or red?
+  
+  
+---
+
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

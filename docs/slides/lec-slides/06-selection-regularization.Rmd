@@ -1,0 +1,1497 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Linear Model Selection & Regularization"
+date: "9/12/2022"
+output: 
+   xaringan::moon_reader:
+    
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, messLC50 = F)
+
+library(tidyverse)
+library(NHANES)
+library(ISLR)
+library(leaps)
+library(glmnet)
+library(Rcpp)
+library(pls)
+set.seed(1)
+fish <- read.csv("data/qsar_fish_toxicity.csv",header = T,sep=";")
+
+library(lars)
+data(diabetes)
+z <- cbind(diabetes$x, y = diabetes$y)
+z[,1:10] <- apply(z[,1:10], 2, scale)
+diabetes <- as.data.frame(z) %>%
+ rename("bp" = "map") 
+```
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+### Linear Model Selection & Regularization
+
+- Recall linear model:
+
+$$Y = \beta_{0} + \beta_{1} X_{1} + \ldots + \beta_{p} X_{p} + \epsilon$$
+
+- We will discuss extending the linear model framework
+
+--
+
+- Alternative fitting procedures can
+
+  - Improve prediction accuracy
+  
+  - Improve model interpretability
+  
+---
+
+## Why alternatives?
+
+- Prediction accuracy: if $n$ only slightly larger than $p$, leasy-squares fit will have high variability
+
+  - If $p > n$, cannot use least-squares
+  
+--
+
+- Interpretability: removing some irrelevant features/predictors can reduce complexity
+
+  - How? Set corresponding coefficients to 0. This is known as **feature selection**
+  
+---
+
+## Three popular classes of methods
+
+1. **Subset selection**: identify a subset of the $p$ possible predictors that we believe to be related to $Y$, then fit least-squares model
+
+--
+
+2. **Shrinkage** or **regularization**: fit a model involving all $p$ predictors, but the estimated coefficients are shrunken towards 0 relative to least-squares estimates
+
+  - Can reduce variance and perform variable selection
+  
+--
+
+3. **Dimension reduction**: project the $p$ predictors into a $q$-dimensional space where $q < p$
+
+  - Achieved using $q$ linear combinations or projections of the $p$ predictors, then fit least squares on the $q$ projections
+  
+---
+
+## Subset Selection
+
+- Different methods to perform subset selection: best subset and stepwise
+
+- **Best subset** selection fits a separate least-squares regression for each possible combination of the $p$ predictors
+  - Look at all models with goal of identifying the *best*
+  
+--
+
+- Fit one model with zero predictors, $p$ models with exactly one predictor, $\binom{p}{2} = p(p-1)/2$ models with exactly two, etc.
+
+---
+
+## Best subset selection
+
+Algorithm:
+
+1. Let $\mathcal{M}_{0}$ denote the *null model* with no predictors $(Y = \beta_{0}) + \epsilon$.
+
+--
+  
+2. For $k = 1,2, \ldots, p$:
+
+  a) Fit all $\binom{p}{k}$ models that contain exactly $k$ predictors
+  
+--
+
+  b) Pick the best among these $\binom{p}{k}$ models (best according to $R^2$). Call it $\mathcal{M}_{k}$ 
+  
+--
+
+3. Select a single best (**) model from the $\mathcal{M}_{0}, \ldots, \mathcal{M}_{p}$ models 
+
+---
+
+## Example: diabetes data
+
+```{r}
+n <- nrow(diabetes)
+
+```
+
+- Researchers collected data on `r n` daibetes patients examining the disease progression one year after baseline
+
+- Predictors: age, sex, BMI, blood pressure, total serum cholesterol, low-density lipoproteins, high-density lipoproteins, total cholestrol/HDL, log of serum triglycerides, glucose
+
+- Response: disease progression
+---
+
+## Example: diabetes data
+
+Find best subset model for $\color{blue}{\text{LC50}}$ from the six possible predictors:
+
+```{r}
+p <- ncol(diabetes) - 1
+sub_mods <- regsubsets(y ~ ., data = diabetes, nvmax = p) # automatically includes intercept
+summary(sub_mods) 
+```
+
+
+
+---
+
+## Best subset selection
+
+- Presented for least squares, but same ideas apply to other models 
+  
+  - E.g.: logistic regression uses *deviance* in place of $R^2$ or RSS (smaller deviance)
+  
+--
+
+Issues:
+
+  - For computational reasons, best subset selection cannot be applied for large $p$
+
+  - When $p$ large, higher chance of finding models that fit training data well but might not have predictive power (overfitting)
+  
+---
+
+## Stepwise methods
+
+- Stepwise methods explore a more restricted set of models
+
+- **Forward stepwise** selection: begins with null model with no predictors, then adds predictors to the model one at a time
+
+  - At each step, the variable that gives the greatest *additional* improvement to the fit is added
+
+---
+
+## Forward stepwise selection
+
+Algorithm:
+
+1. Let $\mathcal{M}_{0}$ denote the null model with no predictors
+
+--
+
+2. For $k = 0, 1, \ldots, p-1$:
+
+  a) Consider all $p-k$ models that augment the predictors in $\mathcal{M}_{k}$ with one additional predictor
+  
+--
+  
+  b) Choose the best (according to RSS or $R^2$) among these $p-k$ models, and call it $\mathcal{M}_{k+1}$
+  
+--
+  
+3. Select a single best (**) model from the models $\mathcal{M}_{0}, \ldots, \mathcal{M}_{p}$
+
+---
+
+## Forward stepwise selection
+
+- For example, pretend we have $p = 3$ possible predictors: $X_{1}, X_{2}, X_{3}$
+
+- $\mathcal{M}_{0}$: $Y \approx \beta_{0}$
+
+- Now $k= 0$, and we consider all $p-k = 3$ models that add an additional predictor to our current working model
+
+  - $Y \approx \beta_{0} + \beta_{1}X_{1} \Rightarrow R^2 = 0.2$
+  
+  - $Y \approx \beta_{0} + \beta_{1}X_{2}  \Rightarrow R^2 = 0.3$
+  
+  - $Y \approx \beta_{0} + \beta_{1}X_{3} \Rightarrow R^2 = 0.1$
+  
+--
+
+- Set $\mathcal{M}_{1}$: $Y \approx \beta_{0} + \beta_{1}X_{2}$
+
+- Now $k=1$, and consider all $p - k = 2$ models that add an additional predictor:
+
+  - $Y \approx \beta_{0} + \beta_{1}X_{2} + \beta_{2} X_{1}$
+  
+  - $Y \approx \beta_{0} + \beta_{1}X_{2} + \beta_{2} X_{3}$
+  
+---
+
+## Forward stepwise selection
+
+```{r}
+mod_fwd <- regsubsets(y ~. ,data = diabetes, nvmax = p)
+summary(mod_fwd)
+```
+  
+---
+
+## Forward stepwise selection
+
+- Computationally advantous to best subset selection
+
+- Works when $p > n$, but can only ocnstruct submodels $\mathcal{M}_{0}, \ldots, \mathcal{M}_{n-1}$
+
+- Not guaranteed to find the best possible model out of all $2^{p}$ models -- why?
+
+
+
+---
+
+## Backward stepwise selection
+
+- **Backward stepwise selection** is another alternative to best subset selection
+
+- Begins with full least squares model containing all $p$ predictors, and iteratively removes the least useful predictor one at a time
+
+---
+
+## Backward stepwise selection
+
+Algorithm:
+
+1. Let $\mathcal{M}_{p}$ denote the full model with all $p$ predictors
+
+--
+
+2. For $k = p, p-1, \ldots, 1$:
+
+  a) Consider all $k$ models that contain all but one of the predictors in $\mathcal{M}_{k}$, for a total of $k-1$ predictors
+  
+--
+  
+  b) Choose the best (according to RSS or $R^2$) among these $k$ models, and call it $\mathcal{M}_{k-1}$
+  
+--
+  
+3. Select a single best model (**) from the models $\mathcal{M}_{0}, \ldots, \mathcal{M}_{p}$
+
+---
+
+## Backward stepwise selection
+
+- Like forward selection, is not guaranteed to yield the *best* model containing a subset of the $p$ predictors
+
+- Does not work when $p > n$
+
+
+
+---
+
+## Choosing optimal model
+
+- Step 3 of all three methods require us to compare many models to choose the "best" model
+
+- Recall, model containing all $p$ predictors will always yield lowest RSS/highest $R^2$
+
+  - Related to training error
+  
+- We want a model with low test error $\rightarrow$ require comparison across models with different number of predictors
+
+---
+
+## Estimating test error
+
+- Approach 1: *indirectly* estimate test error by making an adjustment to the training error to account for the bias due to overfitting 
+
+--
+
+- Approach 2: *directly* estimate the test error (validation set or CV approach)
+
+---
+
+## Approach 1
+
+- Techniques of Mallow's $C_{p}$, AIC, BIC, and adjusted $R^2$ 
+
+- **Adjust** the training error for the model size (number of predictors)
+
+  - Useful for comparing models of different sizes
+  
+--
+
+- Best subset selection for diabetes data
+  
+```{r fig.align="center", fig.height=5, fig.width=8}
+n <- nrow(diabetes)
+mod_ls <- list(lm(y ~ bmi , diabetes),
+               lm(y ~ bmi + ltg, diabetes),
+               lm(y ~ bmi + bp + ltg , diabetes),
+               lm(y ~ bmi + bp + tc + ltg, diabetes),
+               lm(y ~ sex + bmi + bp+ hdl + ltg, diabetes),
+               lm(y ~ sex + bmi + bp+ tc + ldl + ltg, diabetes),
+               lm(y ~ sex + bmi + bp+ tc+ ldl + tch + ltg, diabetes),
+               lm(y ~ sex + bmi + bp+ tc+ ldl + tch + ltg + glu, diabetes),
+               lm(y ~ sex + bmi + bp+ tc+ ldl + hdl + tch + ltg + glu, diabetes),
+               lm(y ~ ., diabetes  ))
+pp <- length(mod_ls)
+s2_hat <- (summary(mod_ls[[pp]])$sigma)^2
+RSS_vec <- unlist(lapply(mod_ls, function(x){sum(resid(x)^2)}))
+
+Cp <- (RSS_vec + 2*(1:pp)*s2_hat)/n
+BIC <- (RSS_vec + log(n)*(1:pp)*s2_hat)/n
+
+plot_df <- data.frame(k = 1:pp, mallows_Cp = Cp, adj_R2 = summary(sub_mods)$adjr2,
+                      BIC = BIC) %>%
+  pivot_longer(cols = -1, names_to = "metric") %>%
+  mutate(label = round(value, 3)) %>%
+  mutate(nudge_x = case_when(k <= 4 ~ 0.5, T ~ 0))
+plot_df %>%
+  ggplot(., aes(x = k, y = value))+
+  geom_point()+
+  geom_line()+
+  facet_wrap(~metric, scales = "free_y")+
+  theme(text = element_text(size = 14)) +
+  # ggrepel::geom_text_repel(aes(label = label), nudge_x = plot_df$nudge_x,
+  #                           segment.alpha = 0)+
+ labs(x = "Number of predictors")+
+ scale_x_continuous(breaks = seq(2,10,2))
+```
+
+---
+
+### Mallow's $C_{p}$
+
+
+- Mallow's $C_{p}$ compares full model with subsets of models to determine amount of error left unexplained by partial model
+
+- For least squares model with $d$ predictors , 
+
+$$C_{p} = \frac{1}{n}(RSS + 2d\hat{\sigma}^{2})$$
+
+and $\hat{\sigma}^{2}$ is estimate of the error variance of $\epsilon$ 
+
+
+--
+- Small $C_{p}$ is preferred 
+
+--
+
+- Term $2d\hat{\sigma}^{2}$ is a  *penalty*; increasing number of predictors $d$ will increase $C_{p}$ holding everything else constant
+
+
+.footnote[throughout these slides, $\hat{\sigma}^{2}$ is estimated using full model containing all predictors]
+
+
+---
+
+## AIC
+
+- The **AIC* (Akaike Information criterion) is defined for a large class of models fit by maximum likelihood:
+
+$$\text{AIC} = -2\log (L) + 2d$$ where $L$ is the maximimized value of the liklihood function for the given model
+
+--
+
+- For linear model with Normal errors, maximum likelihood and least squares are the same, so $C_{p}$ and AIC will lead to same conclusions
+
+---
+
+## BIC
+
+- The **BIC** (Bayesian Information criterion) is derived from Bayesian point of view, but looks similar:
+
+$$\text{BIC} = -2\log(L) + \log(n)d  = \frac{1}{n}(RSS + \log(n) d\hat{\sigma}^2)\quad^{**}$$
+
+--
+
+- Like $C_{p}$, BIC will tend to be small for a model with low test error, so lower BIC preferred
+
+- BIC penalty has $\log(n)d\hat{\sigma}^2$, wherease $C_{p}$ penalty has $2d\hat{\sigma}^2$
+
+  - Since $\log(n) > 2$ when $n > 7$, heavier penalty for BIC compared to $C_{p}$ when the model has many variables
+  
+  - BIC tends to result in selection of smaller models than $C_{p}$ 
+  
+---
+
+## Ajusted $R^2$
+
+- Recall that usual $R^2 = 1- \frac{\text{RSS}}{\text{TSS}}$ where $\text{TSS} = \sum(y_{i} - \bar{y})^2$
+
+  - $\text{RSS}$ always decreases as more variables are added to model $\rightarrow$ $R^2$ increases
+  
+--
+
+- For least squares model with $d$ variables: $$R^{2}_{adj} = 1 - \frac{\text{RSS}/(n-d-1)}{\text{TSS}/(n-1)}$$
+
+--
+
+- Why is $R^{2}_{adj}$ better for comparing models of different size?
+
+--
+
+  - Maximizing $R^{2}_{adj}$ is equivalent to minimizing $\text{RSS}/(n-d-1)$
+  
+---
+
+## Approach 2
+
+- Alternative to adjusting for model size is directly estimating the test error using validation set/CV
+  
+--
+
+- We have candidate models $\mathcal{M}_{0}, \mathcal{M}_{1}, \ldots, \mathcal{M}_{L}$
+
+  - For each model $\mathcal{M}_{l}$, perform same validation set/CV procedure 
+  - Select a model $\mathcal{M}_{\hat{l}}$ that has lowest estimated test error
+  
+--
+
+- Does not require an estimate of $\sigma^{2}$
+
+---
+
+```{r}
+set.seed(1)
+
+## k-fold
+K <- 10
+
+ids <- split(sample(1:n), ceiling(seq_along(1:n)/(n/K))) 
+cv_mse_df <- matrix(NA, nrow = K, ncol = pp)
+for(k in 1:K){
+  val_set_ids <- ids[[k]]
+  for(p in 1:pp){
+    mod <- lm(formula = mod_ls[[p]], data = diabetes[-val_set_ids,])
+    preds <- predict(mod, diabetes[val_set_ids,])
+    cv_mse_df[k,p] <- mean((preds - diabetes[val_set_ids,]$y)^2)
+  }
+}
+
+
+# validation set
+val_mse_df <- rep(NA, pp)
+test_ids <- sample(n, round(n/2))
+for(p in 1:pp){
+  mod <- lm(formula = mod_ls[[p]], data = diabetes[-test_ids,])
+  preds <- predict(mod, diabetes[test_ids,])
+  val_mse_df[p] <- mean((preds - diabetes[test_ids,]$y)^2)
+}
+
+data.frame(k = 1:pp, CV_error = colMeans(cv_mse_df), val_set_error = val_mse_df, BIC = BIC ) %>%
+ pivot_longer(cols = -1, names_to ="metric") %>%
+ group_by(metric) %>%
+ mutate(is_min = ifelse(value == min(value), T, F)) %>%
+ ungroup() %>%
+ ggplot(.,aes(x= k, y = value))+
+ geom_line()+
+ geom_point(aes(col = is_min, shape = is_min), size = 3) +
+ facet_wrap(~metric, scales = "free")+
+ scale_color_manual(values = c("black", "blue"))+
+ guides(color = "none", shape = "none") +
+ theme(text = element_text(size = 14)) +
+ labs(x = "Number of predictors")
+
+```
+  
+---
+
+# Shrinkage
+
+---
+
+## Shrinkage methods
+
+- Subset selection methods use least squares to fit a linear model that contains a subset of the predictors 
+
+- Alternatively, could fit a model containing all $p$ predictors that *constrains/regularizes* the coefficient estimates
+
+ - **Shrinks** coefficient estimates towards zero
+ 
+--
+
+- Two common methods: ridge regression and the Lasso
+
+---
+
+## Ridge regression
+
+- Least-squares procedures estimates coefficients by using values that minimize
+
+$$\text{RSS} = \sum_{i=1}^{n} \left(y_{i} - \beta_{0} - \sum_{j=1}^{p} \beta_{j} x_{ij}\right)^2$$
+--
+ 
+- The **ridge regression** coefficient estimates $\hat{\beta}^{R}$ are obtained by minimizing
+
+$$\sum_{i=1}^{n} \left(y_{i} - \beta_{0} - \sum_{j=1}^{p} \beta_{j} x_{ij}\right)^2 + \lambda \sum_{j=1}^{p} \beta_{j}^2 = \text{RSS} +  \lambda \sum_{j=1}^{p} \beta_{j}^2$$
+
+ where $\lambda \geq 0$ is a **tuning parameter** that is determined separately
+ 
+---
+
+## Ridge regression
+
+Want to minimize: 
+$$\text{RSS} +  \lambda \sum_{j=1}^{p} \beta_{j}^2$$
+
+- RSS: minimized when coefficient estimates fit the data well
+
+- $\lambda \sum_{j=1}^{p} \beta_{j}^2$: **shrinkage penalty**, minimized when the estimates are close to 0
+
+  - Has effect of *shrinking* the estimates of $\beta_{j}$
+  
+  - Note: $\beta_{0}$ note subject to penalty
+  
+--
+  
+- $\lambda$ controls relative impact of the two components
+
+ - What happens when $\lambda = 0$? When $\lambda \rightarrow \infty$?
+ 
+---
+
+## Ridge example: diabetes data
+
+```{r ridge_ex, fig.align="center", fig.width=8, fig.height=6, cache = T}
+pp <- length(mod_ls)
+x <- diabetes[,1:10]
+
+y <- diabetes$y
+lambdas <- 10^seq(4, -3, by = -.1)
+ridge_reg = glmnet::glmnet(x, y, nlambda = 25, alpha = 0, family = 'gaussian', lambda = lambdas)
+ridge_betas <- coef(ridge_reg)
+
+
+lin_reg <- lm(y ~ ., diabetes)
+lin_reg_l2 <- sqrt(sum((coef(lin_reg)[-1])^2))
+
+ridge_df <- data.frame(t(as.matrix(ridge_betas))) %>%
+ dplyr::select(-1) %>%
+ mutate(lambda = lambdas) %>%
+ pivot_longer(cols = 1:pp, names_to = "variable", values_to = "coefficient") %>%
+ group_by(lambda) %>%
+ mutate(ratio_l2 = sqrt(sum(coefficient^2))/lin_reg_l2) %>%
+ ungroup()
+
+p1 <- ggplot(ridge_df, aes(x = lambda, y = coefficient, col = variable))+
+ geom_line(aes(linetype = variable)) +
+ xlab(expression(lambda)) +
+ theme_light() +
+ labs(y = "Standardized coefficients") +
+ theme(text = element_text(size = 14)) +
+  scale_x_continuous(trans = "log10") 
+
+ 
+p2 <- ggplot(ridge_df, aes(x = ratio_l2, y = coefficient, col = variable))+
+ geom_line(aes(linetype = variable)) +
+ xlab(expression(paste("||", hat(beta)[lambda]^R, "||",""[2], "/||", hat(beta)[lambda],"||",""[2] ))) +
+ theme_light() +
+ labs(y = "Standardized coefficients") +
+ theme(text = element_text(size = 14))
+
+ggpubr::ggarrange(p1, p2, ncol = 2, common.legend = T, legend = "bottom")
+```
+
+---
+
+## Ridge example: diabetes data
+
+- Plot on left: estimated ridge regression coefficient for each variable, plotted as a function of $\lambda$
+
+- Plot on right: same ridge coefficient estimates, plotted as a function of $||\hat{\beta}_{\lambda}^{R}||_{2} / ||\hat{\beta} ||_{2}$, where $\hat{\beta}$ is vector of least-squares estimates
+
+ - $||\beta||_{2}$ is the ""$l_{2}$-norm of a vector: $||\beta||_{2} = \sqrt{\sum_{j=1}^{p} \beta_{j}^2}$
+ 
+--
+
+ - $x$-axis can be thought of as amount of shrinkage
+ 
+---
+
+## Ridge regression: scaling
+
+- The standard least-squares coefficient estimates are *scale equivariant*: if I multiply predict $X_{j}$ by a factor of $c$, then estimated $\hat{\beta_{j}}$ gets divided by $c$
+
+ - Enters $RSS$ as $X_{j}\beta_{j} = (c X_{j})(\beta_{j}/c)$
+
+ 
+--
+
+- In contrast, ridge regression coefficients estimates can change *substantially* when multiplying a given predictor by a constant
+
+ - This is due to shrinkage penalty on the $\beta$'s
+ 
+--
+
+- Therefore, we usually apply ridge regression after **standardizing** the predictors:
+
+$$\tilde{x}_{ij} = \frac{x_{ij}}{\sqrt{\frac{1}{n} \sum_{i=1}^{n}(x_{ij} = \bar{x}_{j})^2}}$$
+
+---
+
+```{r ridge_mse, fig.align = "center", fig.height=4, fig.width=4, cache = T}
+set.seed(9)
+n <- 50
+p <- 45
+beta <- rnorm(p)
+s <- 2
+get_bias = function(estimate, truth) {
+  mean(estimate) - truth
+}
+
+get_mse = function(estimate, truth) {
+  mean((estimate - truth) ^ 2)
+}
+
+
+
+x0 <- rnorm(p)
+y0 <- c(x0 %*% beta + rnorm(1,0,s))
+
+nsim <- 1000
+lambdas <- 10^seq(4, -2, length = 100)
+L <- length(lambdas)
+preds <- matrix(NA,nrow = nsim, ncol = L)
+for(j in 1:nsim){
+ X <- matrix(rnorm(n*p), ncol = p, nrow = n)
+ y <- X %*% c(beta) + rnorm(n,0,s)
+ x <- apply(X,2,scale, center = F)
+ 
+ ridge_reg <- glmnet::glmnet(x, y, nlambda = 25, alpha = 0, family = 'gaussian', lambda = lambdas,
+                             intercept = F, standardize = F,  thresh = 1e-20)
+ preds[j,] <- c(predict(ridge_reg, s = lambdas, newx = x0))
+ 
+}
+
+
+bias <- apply(preds,2,get_bias, truth = c(x0 %*% beta))
+variance <- apply(preds,2,var)
+mse <- apply(preds, 2, get_mse, truth = c(x0 %*% beta))
+
+data.frame(bias2 = bias^2, variance = variance, mse = mse, lambda = lambdas) %>%
+ pivot_longer(cols = 1:3, names_to = "stat") %>%
+ # filter(lambda >1) %>%
+ ggplot(., aes(x = lambda, y = value))+
+ # geom_point()+
+ geom_line(aes(col = stat)) +
+ scale_x_continuous(trans = "log10") +
+ geom_point(aes(x = lambdas[which(mse == min(mse))], y = min(mse)),
+            shape = 4, size = 3) +
+ labs(x = expression(lambda))
+```
+
+---
+
+## The Lasso
+
+- One disadvantage of ridge regression: model will include all $p$ predictors
+
+ - Shrinkage penalty $\lambda \sum \beta_{j}^2$ will shrink, but not set, coefficients to 0
+ 
+ - Difficult for model interpretation
+
+--
+
+- The **Lasso** is a relatively recent alternative to ridge that overcomes this disadvantage
+
+- Lasso coefficients $\hat{\beta}_{\lambda}^{L}$ minimize 
+
+$$\sum_{i=1}^{n} \left(y_{i} - \beta_{0} - \sum_{j=1}^{p} \beta_{j} x_{ij}\right)^2 + \lambda \sum_{j=1}^{p} |\beta_{j}| = \text{RSS} +  \lambda \sum_{j=1}^{p} |\beta_{j}|$$
+
+
+---
+
+## The Lasso
+
+- Difference from ridge regression is the penalty: Lasso uses an $l_{1}$ penalty
+
+ - $l_{1}$ norm of vector $\beta$ is $||\beta||_{1} = \sum |\beta_{j}|$
+ 
+--
+
+- This $l_{1}$ penalty forces some of the coefficients estimates to be exactly 0 when $\lambda$ is sufficiently large
+
+- Thus, $Lasso$ performs *variable selection*
+
+--
+
+ - We say that the Lasso yelds *sparse* models -- models that involve only a subset of the variables
+ 
+--
+
+- Need a select a good value for $\lambda$
+
+---
+
+## Lasso: diabetes data
+
+```{r lasso_diabetes, fig.align="center", fig.height=5, fig.width=8}
+pp <- length(mod_ls)
+x <- diabetes[,1:pp]
+
+y <- diabetes$y
+lambdas <- 10^seq(3, -2, by = -.1)
+lasso = glmnet::glmnet(x, y, nlambda = 25, alpha = 1, family = 'gaussian', lambda = lambdas)
+lasso_betas <- coef(lasso)
+
+
+lin_reg <- lm(y ~ ., diabetes)
+lin_reg_l1 <- sum(abs(coef(lin_reg)[-1]))
+
+lasso_df <- data.frame(t(as.matrix(lasso_betas))) %>%
+ dplyr::select(-1) %>%
+ mutate(lambda = lambdas) %>%
+ pivot_longer(cols = 1:pp, names_to = "variable", values_to = "coefficient") %>%
+ group_by(lambda) %>%
+ mutate(ratio_l1 = sum(abs(coefficient))/lin_reg_l1) %>%
+ ungroup()
+
+p1 <- ggplot(lasso_df, aes(x = lambda, y = coefficient, col = variable))+
+ geom_line(aes(linetype = variable)) +
+ xlab(expression(lambda)) +
+ theme_light() +
+ labs(y = "Standardized coefficients") +
+ theme(text = element_text(size = 14))+
+  scale_x_continuous(trans = "log10") 
+ 
+p2 <- ggplot(lasso_df, aes(x = ratio_l1, y = coefficient, col = variable))+
+ geom_line(aes(linetype = variable)) +
+ xlab(expression(paste("||", hat(beta)[lambda]^L, "||",""[1], "/||", hat(beta)[lambda],"||",""[1] ))) +
+ theme_light() +
+ labs(y = "Standardized coefficients") +
+ theme(text = element_text(size = 14))
+
+ggpubr::ggarrange(p1, p2, ncol = 2, common.legend = T, legend = "bottom")
+
+```
+
+--
+
+- RHS: Depending on value of $\lambda$, the Lasso can produce a model involving any number of predictors
+ 
+---
+
+## Lasso variable selection
+
+- Lasso coefficients estimates solve the problem
+
+$$\min_{\beta}\left\{ \sum_{i=1}^{n} \left(y_{i} - \beta_{0} - \sum_{j=1}^{p} \beta_{j} x_{ij}\right)^2 \right\} \quad \text{ subject to } \sum_{j=1}^{p} |\beta_{j}| \leq s$$
+
+ - For every value of $\lambda$ there is some $s$ that will give same lasso coefficients as equation from previous slide
+
+--
+
+
+- Ridge coefficients solve the problem 
+
+$$\min_{\beta}\left\{ \sum_{i=1}^{n} \left(y_{i} - \beta_{0} - \sum_{j=1}^{p} \beta_{j} x_{ij}\right)^2 \right\} \quad \text{ subject to } \sum_{j=1}^{p} \beta_{j}^2 \leq s$$
+
+--
+
+- $s$ can be thought of as a budget
+
+---
+
+## Lasso variable selection
+
+```{r fig.align="center",out.width="100%",echo=FALSE}
+knitr::include_graphics("figs/06-selection/lasso_ridge.png")
+```
+
+- Each ellipse is a *contour*; all points of a particular ellipse have the same RSS
+
+---
+
+## Lasso vs Ridge
+
+Data simulated with $p = 45$ predictors and $n = 50$, but only 2 predictors actually associated with response
+
+```{r lasso_mse, fig.align = "center", fig.height=8, fig.width=5, cache = T}
+set.seed(9)
+n <- 50
+p <- 45
+beta <- c(5*rnorm(2), rep(0, p-2))
+s <- 2
+
+
+x0 <- rnorm(p)
+y0 <- c(x0 %*% beta + rnorm(1,0,s))
+
+nsim <- 500
+L <- 50
+lasso_lambdas <- 10^seq(1.5, -2, length.out  = L)
+ridge_lambdas <- 10^seq(4,-2, length.out = L)
+lasso_preds  <- ridge_preds <- matrix(NA,nrow = nsim, ncol = L)
+lasso_r2 <- ridge_r2 <- matrix(NA,nrow = nsim, ncol = L)
+for(j in 1:nsim){
+ X <- matrix(rnorm(n*p), ncol = p, nrow = n)
+ y <- X %*% c(beta) + rnorm(n,0,s)
+ x <- apply(X,2,scale, center = F)
+ 
+ lasso <- glmnet::glmnet(x, y, nlambda = 25, alpha = 1, family = 'gaussian', lambda = lasso_lambdas,
+                             intercept = F, standardize = F,  thresh = 1e-20)
+ ridge <- glmnet::glmnet(x, y, nlambda = 25, alpha = 0, family = 'gaussian', lambda = ridge_lambdas,
+                             intercept = F, standardize = F,  thresh = 1e-20)
+ lasso_preds[j,] <- c(predict(lasso, s = lasso_lambdas, newx = x0))
+ lasso_r2[j,] <- lasso$dev.ratio
+ ridge_preds[j,] <- c(predict(ridge, s = ridge_lambdas, newx = x0))
+ ridge_r2[j,] <- ridge$dev.ratio
+}
+
+
+lasso_bias <- apply(lasso_preds,2,get_bias, truth = c(x0 %*% beta))
+lasso_variance <- apply(lasso_preds,2,var)
+lasso_mse <- apply(lasso_preds, 2, get_mse, truth = c(x0 %*% beta))
+
+
+lasso_df <- data.frame(bias2 = lasso_bias^2, variance = lasso_variance, mse = lasso_mse, lambda = lasso_lambdas) %>%
+ # mutate(R2 = colMeans(lasso_r2)) %>%
+ pivot_longer(cols = 1:3, names_to = "stat") %>%
+ mutate(model = "lasso")
+
+
+p1 <- lasso_df %>%
+ # filter(lambda >1) %>%
+ ggplot(., aes(x = lambda, y = value))+
+ # geom_point()+
+ geom_line(aes(col = stat)) +
+ scale_x_continuous(trans = "log10") +
+ geom_point(aes(x = lasso_lambdas[which(lasso_mse == min(lasso_mse))], y = min(lasso_mse)),
+            shape = 4, size = 3) +
+ labs(x = expression(lambda))+
+ guides(color = "none")
+
+
+
+r2_seq <- seq(0, 1, 0.025)
+lasso_ids_ls <- ridge_ids_ls <- list()
+for(i in 1:(length(r2_seq)-1)){
+ lasso_ids_ls[[i]] <- which(lasso_r2 >= r2_seq[i] & lasso_r2 < r2_seq[i+1])
+ ridge_ids_ls[[i]] <- which(ridge_r2 >= r2_seq[i] & ridge_r2 < r2_seq[i+1])
+}
+
+lasso_df_ls <- ridge_df_ls <- list()
+for(i in 1:(length(r2_seq)-1)){
+ lasso_df_ls[[i]] <- data.frame(bias = get_bias(lasso_preds[lasso_ids_ls[[i]]], c(x0 %*% beta)),
+                                variance = var(lasso_preds[lasso_ids_ls[[i]]]),
+                                mse = get_mse(lasso_preds[lasso_ids_ls[[i]]], c(x0 %*% beta)),
+                                model = "lasso",
+                                R2 = mean(lasso_r2[lasso_ids_ls[[i]]]))
+ ridge_df_ls[[i]] <- data.frame(bias = get_bias(ridge_preds[ridge_ids_ls[[i]]], c(x0 %*% beta)),
+                                variance = var(ridge_preds[ridge_ids_ls[[i]]]),
+                                mse = get_mse(ridge_preds[ridge_ids_ls[[i]]], c(x0 %*% beta)),
+                                model = "ridge",
+                                R2 = mean(ridge_r2[ridge_ids_ls[[i]]]))
+                             
+}
+
+
+
+p2 <- rbind(do.call(rbind, lasso_df_ls), do.call(rbind,ridge_df_ls)) %>% 
+ pivot_longer(cols = 1:3, names_to = "stat") %>%
+ ggplot(.,aes(x = R2, y = value, col = stat))+
+ geom_line(aes(linetype = model)) +
+ xlim(0.4, 1) +
+ labs(x = expression(R^2))
+
+ggpubr::ggarrange(p1, p2, ncol = 2, common.legend = T)
+
+```
+
+---
+
+## Lasso vs Ridge
+
+- Neither approach will universally dominant the other
+
+- In general, we expect the lasso to perform better when the response is a function of only a relatively small number of prodictors
+
+- Rdige might perform beter when the response is a function of many predictors, all with coefficients of roughly equal size
+
+--
+
+- The number of predictors related to $Y$ is never known *a priori* for real data
+
+ - Using techniques such as CV can be used to determine which approach is better for a given dataset
+ 
+---
+
+## How to select the tuning parameter?
+
+- We require a method to determine which of the models under consideration is "best"
+
+ - How to select $\lambda$ (or constraint $s$)?
+ 
+--
+
+- Cross-validation gives us a simple solution: choose a range/grid of $\lambda$ values, and compute the CV error rate for each value
+
+ - Select the value of tuning parameter $\lambda^{*}$ for which CV error is smallest
+ 
+- The re-fit the model using all of the available observations and $\lambda^{*}$
+
+---
+
+## CV: diabetes data
+
+```{r fig.align="center", fig.height=5, fig.width=8}
+set.seed(23)
+x <- model.matrix(y ~., diabetes)[,-1]
+y <- diabetes$y
+n <- nrow(x)
+train_ids <- sample(1:n)
+lambdas <- 10^seq(2,-3,-0.1)
+cv.out <- cv.glmnet(x[train_ids,], y[train_ids], alpha = 0, nfolds = 10)
+lambda_star <- cv.out$lambda.min
+p1 <- data.frame( lambda = cv.out$lambda, cv_error = cv.out$cvm) %>%
+ ggplot(.,aes(x = lambda, y = cv_error)) + 
+ geom_line(col = "blue") +
+ scale_x_continuous(trans = "log10") +
+ geom_vline(xintercept = lambda_star, linetype = "dashed")+
+ xlab(expression(lambda))
+
+p2 <- t(as.matrix(cv.out$glmnet.fit$beta)) %>%
+ as.data.frame() %>% 
+ mutate(lambda = cv.out$lambda) %>%
+ pivot_longer(cols = -lambda, names_to = "variable") %>%
+ ggplot(., aes(x = lambda, y = value, col = variable)) + 
+ geom_line() +
+  scale_x_continuous(trans = "log10") +
+ geom_vline(xintercept = lambda_star, linetype = "dashed")+
+ labs(x =expression(lambda), y = "Standardized coefficients")
+ 
+ggpubr::ggarrange(p1, p2, ncol = 2, legend = "bottom")
+ 
+```
+ 
+- Left: 10-fold CV errors from applying ridge regression to the diabetes data under various $\lambda$
+
+- Right: coefficients estimates as a function of $\lambda$
+
+--
+
+- What do these plots tell us?
+
+
+---
+
+## LOOCV: simulated data
+
+```{r lasso_loocv, fig.align="center", fig.height=5, fig.width=8}
+# 72
+set.seed(562)
+n <- 50
+p <- 45
+beta <- c(3*rnorm(2), rep(0, p-2))
+s <- 2
+X <- matrix(rnorm(n*p), ncol = p, nrow = n)
+y <-  X %*% c(beta) + rnorm(n,0,s)
+x <- apply(X,2,scale, center = F)
+cv.out <- cv.glmnet(x, y, alpha = 1, nfolds = n,  intercept = F)
+lambda_star <- cv.out$lambda.min
+lambdas <- cv.out$lambda
+
+lin_reg_l1 <- sum(abs(coef(lm(y ~ -1 +x))))
+
+
+lasso_df <- data.frame(t(as.matrix(cv.out$glmnet.fit$beta))) %>%
+ # dplyr::select(-1) %>%
+ mutate(lambda = lambdas) %>%
+ pivot_longer(cols = -lambda, names_to = "variable", values_to = "coefficient") %>%
+ group_by(lambda) %>%
+ mutate(ratio_l1 = sum(abs(coefficient))/lin_reg_l1) %>%
+ ungroup()
+
+p1 <- lasso_df %>% 
+ dplyr::select(ratio_l1, lambda) %>%
+ distinct() %>%
+ mutate(cv_error = cv.out$cvm) %>%
+ ggplot(., aes(x = ratio_l1, y = cv_error))+
+ geom_line(col = "blue")+
+ xlab(expression(paste("||", hat(beta)[lambda]^L, "||",""[1], "/||", hat(beta)[lambda],"||",""[1] )))  +
+ geom_vline(xintercept = lambda_star, linetype = "dashed")
+
+p2 <- lasso_df %>%
+ mutate(keep = case_when(variable == "V1" ~ "V1",
+                         variable == "V2" ~ "V2")) %>%
+ ggplot(.,aes(x = ratio_l1, y = coefficient, col = keep, group = variable))+
+ geom_line()+
+ guides(col = "none") +
+ scale_color_manual(values = c("purple", "orange"), na.value = "grey50")+
+ xlab(expression(paste("||", hat(beta)[lambda]^L, "||",""[1], "/||", hat(beta)[lambda],"||",""[1] )))  +
+ geom_vline(xintercept = lambda_star, linetype = "dashed") +
+ ylab("Standardized Coefficients")
+
+ggpubr::ggarrange(p1, p2, ncol = 2, legend = "bottom")
+
+```
+
+- Left: LOOCV MSE for the lasso, applied to sparse simulated data where only 2 predictors are associated with response
+
+- Right: corresponding lasso coefficients
+
+---
+
+# Dimension Reduction Methods
+
+---
+
+## Dimension reduction
+
+- Subset selection and shrinkage have involved fitting linear regression models using original predictors $X_{1}, X_{2}, \ldots, X_{p}$
+
+--
+
+- Now, consider *transforming* the predictors and then fitting a least-squares model using the transformed variables
+
+ - We will refer to these techniques as **dimension reduction** methods
+ 
+---
+
+## Dimension reduction
+
+- Let $Z_{1}, Z_{2}, \ldots, Z_{M}$ represent $M < p$ linear combinations of the original predictors. That is,
+
+$$Z_{m} = \sum_{j=1}^{p} \phi_{jm} X_{j}$$
+
+ for some constants $\phi_{1m}, \phi_{2m}, \ldots, \phi_{pm}$, $m = 1,\ldots, M$
+ 
+--
+
+- Can then fit a linear regression model
+
+$$y_{i} = \theta_{0} + \sum_{m=1}^{M} \theta_{m}z_{im} + \epsilon_{i}, \quad i = 1,\ldots,n$$ 
+
+ using least squares
+ 
+--
+
+- Here, the regression coefficients are the $\theta$'s
+
+- If the $\phi_{mj}$ are chosen well, dimension reductions can often outperform OLS
+
+---
+
+## Dimension reduction
+
+- We are reducing the problem of estimating $p+1$ coefficients $(\beta_{0}, \beta_{1}, \ldots, \beta_{p})$ to instead estimating $M+1$ $(\theta_{0}, \theta_{1}, \ldots, \theta_{M})$
+
+--
+
+$$\sum_{m=1}^{M} \theta_{m} z_{im} = \sum_{m=1}^{M} \theta_{m} \sum_{j=1}^{p} \phi_{jm}x_{ij} = \sum_{j=1}^{p} \sum_{m=1}^{M} \theta_{m} \phi_{jm}x_{ij} = \sum_{j=1}^{p} \beta_{j} x_{ij}$$
+
+ where $\beta_{j} = \sum_{m=1}^{M} \theta_{m}\phi_{jm}$
+
+- So the linear regression model from the previous slide can be thought of as special case of original linear regression model
+
+--
+
+- Notice that the $\beta_{j}$ are constrained
+ 
+ - Has potential for bias
+ 
+ - When $p$ is large relative to $n$, dimension reduction to reduce variance of the estimated coefficients
+ 
+---
+
+## Dimension reduction
+
+- Generally two steps:
+
+ 1. Obtain transformed predictors $Z_{1}, \ldots, Z_{M}$
+ 
+ 2. Fit the model to the $Z$'s
+
+--
+
+- How we select the $\phi_{jm}$'s will affect the model
+
+---
+
+## Principal Components Regression
+
+- Principal components regression relies on the technique of principal components analysis (PCA)
+
+- The first principal component is the (normalized) linear combination of the variables with the largest variance
+
+- The second principal component has largest variance, subject to being uncorrelated with the first
+
+- Etc.
+
+
+
+---
+
+## PCA pictures
+
+```{r pca_fig1, fig.align = "center", fig.width=4, fig.height=4}
+diabetes_jit <- diabetes
+diabetes_jit$ltg <- rnorm(nrow(diabetes),0.1,0.5) + diabetes$ltg 
+pc  <- princomp(~ glu + ltg,diabetes_jit)
+loads <- pc$loading
+
+start <- c(-2,-2); end <- c(2,2)
+ggplot(diabetes_jit, aes(x = glu, y = ltg))+
+ geom_point() +
+ geom_segment(x = c(start %*% loads[,1]), xend = c(end %*% loads[,1]),
+              y = c(start %*% loads[,1]), yend = c(end %*% loads[,1]), col = "purple") +
+  geom_segment(x =0 + 2*loads[1,2], xend =  0 - 2*loads[1,2],
+              y = 0+ 2*loads[2,2], yend= 0 - 2*loads[2,2], col = "orange", linetype = "dashed")+
+ labs(x = "glucose", y = "log triglycerides")
+
+```
+
+- Purple line is the first principal component direction of the data
+
+- Orange line is the second principal component
+
+---
+
+## PCA
+
+- Recall: $Z_{m} = \sum_{j=1}^{p} \phi_{jm} X_{j}$
+
+--
+
+- In this example,
+
+$$Z_{1} = `r round(loads[1,1],3)`\times (\color{blue}{\text{glu}} - \bar{\color{blue}{\text{glu}}}) + `r round(loads[1,2],3)`\times (\color{blue}{\text{ltg}} - \bar{\color{blue}{\text{ltg}}})$$
+
+ - $\phi_{11} = `r round(loads[1,1],3)`$ and $\phi_{21} = `r round(loads[1,2],3)`$ are the principal component loadings
+ 
+ 
+---
+
+## PCA pictures
+
+
+```{r pca_fig2, fig.align = "center", fig.width=8, fig.height=4}
+p1 <- ggplot(diabetes_jit %>% slice(1:20), aes(x = glu, y = ltg))+
+ geom_point() +
+ geom_segment(x = c(start %*% loads[,1]), xend = c(end %*% loads[,1]),
+              y = c(start %*% loads[,1]), yend = c(end %*% loads[,1]), col = "purple") +
+ labs(x = "glucose", y = "log triglycerides") +
+ geom_segment(aes(x = glu, y = ltg, xend = 0.5*(glu + ltg), yend = 0.5*(glu + ltg)),
+              linetype = "dashed") 
+
+p2 <- ggplot(data.frame(pc$scores[1:20,]) %>% rename("comp1" = 1, "comp2" = 2), 
+       aes(x = comp1, y = comp2) )+
+        geom_point() +
+ geom_hline(yintercept = 0, col = "purple")+
+ geom_segment(aes(x = comp1, y = comp2, xend = comp1, yend = 0), linetype = "dashed") +
+ labs(x = "First principal component", y = "Second prinicpal component")
+
+ggpubr::ggarrange(p1, p2, ncol = 2)
+```
+
+- Subset of the diabetes data
+
+- Left: first principal component minimizes sum of squared perpendicular distances to each point, with dashed line segemnts representing distances
+
+- Right: rotated plot on left so first principal compoent coincides with x-axis
+
+
+---
+
+
+## PCA pictures
+
+```{r pca_scores1, fig.align = "center", fig.width=8, fig.height=4}
+data.frame(comp1 = pc$scores[,1]) %>%
+ mutate(glucose = diabetes_jit$glu,
+        triglycerides = diabetes_jit$ltg) %>%
+ pivot_longer(cols = -1, names_to = "variable") %>%
+ ggplot(.,aes(x = comp1, y = value))+
+ geom_point(col = "pink") +
+ facet_wrap(~variable, scales = "free") +
+ labs(x = "First principal component score", y = "Observed value")
+```
+
+- Plots of the first principal component scores $z_{i1}$ versus $\color{blue}{\text{glucose}}$ and $\color{blue}{\text{tryglycerides}}$
+
+--
+
+- Think of the $z_{i1}$ values as single-number summaries of the joint $\color{blue}{\text{glucose}}$ and $\color{blue}{\text{tryglycerides}}$ for each individual
+
+ - If $z_{i1} < 0$, indicates an individual with below-average glucose and triglycerides level
+
+---
+
+## PCA pictures cont.
+
+```{r pca_scores2, fig.align = "center", fig.width=8, fig.height=4}
+data.frame(comp = pc$scores[,2]) %>%
+ mutate(glucose = diabetes_jit$glu,
+        triglycerides = diabetes_jit$ltg) %>%
+ pivot_longer(cols = -1, names_to = "variable") %>%
+ ggplot(.,aes(x = comp, y = value))+
+ geom_point(col = "pink") +
+ facet_wrap(~variable, scales = "free") +
+ labs(x = "Second principal component score", y = "Observed value")
+```
+
+- Plots of the second principal component scores $z_{i2}$ versus $\color{blue}{\text{glucose}}$ and $\color{blue}{\text{tryglycerides}}$
+
+$$Z_{2} = `r round(loads[1,2],3)`\times (\color{blue}{\text{glu}} - \bar{\color{blue}{\text{glu}}}) + `r round(loads[2,2],3)`\times (\color{blue}{\text{ltg}} - \bar{\color{blue}{\text{ltg}}})$$
+
+---
+
+## Principal components cont.
+
+- In general, can have up to $p$ distinct principal components
+
+ - In this example, $p=2$ so we can only have two components
+ 
+--
+ 
+- By construction, $Z_{1}$ explains more variance than $Z_{2}$
+
+ - Examine variability on plot of $z_{i1}$ vs $z_{i2}$, and strength of relationships between $z_{i2}$ and the two original variables
+ 
+---
+
+## Principal Components Regression
+
+- **PCR** (not to be confused with polymerase chain reaction) approach:
+
+ 1. Construct the first $M$ principle components, $Z_{1}, \ldots, Z_{M}$
+ 
+ 2. Use the components as the predictors in a linear regression model fit using least squares
+ 
+--
+
+- Intuition: often only a small number of principal components are needed to explain most of variability in data, as well as relationship with $Y$
+
+ - Assume that the directions in which $X_{1},\ldots,X_{p}$ exhibit the most variation are the directions that are associated with $Y$
+ 
+---
+
+```{r pcr_sim_dat, cache = T, fig.align="center", fig.width = 8, fig.height = 5}
+#436 for lasso
+set.seed(223)
+n <- 50
+p <- 45
+beta <- runif(p, -1,1)#rnorm(p)
+# beta <- c(3*rnorm(2), rep(0, p-2))
+s <- 2
+x0 <- rnorm(p)
+nsim <- 500
+preds <- matrix(NA , nrow = nsim, ncol = p)
+for(j in 1:nsim){
+ X <- matrix(rnorm(n*p), ncol = p, nrow = n)
+ y <-  X %*% c(beta) + rnorm(n,0,s)
+ x <- apply(X,2,scale, center = F)
+ pcr_fit <- pcr(y ~ x - 1)
+ preds[j,] <- predict(pcr_fit,  matrix(x0, ncol = p))[1:p]
+}
+
+
+bias <- apply(preds,2,get_bias, truth = c(x0 %*% beta))
+variance <- apply(preds,2,var)
+mse <- apply(preds, 2, get_mse, truth = c(x0 %*% beta))
+
+p1 <- data.frame(bias2 = bias^2, variance = variance, mse = mse, M = 1:p) %>%
+ pivot_longer(cols = 1:3, names_to = "stat") %>%
+ # filter(lambda >1) %>%
+ ggplot(., aes(x = M, y = value))+
+ # geom_point()+
+ geom_hline(yintercept = s^2, linetype = "dashed")+
+ geom_line(aes(col = stat)) +
+ labs(x ="Number of components")
+
+# set.seed(27)
+set.seed(29)
+n <- 50
+p <- 45
+beta <- c(3*rnorm(2), rep(0, p-2))
+s <- 2
+x0 <- rnorm(p)
+nsim <- 500
+preds <- matrix(NA , nrow = nsim, ncol = p)
+for(j in 1:nsim){
+ X <- matrix(rnorm(n*p), ncol = p, nrow = n)
+ y <-  X %*% c(beta) + rnorm(n,0,s)
+ x <- apply(X,2,scale, center = F)
+ pcr_fit <- pcr(y ~ x - 1)
+ preds[j,] <- predict(pcr_fit,  matrix(x0, ncol = p))[1:p]
+}
+
+
+bias <- apply(preds,2,get_bias, truth = c(x0 %*% beta))
+variance <- apply(preds,2,var)
+mse <- apply(preds, 2, get_mse, truth = c(x0 %*% beta))
+
+p2 <- data.frame(bias2 = bias^2, variance = variance, mse = mse, M = 1:p) %>%
+ pivot_longer(cols = 1:3, names_to = "stat") %>%
+ # filter(lambda >1) %>%
+ ggplot(., aes(x = M, y = value))+
+ # geom_point()+
+ geom_hline(yintercept = s^2, linetype = "dashed")+
+ geom_line(aes(col = stat)) +
+ labs(x ="Number of components")
+ggpubr::ggarrange(p1,p2,ncol = 2, common.legend = T)
+```
+ 
+- Left: simulated data similar to ridge 
+- Right: simulated data similar to lasso
+
+---
+
+## PCR remarks
+
+- Note that PCR is not a feature selection method
+
+ - Each of the $M$ components uses all $p$ original predictors
+ 
+ - In a sense, PCR is similar to ridge regression
+ 
+--
+
+- The number of components $M$ is typically chosen by CV
+
+--
+
+- Generally recommend standardizing each predictor prior to generating the principal components
+
+--
+
+  - Otherwise, high-variance predictors will tend to play a larger role in the $Z_{m}$ 
+
+---
+
+## PCR: diabetes data
+
+```{r diabetes_pcr, fig.align="center", fig.width=8, fig.height=5}
+pcr_diabetes <- pcr(y ~. , data = diabetes, scale = T, validation = "CV")
+p <- (ncol(diabetes)-1)
+p1 <- data.frame(t(pcr_diabetes$coefficients[,,])) %>%
+ mutate(M = 1:p) %>%
+ pivot_longer(1:p, names_to = "variable") %>%
+ ggplot(., aes(x = M, y = value, col = variable))+
+ geom_line()+
+ scale_x_continuous(breaks = seq(2,p,2))+
+ labs(x = "Number of components", y = "Standardized coefficients")+
+ theme(text = element_text(size = 14))
+
+p2 <- data.frame(cv_mse = (RMSEP(pcr_diabetes)$val[1,,][-1])^2, M = 1:p) %>%
+ ggplot(.,aes(x = M, y = cv_mse)) +
+ geom_point()+
+ geom_line()+
+ scale_x_continuous(breaks = seq(2,p,2))+
+ labs(x = "Number of components", y = "Cross-Validation MSE")+
+ theme(text = element_text(size = 14))
+ggpubr::ggarrange(p1,p2,ncol = 2, common.legend = T)
+
+```
+
+- Left: PCR standardized coefficient estimates for different values of $M$
+
+- Right: The 10-fold CV MSE obtained using PCR as a function of $M$
+
+---
+
+## PCR: remarks cont.
+
+- PCR identifies linear combinations (directions) that best represent the predictors $X_{1}, \ldots, X_{p}$
+
+- The directions are obtained in an *unsupervised* fashion; the response $Y$ is not used
+
+--
+
+- As a result, in PCR there is no guarantee that the direction that best explain $X$ will also be best directions for $Y$
+
+--
+
+## Partial least squares
+
+- **Partial least squares ** (PCL) is another dimnesion reduction method, and is a *supervised* alternative to PCR
+
+- The new features $Z_{1}, \ldots, Z_{M}$ will approximate the original $X$'s well, and will also be related to the response!
+
+--
+
+- Roughly speaking, PLS attempts to find directions that help explain both $X$ adnd $Y$
+
+--
+
+## Partial least squares
+
+- Recall: $Z_{m} = \sum_{j=1}^{p}\phi_{jm} X_{j}$
+
+--
+
+- First, standardize the $p$ predictors $X_{1},\ldots, X_{p}$ (and often the response $Y$ as well)
+
+- Compute first direction $Z_{1}$ by setting each $\phi_{1j}$ equal to the coefficient from the simle linear regression of $Y$ on $X_{j}$
+
+--
+
+ - This coefficient is proportional to the correlation between $X_{j}$ and $Y$
+ 
+--
+
+ - So in PLS, $Z_{1} = \sum_{j=1}^{p} \phi_{1j}X_{j}$ places highest weight on variables that are most strongly related to the response
+
+---
+
+## Partial least squares
+
+- Subsequent directions found by taking *residuals* and repeating this process
+
+ - The residuals are interepreted as the remaining information not expalined by the previous PLS directions
+ 
+--
+
+
+- Finally, after obtaing $Z_{1}, \ldots, Z_{M}$, fit a linear model for $Y$ as before
+
+
+--
+
+- $M$ is typically determined using CV
+
+- In practice, PLS performs no better than ridge regression or PCR
+
+
+---
+
+
+```{r diabetes_pls, fig.align="center", fig.width=8, fig.height=5}
+
+pls_diabetes <- plsr(y ~., data = diabetes, scale = T, validation = "CV")
+
+
+
+p1 <- data.frame(t(pls_diabetes$coefficients[,,])) %>%
+ mutate(M = 1:p) %>%
+ pivot_longer(1:p, names_to = "variable") %>%
+ ggplot(., aes(x = M, y = value, col = variable))+
+ geom_line()+
+ scale_x_continuous(breaks = seq(2,p,2))+
+ labs(x = "Number of directions", y = "Standardized coefficients")+
+ theme(text = element_text(size = 14))
+
+p2 <- data.frame(cv_mse = (RMSEP(pls_diabetes)$val[1,,][-1])^2, M = 1:p) %>%
+ ggplot(.,aes(x = M, y = cv_mse)) +
+ geom_point()+
+ geom_line()+
+ scale_x_continuous(breaks = seq(2,p,2))+
+ labs(x = "Number of directions", y = "Cross-Validation MSE")+
+ theme(text = element_text(size = 14))
+ggpubr::ggarrange(p1,p2,ncol = 2, common.legend = T)
+
+
+```
+
+---
+
+## Summary
+
+- Model selection methods are essential toolds for data analysis
+
+- High-dimensional data (small $n$, large $p$) are becoming more available
+
+- Research into methods that give *sparsity* (such as the Lasso) are thriving research areas

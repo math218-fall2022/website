@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Math 218: Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Classification" />
+    <script src="04-classification-slides_files/kePrint-0.0.1/kePrint.js"></script>
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Math 218: Statistical Learning
+### Classification
+### 9/14/2022
+
+---
+
+
+
+
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Classification
+
+- Qualitative variables takes values in an unordered set `\(\mathcal{C}\)`, such as:
+
+`\(\color{blue}{\text{wine}} \in \{\color{blue}{\text{red}},\color{blue}{\text{white}},\color{blue}{\text{rose}}\}\)`
+
+`\(\color{blue}{\text{diagnosis}} \in \{\color{blue}{\text{yes}}, \color{blue}{\text{no}} \}\)`
+
+- Given predictors (features) `\(X\)` and qualitative response `\(Y\)` that takes values in `\(\mathcal{C}\)`, classification task is to build a function `\(C(X)\)` that predicts a value for `\(Y\)`
+
+--
+
+  - We are often interested in the estimated *probabilities* that `\(X\)` belongs to a given category in `\(\mathcal{C}\)`
+
+---
+
+## Heart attack data
+
+- Health measurements from 303 patients, along with record of the presence of heart disease in the patient
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Seeds data
+
+- Data come from UCI Machine Learning Repository 
+
+- Measurements of geometrical properties of kernels belonging to three different varieties of wheat
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Why not linear regression?
+
+- For seeds data, `\(\mathcal{C} = \{\text{Canadian, Kama, Rosa}\}\)`
+
+- Could we encode the values as a quantitative response, such as:
+
+`$$Y = \begin{cases}
+1 &amp; \text{ if } \color{blue}{\text{Canadian} }\\
+2 &amp; \text{ if } \color{blue}{\text{Kama}}\\
+3 &amp; \text{ if } \color{blue}{\text{Rosa}} \end{cases}$$`
+
+and then fit a linear regression for this `\(Y\)`?
+
+---
+
+## Why not linear regression?
+
+The heart disease data is formatted as:
+
+`$$Y = \begin{cases}
+0 &amp; \text{ if } \color{blue}{\text{no heart disease} }\\
+1 &amp; \text{ if } \color{blue}{\text{heart disease}}\end{cases}$$`
+
+- Here, `\(Y\)` is binary
+
+--
+
+- For binary response, could we use least squares to fit a linear regression model to `\(Y\)`?
+
+  - Maybe fit a linear regression and predict `\(\color{blue}{\text{heart disease}}\)` if `\(\hat{Y} &gt; 0.5\)`
+  
+  --
+  
+  - Equivalent to *linear discriminant analysis*
+  
+  - Can show that the estimate `\(\hat{\beta}_{0} + \hat{\beta}_{1} X_{1} + \ldots + \hat{\beta}_{p} X_{p}\)` is an estimate of `\(Pr(Y = 1 | X) = Pr(\color{blue}{\text{heart disease}} | X)\)`
+  
+
+---
+
+## Why not linear regression?
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+- Fit a linear regression line for `\(\color{blue}{\text{disease}} = \beta_{0} + \beta_{1}\color{blue}{\text{age}} + \beta_{2}\color{blue}{\text{sex}}\)`
+
+--
+
+- In certain cases, linear regression might produce estimated probabilities less than `\(0\)` or bigger than `\(1\)`
+
+---
+
+## Logistic regression
+
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Logistic regression
+
+- Let `\(p(X) = Pr(Y = 1 | X)\)`. Need to somehow restrict `\(0 \leq p(X) \leq 1\)`
+
+- **Logistic** regression uses *logistic* function:
+
+`$$p(X) = \frac{e^{\beta_{0} + \beta_{1}X}}{1 + e^{\beta_{0} + \beta_{1}X}}$$`
+
+--
+
+- Rearranging this equation yields the **odds**:
+
+`$$\frac{p(X)}{1 - p(X)} = e^{\beta_{0} + \beta_{1}X}$$`
+
+--
+
+- Furthermore, we can obtain the **log odds** or **logit**: 
+
+`$$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$`
+
+---
+
+## Logistic regression
+
+`$$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$`
+
+- The logistic regression model has a logit that is linear in `\(X\)`
+
+--
+
+- Interpretation of `\(\beta_{1}\)`: for every one-unit increase in `\(X\)`, we expect an average change of `\(\beta_{1}\)` in the log odds (or average multiple of `\(e^{\beta_{1}}\)` in the odds)
+
+--
+  
+  - `\(\beta_{1}\)` does *not* correspond to the change in `\(p(X)\)` associated with one-unit increase in `\(X\)` (i.e., not a linear relationship between `\(X\)` and `\(p(X)\)`)
+  
+--
+
+  - If `\(\beta_{1} &gt; 0\)`, then increasing `\(X\)` is associated with increasing `\(p(X)\)`
+  
+---
+
+## Estimating the Regression Coefficients
+
+- Use the general method of *maximum likelihood* to estimate `\(\beta_{0}\)` and `\(\beta_{1}\)`
+    
+- *Likelihood function* `\(l()\)` describes the probability of the observed data as a function of model parameters. For logistic regression model:
+
+`$$l(\beta_{0}, \beta_{1}) = \prod_{i: y_{i} = 1}p(x_{i}) \prod_{i:y_{i} = 0}(1 - p(x_{i}))$$`
+
+- We pick `\(\beta_{0}\)` and `\(\beta_{1}\)` that will maximize this likelihood
+
+---
+
+## Logistic regression: heart data
+
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)  -3.01      0.759      -3.96 0.0000750
+## 2 age           0.0520    0.0137      3.80 0.000143
+```
+
+--
+
+What is the estimated probability of `\(\color{blue}{\text{heart disease}}\)` for someone who is 50 years old?
+
+--
+
+`$$\hat{p}(X) = \frac{e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}}{1 + e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}} = \frac{e^{-3.006 + 0.052 \times 50}}{1+e^{-3.006 + 0.052 \times 50}} = 0.3998716$$`
+
+---
+
+## Logistic regression: heart data
+
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic    p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 (Intercept)    -1.06     0.232     -4.56 0.00000520
+## 2 sexM            1.27     0.271      4.69 0.00000271
+```
+
+Here, `\(\color{blue}{\text{sex}}\)` is the predictor
+
+--
+
+- `\(\hat{Pr}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Male}})=\frac{e^{-1.058 + 1.272 \times 1}}{1+e^{-1.058 + 1.272 \times 1}} = 0.5532968\)` 
+
+- `\(\hat{Pr}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Female}})=\frac{e^{-1.058 + 1.272 \times 0}}{1+e^{-1.058 + 1.272 \times 0}} = 0.2576918\)` 
+
+---
+
+## Multiple logistic regression
+
+- Extend from simple to multiple logistic regression similar to linear model:
+
+`$$\log\left(\frac{p(X)}{1-p(X)} \right)= \beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}$$`
+--
+
+`$$p(X) = \frac{e^{\beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}}}{1 + e^{\beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}}}$$`
+
+--
+
+
+```
+## # A tibble: 3 x 5
+##   term        estimate std.error statistic      p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+## 1 (Intercept)  -4.81      0.898      -5.35 0.0000000866
+## 2 age           0.0657    0.0148      4.43 0.00000956  
+## 3 sexM          1.50      0.289       5.18 0.000000223
+```
+
+---
+
+## Multinomial regression
+
+- What if we have `\(K &gt; 2\)` classes? Can extend the logistic regression model to *multiple logistic* or **multinomial** regression
+
+- Choose a single class to serve as *baseline* (it doesn't matter which, so we will choose the `\(K\)`-th class)
+
+--
+
+- Then for class `\(k = 1,\ldots, K-1\)`:
+
+`$$Pr(Y = k | X= x) = \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$`
+
+and
+
+`$$Pr(Y = K | X= x) = \frac{1}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$`
+
+--
+
+- Here there is a function  for *each* class
+
+---
+
+## Multinomial regression
+
+- For `\(k = 1, \ldots, K-1\)`:
+
+`$$\log\left(\frac{Pr(Y = k | X =x)}{Pr(Y = K | X = x)}\right) = \beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp} x_{p}$$`
+
+  - i.e. log odds between any pair of classes is linear in the predictors
+  
+--
+
+
+```
+## # weights:  9 (4 variable)
+## initial  value 230.708581 
+## iter  10 value 62.449477
+## iter  20 value 61.097530
+## iter  30 value 61.008977
+## iter  40 value 61.008049
+## final  value 61.008036 
+## converged
+```
+
+```
+## # A tibble: 4 x 6
+##   y.level term        estimate std.error statistic  p.value
+##   &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Kama    (Intercept)   -30.6      5.20      -5.88 4.06e- 9
+## 2 Kama    area            2.36     0.405      5.83 5.40e- 9
+## 3 Rosa    (Intercept)   -67.0      9.10      -7.36 1.84e-13
+## 4 Rosa    area            4.63     0.620      7.47 8.32e-14
+```
+
+---
+
+## Multinomial regression
+
+- Predicted probabilities of each class for seed with area of 14 `\(mm^2\)`?
+
+  - `\(Pr(\color{blue}{\text{Kama}} | X = 14) = \frac{e^{-30.56 +2.36\times 14}}{1 + e^{-30.56 +2.36\times 14} + e^{-66.98 +4.63\times 14}} = 0.9145776\)`
+  
+  - `\(Pr(\color{blue}{\text{Rosa}} | X = 14) = \ldots = 0.0088327\)`
+  
+  - `\(Pr(\color{blue}{\text{Canadian}} | X = 14) = \ldots = \frac{1}{1 + e^{-30.56 +2.36\times 14} + e^{-66.98 +4.63\times 14}} =  0.0765897\)`
+
+---
+
+## Multinomial regression
+
+- An alternative coding for multinomial regression is known *softmax*
+
+- In softmax coding, we do not choose a baseline but rather, treat all classes symmetrically. For each `\(k = 1,\ldots, K\)`:
+
+`$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$`
+
+---
+
+## Another method: Discriminant analysis
+
+-
+
+---
+
+## Bayes theorem
+
+- For events `\(A\)` and `\(B\)`: 
+
+`$$Pr(A|B) = \frac{Pr(B|A)Pr(A)}{Pr(B)}$$`
+--
+
+- Letting `\(A\)` be event `\(Y=k\)` and `\(B\)` the event `\(X=x\)`:
+
+`$$Pr(Y=k| X =x) = \frac{Pr(X=x|Y=k)Pr(Y=k)}{Pr(X=x)}$$`
+--
+
+- For discriminant analysis:
+
+  - `\(\pi_{k}(x) = Pr(Y = k)\)` is marginal or **prior** probability for class `\(k\)`
+  - `\(f_{k}(x) = Pr(X =x | Y =k)\)` is the **density** for `\(X\)` in class `\(k\)`
+  
+  `$$Pr(Y=k| X =x) = \frac{\pi_{k}(x) f_{k}(x)}{\sum_{l=1}^{K} \pi_{l}(x) f_{l}(x)}$$`
+
+--
+
+- Recall Bayes classifier: classifies an observation `\(x\)` to the class for which `\(p_{k}(x) = Pr(Y = k |X=x)\)` is largest
+  
+  - Will need to estimate the `\(f_{k}(x)\)` to approximate Bayes classifier
+
+---
+
+## Discriminant analysis
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Linear Discriminant Analysis
+
+- First, consider the case of `\(p =1\)` (one predictor)
+
+- Assumption 1: `\(f_{k}(x)\)` is normal distribution. With mean `\(\mu_{k}\)` and variance `\(\sigma_{k}^{2}\)` for class `\(k\)`,
+
+`$$f_{k}(x) = \frac{1}{\sqrt{2\pi\sigma_{k}^2}} e^{-\frac{1}{2\sigma_{k}^2}(x - \mu_{k})^2}$$`
+
+--
+
+- Assumption 2: `\(\sigma_{k}^2= \sigma^{2}\)` for all classes `\(k\)`
+
+--
+
+- Plugging into the formula: `$$p_{k}(x) = \frac{\pi_{k} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(x - \mu_{k})^2}}{\sum_{l=1}^{K} \pi_{l} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(x - \mu_{l})^2}}$$`
+
+
+---
+
+## Linear Discriminant Analysis
+
+- Taking logs and simplifying terms that do no depend on `\(k\)`, classifying based on largest `\(p_{k}(x)\)` is equivalent to classifying based on largest **discriminant score**
+
+`$$\delta_{k}(x) = x \cdot \frac{\mu_{k}}{\sigma^2} - \frac{\mu_{k}^{2}}{2\sigma^2} + \log(\pi_{k})$$`
+
+- Bayes decision boundary is value `\(x^*\)` for which `\(\delta_{1}(x^*) = \delta_{2}(x^*) = \ldots = \delta_{K}(x^*)\)`
+
+
+---
+
+## Linear discriminant analysis (LDA)
+
+- We will typically need to estimate the `\(\mu_{k}\)` and `\(\sigma^2\)` from the data
+
+
+- LDA uses the following estimates:
+
+`\begin{align*}
+\hat{\mu}_{k} &amp;= \frac{1}{n_{k}} \sum_{i:y_{i}= k} x_{i} \\
+\hat{\sigma}^{2} &amp;= \frac{1}{n-K} \sum_{k=1}^{K} \sum_{i: y_{i} = k} (x_{i} - \hat{\mu}_{k})^2 \\
+\hat{\pi}_{k} &amp;= \frac{n_{k}}{n} \qquad (**)
+\end{align*}`
+
+such that:
+
+`$$\hat{\delta}_{k}(x)= x\cdot\frac{\hat{\mu}_{k}}{\hat{\sigma}} -\frac{\hat{\mu}_{k}^{2}}{2\hat{\sigma}^{2}} + \log(\hat{\pi}_{k})$$`
+
+---
+
+## Linear discriminant analysis
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Linear discriminant analysis
+
+- What about when `\(p&gt;1\)`? 
+
+- Extend LDA classifier by assuming `\(X = (X_{1}, X_{2}, \ldots, X_{p})\)` is drawn from **multivariate normal** distribution
+
+- Multivariate normal is characterized by mean vector `\(\mathbf{\mu}\)` and covariance matrix `\(\Sigma\)`
+  
+  - `\(\mathbf{\mu} = (\mu_{1}, \mu_{2}, \ldots, \mu_{p})\)`
+
+  - `\(\Sigma\)` is `\(p \times p\)` matrix which describes correlations between each components in `\(X\)`
+  
+--
+
+`$$f(x) = \frac{1}{(2\pi)^{p/2}|\Sigma|^{1/2}} e^{-\frac{1}{2}(x - \mathbf{\mu})'\Sigma^{-1} (x - \mathbf{\mu})}$$`
+
+
+---
+
+## Multivariate Normal
+
+- Contour plots of two multivariate densities with `\(p=2\)` and `\(\mathbf{\mu} = (0,0)\)`. Left: the two components are uncorrelated. Right: the two variables have correlation of 0.75.
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Linear discriminant analysis
+
+- For `\(p &gt;1\)`, LDA assumes that observations in class `\(k\)` are drawn from `\(MVN_{p}(\mathbf{\mu}_{k}, \Sigma)\)`
+
+  - Here, `\(\mathbf{\mu}_{k} = (\mu_{k1}, \mu_{k2}, \ldots, \mu_{kp})\)` and `\(\Sigma\)` is `\(p \times p\)`
+  
+--
+
+- Plugging in `\(f_{k}(x) = MVN_{p}(\mathbf{\mu}_{k}, \Sigma)\)` into `\(p_{k}(x)\)` yields discriminant score
+
+`$$\delta_{k}(x)= x^{T}\Sigma^{-1}\mathbf{\mu}_{k} - \frac{1}{2}\mathbf{\mu}_{k}^{T}\Sigma^{-1} \mathbf{\mu}_{k} + \log(\pi_{k})$$`
+--
+
+  - Despite this complicated-looking form, `\(\delta_{k}(x)\)` is still linear in predictors `\(x_{1}, \ldots, x_{p}\)`
+  
+---
+
+## LDA example
+
+- Simulated data with `\(p = 2\)` predictors and `\(K = 3\)` classes. Each class has 20 observations
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## LDA example
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+
+Dashed lines are the Bayes decision boundaries. If known, would yield the fewest misclassification errors.
+
+---
+
+## LDA example
+
+&lt;img src="04-classification-slides_files/figure-html/lda_ests-1.png" style="display: block; margin: auto;" /&gt;
+
+Solid lines are the estimated Bayesian decision boundaries.
+
+---
+
+## LDA: heart data
+
+
+Confusion matrix of LDA predicted (rows) vs true (columns) heart disease status, using predictors `\(\color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}\)`:
+
+&lt;table&gt;
+ &lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="border-bottom:hidden" colspan="1"&gt;&lt;/th&gt;
+&lt;th style="border-bottom:hidden; padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"&gt;&lt;div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; "&gt;True&lt;/div&gt;&lt;/th&gt;
+&lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 0 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 131 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 103 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Misclassification rate: (36 + 33)/303) = 0.228
+
+- Of the observations with true `\(\color{blue}{\text{heart disease}}\)`, we make 36/139 = 0.259 errors
+
+- Of the observation with true `\(\color{blue}{\text{no heart disease}}\)`, we make 33/164 = 0.201 errors
+
+---
+
+## Types of errors
+
+- **False positive rate** (FPR): fraction of negative observations incorrectly classified as positive -- 0.201 in our example
+
+- **False negative rate** (FNR): fraction of positive observations incorrectly classified as negative example -- 0.259 in our example
+
+--
+
+- Is a false positive or a false negative worse? In the heart data, maybe a false negative?
+
+--
+
+- This table was produced by classifying an observation at `\(\color{blue}{\text{heart disease}}\)` if `\(\hat{Pr}(\color{blue}{\text{heart disease}} | \color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}) \geq 0.5\)`
+
+  - Here, 0.5 is the threshold for assigning an observation to `\(\color{blue}{\text{heart disease}}\)` class
+  
+  - Can change threshold to any value in `\([0,1]\)`, which will affect error rates
+  
+---
+
+## Varying threshold
+
+&lt;img src="04-classification-slides_files/figure-html/lda_threshold-1.png" style="display: block; margin: auto;" /&gt;
+
+- Overall error rate minimized at threshold of 0.5
+- How to decide a threshold rate?
+
+---
+
+## ROC Curve
+
+
+- **sensitivity** (true positive rate) = probability of a positive, conditioned on truly being positive = 1 - FNR
+
+- **specificity** (true negative rate) = probability of a negative, conditioned on truly being negative = 1 - FPR
+
+- The **ROC curve** plots both simultaneously
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+- **AUC** (area under the curve) summarizes overall performance
+
+---
+
+## Quadratic Discriminant Analysis (QDA)
+
+- Similar to LDA, but lessens one assumption: allow a different covariance matrix (or variance) for each class `\(k\)` 
+
+  - Now, `\(f_{k}(X) =  MVN_{p}(\mathbf{\mu}_{k},\Sigma_{k})\)` 
+
+  - With QDA, discriminant function `\(\delta_{k}(x)\)` has `\(x\)` appearing as a quadratic function:
+  
+  `$$\delta_{k}(x) = -\frac{1}{2}x^{T}\Sigma_{k}^{-1}x + x^{T}\Sigma_{k}^{-1} \mathbf{\mu}_{k} -\frac{1}{2} \mathbf{\mu}_{k}^{T}\Sigma_{k}^{-1} \mathbf{\mu}_{k} - \frac{1}{2}\log|\Sigma_{k}| + \log(\pi_{k})$$`
+  
+--
+
+- More flexible than LDA
+
+---
+
+## Example: simulated data
+
+Simulated data under QDA model with `\(K=2\)` and `\(p=2\)` with `\(n_{1} = n_{2} = 50\)`.
+
+
+
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+- Purple curve is Bayes decision boundary, dashed black curve is estimated decision boundary under QDA, and dashed blue line is estimate under LDA
+
+---
+
+## Naive Bayes
+
+- Up until now, we have assumed that for `\(p&gt;1\)`, `\(f_{k}(x)\)` is `\(p\)`-dimensional distribution
+
+- Under **naive Bayes**, we do not assume a specific family of distribution. Instead, assume that within class `\(k\)`, the `\(p\)` predictors are independent:
+
+`$$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p}) = \prod_{j=1}^{p}f_{kj}(x_{j})$$`
+
+--
+
+- Useful when `\(p\)` is large
+
+
+---
+
+## Naive Bayes
+
+- If we assume each `\(f_{kj}\)` is Normal, then this is QDA with diagonal `\(\Sigma_{k}\)`
+
+  - Under Normal (Gaussian) naive Bayes:
+
+`$$\delta_{k}(x) = -\frac{1}{2}\sum_{j=1}^{p}\left(\frac{(x_{j}-\mu_{kj})^2}{\sigma_{kj}^{2}} + \log\sigma_{kj}^{2}  \right) + \log(\pi_{k})$$`
+
+--
+
+- Allows for *mixed feature types* (qualitative and quantitative)
+
+---
+
+## Logistic Regression vs LDA
+
+- Return back to `\(K=2\)` setting (binary classification) 
+
+- Recall in logistic regression: `$$\log\left(\frac{p_{x}}{1 - p_{x}}\right) = \log\left( \frac{Pr(Y=1 | X=x)}{Pr(Y=2 | X=x)}\right)= \beta_{0} + \beta_{1}x_{1} + \ldots + \beta_{p}x_{p}$$`
+--
+
+- In LDA, 
+`\begin{align*}
+\log\left(\frac{Pr(Y= 1 | X=x)}{Pr(Y= 2 | X=x)}\right) &amp;= \log \left(\frac{\pi_{1} f_{1}(x)}{\pi_{2}f_{2}(x)}\right) \\
+&amp;= \log\left(\frac{\pi_{1} \exp\left(-\frac{1}{2}(x - \mathbf{\mu}_{1})^{T} \Sigma^{-1}(x - \mathbf{\mu}_{1})\right)}{\pi_{2} \exp\left(-\frac{1}{2}(x - \mathbf{\mu}_{2})^{T} \Sigma^{-1}(x - \mathbf{\mu}_{2})\right))}\right) \\
+&amp;= \ldots \\
+&amp;= c_{0} + c_{1}x_{1}+ c_{2}x_{2} + \ldots + c_{p}x_{p}
+\end{align*}`
+
+---
+
+## Logistic Regression vs LDA
+
+- LDA has same form of logistic regression for log-odds
+
+- Differ in how parameters  are estimated 
+
+  - Logistic regression uses conditional likelihood `\(Pr(Y|X)\)`
+  - LDA uses full likelihood `\(Pr(X,Y)\)`
+  
+- Often similar results
+  
+---
+
+## Summary
+
+- Logistic regression is very commonly used when `\(K=2\)`
+
+- LDA useful when `\(n\)` small, or the classes are well
+separated, and Gaussian assumptions are reasonable
+
+- Naive Bayes useful when `\(p\)` very large
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

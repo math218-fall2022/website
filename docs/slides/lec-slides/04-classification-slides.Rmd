@@ -1,0 +1,1025 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Classification"
+date: "9/14/2022"
+output: 
+   xaringan::moon_reader:
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+
+library(tidyverse)
+library(broom)
+library(ISLR)
+library(nnet)
+library(MASS)
+library(mvtnorm)
+library(mnormt)
+library(pROC)
+library(kableExtra)
+set.seed(1)
+heart<- read.table("data/heart_cleveland.txt", header = T, sep = ",") %>% 
+  mutate(cp = as.factor(cp),
+         sex = ifelse(sex == 1, "M", "F"),
+         target = ifelse(target == 0,0, 1))
+seeds <- read.table("data/seeds_dataset.txt", header = T) %>%
+  mutate(variety= case_when(variety == 1~ "Kama",
+                          variety == 2 ~ "Rosa",
+                          T ~ "Canadian"))
+```
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Classification
+
+- Qualitative variables takes values in an unordered set $\mathcal{C}$, such as:
+
+$\color{blue}{\text{wine}} \in \{\color{blue}{\text{red}},\color{blue}{\text{white}},\color{blue}{\text{rose}}\}$
+
+$\color{blue}{\text{diagnosis}} \in \{\color{blue}{\text{yes}}, \color{blue}{\text{no}} \}$
+
+- Given predictors (features) $X$ and qualitative response $Y$ that takes values in $\mathcal{C}$, classification task is to build a function $C(X)$ that predicts a value for $Y$
+
+--
+
+  - We are often interested in the estimated *probabilities* that $X$ belongs to a given category in $\mathcal{C}$
+
+---
+
+## Heart attack data
+
+- Health measurements from `r nrow(heart)` patients, along with record of the presence of heart disease in the patient
+
+```{r fig.align ="center", fig.height=5, fig.width=8}
+heart %>%
+  mutate( target = as.factor(target)) %>%
+  dplyr::select(c(target, age, chol, trestbps))%>%
+  pivot_longer(cols = -1, names_to = "variable") %>%
+  ggplot(.,aes(y = value, x = target))+
+  geom_boxplot()+
+  facet_wrap(~variable, scales= "free")
+
+```
+
+---
+
+## Seeds data
+
+- Data come from UCI Machine Learning Repository 
+
+- Measurements of geometrical properties of kernels belonging to three different varieties of wheat
+
+```{r fig.align ="center", fig.height=5, fig.width=8}
+seeds %>%
+  ggplot(., aes(x = variety, y = area))+
+  geom_boxplot() +
+  theme(text =element_text(size = 14))
+
+```
+
+---
+
+## Why not linear regression?
+
+- For seeds data, $\mathcal{C} = \{\text{Canadian, Kama, Rosa}\}$
+
+- Could we encode the values as a quantitative response, such as:
+
+$$Y = \begin{cases}
+1 & \text{ if } \color{blue}{\text{Canadian} }\\
+2 & \text{ if } \color{blue}{\text{Kama}}\\
+3 & \text{ if } \color{blue}{\text{Rosa}} \end{cases}$$
+
+and then fit a linear regression for this $Y$?
+
+---
+
+## Why not linear regression?
+
+The heart disease data is formatted as:
+
+$$Y = \begin{cases}
+0 & \text{ if } \color{blue}{\text{no heart disease} }\\
+1 & \text{ if } \color{blue}{\text{heart disease}}\end{cases}$$
+
+- Here, $Y$ is binary
+
+--
+
+- For binary response, could we use least squares to fit a linear regression model to $Y$?
+
+  - Maybe fit a linear regression and predict $\color{blue}{\text{heart disease}}$ if $\hat{Y} > 0.5$
+  
+  --
+  
+  - Equivalent to *linear discriminant analysis*
+  
+  - Can show that the estimate $\hat{\beta}_{0} + \hat{\beta}_{1} X_{1} + \ldots + \hat{\beta}_{p} X_{p}$ is an estimate of $Pr(Y = 1 | X) = Pr(\color{blue}{\text{heart disease}} | X)$
+  
+
+---
+
+## Why not linear regression?
+
+```{r fig.align = "center"}
+heart_lm <- lm(target ~ age + sex, heart)
+
+ggplot(heart, aes(x = age, y = target)) + 
+  geom_point()+
+  geom_abline(intercept = heart_lm$coefficients[1] , slope = heart_lm$coefficients[2],
+              col = "blue") +
+  ggtitle("Observed disease vs. age", subtitle = "Estimated regression line for females")
+```
+
+- Fit a linear regression line for $\color{blue}{\text{disease}} = \beta_{0} + \beta_{1}\color{blue}{\text{age}} + \beta_{2}\color{blue}{\text{sex}}$
+
+--
+
+- In certain cases, linear regression might produce estimated probabilities less than $0$ or bigger than $1$
+
+---
+
+## Logistic regression
+
+
+```{r fig.align = "center"}
+heart_log <- glm(target ~ age + sex, heart, family = "binomial")
+
+x <- min(heart$age):max(heart$age)
+XB <- cbind(1,x,0) %*% coefficients(heart_log)
+preds <- exp(XB)/(1 + exp(XB))
+
+ggplot(data = heart, aes(x = age, y = target)) + 
+  geom_point()+
+  geom_path(data = data.frame(x = x, y = preds), mapping= aes(x =x, y = y),
+              col = "blue") +
+  ggtitle("Observed disease vs. age", subtitle = "Estimated regression line for males")
+```
+
+---
+
+## Logistic regression
+
+- Let $p(X) = Pr(Y = 1 | X)$. Need to somehow restrict $0 \leq p(X) \leq 1$
+
+- **Logistic** regression uses *logistic* function:
+
+$$p(X) = \frac{e^{\beta_{0} + \beta_{1}X}}{1 + e^{\beta_{0} + \beta_{1}X}}$$
+
+--
+
+- Rearranging this equation yields the **odds**:
+
+$$\frac{p(X)}{1 - p(X)} = e^{\beta_{0} + \beta_{1}X}$$
+
+--
+
+- Furthermore, we can obtain the **log odds** or **logit**: 
+
+$$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
+
+---
+
+## Logistic regression
+
+$$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
+
+- The logistic regression model has a logit that is linear in $X$
+
+--
+
+- Interpretation of $\beta_{1}$: for every one-unit increase in $X$, we expect an average change of $\beta_{1}$ in the log odds (or average multiple of $e^{\beta_{1}}$ in the odds)
+
+--
+  
+  - $\beta_{1}$ does *not* correspond to the change in $p(X)$ associated with one-unit increase in $X$ (i.e., not a linear relationship between $X$ and $p(X)$)
+  
+--
+
+  - If $\beta_{1} > 0$, then increasing $X$ is associated with increasing $p(X)$
+  
+---
+
+## Estimating the Regression Coefficients
+
+- Use the general method of *maximum likelihood* to estimate $\beta_{0}$ and $\beta_{1}$
+    
+- *Likelihood function* $l()$ describes the probability of the observed data as a function of model parameters. For logistic regression model:
+
+$$l(\beta_{0}, \beta_{1}) = \prod_{i: y_{i} = 1}p(x_{i}) \prod_{i:y_{i} = 0}(1 - p(x_{i}))$$
+
+- We pick $\beta_{0}$ and $\beta_{1}$ that will maximize this likelihood
+
+---
+
+## Logistic regression: heart data
+
+```{r}
+heart_log <- glm(target ~ age, heart, family = "binomial")
+heart_coeff <- round(coefficients(heart_log), 3)
+tidy(heart_log)
+
+```
+
+--
+
+What is the estimated probability of $\color{blue}{\text{heart disease}}$ for someone who is 50 years old?
+
+--
+
+$$\hat{p}(X) = \frac{e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}}{1 + e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}} = \frac{e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 50}}{1+e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 50}} = `r exp(heart_coeff[1] +  heart_coeff[2]*50)/(1+exp(heart_coeff[1] +  heart_coeff[2]*50))`$$
+
+---
+
+## Logistic regression: heart data
+
+```{r}
+heart_log <- glm(target ~ sex, heart, family = "binomial")
+heart_coeff <- round(coefficients(heart_log), 3)
+tidy(heart_log)
+```
+
+Here, $\color{blue}{\text{sex}}$ is the predictor
+
+--
+
+- $\hat{Pr}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Male}})=\frac{e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 1}}{1+e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 1}} = `r exp(heart_coeff[1] +  heart_coeff[2]*1)/(1+exp(heart_coeff[1] +  heart_coeff[2]*1))`$ 
+
+- $\hat{Pr}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Female}})=\frac{e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 0}}{1+e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 0}} = `r exp(heart_coeff[1])/(1+exp(heart_coeff[1]))`$ 
+
+---
+
+## Multiple logistic regression
+
+- Extend from simple to multiple logistic regression similar to linear model:
+
+$$\log\left(\frac{p(X)}{1-p(X)} \right)= \beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}$$
+--
+
+$$p(X) = \frac{e^{\beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}}}{1 + e^{\beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}}}$$
+
+--
+
+```{r}
+heart_log <- glm(target ~ age +sex, heart, family = "binomial")
+tidy(heart_log)
+```
+
+---
+
+## Multinomial regression
+
+- What if we have $K > 2$ classes? Can extend the logistic regression model to *multiple logistic* or **multinomial** regression
+
+- Choose a single class to serve as *baseline* (it doesn't matter which, so we will choose the $K$-th class)
+
+--
+
+- Then for class $k = 1,\ldots, K-1$:
+
+$$Pr(Y = k | X= x) = \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$
+
+and
+
+$$Pr(Y = K | X= x) = \frac{1}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$
+
+--
+
+- Here there is a function  for *each* class
+
+---
+
+## Multinomial regression
+
+- For $k = 1, \ldots, K-1$:
+
+$$\log\left(\frac{Pr(Y = k | X =x)}{Pr(Y = K | X = x)}\right) = \beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp} x_{p}$$
+
+  - i.e. log odds between any pair of classes is linear in the predictors
+  
+--
+
+```{r}
+seeds_multi <- multinom(variety ~ area, seeds)
+multi_coeffs <- round(coefficients(seeds_multi), 2)
+tidy(seeds_multi)
+```
+
+---
+
+## Multinomial regression
+
+- Predicted probabilities of each class for seed with area of 14 $mm^2$?
+
+  - $Pr(\color{blue}{\text{Kama}} | X = 14) = \frac{e^{`r multi_coeffs[1,1]` +`r multi_coeffs[1,2]`\times 14}}{1 + e^{`r multi_coeffs[1,1]` +`r multi_coeffs[1,2]`\times 14} + e^{`r multi_coeffs[2,1]` +`r multi_coeffs[2,2]`\times 14}} = `r exp(multi_coeffs[1,1] + multi_coeffs[1,2]*14)/(1+exp(multi_coeffs[1,1] + multi_coeffs[1,2]*14)+exp(multi_coeffs[2,1] + multi_coeffs[2,2]*14))`$
+  
+  - $Pr(\color{blue}{\text{Rosa}} | X = 14) = \ldots = `r exp(multi_coeffs[2,1] + multi_coeffs[2,2]*14)/(1+exp(multi_coeffs[1,1] + multi_coeffs[1,2]*14)+exp(multi_coeffs[2,1] + multi_coeffs[2,2]*14))`$
+  
+  - $Pr(\color{blue}{\text{Canadian}} | X = 14) = \ldots = \frac{1}{1 + e^{`r multi_coeffs[1,1]` +`r multi_coeffs[1,2]`\times 14} + e^{`r multi_coeffs[2,1]` +`r multi_coeffs[2,2]`\times 14}} =  `r 1/(1+exp(multi_coeffs[1,1] + multi_coeffs[1,2]*14)+exp(multi_coeffs[2,1] + multi_coeffs[2,2]*14))`$
+
+---
+
+## Multinomial regression
+
+- An alternative coding for multinomial regression is known *softmax*
+
+- In softmax coding, we do not choose a baseline but rather, treat all classes symmetrically. For each $k = 1,\ldots, K$:
+
+$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$
+
+---
+
+## Another method: Discriminant analysis
+
+-
+
+---
+
+## Bayes theorem
+
+- For events $A$ and $B$: 
+
+$$Pr(A|B) = \frac{Pr(B|A)Pr(A)}{Pr(B)}$$
+--
+
+- Letting $A$ be event $Y=k$ and $B$ the event $X=x$:
+
+$$Pr(Y=k| X =x) = \frac{Pr(X=x|Y=k)Pr(Y=k)}{Pr(X=x)}$$
+--
+
+- For discriminant analysis:
+
+  - $\pi_{k}(x) = Pr(Y = k)$ is marginal or **prior** probability for class $k$
+  - $f_{k}(x) = Pr(X =x | Y =k)$ is the **density** for $X$ in class $k$
+  
+  $$Pr(Y=k| X =x) = \frac{\pi_{k}(x) f_{k}(x)}{\sum_{l=1}^{K} \pi_{l}(x) f_{l}(x)}$$
+
+--
+
+- Recall Bayes classifier: classifies an observation $x$ to the class for which $p_{k}(x) = Pr(Y = k |X=x)$ is largest
+  
+  - Will need to estimate the $f_{k}(x)$ to approximate Bayes classifier
+
+---
+
+## Discriminant analysis
+
+```{r fig.align="center"}
+sd <- 1; mu1 <- 1.5; mu2 <- -1.5
+xrange <- seq(-5,5,0.1)
+pi1 <- pi2 <- 0.5
+d1 <- ((mu1^2 - mu2^2)/2 + sd^2 * log(pi2/pi1))/(mu1-mu2)
+p1 <- data.frame(x = xrange, k1 = pi1*dnorm(xrange, mu1, sd), k2 = pi2*dnorm(xrange, mu2, sd)) %>%
+  pivot_longer(cols = 2:3, names_to = "group", values_to = "y") %>%
+  ggplot(., aes(x=x , y = y, col = group))+
+  geom_path()+
+  labs(y = "posterior density") +
+  theme(text = element_text(size = 14))+
+  guides(col = "none")+
+  ylim(c(0,0.35))+
+  geom_vline(xintercept = d1, linetype = "dashed")+
+  ggtitle(bquote(pi[1] == ~.(pi1) ~ and ~ pi[2] == ~.(pi2)))
+  # ggtitle(expression(paste(pi[1]," = " ,pi1)))
+
+pi1 <- 0.2; pi2 <- 0.8
+d2 <- ((mu1^2 - mu2^2)/2 + sd^2 * log(pi2/pi1))/(mu1-mu2)
+p2 <- data.frame(x = xrange, k1 = pi1*dnorm(xrange, mu1, sd), k2 = pi2*dnorm(xrange, mu2, sd)) %>%
+  pivot_longer(cols = 2:3, names_to = "group", values_to = "y") %>%
+  ggplot(., aes(x=x , y = y, col = group))+
+  geom_path()+
+    labs(y = "posterior density") +
+  theme(text = element_text(size = 14))+
+  guides(col = "none")+
+   ylim(c(0,0.35))+
+  geom_vline(xintercept = d2, linetype = "dashed")+
+  ggtitle(bquote(pi[1] == ~.(pi1) ~ and ~ pi[2] == ~.(pi2)))
+
+gridExtra::grid.arrange(p1,p2, ncol = 2)
+
+```
+
+---
+
+## Linear Discriminant Analysis
+
+- First, consider the case of $p =1$ (one predictor)
+
+- Assumption 1: $f_{k}(x)$ is normal distribution. With mean $\mu_{k}$ and variance $\sigma_{k}^{2}$ for class $k$,
+
+$$f_{k}(x) = \frac{1}{\sqrt{2\pi\sigma_{k}^2}} e^{-\frac{1}{2\sigma_{k}^2}(x - \mu_{k})^2}$$
+
+--
+
+- Assumption 2: $\sigma_{k}^2= \sigma^{2}$ for all classes $k$
+
+--
+
+- Plugging into the formula: $$p_{k}(x) = \frac{\pi_{k} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(x - \mu_{k})^2}}{\sum_{l=1}^{K} \pi_{l} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(x - \mu_{l})^2}}$$
+
+
+---
+
+## Linear Discriminant Analysis
+
+- Taking logs and simplifying terms that do no depend on $k$, classifying based on largest $p_{k}(x)$ is equivalent to classifying based on largest **discriminant score**
+
+$$\delta_{k}(x) = x \cdot \frac{\mu_{k}}{\sigma^2} - \frac{\mu_{k}^{2}}{2\sigma^2} + \log(\pi_{k})$$
+
+- Bayes decision boundary is value $x^*$ for which $\delta_{1}(x^*) = \delta_{2}(x^*) = \ldots = \delta_{K}(x^*)$
+
+
+---
+
+## Linear discriminant analysis (LDA)
+
+- We will typically need to estimate the $\mu_{k}$ and $\sigma^2$ from the data
+
+
+- LDA uses the following estimates:
+
+\begin{align*}
+\hat{\mu}_{k} &= \frac{1}{n_{k}} \sum_{i:y_{i}= k} x_{i} \\
+\hat{\sigma}^{2} &= \frac{1}{n-K} \sum_{k=1}^{K} \sum_{i: y_{i} = k} (x_{i} - \hat{\mu}_{k})^2 \\
+\hat{\pi}_{k} &= \frac{n_{k}}{n} \qquad (**)
+\end{align*}
+
+such that:
+
+$$\hat{\delta}_{k}(x)= x\cdot\frac{\hat{\mu}_{k}}{\hat{\sigma}} -\frac{\hat{\mu}_{k}^{2}}{2\hat{\sigma}^{2}} + \log(\hat{\pi}_{k})$$
+
+---
+
+## Linear discriminant analysis
+
+```{r fig.align="center"}
+set.seed(32)
+n <- 30
+n1 <- rbinom(1,n,pi1); n2 <-n-n1
+
+x1 <- rnorm(n1,mu1,sd); x2 <-  rnorm(n2,mu2,sd)
+lda_dat <- data.frame(x = c(x1,x2),
+           class = c(rep("1",n1), rep("2",n2)))
+mu1_hat <- mean(x1); mu2_hat <- mean(x2)
+s2_hat <- (sum((x1-mu1_hat)^2) + sum((x2-mu2_hat)^2))/(n-2)
+pi1_hat <- n1/n; pi2_hat <- n2/n
+
+d2_hat <- ((mu1_hat^2 - mu2_hat^2)/2 + s2_hat * log(pi2_hat/pi1_hat))/(mu1_hat-mu2_hat)
+
+lda_dat %>%
+  ggplot(.,aes(x = x, fill = class))+
+  geom_histogram(bins = 10, alpha = 0.5, position = "identity")+
+  guides(fill = "none")+
+  ggtitle("Simulated data")+
+  geom_vline(xintercept = d2) +
+  geom_vline(xintercept = d2_hat, linetype = "dashed")
+```
+
+---
+
+## Linear discriminant analysis
+
+- What about when $p>1$? 
+
+- Extend LDA classifier by assuming $X = (X_{1}, X_{2}, \ldots, X_{p})$ is drawn from **multivariate normal** distribution
+
+- Multivariate normal is characterized by mean vector $\mathbf{\mu}$ and covariance matrix $\Sigma$
+  
+  - $\mathbf{\mu} = (\mu_{1}, \mu_{2}, \ldots, \mu_{p})$
+
+  - $\Sigma$ is $p \times p$ matrix which describes correlations between each components in $X$
+  
+--
+
+$$f(x) = \frac{1}{(2\pi)^{p/2}|\Sigma|^{1/2}} e^{-\frac{1}{2}(x - \mathbf{\mu})'\Sigma^{-1} (x - \mathbf{\mu})}$$
+
+
+---
+
+## Multivariate Normal
+
+- Contour plots of two multivariate densities with $p=2$ and $\mathbf{\mu} = (0,0)$. Left: the two components are uncorrelated. Right: the two variables have correlation of 0.75.
+
+```{r fig.align="center"}
+# set.seed(0)
+p <- 2
+mu <- c(0,0)
+Sigma1 <- matrix(c(2,0,
+                  0,2),by = T, ncol = p )
+Sigma2 <- matrix(c(2,1.5,
+                  1.5,2),by = T, ncol = p )
+#simulate bivariate normal distribution
+x1 <- seq(-5,5,0.1); x2 <- seq(-5,5,0.1)
+f     <- function(x, y) dmnorm(cbind(x, y), mu, Sigma1)
+z1     <- outer(x1, x2, f)
+f     <- function(x, y) dmnorm(cbind(x, y), mu, Sigma2)
+z2     <- outer(x1, x2, f)
+
+
+
+# contour(x1, x2, z)
+contour1 <- data.frame(x1 = expand.grid(x1,x2)[,1], x2 = expand.grid(x1,x2)[,2], z = c(z1)) %>%
+ ggplot(., aes(x=x1,y=x2, z=z))+
+  geom_contour(aes(colour = after_stat(level))) +
+  guides(col = "none")
+contour2 <- data.frame(x1 = expand.grid(x1,x2)[,1], x2 = expand.grid(x1,x2)[,2], z = c(z2)) %>%
+ ggplot(., aes(x=x1,y=x2, z=z))+
+  geom_contour(aes(colour = after_stat(level))) +
+  guides(col = "none")
+
+gridExtra::grid.arrange(contour1, contour2, ncol = 2)
+
+# persp1 <- plot_ly(x= x1, y= x2,z = z1, type = "surface")
+# persp2 <- plot_ly(x= x1, y= x2,z = z2, type = "surface")
+```
+
+---
+
+## Linear discriminant analysis
+
+- For $p >1$, LDA assumes that observations in class $k$ are drawn from $MVN_{p}(\mathbf{\mu}_{k}, \Sigma)$
+
+  - Here, $\mathbf{\mu}_{k} = (\mu_{k1}, \mu_{k2}, \ldots, \mu_{kp})$ and $\Sigma$ is $p \times p$
+  
+--
+
+- Plugging in $f_{k}(x) = MVN_{p}(\mathbf{\mu}_{k}, \Sigma)$ into $p_{k}(x)$ yields discriminant score
+
+$$\delta_{k}(x)= x^{T}\Sigma^{-1}\mathbf{\mu}_{k} - \frac{1}{2}\mathbf{\mu}_{k}^{T}\Sigma^{-1} \mathbf{\mu}_{k} + \log(\pi_{k})$$
+--
+
+  - Despite this complicated-looking form, $\delta_{k}(x)$ is still linear in predictors $x_{1}, \ldots, x_{p}$
+  
+---
+
+## LDA example
+
+- Simulated data with $p = 2$ predictors and $K = 3$ classes. Each class has 20 observations
+
+```{r fig.align = "center",  fig.width=6, fig.height=6}
+n <- 60
+set.seed(1)
+K <- 3
+p <- 2
+n1 <- n2 <- n3 <- n/K
+pi1 <- pi2 <- pi3 <- 1/3
+
+mu1 <- c(2,1)
+mu2 <- c(-1.5,-1)
+mu3 <- c(0, 3)
+mu_mat <- rbind(mu1,mu2,mu3)
+Sigma <- matrix(c(2,0.5, 0.5, 2), byrow = T, ncol = p)
+prec <- solve(Sigma)
+
+sim_dat <- data.frame(rmvnorm(n1, mu_mat[1,], Sigma), class = "1") %>%
+  add_row(data.frame(rmvnorm(n2, mu_mat[2,], Sigma), class = "2")) %>%
+  add_row(data.frame(rmvnorm(n3, mu_mat[3,], Sigma), class = "3")) 
+
+sim_dat %>%
+  ggplot(., aes(x = X1, y = X2))+
+  geom_point(aes(col = class))
+
+```
+
+
+---
+
+## LDA example
+
+```{r fig.align = "center",  fig.width=6, fig.height=6}
+x1_min <- min(sim_dat$X1)-0.2; x1_max<- max(sim_dat$X1) + 0.2
+x2_min <- min(sim_dat$X2)-0.2; x2_max <- max(sim_dat$X2) + 0.2
+
+x2_range <- seq(x2_min, x2_max, 0.1)
+dbs <- matrix(c(1,2, 2,3,1,3), byrow = T, ncol = p)
+db_ls <- list()
+for(j in 1:K){
+  mu1_curr <- mu_mat[dbs[j,1],]
+  mu2_curr <- mu_mat[dbs[j,2],]
+  c1 <- 0.5*(t(mu1_curr - mu2_curr) %*% prec %*% (mu1_curr+mu2_curr) )[1,1]
+  c2 <- (prec %*% (mu1_curr - mu2_curr))[2]
+  c3 <-  (prec %*% (mu1_curr - mu2_curr))[1]
+  db_ls[[j]] <- data.frame(x1 = (c1 - c2*x2_range )/c3, x2 = x2_range, 
+                          boundary = paste0(dbs[j,1], "-", dbs[j,2])) %>%
+    filter(x1 <= x1_max, x2 <= x2_max, x1 >= x1_min, x2 >= x2_min)
+}
+
+x1_x2_grid <- as.matrix(expand.grid(seq(x1_min, x2_max, 0.2), seq(x2_min, x2_max, 0.2)))
+delta_ls <- list()
+for(j in 1:K){
+  delta_ls[[j]] <- data.frame(x1 = x1_x2_grid[,1], x2 = x1_x2_grid[,2],
+                              delta = x1_x2_grid %*% prec %*% mu_mat[j,] -(0.5 *t(mu_mat[j,]) %*% prec %*%mu_mat[j,])[1,1],
+                         class = j)
+}
+
+assign_df <- do.call(rbind, delta_ls) %>% 
+  group_by(x1,x2) %>%
+  mutate(max = max(delta)) %>% 
+  # arrange(x1,x2) %>%
+  ungroup() %>%
+  filter(delta == max) %>%
+  mutate(class = as.factor(class))
+
+coeffs1 <- coefficients(lm(db_ls[[1]][,2]~ db_ls[[1]][,1]))
+coeffs2 <- coefficients(lm(db_ls[[2]][,2]~ db_ls[[2]][,1]))
+coeffs3 <- coefficients(lm(db_ls[[3]][,2]~ db_ls[[3]][,1]))
+x_int <- (coeffs2[1]-coeffs1[1])/(coeffs1[2] - coeffs2[2])
+y_int <- coeffs3[2]*x_int + coeffs3[1]
+
+db_df <- rbind(db_ls[[1]] %>% 
+ arrange(x2) %>%
+  slice(1),
+  db_ls[[2]] %>% 
+  arrange(desc(x2)) %>% 
+  slice(1), db_ls[[3]] %>% 
+  arrange(desc(x2)) %>%
+  slice(1)) %>%
+  mutate(xend = x_int, yend = y_int)
+
+lda_p1 <- sim_dat %>%
+  ggplot(., aes(x = X1, y = X2))+
+  geom_point(aes(col = class)) +
+  geom_point(data = assign_df, aes(x = x1, y = x2, col = class), size = 0.2)+
+  geom_segment(data = db_df, aes(x = x1, y = x2, xend = xend, yend = yend, group = boundary), 
+               linetype = "dashed")+
+  xlim(x1_min, x1_max)+
+  ylim(x2_min,x2_max)+
+  theme_minimal()
+lda_p1
+
+```
+
+Dashed lines are the Bayes decision boundaries. If known, would yield the fewest misclassification errors.
+
+---
+
+## LDA example
+
+```{r lda_ests, fig.align = "center", fig.width=6, fig.height=6}
+mu_ests <- sim_dat %>%
+  group_by(class) %>%
+  mutate(x1_mean = mean(X1), x2_mean = mean(X2)) %>%
+  ungroup() %>%
+  distinct(x1_mean, x2_mean, class) %>%
+  dplyr::select(-1) %>%
+  as.matrix
+
+nvec <- c(n1,n2,n3)
+Sp <- 0
+for(j in 1:K){
+  Sp <- Sp + nvec[j]* sim_dat %>%
+    filter(class == as.character(j)) %>%
+    dplyr::select(-class) %>%
+    as.matrix %>%
+    cov
+}
+Sp <- Sp/(n-K)
+prec_est <- solve(Sp)
+
+db_est_ls <- list()
+for(j in 1:K){
+  mu1_curr <- mu_ests[dbs[j,1],]
+  mu2_curr <- mu_ests[dbs[j,2],]
+  c1 <- 0.5*(t(mu1_curr - mu2_curr) %*% prec_est %*% (mu1_curr+mu2_curr) )[1,1]
+  c2 <- (prec_est %*% (mu1_curr - mu2_curr))[2]
+  c3 <-  (prec_est %*% (mu1_curr - mu2_curr))[1]
+  db_est_ls[[j]] <- data.frame(x1 = (c1 - c2*x2_range )/c3, x2 = x2_range, 
+                          boundary = paste0(dbs[j,1], "-", dbs[j,2])) %>%
+    filter(x1 <= x1_max, x2 <= x2_max, x1 >= x1_min, x2 >= x2_min)
+}
+
+
+coeffs1 <- coefficients(lm(db_est_ls[[1]][,2]~ db_est_ls[[1]][,1]))
+coeffs2 <- coefficients(lm(db_est_ls[[2]][,2]~ db_est_ls[[2]][,1]))
+coeffs3 <- coefficients(lm(db_est_ls[[3]][,2]~ db_est_ls[[3]][,1]))
+x_int <- (coeffs2[1]-coeffs1[1])/(coeffs1[2] - coeffs2[2])
+y_int <- coeffs3[2]*x_int + coeffs3[1]
+
+db_est_df <- rbind(db_est_ls[[1]] %>% 
+ arrange(x2) %>%
+  slice(1),
+  db_ls[[2]] %>% 
+  arrange(desc(x2)) %>% 
+  slice(1), db_ls[[3]] %>% 
+  arrange(desc(x2)) %>%
+  slice(1)) %>%
+  mutate(xend = x_int, yend = y_int)
+
+lda_p1 +
+  geom_segment(data = db_est_df, aes(x = x1, y = x2, xend = xend, yend = yend, group = boundary))
+  
+```
+
+Solid lines are the estimated Bayesian decision boundaries.
+
+---
+
+## LDA: heart data
+
+
+Confusion matrix of LDA predicted (rows) vs true (columns) heart disease status, using predictors $\color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}$:
+
+```{r}
+heart_lda <- lda(target ~ age + sex + cp, heart)
+heart_preds <- predict(heart_lda, heart)
+heart_df <- data.frame(true = heart$target, pred = heart_preds$class, prob1 = heart_preds$posterior[,2])
+n <- nrow(heart); n0 <- sum(heart$target==0); n1 <- n - n0
+
+heart_df%>%
+  dplyr::select(-prob1) %>%
+  table() %>%
+  knitr::kable() %>%
+  add_header_above(header = c(" " =1, "True" = 2)) 
+
+fpr <- round(heart_df %>% filter(true == 0, pred==1) %>% nrow() / n0 , 3)
+fnr <- round(heart_df %>% filter(true == 1, pred==0) %>% nrow() / n1 , 3)
+
+```
+
+- Misclassification rate: (`r heart_df %>% filter(true == 1, pred==0) %>% nrow()` + `r heart_df %>% filter(true == 0, pred==1) %>% nrow()`)/`r n`) = `r round((heart_df %>% filter(true == 1, pred==0) %>% nrow() + heart_df %>% filter(true == 0, pred==1) %>% nrow())/ n,3)`
+
+- Of the observations with true $\color{blue}{\text{heart disease}}$, we make `r heart_df %>% filter(true == 1, pred==0) %>% nrow()`/`r n1` = `r fnr` errors
+
+- Of the observation with true $\color{blue}{\text{no heart disease}}$, we make `r heart_df %>% filter(true == 0, pred==1) %>% nrow()`/`r n0` = `r fpr` errors
+
+---
+
+## Types of errors
+
+- **False positive rate** (FPR): fraction of negative observations incorrectly classified as positive -- `r fpr` in our example
+
+- **False negative rate** (FNR): fraction of positive observations incorrectly classified as negative example -- `r fnr` in our example
+
+--
+
+- Is a false positive or a false negative worse? In the heart data, maybe a false negative?
+
+--
+
+- This table was produced by classifying an observation at $\color{blue}{\text{heart disease}}$ if $\hat{Pr}(\color{blue}{\text{heart disease}} | \color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}) \geq 0.5$
+
+  - Here, 0.5 is the threshold for assigning an observation to $\color{blue}{\text{heart disease}}$ class
+  
+  - Can change threshold to any value in $[0,1]$, which will affect error rates
+  
+---
+
+## Varying threshold
+
+```{r lda_threshold, fig.align="center", fig.width=8, fig.height=5}
+th <- seq(0, 1, 0.025)
+TT <- length(th)
+err_mat <- matrix(NA, nrow = TT, ncol = 3)
+for(t in 1:length(th)){
+  fpr <- heart_df %>%
+    mutate(pred = ifelse(prob1 >= th[t], 1, 0 )) %>%
+    filter(true == 0, pred == 1)  %>%
+    nrow() / n0
+  fnr <- heart_df %>%
+    mutate(pred = ifelse(prob1 >= th[t], 1, 0 )) %>%
+    filter(true == 1, pred == 0)  %>%
+    nrow() / n1
+  
+  oe <- heart_df %>%
+    mutate(pred = ifelse(prob1 >= th[t], 1, 0 )) %>%
+    filter(true != pred)  %>%
+    nrow() / n
+  err_mat[t,] <- c(fpr, fnr, oe)
+}
+
+as.data.frame(err_mat) %>%
+  add_column(threshold = th) %>%
+  rename("False positive" = 1, "False negative" = 2, "Overall error" = 3) %>%
+  pivot_longer(cols = 1:3, names_to = "type", values_to = "error_rate") %>%
+  ggplot(., aes(x = threshold, y = error_rate, col = type))+
+  geom_path() +
+  labs(y = "Error rate")+
+  theme(legend.title = element_blank())
+```
+
+- Overall error rate minimized at threshold of 0.5
+- How to decide a threshold rate?
+
+---
+
+## ROC Curve
+
+
+- **sensitivity** (true positive rate) = probability of a positive, conditioned on truly being positive = 1 - FNR
+
+- **specificity** (true negative rate) = probability of a negative, conditioned on truly being negative = 1 - FPR
+
+- The **ROC curve** plots both simultaneously
+
+```{r fig.align="center", fig.height=4, fig.width=4}
+heart_roc <- roc(response = heart_df$true, predictor= c(heart_df$pred)-1, plot = F)
+auc <- round(heart_roc$auc, 3)
+ggroc(heart_roc)+
+  ggtitle(paste0('ROC Curve ', '(AUC = ', auc, ')')) +
+  geom_abline(slope = 1, intercept = 1, linetype = "dashed")
+```
+
+- **AUC** (area under the curve) summarizes overall performance
+
+---
+
+## Quadratic Discriminant Analysis (QDA)
+
+- Similar to LDA, but lessens one assumption: allow a different covariance matrix (or variance) for each class $k$ 
+
+  - Now, $f_{k}(X) =  MVN_{p}(\mathbf{\mu}_{k},\Sigma_{k})$ 
+
+  - With QDA, discriminant function $\delta_{k}(x)$ has $x$ appearing as a quadratic function:
+  
+  $$\delta_{k}(x) = -\frac{1}{2}x^{T}\Sigma_{k}^{-1}x + x^{T}\Sigma_{k}^{-1} \mathbf{\mu}_{k} -\frac{1}{2} \mathbf{\mu}_{k}^{T}\Sigma_{k}^{-1} \mathbf{\mu}_{k} - \frac{1}{2}\log|\Sigma_{k}| + \log(\pi_{k})$$
+  
+--
+
+- More flexible than LDA
+
+---
+
+## Example: simulated data
+
+Simulated data under QDA model with $K=2$ and $p=2$ with $n_{1} = n_{2} = 50$.
+
+```{r fns}
+get_qda_db <- function(yrange, mu1, mu2, Sigma1, Sigma2){
+ cc <- -0.5*(t(mu1) %*% Sigma1 %*% mu1 - t(mu2) %*% Sigma2 %*% mu2)-
+ 0.5*(log(det(Sigma1)) - log(det(Sigma2)))
+ Vm <- c(solve(Sigma1) %*% mu1 - solve(Sigma2) %*% mu2)
+ Sigma_star <- solve(Sigma1) - solve(Sigma2)
+ a <- Sigma_star[1,1]
+ bayes_df <- matrix(nrow = length(yrange), ncol = 2)
+ for(i in 1:length(yrange)){
+  xx2 <- yrange[i]
+  b <-2*(xx2*Sigma_star[1,2]) -2 * Vm[1]
+  c <- Sigma_star[2,2] * xx2^2 - 2*xx2 *Vm[2] - 2*cc
+  xx1 <- (-b - sqrt(b^2 - 4*a*c))/(2*a)
+  bayes_df[i,] <- c(xx1,xx2)
+ }
+ return(bayes_df)
+}
+get_lda_db <- function(yrange, mu1, mu2, Sigma){
+ prec <- solve(Sigma)
+ kk <- 0.5*t(mu1) %*% prec %*% mu1 - 0.5*t(mu2) %*% prec%*% mu2
+ Vv <- c(prec %*% mu1 - prec %*% mu2)
+ df <- matrix(0, nrow = length(yrange), ncol = 2)
+ for(i in 1:length(yrange)){
+  xx2 <- yrange[i]
+  xx1 <- (kk - xx2*Vv[2])/Vv[1]
+  df[i,] <- c(xx1,xx2)
+ }
+ df
+}
+
+.delta_qda <- function(x, mu, Sigma){
+  prec <- solve(Sigma)
+  -0.5*t(x) %*% prec %*% x + t(x) %*% prec %*% mu - 0.5*t(mu) %*% prec %*% mu -0.5*log(det(Sigma))
+}
+```
+
+
+```{r fig.align="center", fig.width=5, fig.height=5}
+set.seed(24)
+K <- 2; p <-2
+n <- 100
+n1 <- n2 <- n/K
+mu1 <- c(1,2); mu2 <- c(-1,0)
+Sigma1 <- matrix(c(1,0.5,0.5,1),nrow = p); prec1 <- solve(Sigma1)
+Sigma2 <- matrix(c(0.75,-.25,-.25,0.75),nrow = p); prec2 <- solve(Sigma2)
+
+x1 <- rmvnorm(n1, mu1, Sigma1); x2 <-  rmvnorm(n2, mu2, Sigma2)
+pi1 <- pi2 <- 0.5
+
+mu1_hat <- colMeans(x1); mu2_hat <- colMeans(x2)
+Sigma1_hat <- cov(x1); Sigma2_hat <- cov(x2)
+
+points_df <- data.frame(rbind(x1, x2)) %>%
+ mutate(class = c(rep("1", n1), rep("2", n2))) 
+
+yrange <- seq(min(points_df$X2), max(points_df$X2)+0.1, 0.01)
+xrange2 <- seq(min(points_df$X1)-0.2, max(points_df$X1)+0.2, 0.1)
+yrange2 <- seq(min(points_df$X2)-0.2, max(points_df$X2)+0.2, 0.1)
+
+plot_df <- data.frame(get_qda_db(sort(union(yrange,yrange2)), mu1,mu2,Sigma1,Sigma2)) # true Bayes QDA
+qda_plot_df <- data.frame(get_qda_db(sort(union(yrange,yrange2)),  mu1_hat,mu2_hat,Sigma1_hat,Sigma2_hat)) # estiamted db under QDA
+
+
+Sp <- 0
+nvec <- c(n1,n2)
+for(j in 1:K){
+  Sp <- Sp + nvec[j]* points_df %>%
+    filter(class == as.character(j)) %>%
+    dplyr::select(-class) %>%
+    as.matrix %>%
+    cov
+}
+Sp <- Sp/(n-K)
+
+
+lda_plot_df <- data.frame(get_lda_db(yrange, colMeans(x1), colMeans(x2), Sp)) # est db under LDA
+
+background_df <-expand.grid(xrange2,yrange2) %>%
+ data.frame() %>%
+ left_join(., plot_df %>% rename( "Var2" = 2), by = "Var2") %>% 
+ mutate(class = ifelse(Var1 >= X1, "1", "2"))
+ 
+
+points_df %>%
+ ggplot(., aes(x=X1, y = X2))+
+ geom_point(aes(col = class), size = 1.5)+
+  geom_point(data = background_df, aes(x = Var1, y = Var2, col = class), size = 0.1)+
+ geom_path(data = plot_df , aes(x = X1, y = X2), col = "purple") +
+ geom_path(data = qda_plot_df , aes(x = X1, y = X2), linetype = "dashed")+
+ geom_path(data = lda_plot_df,  aes(x = X1, y = X2), linetype = "dashed", col = "blue")+
+ xlim(min(points_df$X1)-0.2, max(points_df$X1)+0.2) +
+ ylim(min(points_df$X2)-0.2, max(points_df$X2)+0.2) +
+ guides(col = "none") +
+ ggtitle("Decision boundaries")
+```
+
+- Purple curve is Bayes decision boundary, dashed black curve is estimated decision boundary under QDA, and dashed blue line is estimate under LDA
+
+---
+
+## Naive Bayes
+
+- Up until now, we have assumed that for $p>1$, $f_{k}(x)$ is $p$-dimensional distribution
+
+- Under **naive Bayes**, we do not assume a specific family of distribution. Instead, assume that within class $k$, the $p$ predictors are independent:
+
+$$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p}) = \prod_{j=1}^{p}f_{kj}(x_{j})$$
+
+--
+
+- Useful when $p$ is large
+
+
+---
+
+## Naive Bayes
+
+- If we assume each $f_{kj}$ is Normal, then this is QDA with diagonal $\Sigma_{k}$
+
+  - Under Normal (Gaussian) naive Bayes:
+
+$$\delta_{k}(x) = -\frac{1}{2}\sum_{j=1}^{p}\left(\frac{(x_{j}-\mu_{kj})^2}{\sigma_{kj}^{2}} + \log\sigma_{kj}^{2}  \right) + \log(\pi_{k})$$
+
+--
+
+- Allows for *mixed feature types* (qualitative and quantitative)
+
+---
+
+## Logistic Regression vs LDA
+
+- Return back to $K=2$ setting (binary classification) 
+
+- Recall in logistic regression: $$\log\left(\frac{p_{x}}{1 - p_{x}}\right) = \log\left( \frac{Pr(Y=1 | X=x)}{Pr(Y=2 | X=x)}\right)= \beta_{0} + \beta_{1}x_{1} + \ldots + \beta_{p}x_{p}$$
+--
+
+- In LDA, 
+\begin{align*}
+\log\left(\frac{Pr(Y= 1 | X=x)}{Pr(Y= 2 | X=x)}\right) &= \log \left(\frac{\pi_{1} f_{1}(x)}{\pi_{2}f_{2}(x)}\right) \\
+&= \log\left(\frac{\pi_{1} \exp\left(-\frac{1}{2}(x - \mathbf{\mu}_{1})^{T} \Sigma^{-1}(x - \mathbf{\mu}_{1})\right)}{\pi_{2} \exp\left(-\frac{1}{2}(x - \mathbf{\mu}_{2})^{T} \Sigma^{-1}(x - \mathbf{\mu}_{2})\right))}\right) \\
+&= \ldots \\
+&= c_{0} + c_{1}x_{1}+ c_{2}x_{2} + \ldots + c_{p}x_{p}
+\end{align*}
+
+---
+
+## Logistic Regression vs LDA
+
+- LDA has same form of logistic regression for log-odds
+
+- Differ in how parameters  are estimated 
+
+  - Logistic regression uses conditional likelihood $Pr(Y|X)$
+  - LDA uses full likelihood $Pr(X,Y)$
+  
+- Often similar results
+  
+---
+
+## Summary
+
+- Logistic regression is very commonly used when $K=2$
+
+- LDA useful when $n$ small, or the classes are well
+separated, and Gaussian assumptions are reasonable
+
+- Naive Bayes useful when $p$ very large

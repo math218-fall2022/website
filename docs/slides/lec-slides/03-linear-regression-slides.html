@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Math 218: Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Linear Regression" />
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Math 218: Statistical Learning
+### Linear Regression
+### 9/14/2022
+
+---
+
+
+
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+class: center, middle
+
+# Linear regression
+
+---
+
+## Linear regression
+
+- A simple, widely used approach to supervised learning
+
+- Assumes that the dependence of `\(Y\)` on the predictors `\(X_{1}, \ldots, X_{p}\)` is linear
+
+--
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Linear regression for abalone data
+
+Questions we can ask:
+
+- Is there a relationship between the age and physical characteristics of abalone?
+
+- How strong is the relatinships between abalone age and the physical attributes?
+
+- Which physical attributes are associated with age? What is the strength of the association?
+
+- How accurately can we predict abalone age?
+
+- Is the relationship linear?
+
+---
+
+## Simple linear regression
+
+- **Simple linear regression** assumes a linear model for a quantative response using a single predictor:
+
+`$$Y = \beta_{0} + \beta_{1} X + \epsilon,$$`
+
+  where `\(\beta_{0}, \beta_{1}\)` are unknown **coefficients** or **parameters** and `\(\epsilon\)` is the error term
+
+- `\(\beta_{0}\)` is commonly referred to as the **intercept**, and `\(\beta_{1}\)` as the **slope**
+
+
+--
+
+- For example,  `\(\qquad \color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{length}} +\epsilon\)`
+
+
+--
+
+- We use training data to obtain estimates of the coefficients, `\(\hat{\beta}_{0}\)` and `\(\hat{\beta}_{1}\)`
+
+- Once we have stimates for the coefficients, can predict future responses at `\(X = x\)` using `$$\hat{y} = \hat{\beta}_{0} + \hat{\beta}_{1}x$$`
+
+---
+
+## Estimation of parameters by least squares
+
+- In practice, `\(\beta_{0}\)` and `\(\beta_{1}\)` are unknown, so we must estimate them!
+
+- Assuming `\(n\)` observations, we have data of the form `\((x_{1}, y_{1}), (x_{2}, y_{2}), \ldots, (x_{n}, y_{n})\)`
+
+- Goal: obtain estimates `\(\hat{\beta}_{0}\)` and `\(\hat{\beta}_{1}\)` such that `\(y_{i} \approx \hat{\beta}_{0} + \hat{\beta}_{1}x_{i}\)`
+
+- To measure how close a resulting line is to the `\(n\)` data points, we will minimize the *least squares* criterion
+
+--
+
+- Let `\(\hat{y}_{i} =  \hat{\beta}_{0} + \hat{\beta}_{1}x_{i}\)` be prediction for `\(Y\)` based on `\(i\)`-th value of `\(X\)`
+
+- Then `\(i\)`-th **residual** is: `\(e_{i} = y_{i} - \hat{y}_{i}\)`
+
+---
+
+## Estimation of parameters by least squares
+
+- Define **residual sum of squares** (RSS) as `$$RSS = e_{1}^{2} + e_{2}^{2} + \ldots + e_{n}^{2}$$`
+
+- This is equivalent to `$$RSS = (y_{1} - \hat{\beta}_{0}  - \hat{\beta}_{1}x_{1})^2 + (y_{2} - \hat{\beta}_{0}  - \hat{\beta}_{1}x_{2})^2 + \ldots (y_{n} - \hat{\beta}_{0}  - \hat{\beta}_{1}x_{n})^2$$` 
+
+--
+
+- Least square approach selects the pair `\((\hat{\beta}_{0}, \hat{\beta}_{1})\)` that minimize the RSS. Can be shown that the minimizing values are:
+
+`\begin{align*}
+\hat{\beta}_{1} &amp;= \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})(y_{i} - \bar{y})}{\sum_{i=1}^{n}(x_{i} - \bar{x})^2}\\
+\hat{\beta}_{0} &amp;= \bar{y} - \hat{\beta}_{1} \bar{x}
+\end{align*}`
+
+where `\(\bar{y} = \frac{1}{n}\sum_{i=1}^{n}y_{i}\)` and `\(\bar{x} = \frac{1}{n}\sum_{i=1}^{n}x_{i}\)`
+
+---
+
+## Abalone example
+
+Least squares fit for regression of `\(\color{blue}{\text{age}}\)` on `\(\color{blue}{\text{length}}\)`, with selected residuals.
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+`$$Y = \beta_{0} + \beta_{1} X + \epsilon$$`
+
+- `\(\beta_{0}\)` is the expected value of `\(Y\)` when `\(X = 0\)`
+
+- `\(\beta_{1}\)` is the average increase in `\(Y\)` for one-unit increase in `\(X\)`
+
+- `\(\epsilon\)` is error
+
+- This equation is the *population regression line*
+
+--
+
+- When using the least squares estimates for the coefficients, `\(\hat{Y} = \hat{\beta}_{0} + \hat{\beta}_{1} X\)` is the *least squares line*
+
+- Note: the estimates of `\(\beta_{0}\)` and `\(\beta_{1}\)` will depend on the observed data!
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+- Simulated example: true model is `\(Y = 1 + 3X + \epsilon\)`, where `\(\epsilon\)` is error from mean-zero normal distribution
+
+- We will generate `\(n = 100\)` data points from this model and fit the least squares line to these data
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+- We can continue to simulate datasets of `\(n=100\)` observations. Below are the least squares lines for each separate set of simulated data.
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+- Estimates `\(\hat{\beta}_{0}\)` and `\(\hat{\beta}_{1}\)` on the basis of a particular data set will not exactly equal the true parameters
+
+- But averaging estimates over a large number of data sets would lead to perfect estimation
+
+- Then, how accurate are our estimates `\(\hat{\beta}_{0}\)` and `\(\hat{\beta}_{1}\)`?
+
+--
+
+- *Standard error* (SE) of an estimator reflects how it varies under repeated sampling. For simple linear regression:
+
+`$$\text{SE}(\hat{\beta}_{0}) = \sigma^2 \left[ \frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^{n}(x_{i} - \bar{x})^2}\right], \qquad \text{SE}(\hat{\beta}_{1}) = \frac{\sigma^2}{\sum_{i=1}^{n}(x_{i} - \bar{x})^2}$$`
+
+where `\(\sigma^2 = \text{Var}(\epsilon)\)`
+
+---
+
+### Assessing Accuracy of Coefficient Estimates
+
+- Typically `\(\sigma^2\)` is not known, but can be estimated from the data. Estimate `\(\hat{\sigma}\)` is residual standard error (RSE) given by:
+
+`$$\hat{\sigma}= \text{RSE} = \sqrt{\text{RSS}/(n-2)}$$`
+
+- We use this estimate to calculate `\(\text{SE}(\hat{\beta}_{0})\)` and `\(\text{SE}(\hat{\beta}_{1})\)`
+
+--
+
+- Standard errors can be used to compute **confidence intervals** for the coefficients! A 95% confidence interval (CI) is the range of values such that with 95% probability, the range will contain the true value of the parameter.
+
+---
+
+## Confidence Intervals
+
+- For linear regression, the 95% CI for `\(\beta_{1}\)` is approximately 
+`$$\hat{\beta}_{1} \pm 2 \cdot \text{SE}(\hat{\beta}_{1})$$`
+- So, there is approximately a 95% chance that the true value of `\(\beta_{1}\)` falls between `\(\hat{\beta}_{1} - 2 \cdot \text{SE}(\hat{\beta}_{1})\)` and `\(\hat{\beta}_{1} + 2 \cdot \text{SE}(\hat{\beta}_{1})\)`.
+
+- Similarly, the 95% CI for the intercept is 
+`$$\hat{\beta}_{0} \pm 2 \cdot \text{SE}(\hat{\beta}_{0})$$`
+
+--
+
+
+- In the abalone example, the 95% CI for `\(\beta_{0}\)` is (3.23, 3.96), and the 95% CI for `\(\beta_{1}\)` is (0.07, 0.08).
+
+---
+
+## Hypothesis Testing
+
+- **Hypothesis testing** is a method of statistical inference to determine whether the data at hand sufficiently support a particular hypothesis
+
+  - Helps test the results of an experiment or survey to see if you have meaningful results
+  
+  - Helps draw conclusions about a population parameter
+  
+- Standard errors can be used to perform hypothesis tests on the coefficients
+
+--
+
+- **Null hypothesis** `\(H_{0}\)`: there is no relationship between `\(X\)` and `\(Y\)` versus
+
+- **Alternative hypothesis** `\(H_{A}\)`: there is some relationship between `\(X\)` and `\(Y\)`
+
+--
+
+- Mathematically, corresponds to testing `$$H_{0}: \beta_{1} = 0 \quad \text{ vs. } \quad H_{A}: \beta_{1} \neq 0$$`
+
+because if `\(H_{0}\)` true, then the model would reduce to `\(Y = \beta_{0} + \epsilon\)`
+
+---
+
+## Hypothesis Testing
+
+- To test this null hypothesis, want to determine if `\(\hat{\beta}_{1}\)` is sufficiently far from zero 
+
+  - How much is 'sufficiently far'? Depends on `\(\text{SE}(\hat{\beta}_{1})\)`
+  
+- Compute **t-statistic**: `$$t = \frac{\hat{\beta}_{1} - 0}{\text{SE}(\hat{\beta}_{1})}$$`
+
+--
+
+- Follows a `\(t\)`-distribution with `\(n-2\)` degrees of freedom, assuming `\(\beta_{1} = 0\)`
+
+--
+
+- `\(t\)` is very large (positive or negative) when `\(\hat{\beta}_{1}\)` is very far from 0 and standard error is not too large
+
+- Can calculate **p-value**, which is the probability of observaing any value equal to `\(|t|\)` or larger
+
+---
+
+## Hypothesis testing
+
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   3.60     0.186        19.3 1.61e-79
+## 2 length        0.0747   0.00173      43.1 0
+```
+
+--
+
+- For abalone example, `\(t =\)` 43.08 with a p-value essentially equal to 0
+
+- Compare `\(p\)`-value to a pre-determine rejection level `\(\alpha\)` (often `\(\alpha = 0.05\)`). If `\(p\)`-value `\(&lt; \alpha\)`, reject `\(H_{0}\)`
+
+---
+
+## Assessing Model Accuracy
+
+- How well does the model fit the data?
+
+- **Residual standard error** (RSE) `$$\text{RSE} = \sqrt{\frac{1}{n-2}\text{RSS}} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_{i} - \hat{y}_{i})^2}$$`
+
+  - Recall that `\(RSE\)` is estimate of the standard deviation of `\(\epsilon\)`
+  
+--
+  
+  - Considered a measure of the *lack of fit* of the model
+  
+  - Measured in the units of `\(Y\)`
+  
+--
+
+- **R-squared** `\((R^2)\)` is the proportion of variance in `\(Y\)` explained by `\(X\)`:
+`$$R^2 = \frac{\text{TSS} - \text{RSS}}{\text{TSS}} = 1 - \frac{\text{RSS}}{\text{TSS}},$$` where `\(\text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2\)` is the *total sum of squares*
+
+--
+
+  - It can be shown that in the case of simple linear regression, `\(R^2 = \rho^2\)`, where `\(\rho\)` is correlation between `\(X\)` and `\(Y\)`
+  
+
+
+---
+
+## Assessing Model Accuracy
+
+
+
+- For the RSE from regressing age on length is 2.692, and the `\(R^2\)` is 0.308
+
+
+---
+
+# Multiple Linear Regression
+
+---
+
+## Multiple Linear Regression
+
+- In practice, we often have more than one predictor.
+
+- With `\(p\)` predcitors, the model is `$$Y = \beta_{0} + \beta_{1}X_{1} + \beta_{2}X_{2} + \ldots + \beta_{p}X_{p}$$`
+
+--
+
+- For abalone example, the model is `$$\color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{height}} + \beta_{2}\color{blue}{\text{length}} + \beta_{3}\color{blue}{\text{weight}} + \epsilon$$`
+
+--
+
+- Interpret `\(\beta_{j}\)` as the *average* effect on `\(Y\)` for a one-unit increase in `\(X_{j}\)`, **holding all other predictors** fixed/constant
+
+---
+
+## Multiple Linear Regression
+
+- Given estimates `\(\hat{\beta}_{0}, \hat{\beta}_{1}, \ldots, \hat{\beta}_{p}\)`, can make predictions `$$\hat{y} = \hat{\beta}_{0} + \hat{\beta}_{1}x_{1} +\hat{\beta}_{2}x_{2} + \ldots + \hat{\beta}_{p}x_{p}$$`
+
+- Once again, estimate the coefficients as the values that minimize the sum of squared residuals `$$RSS = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2$$`
+
+
+---
+
+## Interpreting regression coefficients
+
+- The ideal scenario is when the predictors are uncorrelated
+
+- Correlations amongst predictors cause problems
+
+  - Difficulty in interpretation -- when one predictor changes, the other correlated predictors will also change
+  
+--
+
+- Fitting coefficients for abalone data:
+
+
+```
+## # A tibble: 4 x 5
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)  4.34      0.315       13.8    0    
+## 2 height       0.114     0.00897     12.7    0    
+## 3 length       0.0341    0.00472      7.22   0    
+## 4 weight       0.00209   0.00113      1.85   0.065
+```
+
+--
+
+- Correlations for abalone data:
+
+
+```
+##          age height length weight
+## age    1.000  0.555  0.555  0.538
+## height 0.555  1.000  0.828  0.819
+## length 0.555  0.828  1.000  0.925
+## weight 0.538  0.819  0.925  1.000
+```
+
+---
+
+## Questions
+
+1. Is at least one of the predictors useful in explaining the response? 
+
+--
+
+2. Do all the predictors help to expalin `\(Y\)`, or is only a subset useful?
+
+--
+
+3. How well does the model fit the data?
+
+--
+
+4. Given a set of predictors `\(X =x\)`, what is the predicted response? How accurate is our prediction?
+
+---
+
+## 1. Is at least one predictor useful?
+
+- Can extend the hypothesis test from simple linear regression to the multiple predictors setting:
+
+`$$H_{0}: \beta_{1} = \beta_{2} = \ldots = \beta_{p} = 0$$` versus
+
+`$$H_{A}: \text{ at least one } \beta_{j} \text{ is non-zero}$$`
+
+--
+
+- Test this hypothesis using the `\(F\)`-statistic: `$$F = \frac{(\text{TSS}-\text{RSS})/p}{\text{RSS}/(n-p-1)} \sim F_{p.n-p-1}$$`
+
+  - If `\(H_{0}\)` true, we expect `\(F\)` close to 1. Otherwise, we expect `\(F\)` to be much larger than 1
+  
+- If we reject `\(H_{0}\)` and conclude that at least one of the predictors is related to `\(Y\)`, we will naturally ask which one(s)?
+  
+--
+
+
+
+- For abalone data, the `\(F\)` statistic for this hypothesis is 708.53
+
+---
+
+## 2. Deciding on important predictors
+
+- Task of determining subset of important predictors from full set of available predictors is known as *variable selection*
+
+- Ideally, we would want to compare different models, each containing one of the possible subsets of predictors.
+
+- However, we often cannot examine all possible models
+
+  - With `\(p\)` predictors, there are `\(2^p\)` possible models! 
+  
+- Rather than consider each one, it is common to use an automated and efficient approach
+
+---
+
+## Forward selection
+
+1. Begin with *null model*, the model that contains an intercept but zero predictors
+
+--
+
+2. Fit `\(p\)` simple linear regression models (one for each predictors). Add to the null model the variable that results in lowest RSS
+
+--
+
+3. Fit `\(p-1\)` two-variable models, all of which contain an intercept and the predictor selected from step 2. Add to the model that variable that results in lowest RSS
+
+--
+
+Continue until some stopping rule is satisfied
+
+---
+
+## Backward selection
+
+1. Begin with *full model*, the model that contains all variables
+
+--
+
+2. Remove from the full model the variable with the largest `\(p\)`-value
+
+--
+
+3. Fit the new model, and remove the variable with the largest `\(p\)`-value
+
+--
+
+Continue until some stopping rule is satsfied
+
+---
+
+## 3. Assessing model fit
+
+- Can generalize the RSE and `\(R^2\)` from simple linear regression setting to multiple linear regression
+
+`$$\text{RSE} = \sqrt{\frac{1}{n-p-1} \text{RSS}}$$`
+
+- Note that `\(R^2\)` will *always* increase when new predictors are added to the model
+  
+  - More predictors always results in decreasing `\(\text{RSS}\)`
+  
+- Therefore, when comparing models with more than one predictor, we use **adjusted** `\(R^2\)`
+
+---
+
+## 4. Predictions
+
+---
+
+# Other considerations in regression
+
+---
+
+## Qualitative predictors
+
+- Thus far, we have assumed that all predictors in linear model are quantitative. In practice, we often have qualitative/categorical predictors
+
+- Our abalone data has the `\(\color{blue}{\text{sex}}\)` of each observation: Male, Female, and Infant
+
+--
+
+- Let's begin with the simplest case: predictor with two categories
+
+---
+
+## Qualitative predictors
+
+- If a qualitative predictors only has two *levels* (possible values), it is very simple to incorporate!
+
+- Create an *indicator* or dummy variable 
+
+- We will first consider the subset of the abalone data where `\(\color{blue}{\text{sex}}\)` is either Male or Female
+
+
+
+- Based on the `\(\color{blue}{\text{sex}}\)` variable, create a new variable as follows:
+
+`$$x_{i} = \begin{cases} 1 &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
+0 &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \end{cases}$$`
+--
+
+- Use this new dummy variable as a predictor
+
+---
+
+## Qualitative predictors: Abalone data
+
+- For example, a simple linear regression model for `\(\color{blue}{\text{age}}\)` would be
+
+`$$y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} = \begin{cases} \beta_{0} + \beta_{1} + \epsilon_{i} &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
+\beta_{0} + \epsilon_{i} &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \end{cases}$$`
+
+--
+
+- How to interpet?
+
+--
+
+Results for model fit on subsetted data:
+
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   12.6      0.0851    148.   0       
+## 2 sexM          -0.417    0.116      -3.60 0.000321
+```
+
+
+---
+
+## Qualitative predictors: Abalone data
+
+- Fitted model is: `$$\hat{\color{blue}{\text{age}_{i}}} = 12.619 + -0.417 \color{blue}{\text{Male}_{i}}$$`
+
+  - Notice notation: `\(\color{blue}{\text{Male}_{i}}\)` is shorthand for `\(\color{blue}{\mathbf{1}(\text{sex}_{i} = \text{Male})}\)`
+  
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Qualitative predictors
+
+- With more than two levels, we simply create additional dummy variables
+
+- Returning to full set of abalone data where `\(\color{blue}{\text{sex}}\)` has three levels (Male, Female, or Infant), we create two dummy variables:
+
+--
+
+`$$x_{i1} = \begin{cases} 1 &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
+0 &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{not Male} \end{cases}$$`
+
+--
+
+`$$x_{i2} = \begin{cases} 1 &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \\
+0 &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{not Female} \end{cases}$$`
+
+--
+
+Results in the regression model: 
+`\begin{align*}
+y_{i} &amp;= \beta_{0} + \beta_{1} x_{i1} + \beta_{2} x_{i2} + \epsilon_{i}\\
+&amp;= \begin{cases}  \beta_{0} + \beta_{1} &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
+\beta_{0} + \beta_{2} &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \\
+\beta_{0} &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Infant} \end{cases}
+\end{align*}`
+
+---
+
+## Qualitative predictors
+
+- There will always be one fewer dummy variables than levels
+
+  - Level with no dummy variable is known as *baseline*
+  
+  - Does the coding scheme matter? 
+  
+--
+
+
+```
+## # A tibble: 3 x 5
+##   term        estimate std.error statistic   p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)     9.39    0.0794     118.  0        
+## 2 sexM            2.82    0.109       25.9 5.47e-137
+## 3 sexF            3.23    0.113       28.6 2.16e-164
+```
+
+---
+
+## Extensions of linear model
+
+- Linear model is widely used and works quite well, but has several highly restrictive assumptions
+
+  - Relationship between `\(X\)` and `\(Y\)` is additive
+  - Relationship between `\(X\)` and `\(Y\)` is linear
+  
+- There are common approaches to loosen these assumptions
+
+---
+
+## Interactions
+
+- Additive assumption: the association between a predictor `\(X_{j}\)` and the repsonse `\(Y\)` does not depend on the value of any other predictors
+
+`$$Y = \beta_{0} + \beta_{1} X_{1} + \beta_{2} X_{2} + \epsilon$$`
+
+versus 
+
+`$$Y = \beta_{0} + \beta_{1} X_{1} + \beta_{2} X_{2} + \beta_{3}\color{orange}{X_{1}X_{2}} + \epsilon$$`
+
+--
+
+- This third predictor `\(\color{X_{1}X_{2}}\)` is known as an **interaction** term or effect
+
+- The total effect of `\(X_{1}\)` on `\(Y\)` also depends on the value of `\(X_{2}\)` through the interaction
+
+---
+
+## Interactions -- Abalone data
+
+Model: 
+`$$\color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{height}} + \beta_{2}\color{blue}{\text{length}} + \beta_{3} \color{blue}{\text{height}}\times \color{blue}{\text{length}} + \epsilon$$`
+
+Results:
+
+
+```
+## # A tibble: 4 x 5
+##   term           estimate std.error statistic  p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)    2.11      0.448         4.71 2.52e- 6
+## 2 height         0.197     0.0205        9.63 9.61e-22
+## 3 length         0.0588    0.00517      11.4  1.58e-29
+## 4 height:length -0.000760  0.000177     -4.29 1.86e- 5
+```
+
+--
+
+Interpretations:
+
+  - Results suggest that the interaction is important
+  
+  - However, adjusted `\(R^2\)` for model with interaction is 0.339 compared to 0.339 from model without interaction 
+  
+  
+---
+
+## Interactions -- Abalone data
+
+
+```
+## # A tibble: 4 x 5
+##   term           estimate std.error statistic  p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)    2.11      0.448         4.71 2.52e- 6
+## 2 height         0.197     0.0205        9.63 9.61e-22
+## 3 length         0.0588    0.00517      11.4  1.58e-29
+## 4 height:length -0.000760  0.000177     -4.29 1.86e- 5
+```
+
+- Fitted model takes the form:
+
+`$$\hat{\color{blue}{\text{age}}} = 2.114 + 0.197\color{blue}{\text{height}} + 0.059\color{blue}{\text{length}} + -0.001\color{blue}{\text{height}}\times\color{blue}{\text{length}}$$`
+
+--
+
+- Estimates suggest that a 1 mm increase in the \color{blue}{\text{height}} of an abalone is associated with an increased age of 0.197 + -0.001 `\(\times \color{blue}{\text{length}}\)` years
+
+- A 1 mm increase in the \color{blue}{\text{length}} of an abalone is associated with an increased age of 0.059 + -0.001 `\(\times \color{blue}{\text{height}}\)` years
+
+---
+
+## Interactions 
+
+- Can also have interactions involving categorical variables! 
+
+- In particular, interaction between a quantitative and a categorical variable has nice interpretation
+
+--
+
+- Consider again subset of abalone data where we remove the observations `\(\color{blue}{\text{sex}} = \text{Infant}\)`. Consider the effects of `\(\color{blue}{\text{height}}\)` and  `\(\color{blue}{\text{sex}}\)` on `\(\color{blue}{\text{age}}\)`.
+
+- Model with no interactions:
+
+`$$\color{blue}{\text{age}_{i}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{height}_{i}} + \beta_{2} \color{blue}{\mathbf{1}(\text{sex}_{i} = \text{Male})}$$`
+
+- Can be re-written as
+
+`$$\color{blue}{\text{age}_{i}} \approx \begin{cases}
+\beta_{0} + \beta_{1}\color{blue}{\text{height}_{i}} &amp; \text{ if } \color{blue}{\text{sex}_{i} = \text{Female}} \\
+(\beta_{0} + \beta_{2}) + \beta_{1}\color{blue}{\text{height}_{i}} &amp; \text{ if } \color{blue}{\text{sex}_{i} = \text{Male}} 
+\end{cases}$$`
+
+
+
+---
+
+## Interactions 
+
+- With interactions, the model takes the form:
+
+`$$\color{blue}{\text{age}_{i}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{height}_{i}} + \beta_{2} \color{blue}{\mathbf{1}(\text{sex}_{i} = \text{Male})} + \beta_{3}\color{blue}{\text{height}_{i}} \times \color{blue}{\mathbf{1}(\text{sex}_{i} = \text{Male})}$$`
+
+- Can be re-written as
+
+`$$\color{blue}{\text{age}_{i}} \approx \begin{cases}
+\beta_{0} + \beta_{1}\color{blue}{\text{height}_{i}} &amp; \text{ if } \color{blue}{\text{sex}_{i} = \text{Female}} \\
+(\beta_{0} + \beta_{2}) + (\beta_{1} + \beta_{3})\color{blue}{\text{height}_{i}} &amp; \text{ if } \color{blue}{\text{sex}_{i} = \text{Male}} 
+\end{cases}$$`
+
+---
+
+## Interactions -- Abalone data
+
+Estimated regression lines
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Nonlinear Relationships
+
+- Linear assumption: change in `\(Y\)` associated with a one-unit change in `\(X_{j}\)` is constant
+
+- In some cases, true relationship between a predictor and response may be nonlinear 
+
+- Consider some new data about cars:
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Nonlinear Relationships
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+- Data suggest a curved relationship between `\(\color{blue}{\text{horsepower}}\)` and `\(\color{blue}{\text{mpg}}\)`
+
+- Can include transformed versions of the predictors
+
+---
+
+## Nonlinear Relationships
+
+- Figure suggests a *quadratic* shape, which can be accomodated in the following model:
+
+`$$\color{blue}{\text{mpg}} = \beta_{0} + \beta_{1}\color{blue}{\text{horsepower}} + \beta_{2}\color{blue}{\text{horsepower}}^2+ \epsilon$$`
+
+```
+## # A tibble: 3 x 5
+##   term            estimate std.error statistic   p.value
+##   &lt;chr&gt;              &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 (Intercept)     56.9      1.80          31.6 1.74e-109
+## 2 horsepower      -0.466    0.0311       -15.0 2.29e- 40
+## 3 I(horsepower^2)  0.00123  0.000122      10.1 2.20e- 21
+```
+
+--
+
+- Approach of including polynomials of predictors is known as **polynomial regression**
+
+--
+
+- Note: Non-linear in `\(\color{blue}{\text{horsepower}}\)`, but still linear model for `\(\color{blue}{\text{mpg}}\)`
+
+---
+
+## Model checking for linear regression
+
+- Can always fit a linear regression model for quantiative `\(Y\)`, but should assess whether the linear model is appropriate
+
+--
+
+- Check if our assumptions are met:
+
+  1. Linearity between predictors and response
+  2. Error terms are uncorrelated
+  3. Error terms have constant variance
+  
+--
+
+- Additionally, check for potential problems that may influene model fit:
+
+  1. Outliers
+  2. High-leverage points
+  3. Collinearity in predictors
+  
+---
+
+## 1. Assumption: linearity
+
+- *Residual plots* are useful for diagnosing non-linearity
+  
+  - For simple linear regression, plot the residuals `\(e_{i} = y_{i} - \hat{y}_{i}\)` versus a predictor `\(x_{i}\)`
+  - For multiple linear regression, plot residuals `\(e_{i}\)` versus fitted `\(\hat{y}_{i}\)`
+  
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## 2. Assumption: uncorrelated errors
+
+- Important assumption in linear regression is that errors `\(\epsilon_{1}, \epsilon_{2}, \ldots, \epsilon_{n}\)` are uncorrelated
+
+  - Often occur in time-series data
+
+- Often assessed by identifiying *tracking* in the data. Plot residuals in the order they appear in the data
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## 3. Assumption: constant variance
+
+- Assumption: `\(Var(\epsilon_{i}) = \sigma^2\)` for all observations `\(i\)`
+
+- **Heteroscedasticity** is when the variances are non-constant
+
+  - Funnel-shapes in residual plots help diagnosis heteroscedasticity
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## 1. Problem: outliers
+
+- **Outliers** are points for which the true `\(y_{i}\)` is very far from the estimated/fitted `\(\hat{y}_{i}\)`
+
+  - i.e. response `\(y_{i}\)` is unusual given corresponding `\(x_{i}\)`
+
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+
+- Blue line fit to all data points, purple line fit to data removing outlier
+
+---
+
+## 1. Problem: outliers
+
+- May not have too large an impact on estimated regression line, but can impact overall accuracy of model
+
+- Residual standard error `\((\hat{\sigma})\)`:
+  - Model fit on all data: 1.113
+  - Model fit after removing outlier: 1
+  
+- `\(R^2\)`:
+  - Model fit on all data: 0.164
+  - Model fit after removing outlier: 0.213
+
+---
+
+## 2. Problem: high leverage points
+
+- **High leverage** points have an unusual value for `\(x_{i}\)`
+
+- Same data as previous slide + one additional point in orange
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+
+- Blue line is fit to all data
+- Purple point is outlier from before. Purple line is fitted line omitting this point
+- Orange line is fitted line omitting the orange point
+
+
+---
+
+## 2. Problem: high leverage points
+
+- High leverage observations tend to have a non-negligable impact on estimated regression line
+
+- Calculate *leverage statistic* `\((h_{i})\)` of a point. For simple linear regression:
+
+`$$h_{i} = \frac{1}{n} + \frac{(x_{i} - \bar{x})^2}{\sum_{i'=1}^{n}(x_{i'} - \bar{x})^2}$$`
+
+--
+
+  - `\(h_{i}\)` is always between `\(1/n\)` and `\(1\)`
+  - Average leverage for all observations is `\((p+1)/n\)`
+  
+--
+
+- In simulated data:
+  - Average leverage: `\((1+1)/51 =\)` 0.039
+  - Leverage of purple point: 0.021
+  - Leverage of orange point: 0.294
+  
+---
+
+## Problem: collinearity
+
+- As mentioned before, **collinearity** occurs when two or more predictors are closely related to one another
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+
+- Can be hard to separate the individual effects of `\(\color{blue}{\text{weight}}\)` and `\(\color{blue}{\text{length}}\)` on `\(\color{blue}{\text{age}}\)`
+
+  - Reduces accuracy of the associated regression coefficients, causing the `\(SE\)` to grow
+  
+---
+
+## Problem: collinearity
+
+Model `$$\color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{length}} + \epsilon$$`
+
+
+```
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   3.60     0.186        19.3 1.61e-79
+## 2 length        0.0747   0.00173      43.1 0
+```
+
+Model `$$\color{blue}{\text{age}} = \beta_{0} + \beta_{1}\color{blue}{\text{length}} + \beta_{1}\color{blue}{\text{weight}} + \epsilon$$`
+
+
+```
+## # A tibble: 3 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)  4.91      0.317       15.5  1.45e-52
+## 2 length       0.0532    0.00456     11.7  5.33e-31
+## 3 weight       0.00569   0.00112      5.10 3.55e- 7
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

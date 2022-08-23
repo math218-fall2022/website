@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Math 218: Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Resampling" />
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Math 218: Statistical Learning
+### Resampling
+### 9/12/2022
+
+---
+
+
+
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Resampling
+
+- Economically using a collected dataset by repeatedly drawing samples from the same training dataset and fitting a model of interest on each sample
+
+  - Obtain additional information about the fitted model
+
+- We will focus on two methods: **cross-validation** and the **bootstrap**
+
+
+---
+
+## Training vs Test errors
+
+- Recall the distinction between the training and test datasets
+
+  - Training data: used to fit model
+  - Test data: used to test/evaluate the model 
+  
+- These two datasets result in two types of error:
+
+  - **Training error**: average error resulting from using the model to predict the responses for the training data
+  - **Test error**: average error from using the model to predict the responses on new, "unseen" observations
+  
+  
+- Training error is often very different from test error
+
+---
+
+## Validation-set approach
+
+- Ideally, the test data would be a designated dataset that:
+  - Represents the actual dataset
+  - Is large enough to generate meaningful predictions
+  
+--
+
+- *Validation-set* approach: randomly divide (e.g. 50/50) the available data into two parts: a **training set** and a **validation**/**hold-out** set
+
+  - Model is fit on training set
+  - Fitted model predicts responses for the observations in the validation set
+  
+- The resulting validation-set error provides an estimate of the test error. This is typically assessed using MSE in the
+case of a quantitative response and misclassification rate in
+the case of a qualitative (discrete) response
+
+
+
+---
+
+## Validation-set approach: drawbacks
+
+- Estimate for test error will depend on the observations included in the training and validation sets
+  - Validation estimate of test error can be highly variable
+
+--
+
+- Only a subset of the available data (observations used in training set) are used to fit the model
+  - i.e. fewer observations used to fit model might lead to *overestimating* test error rate
+  
+---
+
+## Leave-One-Out Cross-Validation
+
+- **Leave-one-out cross-validaiton** (LOOCV) attempts to address the drawbacks from validation set approach
+
+- Still splits all observations into two sets: training and validation
+
+  - Key difference: just *one* observation is used for the validation set is used for validation set, leaving `\(n-1\)` observations for training set
+  
+--
+
+- For example: choose observation `\((x_{1}, y_{1})\)` to be validation set, and fit model on training set `\(\{(x_{2}, y_{2}), (x_{3}, y_{3}), \ldots, (x_{n}, y_{n}) \}\)`
+
+  - `\(\text{MSE}_{1} = (y_{1} -\hat{y}_{1})^2\)` an approximately unbiased estimate for test error
+  
+---
+
+
+## Leave-One-Out Cross-Validation
+
+- Repeat procedure by selecting the second observation to be validation set, then third, etc. 
+
+- Will end up with `\(n\)` squared errors: `\(\text{MSE}_{1}, \text{MSE}_{2}, \ldots, \text{MSE}_{n}\)`
+
+--
+
+- LOOCV estimate for test MSE is the average:
+
+`$$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \text{MSE}_{i}$$`
+
+--
+
+- Why is LOOCV preferred over validation set approach?
+
+  - Each training set has `\(n-1\)` observations `\(\rightarrow\)` tend to not overestimate test error as much
+  - There is no randomness in training/validation set splits
+  
+
+  
+  
+---
+
+## LOOCV: Auto data
+
+- Predict `\(\color{blue}{\text{mpg}}\)` using a linear model with polynomial functions of `\(\color{blue}{\text{horsepower}}\)`
+
+&lt;img src="05-resampling_files/figure-html/loocv_auto-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## LOOCV
+
+- LOOCV can be *expensive* to implement -- must fit the model `\(n\)` times
+
+- If using least square linear or polynomial regression, we have a nice shortcut!
+
+--
+
+`$$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \left(\frac{y_{i} - \hat{y}_{i}}{1-h_{i}}\right)^2$$` where `\(\hat{y}_{i}\)` is the fitted value from the least squares model fit to all `\(n\)` observations, and `\(h_{i}\)` is leverage
+
+- Thus, only need to fit the model once!
+
+--
+
+- Drawbacks: estimates for each validation set `\(i\)`  are highly correlated, so the average can have high variance
+
+
+---
+
+## k-fold Cross-Validation
+
+
+- In **k-fold cross-validation**, the observations are randomly divided into `\(k\)` groups (or folds) of approximately equal size. For each `\(k\)` in `\(1, 2, \ldots, K\)`:
+  - Leave out `\(k\)`-th group as validation set, and fit model on remaining `\(K-1\)` parts (combined)
+  - Obtain predictions for `\(k\)`-th part, and a corresponding `\(\text{MSE}_{k}\)`
+  
+--
+
+- Letting the `\(k\)`-th fold have `\(n_{k}\)` observations:
+
+  - `\(\text{MSE}_{k} = \frac{1}{n_{k}}\sum_{i \in \mathcal{C}_{k}} (y_{i} - \hat{y}_{i})^2\)`, where `\(\mathcal{C}_{k}\)` is set of observations in `\(k\)`-th fold and `\(\hat{y}_{i}\)` is fit for observation `\(i\)` obtained from data with part `\(k\)` removed
+  
+  - If `\(n\)` is a multiple of `\(K\)`, then `\(n_{k} = n/K\)`
+  
+--
+
+- The `\(k\)`-fold CV estimate of the test error is the average:
+
+`$$\text{CV}_{(K)} = \frac{1}{K} \sum_{k=1}^{K} \text{MSE}_{k}$$`
+---
+
+## k-fold CV
+
+- - LOOCV is a special case of `\(k\)`-fold CV. Which value of `\(K\)` yields LOOCV?
+
+--
+
+- `\(k\)`-fold CV estimate is still biased upward; bias minimized when `\(K = n\)`
+
+
+  - `\(K = 5\)` or `\(K=10\)` often used as a compromise for bias-variance tradeoff
+
+--
+
+- LOOCV and `\(k\)`-fold CV are useful and commonly used because of generality
+
+---
+
+## k-fold CV: Auto data
+
+
+
+Run `\(k\)`-fold CV with `\(K =\)` 5 run 8 separate times, each with different random split of data:
+
+&lt;img src="05-resampling_files/figure-html/cv_5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+## Cross-Validation for Classification
+
+- CV can be useful for qualitative `\(Y\)`. Same procedure as for quantiative, but uses number of misclassified observations instead of MSE
+
+- LOOCV error rate:
+
+`$$\text{CV}_{(n)} = \frac{1}{n} \sum_{i=1}^{n} \text{Err}_{i} = \frac{1}{n} \sum_{i=1}^{n} \mathbf{1}(y_{i} \neq \hat{y}_{i})$$`
+--
+
+- Easily translated to `\(k\)`-fold CV 
+
+
+---
+
+## Caution!
+
+- We may need to think critically about when to apply cross-validation
+
+- Consider a scenario with binary data ($n = 50$), and we have `\(p = 100\)` possible predictors at hand
+
+--
+
+- Develop a classifier as follows:
+
+  1. Find `\(p^{*} = 20\)` predictors that have the largest correlation with the binary labels
+  2. Apply binary classifier (e.g. logistic regression) using only those `\(p^*\)` predictors
+  
+--
+
+- Can we apply cross-validation at Step 2, forgetting Step 1? 
+
+---
+
+## Caution!
+
+- No! CV at Step 2 ignores the fact that in Stpe 1, the procedure **already saw the labels of the training** and made use of them. Forgetting this would result in **leakage**.
+
+  - Instead, we should include Step 1 as part of the validation process. 
+  
+--
+
+- Wrong vs right procedure?
+
+---
+
+## Simulated data
+
+- I can simulate data as follows:
+
+  - Generate `\(p = 100\)` predictors `\(X\)` for `\(n = 50\)` observations
+  - Generate binary responses `\(Y_{i}\)` at random
+  
+--
+
+- Because the responses `\(Y\)` are generated independent of `\(X\)`, true test error is 50%. 
+
+- However, 10-fold CV estimate of test error when ignoring Step 1 is 0!
+
+
+
+---
+
+## Cross-validation
+
+
+- Estimated CV error rates from different models on same set of *validation* data
+
+  - Not useful for comparing training error rates
+  
+---
+
+## The Bootstrap
+
+- The **bootstrap** is a flexible and powerful statistical tool that can be used to quantify the uncertainty associated with a given estimator or statistical learning method
+
+- Example: can be used to estimate the standard errors of the `\(\beta\)` coefficients in linear regression
+
+--
+
+- One goal of statistics: learn about a population.
+
+  - Usually, population is not available, so must make inference from sample data
+
+--
+
+- Bootstrapping operates by *resampling* this sample data to create many simulated samples
+
+---
+
+## The Bootstrap
+
+- Bootstrapping resamples the original dataset **with replacement**
+
+- If the original datset has `\(n\)` observations, then each bootstrap/resampled dataset also has `\(n\)` observations
+
+  - Each observation has equal probability of being included in resampled dataset
+  - Can select an observation more than once for a resampled dataset
+---
+
+
+## Bootstrap: example
+
+- Suppose a study on adult daily caffeine consumption (mg) collects 4 data points: 110, 130, 150, 200. I want to learn about the average consumption in adults.
+
+- Create my first bootstrap sample:
+
+
+```r
+dat &lt;- c(110, 130, 150, 200)
+n &lt;- length(dat)
+
+samp1 &lt;- sample(x = dat, size = n, replace = T)
+samp1
+```
+
+```
+## [1] 200 130 200 130
+```
+
+--
+
+- Obtain our first estimate for `\(\mu\)`, the population mean daily caffeine consumption in adults: `\(\hat{\mu}_{1} = 165\)`
+
+---
+
+## Bootstrap: example
+
+- Take second sample:
+
+
+```r
+samp2 &lt;- sample(x = dat, size = n, replace = T)
+samp2
+```
+
+```
+## [1] 150 130 150 200
+```
+  
+- `\(\hat{\mu}_{2} = 157.5\)`
+
+--
+
+- Repeat this process thousands of times!
+
+
+---
+
+## Bootstrap: example
+
+
+
+- After 1000 bootstrap samples, we end up with 1000 estimates for `\(\mu\)`
+
+&lt;img src="05-resampling_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+--
+
+- Mean over all estimates is `\(\hat{\mu} = 146.6275\)`
+
+- Approximate 95% confidence interval for the mean are the 5% and 95% quantiles of the 1000 mean estimates: (115, 182.5) 
+
+  - Called a *bootstrap percentile* confidence interval
+---
+
+## The bootstrap
+
+- Real world vs bootstrap world
+
+--
+
+- Pros:
+
+  - No assumptions about distribution of your data 
+  - Very general method that allows estimating sampling distribution of almost any statistic!
+  - Cost-effective
+--
+- Cons:
+
+  - In more complex scenarios, figuring out appropriate way to bootstrap may require thought
+  - Can fail in some situations
+  - Relies quite heavily on the original sample
+
+---
+
+### Can boostrap estimate prediction error?
+
+
+- Idea: take a bootstrap sample as training set, and the original sample as validation set. Repeat `\(B\)` times.
+
+--
+
+- Issue: each bootstrap sample would have significant overlap (about 2/3) with the original data
+
+  - Compare to `\(k\)`-fold CV which requires *no* overlap between the folds
+  
+  - Would result in underestimating true prediction error
+  
+---
+
+### Can boostrap estimate prediction error?
+
+- Solution? Only use prediction for the observations that did not (by chance) occur in current bootstrap sample
+
+- Gets complicated `\(\rightarrow\)` CV is a more attractive approach for estimating prediction error
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
