@@ -1,8 +1,8 @@
 # Website
 
-Course website for Math 118 - Intro to Data Science at Middlebury College (Fall 2022)
+Course website for Math 218 - Intro to Data Science at Middlebury College (Fall 2022)
 
-Website address: https://math118-fall2022.github.io/website/.
+Website address: https://math218-fall2022.github.io/website/.
 
 # Attribution
 
