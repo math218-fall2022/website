@@ -52,6 +52,8 @@ class: center, middle
 
 # Welcome!
 
+---
+
 
 ## Necessary background
 
@@ -73,16 +75,16 @@ class: regular
 --
 
 .pull-left[
-```{r, echo=FALSE,out.width = '100%', eval = F} 
-knitr::include_graphics("img/00/eBird.png")
+```{r, echo=FALSE,out.width = '100%'} 
+knitr::include_graphics("figs/00/eBird.png")
 ```
 ]
 
 --
 
 .pull-right[
-```{r, echo=FALSE,out.width = '100%', eval = F} 
-knitr::include_graphics("img/00/restio.jpg")
+```{r, echo=FALSE,out.width = '100%'} 
+knitr::include_graphics("figs/00/cotw_08232022.jpg")
 ```
 ]
 ---
