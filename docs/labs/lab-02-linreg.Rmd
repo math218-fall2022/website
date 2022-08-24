@@ -12,14 +12,28 @@ editor_options:
   chunk_output_type: console
 ---
 
+Here, we will make use of the package `ggfortify`. Check if it is installed by running 
+
+```{r eval = F}
+library(ggfortify)
+```
+
+If you receive an error message, then run the following command in your Console once:
+
+```{r eval = F}
+install.packages("ggfortify")
+```
+
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval = T, 
+knitr::opts_chunk$set(eval = F, 
                       warning = FALSE, 
                       message  = FALSE,
                       fig.align="center", fig.width=4, fig.height=4)
 library(tidyverse)
 library(MASS)
 library(ISLR2)
+library(ggfortify)
 ```
 
 
@@ -76,7 +90,7 @@ data.frame(fitted = predict(mod0), residuals = resids) %>%
   geom_point()
 ```
 
-Leverage statistics can be computed using the `hatvalues` function:
+Leverage statistics can be computed using the `hatvalues()` function. Here, I plot the leverage in the order of data collection:
  
 ```{r}
 lev <- hatvalues(mod0)
@@ -84,6 +98,12 @@ data.frame(leverage = lev) %>%
   mutate(order = row_number()) %>%
   ggplot(., aes(x = order, y = leverage)) +
   geom_point()
+```
+
+Alternatively, we can take advantage of the `autoplot()` function from the `ggfortify` library we loaded. We pass in a fitted `lm()` object, and `autoplot()` will plot up to six diagnostic plots. Here, we will focus on four: residuals vs fitted, Normal q-q plot, standardized residuals vs fitted, and residuals vs leverage. Notice that `autoplot` will provide the indices of points of interest (possible outliers or high leverage) in the respective plots. 
+
+```{r}
+autoplot(mod0, which = c(1,2,3,5))
 ```
 
 # Multiple linear regression
@@ -194,3 +214,80 @@ What happens if you don't pass in a parameter?
 ```{r}
 greeting("student")
 ```
+
+# Your turn!
+
+
+## Exercise 1 
+
+You will create some simulated data and will fit simple linear regression models to it. Make sure to use `set.seed(2)` prior to starting Exercise 1 to ensure consistent results.
+
+  a. Using the `rnorm()` function, create a vector `x` that contains 100 observations drawn from a $N(0,1)$ distirbution. This represents a feature or predictor, $X$. 
+  
+  b. Using the `rnorm()` function, create a vector `eps` that contains 100 observations drawn from a $N(0,0.25)$ distribution -- a Normal distribution with mean 0 and variance 0.25. 
+
+  c. | Using `x` and `eps`, generate a vector `y` according to the model
+$$Y = -2 + 0.5X + \epsilon$$
+
+     | What is the length of `y`? What are the values of $\beta_{0}$ and $\beta_{1}$?
+
+  d) Fit a least squares linear model to predict `y` using `x`. How do $\hat{\beta}_{0}$ and  $\hat{\beta}_{1}$ compare to $\beta_{0}$ and $\beta_{1}$?
+
+  e) Now fit a polynomial regression model that predicts `y` using `x` and `x^2`. Is there evidence that the quadratic terms improve model fit? Explain. 
+
+  f) Suppose we wanted to generate data with *more* noise. How might we do that? Would you expect the confidence intervals for $\beta_{0}$ and $\beta_{1}$ to be wider, narrower, or about the same as compared to the original data?
+
+```{r echo = F, eval = F}
+set.seed(2)
+x <- rnorm(100)
+eps <- rnorm(100, 0, sqrt(0.25))
+y <- -1 + 0.5*x + eps
+df <- data.frame(x =x , y = y)
+ggplot(df, aes(x = x, y = y))+
+  geom_point()
+summary(lm(y ~ x))
+summary(lm(y ~ x + I(x^2)))
+```
+
+## Exercise 2
+
+Here, we explore the *collinearity* problem. Run the following by changing to `eval = T`:
+
+```{r eval = F}
+set.seed(2)
+x1 <- runif(100)
+x2 <- 0.5 * x1 + rnorm(100)/10
+y <- 2 + 2*x1 + 0.3*x2 + rnorm(100)
+```
+
+  a) Write out the form of the linear model. What are the regression coefficients?
+  
+  b) What is the correlation between `x1` and `x2? Create a scatterplot displaying a relationship between the two variables.
+
+  c) Using this data, fit a least squares regression line to predict `y` using `x1` and `x2`. Describe the results obtained. How do the estimates $\hat{\beta}_{j}$ relate to the true $\beta_{j}$? Can you reject the null hypothesis $H_{0}: \beta_{1} = 0$ or the null hypothesis $H_{0}: \beta_{2} = 0$?
+
+  d) Now fit a least squares regression line to predict `y` using only `x1`. Comment on your results. Can you reject the null hypothesis $H_{0}: \beta_{1} = 0$?
+
+  e) Now fit a least squares regression line to predict `y` using only `x2`. Comment on your results. Can you reject the null hypothesis $H_{0}: \beta_{2} = 0$?
+
+  f) Do the results obtained in (c) - (e) contradict each other? Explain.
+
+  g) Now, suppose we obtain one additional observation which happened to be mismeasured. Be sure to run this code by changing `eval = F` to `eval = T` in the `R` chunk header.
+     
+
+```{r eval = F}
+set.seed(1)
+x1 <- runif(100)
+x2 <- 0.5 * x1 + rnorm(100)/10
+y <- 2 + 2*x1 + 0.3*x2 + rnorm(100)
+x1 <- c(x1, 0.1 )
+x2 <- c(x2, 0.8)
+y <- c(y, 6)
+```
+
+Refit the linear models from (c) - (e) using this new data. What effect does this new observation have on the each of the models? In each model, is this observation an outlier? A high-leverage point? Both? Explain your answers.
+    
+## Exercise 3
+
+Create a function that given a vector and an integer will return how many times the integer appears inside the vector.
+
