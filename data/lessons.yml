@@ -17,7 +17,7 @@ lessons:
    title: "Linear regression (cont.)"
  - date: "Friday, Sep. 23"
    title: "Lab: Linear regression"
-   #lab: "lab-02-linreg.html"
+   lab: "lab-02-linreg.html"
  - date: "Week 03"
  - date: "Monday, Sep. 26"
    title: "Classification"

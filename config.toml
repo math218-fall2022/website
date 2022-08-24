@@ -1,5 +1,4 @@
-#baseurl = "/"
-baseurl = "https://math218-fall2022.github.io/website/"
+baseurl = "/"
 languageCode = "en-us"
 defaultContentLanguage = "en-us"
 title = "Math 218"
@@ -62,5 +61,5 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [params]
   dateFormat = "January 2, 2006"
-  background = "img/fleas2.png"
+  background = "https://math218-fall2022.github.io/website/img/fleas2.png"
   favicon = "img/math218-sticker-icon.png"
