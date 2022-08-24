@@ -8,7 +8,7 @@ lessons:
    slides: "lec-slides/01-Intro-slides.html"
  - date: "Friday, Sep. 17"
    title: "Review of R and Linear Algebra"
-   lab: lab-01-review.html"
+   lab: "lab-01-review.html"
  - date: "Week 02"
  - date: "Monday, Sep. 19"
    title: "Linear regression"
