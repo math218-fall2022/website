@@ -19,6 +19,7 @@ lessons:
    #slides: "lec-slides/04-tidy-data-wrangle.html"
  - date: "Friday, Sep. 23"
    title: "Lab: Linear regression"
+   lab: "lab-02-linereg.html"
  - date: "Week 03"
  - date: "Monday, Sep. 26"
    title: "Classification"
