@@ -1,4 +1,5 @@
-baseurl = "/"
+#baseurl = "/"
+baseurl = "https://math218-fall2022.github.io/website/"
 languageCode = "en-us"
 defaultContentLanguage = "en-us"
 title = "Math 218"
