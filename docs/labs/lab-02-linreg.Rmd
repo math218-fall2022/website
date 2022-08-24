@@ -1,0 +1,196 @@
+---
+title: "Lab 02 - Linear Regression"
+subtitle: "due ? at 11:59pm"
+output: 
+  tufte::tufte_html:
+    css: "./math218-labs.css"
+    tufte_variant: "envisioned"
+    highlight: tango
+    toc: true
+    toc_depth: 1
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = T, 
+                      warning = FALSE, 
+                      message  = FALSE,
+                      fig.align="center", fig.width=4, fig.height=4)
+library(tidyverse)
+library(MASS)
+library(ISLR2)
+```
+
+
+# Simple linear regression
+
+We will begin by working with some data about fish. The data consist of record of seven common different fish species in fish market sales. Our goal will be to estimate the `Weight` (g) of a fish given its other characteristics. We have access to the following predictors: `Species`, `BodyLength` (nose to beginning of tail), `TotalLength` (nose to end of tail), `Height`, and `Width`. All physical measurements are in cm.
+
+```{r}
+fish <- read.csv("data/fish.csv", header = T)
+head(fish)
+```
+
+We will begin by using the `lm()` function to fit a simple linear model, with `Weight` and the response and `BodyLength` as the predictor. The `summary()` function gives us estimates, standard errors, and $p$-values for the coefficients, as well as the $R^2$ for the model. 
+
+```{r}
+mod0 <- lm(Weight ~ BodyLength, data = fish)
+summary(mod0)
+```
+
+We can access just the estimates $\hat{\beta}$ using the `coef()` function, and obtain confidence intervals (default are 95%).
+
+```{r}
+coef(mod0)
+confint(mod0)
+```
+
+The `predict()` function can be used to obtain confidence and prediction intervals for the response, for a given value of the predictors:
+
+```{marginfigure}
+Compare the widths of the intervals. Why is there a difference?
+```
+
+```{r}
+predict(mod0, data.frame(BodyLength = c(15, 30, 45)), interval = "confidence")
+predict(mod0, data.frame(BodyLength = c(15, 30, 45)), interval = "prediction")
+```
+
+# Diagnostics
+
+Here, I plot the response and predictors, along with the least squares regression line. There is some evidence for non-linearity between `Weight` and `BodyLength`...
+
+```{r}
+ggplot(fish, aes(x = BodyLength,y = Weight))+
+  geom_point() +
+  geom_smooth(method = "lm", se = F)
+```
+
+We can compute the residuals from a linear regression fit using the `residuals()` function. Here, it is clear that we have non-linearity.
+
+```{r}
+resids <- residuals(mod0)
+data.frame(fitted = predict(mod0), residuals = resids) %>%
+  ggplot(., aes(x = fitted, y = residuals))+
+  geom_point()
+```
+
+Leverage statistics can be computed using the `hatvalues` function:
+ 
+```{r}
+lev <- hatvalues(mod0)
+data.frame(leverage = lev) %>%
+  mutate(order = row_number()) %>%
+  ggplot(., aes(x = order, y = leverage)) +
+  geom_point()
+```
+
+# Multiple linear regression
+
+In order to fit a multiple linear regression model using least squares, we again use the `lm()` function. The `summary()` function now outputs the regression coefficients for all the predictors.
+
+```{marginfigure}
+This is a bad example of naming models...oops! Usually we would want to have more informative variable names.
+```
+
+```{r}
+mod1 <- lm(Weight ~ BodyLength + Height, data = fish)
+summary(mod1)
+```
+
+Suppose I want to fit a multiple linear regression model using all the quantitative predictors. Rather than type them all out, I can use shorthand. On the right side of the `~`, typing a period `.` will tell `R` to use all the variables in the specified dataset (minus the specified response). Because I am currently only interested in the quantitative predictors, I will add `- Species` to tell `R` to use all the predicotrs *except* for `Species`.
+
+```{r}
+mod2 <- lm(Weight ~ . - Species, data = fish)
+summary(mod2)
+```
+
+## Interactions
+
+It is easy to include interaction terms in a linear model using the `lm()` function. The syntax `BodyLength:Height` tells `R` to include an interaction term between the two predictors. Here, we will use shorthand:
+
+```{marginfigure}
+Note, this is equivalent to `BodyLength + Height + BodyLength:Height`
+```
+
+```{r}
+summary(lm(Weight ~ BodyLength * Height, data = fish))
+```
+
+## Non-linear transformations of predictors
+
+Given a predictor $X$, we can create a predictor $X^{k}$ using `I(X^k)`. The function `I()` is necessary because the carat `^` has a special meaning. The following regresses `Weight` on `BodyLength` and `BodyLength^2`.
+
+```{r}
+mod_poly <- lm(Weight ~ BodyLength + I(BodyLength^2), data = fish)
+summary(mod_poly)
+```
+
+The $p$-value for the quadratic term is significant, and suggests that the quadratic model might be an improvement over the simple linear regression model. We can use the `anova()` function to further quantify the extent to which the quadratic fit is superior to the linear fit.
+
+```{marginfigure}
+Note, the `anova()` function can only compare nested models. That is, `mod0` is a "subset" of `mod_poly`.
+```
+
+```{r}
+anova(mod0, mod_poly)
+```
+
+The `anova()` function performs a hypothesis test comparing the two models, where the null hypothesis is that the two models fit the data equally well, and the alternative hypothesis is that the larger model is superior.The resulting $p$-value is small, and suggests that the model containing the quadratic term is superior to the simpler model that is only linear in `BodyLength`. This is not surprising, as we earlier saw evidence for non-linearity in the relationship between `Weight` and `BodyLength`.
+
+
+## Qualitative predictors
+
+Now, I will fit a  linear regression model using all the predictors, including the qualitative `Species` variable.
+
+```{marginfigure}
+What is our baseline level for `Species`?
+```
+
+```{r}
+mod3 <- lm(Weight ~ ., data = fish)
+summary(mod3)
+```
+
+
+Looking at a plot of residuals vs fitted values, it is clear that a linear model is still insufficient. However, it appears to be an improvement from the simpler model.
+
+```{marginfigure}
+What are some other predictors that you think would be helpful in predicting the `Weight` of these species? 
+```
+
+```{r}
+resids <- residuals(mod3)
+data.frame(fitted = predict(mod3), residuals = resids) %>%
+  ggplot(., aes(x = fitted, y = residuals))+
+  geom_point()
+```
+
+# Writing functions
+
+We will often be interested in performing an operation for which no function is available. In this case, we may want to write our own functions. As an example, below I am creating a function called `greeting()`, which takes in one parameter as an input. This simple function will simply greet you! 
+
+Notice that the function name goes on the left, and the generic placeholder for the input is `name`. You could really change this to anything you want, so long as it is consistent throughout the function definition. We can type as many commands between the curly braces as we wish.
+
+```{r}
+greeting <- function(name){
+  print(paste0("Hello, ", name, "!"))
+}
+```
+
+If we type `greeting`, `R` will tell us what is in the function:
+
+```{r}
+greeting
+```
+
+To call the function, simply pass in a name of your choice:
+
+```{marginfigure}
+What happens if you don't pass in a parameter?
+```
+
+```{r}
+greeting("student")
+```
