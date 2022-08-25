@@ -573,8 +573,11 @@ font-size: 10pt;
 <a class="sourceLine" id="cb21-3" data-line-number="3">x2 &lt;-<span class="st"> </span><span class="fl">0.5</span> <span class="op">*</span><span class="st"> </span>x1 <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)<span class="op">/</span><span class="dv">10</span></a>
 <a class="sourceLine" id="cb21-4" data-line-number="4">y &lt;-<span class="st"> </span><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span><span class="op">*</span>x1 <span class="op">+</span><span class="st"> </span><span class="fl">0.3</span><span class="op">*</span>x2 <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">100</span>)</a></code></pre></div>
 <ol style="list-style-type: lower-alpha">
-<li><p>Write out the form of the linear model. What are the regression coefficients?</p></li>
-<li><p>What is the correlation between <code>x1</code> and `x2? Create a scatterplot displaying a relationship between the two variables.</p></li>
+<li>Write out the form of the linear model. What are the regression coefficients?</li>
+</ol>
+<p><label for="tufte-mn-8" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-8" class="margin-toggle"><span class="marginnote"><span style="display: block;">Hint: the <code>cor()</code> function may be useful</span></span></p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>What is the correlation between <code>x1</code> and <code>x2</code>? Create a scatterplot displaying a relationship between the two variables.</p></li>
 <li><p>Using this data, fit a least squares regression line to predict <code>y</code> using <code>x1</code> and <code>x2</code>. Describe the results obtained. How do the estimates <span class="math inline">\(\hat{\beta}_{j}\)</span> relate to the true <span class="math inline">\(\beta_{j}\)</span>? Can you reject the null hypothesis <span class="math inline">\(H_{0}: \beta_{1} = 0\)</span> or the null hypothesis <span class="math inline">\(H_{0}: \beta_{2} = 0\)</span>?</p></li>
 <li><p>Now fit a least squares regression line to predict <code>y</code> using only <code>x1</code>. Comment on your results. Can you reject the null hypothesis <span class="math inline">\(H_{0}: \beta_{1} = 0\)</span>?</p></li>
 <li><p>Now fit a least squares regression line to predict <code>y</code> using only <code>x2</code>. Comment on your results. Can you reject the null hypothesis <span class="math inline">\(H_{0}: \beta_{2} = 0\)</span>?</p></li>
@@ -592,7 +595,7 @@ font-size: 10pt;
 </div>
 <div id="exercise-3" class="section level2">
 <h2>Exercise 3</h2>
-<p>Create a function that given a vector and an integer will return how many times the integer appears inside the vector.</p>
+<p>Create a function called <code>mse</code> that takes two vectors as input and returns the mean squared error.</p>
 </div>
 </div>
 

@@ -2,13 +2,7 @@
 title: "HW 01: Introduction"
 date: "Due:  11:59pm"
 author: "Total: ? points"
-output: 
-  tufte::tufte_html:
-    tufte_variant: "envisioned"
-    highlight: pygments
-    css: "./math218-hw.css"
-    toc: true
-    toc_depth: 2
+output: html_document
 editor_options: 
   chunk_output_type: console
 ---
@@ -37,8 +31,8 @@ In two-dimensions (think $x$ - $y$ coordinate system, latitude-longitude), the t
 This easily generalizes to $p$-dimensions! If our two points are $p$-dimensional (i.e. $\mathbf{a} = (a_{1}, a_{2}, \ldots, a_{p})$ and $\mathbf{b} = (b_{1}, b_{2}, \ldots, b_{p})$), then 
 $$d(\mathbf{a}, \mathbf{b}) = \sqrt{(a_{1} - b_{1})^2 + (a_{2} - b_{2})^2 + \ldots + (a_{p} - b_{p})^2 } = \sqrt{\sum_{j=1}^{p}(a_{j} - b_{j})^2}$$
 
-#### Example
-Let $\mathbf{a}= (1,2)$ and $\mathbf{b} = (3,5)$. Then $d(\mathbf{a}, \mathbf{b}) = \sqrt{(3-1)^2 + (5-2)^2} = \sqrt{13}$
+
+For example: let $\mathbf{a}= (1,2)$ and $\mathbf{b} = (3,5)$. Then the Euclidean distance between them is $d(\mathbf{a}, \mathbf{b}) = \sqrt{(3-1)^2 + (5-2)^2} = \sqrt{13}$.
 
 
 ### Manhattan distance
@@ -87,9 +81,9 @@ a) Compute the Euclidean distance between each observation and the test point.
 rowSums(df1[,1:3]^2)
 ```
 
-b) Using the Euclidean distance metric, what is is our prediction with $K = 1$? Why?
+b) Using the Euclidean distance metric, what is our prediction with $K = 1$? Why?
 
-c) Using the Euclidean distance metric, what is is our prediction with $K = 3$? Why?
+c) Using the Euclidean distance metric, what is our prediction with $K = 3$? Why?
 
 
 d) Compute the Manhattan distance between each observation and the test point.
@@ -98,9 +92,9 @@ d) Compute the Manhattan distance between each observation and the test point.
 rowSums(abs(df1[,1:3]))
 ```
 
-e) Using the Manhattan distance metric, what is is our prediction with $K = 1$? Why?
+e) Using the Manhattan distance metric, what is our prediction with $K = 1$? Why?
 
-f) Using the Manhattan distance metric, what is is our prediction with $K = 3$? Why?
+f) Using the Manhattan distance metric, what is our prediction with $K = 3$? Why?
 
 g) Are there certain scenarios where we might prefer one distance metric over another? 
 
@@ -165,7 +159,9 @@ mean(abs(yhat2 - y_true))
 
 c) Based on your results in (a) and (b), which model performs better predictions?
 
-d) Now, let's consider some new data with just one model for predictions: 
+## Exericise 4
+
+Now, let's consider some new data with just one model for predictions: 
 
 ```{r}
 y_true <- c(1, 3, 1, -1, 0, 2)
@@ -174,24 +170,31 @@ df4 <- data.frame(y_true = y_true, yhat = ypred)
 print.data.frame(df4)
 ```
 
-Calculate the MSE and MAE.
+a) Calculate the MSE and MAE.
 
-```{r echo = F}
+```{r eval = F}
 mean( (y_true - ypred)^2)
 mean(abs(y_true - ypred))
 ```
 
-e) Now, suppose we measure a 7th point, where $y_{7} = 5$ and $\hat{y}_{7} = 15$. Clearly our prediction is way off! Calculate the MSE and MAE include this new observation, and comment on how they compare to the errors obtained on the original six data points.
+b) Now, suppose we measure a 7th point, where $y_{7} = 5$ and $\hat{y}_{7} = 15$. Clearly our prediction is way off! Calculate the MSE and MAE including this new observation, and comment on how they compare to the errors obtained on the original six data points in part (a).
 
-```{r echo = F}
+```{r eval = F}
 mean( (y_true - ypred)^2 + (5 - 15)^2)
 mean(abs(y_true - ypred) + abs(5-15))
 ```
 
-f) Are there scenarios where we might prefer one error metric over the other?
+c) Are there scenarios where we might prefer one error metric over the other?
 
+## Exercise 5
+
+Explain whether each scenario is a classification or regression problem, and indicate whether we are most interested in inference or prediction. Finally, provide $n$ and $p$.
+
+a) We are foraging for mushrooms and happen to find a mushroom we have never seen before. How exciting! We would like to determine if it is poisonous based on thirty mushroom species we have previously collected. For each of these thirty mushrooms, we know its color, shape, where it was found, spore dispersal method, and poison status. **While statistical learning methods are powerful, please do not trust them to help identify poisonous mushrooms!**
+
+b) We collect data on 300 national universities, recording the average school expenditures per student, average SAT scores, tuition cost, and average family income. We would like to understand what factors might influence the average salary of alumni from these universitities.
 
 
 ## Submission 
 
-Upload your to Gradescope. Associate the "Overall" graded section with the first page of your PDF, and mark where each answer is  to the exercises. If any answer spans multiple pages, then mark all pages.
+Please upload your finished assignment to Canvas as a PDF (either scanned or converted document). 

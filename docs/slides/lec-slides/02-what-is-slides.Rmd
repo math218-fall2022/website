@@ -248,7 +248,7 @@ ggplot(abalone, aes(x = weight, y = age))+
 
 - In regression setting, we often use **mean squared error (MSE)**
 
-$$MSE=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{f}(x_{i}))^2$$ 
+$$\text{MSE}=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{f}(x_{i}))^2$$ 
 
 --
 
@@ -276,9 +276,8 @@ $$MSE=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{f}(x_{i}))^2$$
 - Let $n_{train}$ and $n_{test}$ be number of observations in train and test sets, respectively.
 
 $$MSE_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$
-$$MSE_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$
+$$\text{MSE}_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$
 
----
 
 --- 
 ## Example 1

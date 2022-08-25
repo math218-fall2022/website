@@ -825,7 +825,7 @@ as.data.frame(err_mat) %>%
 - The **ROC curve** plots both simultaneously
 
 ```{r fig.align="center", fig.height=4, fig.width=4}
-heart_roc <- roc(response = heart_df$true, predictor= c(heart_df$pred)-1, plot = F)
+heart_roc <- roc(response = heart_df$true, predictor= as.numeric(heart_df$pred)-1, plot = F)
 auc <- round(heart_roc$auc, 3)
 ggroc(heart_roc)+
   ggtitle(paste0('ROC Curve ', '(AUC = ', auc, ')')) +

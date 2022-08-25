@@ -262,7 +262,11 @@ y <- 2 + 2*x1 + 0.3*x2 + rnorm(100)
 
   a) Write out the form of the linear model. What are the regression coefficients?
   
-  b) What is the correlation between `x1` and `x2? Create a scatterplot displaying a relationship between the two variables.
+```{marginfigure}
+Hint: the `cor()` function may be useful
+```
+
+  b) What is the correlation between `x1` and `x2`? Create a scatterplot displaying a relationship between the two variables.
 
   c) Using this data, fit a least squares regression line to predict `y` using `x1` and `x2`. Describe the results obtained. How do the estimates $\hat{\beta}_{j}$ relate to the true $\beta_{j}$? Can you reject the null hypothesis $H_{0}: \beta_{1} = 0$ or the null hypothesis $H_{0}: \beta_{2} = 0$?
 
@@ -289,5 +293,5 @@ Refit the linear models from (c) - (e) using this new data. What effect does thi
     
 ## Exercise 3
 
-Create a function called `dist_man` that takes two points as input and returns the Manhattan distance between them.
+Create a function called `dist` that takes two vectors as input and returns their Euclidean distance. 
 
