@@ -115,46 +115,6 @@ pre {
 
 /* Exercise counter */
 
-ol {
-	/* Remove the default left padding */
-	padding-left: 0;
-	font-size: 13pt;
-}
-
-ol>li {
-	/* Create a positioning context */
-	position: relative;
-	/* Disable the normal item numbering */
-	list-style: none;
-	width: 90%;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-right: 0;
-	padding-left: 97px;
-	font-size: 13pt;
-}
-
-ol>li:before {
-	/* Use the counter as content */
-	content: "Question " counter(li)".";
-	/* Increment the counter by 1 */
-	counter-increment: li;
-	position: absolute;
-	color: #875687;
-	left: -0.5px;
-	font-weight: bold;
-}
-
-ol ol>li:before {
-	counter-reset: sub-item;
-		/* Use the counter as content */
-	/* Increment the counter by 1 */
-	position: absolute;
-	color: #875687;
-	left: -0.5px;
-	font-weight: bold;
-	padding-left: 90px;
-}
 
 .td {
   font-size: 10pt;

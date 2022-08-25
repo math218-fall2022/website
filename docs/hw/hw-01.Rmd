@@ -1,120 +1,196 @@
 ---
-title: "HW 01: Gun Violence"
-date: "Due: June 2, 11:59pm"
-author: "Total: 100 points"
+title: "HW 01: Introduction"
+date: "Due:  11:59pm"
+author: "Total: ? points"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
     highlight: pygments
-    css: "./sta199-hw.css"
+    css: "./math218-hw.css"
     toc: true
     toc_depth: 2
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = F)
 library(tidyverse)
-gun_violence <- read_csv("data/gun_violence.csv")
-census <- read_csv("data/census.csv")
 ```
 
 
 ## Introduction
 
-Gun violence in the US results in tens of thousands of deaths and injuries annually, and every year it seems as if the number of incidents involving guns increases. At the time of creating this lab, the US has experienced 268 mass shootings that fit the [Mass Shooting Tracker](https://www.massshootingtracker.site/) project criterion in this year alone. Their criterion for a mass shooting is one in which four or more persons shot in one incident, at one location, at roughly the same time. We are going to examine some data from 2014-2017 about gun violence incidents in the US. The data are obtained from [Kaggle](https://www.kaggle.com/jameslko/gun-violence-data), and have been slightly modified. We will also be using data about the [U.S. Census](https://www2.census.gov/programs-surveys/popest/datasets/2010-2017/state/asrh/scprc-est2017-18+pop-res.csv) and [gun laws](https://statefirearmlaws.org/national-data/).
+For the $K$-Nearest Neighbors classifier, after choosing $K$ we need to somehow find the nearest neighbors. That is, for a new point $x_{0}$, we need to determine the neighboring set $\mathcal{N}_{0}$. 
 
-## Getting started
+Here, "nearest" gives off a notion of closeness or distance. Therefore, we want to somehow measure distance between features/predictors. How might we do that?
 
-Go to the course GitHub organization and locate your Lab 03 repo, which should be named `hw-01-gun-violence-[GITHUB USERNAME]`. Grab the URL of the repo, and clone it in RStudio. Don't forget to configure git:
+### Euclidean distance
 
-```{r eval=FALSE}
-library(usethis)
-usethis::use_git_config(user.name = "github username", user.email = "your email")
-```
+In Mathematics, the Euclidean distance is defined as the shortest possible path through space between two points.
+
+On a number line (one-dimension), the distance between two points $a$ and $b$ is simply the absolute value of their difference: letting $d(a,b)$ denote the Euclidean distance between points $a$ and $b$, $d(a,b) = |a-b|$. This is equivalent to $d(a,b) = \sqrt{(a-b)^2}$
 
 
-The variable descriptions are as follows:
+In two-dimensions (think $x$ - $y$ coordinate system, latitude-longitude), the two points are $\mathbf{a} = (a_{1}, a_{2})$ and $\mathbf{b} = (b_{1}, b_{2})$. The euclidean distance between points  $\mathbf{a}$ and  $\mathbf{b}$ is given by $$d(\mathbf{a}, \mathbf{b}) = \sqrt{(a_{1} - b_{1})^2 + (a_{2} - b_{2})^2}$$ Importantly, "two-dimensions" refers to the number of coordinates in each point; not the fact that we are calculating a distance between two points.
 
-- `incident_id`: ID number
-- `date`: date of incident
-- `state`: state in which incident occurred
-- `city_or_county`: city or county in which incident occurred
-- `address`: address where incident occurred
-- `n_killed`: number of people killed
-- `n_injured`: number of people injured, but not killed
-- `n_guns_involved`: number of guns involved 
-- `doy`: day of year (month/day) of incident
-- `year`: year
-- `month`: month
+This easily generalizes to $p$-dimensions! If our two points are $p$-dimensional (i.e. $\mathbf{a} = (a_{1}, a_{2}, \ldots, a_{p})$ and $\mathbf{b} = (b_{1}, b_{2}, \ldots, b_{p})$), then 
+$$d(\mathbf{a}, \mathbf{b}) = \sqrt{(a_{1} - b_{1})^2 + (a_{2} - b_{2})^2 + \ldots + (a_{p} - b_{p})^2 } = \sqrt{\sum_{j=1}^{p}(a_{j} - b_{j})^2}$$
+
+#### Example
+Let $\mathbf{a}= (1,2)$ and $\mathbf{b} = (3,5)$. Then $d(\mathbf{a}, \mathbf{b}) = \sqrt{(3-1)^2 + (5-2)^2} = \sqrt{13}$
+
+
+### Manhattan distance
+
+Another possible way to define distance is using the Manhattan distance. This is named after the grid-system of Manhattan's roads. An analogy is the number of blocks (in the north, south, east or west directions) a taxicab must travel on, in order to reach its destination on the grid of streets in parts of New York City.
+
+The Manhattan distance $d_{m}$ between two $p$-dimensional points $\mathbf{a}$ and  $\mathbf{b}$ is defined as 
+
+$$d_{m}(\mathbf{a}, \mathbf{b}) = \sum_{j=1}^{p}|a_{j} - b_{j}|$$
+
+
+### Distances for categorical features
+
+Thus far, we have assumed that all our predictors are quantitative, but oftentimes we have qualitative features. How does one measure the distance between categorical levels?
+
+One approach is to assign numeric values for each possible category. For example, if the feature is "Experience level" with levels (Beginner, Average, Professional), maybe we assign the values (0, 5, 10). However, this assumes an implicit ordering in the levels.
+
+Alternatively, consider that all our $p$ features are binary in that they each take one of two values. Example: $X_{1}$ = smoker status (non-smoker/smoker) and $X_{2}$ = drinks alcohol (no/yes). The Hamming distance is the number (or proportion, depending on the context) of features for which the two values do not match.
+
 
 ## Exercise 1
 
-In which five cities or counties did the most incidents occur? Answer the question using pipes (`%>%`) and the `tidyverse` functions we've discussed. Show your code and output and state your answer in a sentence.
+```{r echo = F}
+n <- 6
+```
+
+Suppose we have `r n` training data points as follows:
+
+```{r echo = F}
+obs <- 1:n
+x1 <- c(0, 1, 1, 2, -1, 0)
+x2 <- c(3, -1, 1, 0, 1, 1)
+x3 <- c(1, 2, -1, 0, 0, 0)
+y <- c("red", "red", "blue", "red", "blue", "red")
+df1 <- data.frame(X1 = x1, X2 = x2, X3 = x3, Y = y)
+print.data.frame(df1)
+```
+
+Suppose we want to use this data set to make a prediction for Y when (X1, X2, X3) = (0,0,0) using K-nearest neighbors.
+
+
+
+a) Compute the Euclidean distance between each observation and the test point.
+
+```{r eval = F}
+rowSums(df1[,1:3]^2)
+```
+
+b) Using the Euclidean distance metric, what is is our prediction with $K = 1$? Why?
+
+c) Using the Euclidean distance metric, what is is our prediction with $K = 3$? Why?
+
+
+d) Compute the Manhattan distance between each observation and the test point.
+
+```{r eval = F}
+rowSums(abs(df1[,1:3]))
+```
+
+e) Using the Manhattan distance metric, what is is our prediction with $K = 1$? Why?
+
+f) Using the Manhattan distance metric, what is is our prediction with $K = 3$? Why?
+
+g) Are there certain scenarios where we might prefer one distance metric over another? 
 
 
 ## Exercise 2
 
-While there are a variety of definitions of mass shootings, one definition is "any incidents in which four or more people were shot, whether injured or killed". Based on this definition, display the 10 incidents that meet this definition of mass shooting in descending order of number of people shot. Only display the date, state, city or county, and number of people.
-
-
-## Exercise 3
-
-Let's examine which days of the year are most common for gun violence. Display a table of the top six days of the year with highest number of total incidents, displayed in descending order. Comment on what you notice.
-
-
-## Exercise 4
-
-Create a data frame called `state_incidents` where each row is an observation with a state and its total number of incidents.
-
-
-## Exercise 5
-
-```{marginfigure}
-*Hint:* Use the `reorder()` function while plotting.
-```
-
-```{marginfigure}
-*Hint:* Use the `stat = "identity"` in your `geom_()` function. This lets us override the default option of just plotting the total counts.
-```
-
-Let's look at the number of gun violence incidents by state. Plot a bar graph with the counts of gun violent incidents by each state. Display the graph such that the bars run horizontally, and also in descending order. Don't forget to adjust the labels on your plot! Briefly comment on what you see.
-
-
-## Exercise 6
-
-We expect that the more populated states would have a larger number of gun violence incidents. To address this, we want to add in some notion of population size. The dataset `census.csv` provides each state's estimated population in 2017, as well as some other information related to that state. The variables are as follows: 
-
-- `state`: state
-- `state_code`: two-letter postal code
-- `population`: estimated population in 2017 
-- `gun_laws`: number of gun laws in 2017
-
-First, let's combine the two datasets together, such that for every observation in `state_incidents`, we add a column for corresponding population. Save this into `state_incidents`.
-
-
-## Exercise 7
-
-Now let's look at the number of gun violence incidents per 100000 residents in each state, and visualize it. First, create a new variable that is equal to the number of gun violence incidents per 100000 people. This is calculated as taking the number of incidents divided by number of residents, multiplied by 100000. Save this into the same data frame `state_incidents`, then provide a plot of these incidents per 100000 residents by state, once again displaying in descending order. How does this plot compare to that of Exercise 5?
-
-
-## Exercise 8
-
-```{marginfigure}
-*Hint:* Use the `case_when()` function.
-```
-
-Let's create groupings for the state populations for easier visualization. Create a new variable called `pop_group` and group the states into the following categories: "small", "medium", "large", "x-large" based on if their populations  are less than 5 million, at least 5 million and less than 10 million, at least 10 million and less than 19 million, and 19 million or more. Save this into the same dataframe `state_incidents`.
-
-## Exercise 9
-
-Another column in the `census.csv` dataset is the number of gun laws/provisions by state in 2017. Plot the incidents per 100000 residents by the number of gun laws in each state. Color each observation by its `pop_group`. Does there appear to be a relationship between number of gun laws and number of gun violence incidents per 100000 residents by state? What about between the number of gun laws and population size?
-
-
-## Wrapping up
-
-Go back through your write up to make sure you followed the coding style guidelines we discussed in class (e.g. no long lines of code, plots nicely labeled).
+a) Suppose we have `r n` training data points as follows
  
-Also, make sure all of your R chunks are properly labeled, and your figures are reasonably sized.
+```{r}
+x1 <- c("smoker", "non-smoker", "smoker", "smoker", "smoker","non-smoker")
+x2 <- c("yes", "no", "no", "yes", "yes", "no")
+x3 <- c("no", "yes", "no", "yes", "no", "yes")
+df2 <- data.frame("Smoke status" = x1, "Alcohol" = x2, "Athlete" = x3)
+print.data.frame(df2)
+```
+
+Calculate the Hamming distance between a new test point where the individual does not smoke, does not consume alcohol, and does not play a sport.
+
+```{r eval = F}
+rowSums(apply(df2, 2, function(x){x != c("non-smoker", "no", "no")}))
+```
+
+b) Hamming distance is commonly used to measure distance between words or phrases. What is the Hamming distance between the words "MIDDLEBURY" and "SWARTHMORE"?
+
+c) For points with $p$ features, are the minimum and maximum possible Hamming distances?
+
+
+## Exericise 3
+
+In class, we introduced the notion of mean squared error (MSE):
+
+$$\text{MSE}=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{y}_{i})^2$$ 
+where $y_{i}$ is the true value, and $\hat{y}_{i}$ is the predicted value. We can use MSE to compare different models' quality of predictions. 
+
+Another metric that is commonly used is the mean absolute error (MAE), which simply uses the absolute value of the difference, rather than the squared difference:
+
+$$\text{MAE}=\frac{1}{n}\sum_{i=1}^{n}|y_{i}-\hat{y}_{i}|$$ 
+
+In the following table, the first column `y_true` denotes the true values $y_{i}$. The second column `yhat1` holds the predicted values obtained from a model $\mathcal{M}_{1}$, and the third column `yhat2` holds the predicted values obtained from a different model $\mathcal{M}_{2}$.
+
+```{r}
+y_true <- c(1, 3, 1, -1, 0, 5)
+yhat1 <- c(0, 1, 0, 0, -1, 3)
+yhat2 <- c(2, 3, 2, 2, 1, 4)
+df3 <- data.frame(y_true = y_true, yhat1 = yhat1, yhat2 = yhat2)
+print.data.frame(df3)
+```
+
+a) Calculate the MSE for both models.
+
+```{r eval = F}
+mean((yhat1 - y_true)^2)
+mean((yhat2 - y_true)^2)
+```
+
+b) Calculate the MAE for both models.
+
+```{r eval = F}
+mean(abs(yhat1 - y_true))
+mean(abs(yhat2 - y_true))
+```
+
+c) Based on your results in (a) and (b), which model performs better predictions?
+
+d) Now, let's consider some new data with just one model for predictions: 
+
+```{r}
+y_true <- c(1, 3, 1, -1, 0, 2)
+ypred <- c(0, 2, 0, -3, -1, 1)
+df4 <- data.frame(y_true = y_true, yhat = ypred)
+print.data.frame(df4)
+```
+
+Calculate the MSE and MAE.
+
+```{r echo = F}
+mean( (y_true - ypred)^2)
+mean(abs(y_true - ypred))
+```
+
+e) Now, suppose we measure a 7th point, where $y_{7} = 5$ and $\hat{y}_{7} = 15$. Clearly our prediction is way off! Calculate the MSE and MAE include this new observation, and comment on how they compare to the errors obtained on the original six data points.
+
+```{r echo = F}
+mean( (y_true - ypred)^2 + (5 - 15)^2)
+mean(abs(y_true - ypred) + abs(5-15))
+```
+
+f) Are there scenarios where we might prefer one error metric over the other?
+
+
 
 ## Submission 
 

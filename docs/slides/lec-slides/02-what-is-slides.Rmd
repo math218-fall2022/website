@@ -4,7 +4,6 @@ author: "What is statistical learning?"
 date: "9/14/2022"
 output: 
    xaringan::moon_reader:
-
     css: "math218-slides.css"
     nature: 
       highlightLines: true

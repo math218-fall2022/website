@@ -289,5 +289,5 @@ Refit the linear models from (c) - (e) using this new data. What effect does thi
     
 ## Exercise 3
 
-Create a function that given a vector and an integer will return how many times the integer appears inside the vector.
+Create a function called `dist_man` that takes two points as input and returns the Manhattan distance between them.
 
