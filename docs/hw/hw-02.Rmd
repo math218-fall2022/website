@@ -8,9 +8,11 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = F, fig.height = 4, fig.width = 4, fig.align = "center")
 library(tidyverse)
-library(caret)
+library(ggfortify)
+data("airquality")
+air <- airquality %>% na.omit()
 ```
 
 
@@ -19,12 +21,118 @@ library(caret)
 
 In class, we learned about the coefficient of determination $R^2$. In linear regression models, $R^2$ quantifies that proportion of variation in the response that is explained by the predictors. 
 
+Recall that $R^2$ is defined as $$R^2 = 1 - \frac{\text{RSS}}{\text{TSS}}$$ where $\text{RSS} = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2$ and $\text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2$
+
+
 
 ## Exercise 1
-What is "good" R2? Depends on context.
+
+It is not uncommon to want to chase a "good" $R^2$. However, a low $R^2$  isn’t necessarily a problem, and a high value doesn’t automatically indicate that you have a good model. Consider the following data about air quality measurements in New York during May to September 1973. Here, we are regressing `Ozone` levels (ppb) on the temperature `Temp` (F).
+
+```{r}
+mod <- lm(Ozone ~ Temp, air)
+summary(mod)
+
+```
+
+a) Interpret the coefficient for `Temp`. How does the model's $R^2$ information/affect your interpretation?
+
+b) The following plot displays 95% prediction intervals for various `Temp` values.
+
+```{r}
+preds <- predict(mod, newdata = data.frame(Temp = seq(55,90,2)), interval = "predict")
+data.frame(preds) %>%
+  mutate(Temp =seq(55,90,2)) %>%
+  ggplot(., aes(x = Temp, y = fit))+
+  geom_point()+
+  geom_errorbar(aes(ymin = lwr, ymax = upr)) +
+  labs(x = "Temperature (F)", y = "Predicted ozone (ppb)")
+```
+
+What do you think about the quality of our predictions for Ozone? Are you comfortable with all of these intervals? 
+
+c) We should look at some diagnostic plots. Below is a plot of the residuals vs fitted values. What does this plot reveal about the fit of the linear model? How does the $R^2$ inform about whether the linear model is a good choice?
+
+```{r}
+data.frame(residuals = mod$residuals, fitted = mod$fitted.values) %>%
+  ggplot(.,aes(x = fitted, y = residuals)) +
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
 
 ## Exercise 2
-Correlation: what even is it
+
+In statistics, correlation coefficients measure the strength of the relationship between two variables. They are a quantitative assessment that measures both the direction and the strength of the tendency to vary together. We will focus on a common correlation coefficient known as the Pearson correlation, $r$ or $\rho$. This correlation coefficient is a single number that measures both the strength and direction of the *linear* relationship between two continuous variables. $-1 \leq r \leq 1$.
+
+```{r echo = F}
+set.seed(1)
+n <- 100
+x <- sort(rnorm(n))
+y <- 1 + 0.5*x + rnorm(n,0, 0.25)
+id <- 40
+y[id] <- y[id]*5
+r_all <- cor(x,y)
+r_no_out <- cor(x[-id], y[-id])
+
+data.frame(x = x, y =y ) %>%
+  mutate(outlier = ifelse(row_number() == id, T, F)) %>%
+  ggplot(., aes(x =x , y = y, col = outlier))+
+  geom_point() +
+  scale_color_manual(values = c("black", "orange"))+
+  guides(col = "none") +
+  ggtitle(paste0("All points: r = ", round(r_all, 2), "\nOmitting orange point: r = ", round(r_no_out,2)))
+```
+
+
+```{r}
+set.seed(1)
+n <- 100
+x <- rnorm(n)
+y <- 1 + x + x^3 + rnorm(n, 0, 0.25)
+data.frame(x = x, y =y ) %>%
+  ggplot(., aes(x =x , y= y))+
+  geom_point() +
+  ggtitle(paste0("r = ", round(cor(x,y),2)))
+```
+
+a) Based on these plots, what are some cautions when it comes to interpreting Pearson's correlation coefficient (with respect to linearity, outliers). 
+
+b) Scale and/or location invariance
+
+The formula for $r$ is $$r = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 (y_{i} - \bar{y})^2 }}$$
+
+Suppose we have the following data:
+
+```{r}
+df <- data.frame(x = c(-1, 0, 1, 0, 2, -2),
+           y = c(0, 2, 1, 2, 3, -2))
+print.data.frame(df)
+
+```
+
+Calculate $\bar{x}$ and $\bar{y}$.
+
+Calculate the correlation $r$ between $x$ and $y$ using this data. 
+
+
+Now, suppose we actually measured `x2 = 5x`. That is, `x2` is simply a *scaled* version of the original `x`: 
+
+```{r}
+print.data.frame(df %>% mutate(x = 5*x) %>% rename("x2" = "x"))
+```
+
+Calculate the correlation between  $x2$ and $y$.
+
+Now, supposed we actually measured `x3 = x + 1`. That is, `x3` is just a shifted version of the original `x`. 
+
+```{r}
+print.data.frame(df %>% mutate(x = x+1) %>%  rename("x3" = "x"))
+```
+
+Calculate the correlation between  $x3$ and $y$.
+
+
 
 ## Exercise 3
 Relationship to correlation: confirm empirically
@@ -44,10 +152,6 @@ sqrt(0.1329)
 Recall from the slides that our ordinary least squares estimate for $\beta_{1}$ is
 
 $$\hat{\beta}_{1} = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{ \sum_{i=1}^{n}(x_{i} - \bar{x})^2 }$$
-
-While we do not derive it here, the correlation coefficient $r$ is calculated as follows:
-
-$$r = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 (y_{i} - \bar{y})^2 }}$$
 
 a) Re-write $\hat{\beta}_{1}$ as a function of $r$.
 
