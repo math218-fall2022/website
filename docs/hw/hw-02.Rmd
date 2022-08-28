@@ -8,7 +8,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
-knitr::opts_chunk$set(echo = F, fig.height = 4, fig.width = 4, fig.align = "center")
+knitr::opts_chunk$set(echo = F, message = F, warning = F, fig.height = 4, fig.width = 4, fig.align = "center")
 library(tidyverse)
 library(ggfortify)
 data("airquality")
@@ -23,11 +23,13 @@ In class, we learned about the coefficient of determination $R^2$. In linear reg
 
 Recall that $R^2$ is defined as $$R^2 = 1 - \frac{\text{RSS}}{\text{TSS}}$$ where $\text{RSS} = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2$ and $\text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2$
 
+As it turns out, in simple linear regression, the $R^2$ value is exactly the square of the correlation coefficient $r$ (defined below) between the predictor $x$ and the response $y$! However, $R^2$ and $r$ have two very different meanings. We will explore both in terms in this homework.
+
 
 
 ## Exercise 1
 
-It is not uncommon to want to chase a "good" $R^2$. However, a low $R^2$  isn’t necessarily a problem, and a high value doesn’t automatically indicate that you have a good model. Consider the following data about air quality measurements in New York during May to September 1973. Here, we are regressing `Ozone` levels (ppb) on the temperature `Temp` (F).
+It is not uncommon to want to chase a "good" $R^2$. However, a low $R^2$  isn’t necessarily a problem, and a high value doesn’t automatically indicate that you have a good model. (You don’t get paid in proportion to R-squared!) Consider the following data about air quality measurements in New York during May to September 1973. Here, we are regressing `Ozone` levels (ppb) on the temperature `Temp` (F). Note that ozone levels are always non-negative.
 
 ```{r}
 mod <- lm(Ozone ~ Temp, air)
@@ -37,16 +39,16 @@ summary(mod)
 
 a) Interpret the coefficient for `Temp`. How does the model's $R^2$ information/affect your interpretation?
 
-b) The following plot displays 95% prediction intervals for various `Temp` values.
+b) The following plot displays 95% confidence intervals for predicted ozone for various `Temp` values.
 
 ```{r}
-preds <- predict(mod, newdata = data.frame(Temp = seq(55,90,2)), interval = "predict")
+preds <- predict(mod, newdata = data.frame(Temp = seq(55,90,2)), interval = "confidence")
 data.frame(preds) %>%
   mutate(Temp =seq(55,90,2)) %>%
   ggplot(., aes(x = Temp, y = fit))+
   geom_point()+
   geom_errorbar(aes(ymin = lwr, ymax = upr)) +
-  labs(x = "Temperature (F)", y = "Predicted ozone (ppb)")
+  labs(x = "Temperature (F)", y = "Predicted ozone + 95% CIs (ppb)")
 ```
 
 What do you think about the quality of our predictions for Ozone? Are you comfortable with all of these intervals? 
@@ -63,7 +65,35 @@ data.frame(residuals = mod$residuals, fitted = mod$fitted.values) %>%
 
 ## Exercise 2
 
-In statistics, correlation coefficients measure the strength of the relationship between two variables. They are a quantitative assessment that measures both the direction and the strength of the tendency to vary together. We will focus on a common correlation coefficient known as the Pearson correlation, $r$ or $\rho$. This correlation coefficient is a single number that measures both the strength and direction of the *linear* relationship between two continuous variables. $-1 \leq r \leq 1$.
+In statistics, correlation coefficients measure the strength of the relationship between two variables. They are a quantitative assessment that measures both the direction and the strength of the tendency to vary together. We will focus on a common correlation coefficient known as the Pearson correlation, $r$ or $\rho$. This correlation coefficient is a single number that measures both the strength and direction of the *linear* relationship between two continuous variables. $-1 \leq r \leq 1$. Here are some examples:
+
+```{r fig.width=10}
+# examples
+set.seed(100)
+n <- 100
+x <- sort(rnorm(n))
+y1 <-  1 + 0.5*x + rnorm(n, 0, 1)
+y2 <- 1 -1*x + rnorm(n,0,0.2)
+y3 <- rnorm(n, 0, 1)
+p1 <- data.frame(x = x, y = y1) %>%
+  ggplot(.,aes(x = x, y = y))+
+  geom_point()+
+  ggtitle("Moderately positive", subtitle = paste0("r = ", round(cor(x,y1), 2)))+
+  geom_smooth(method = "lm", se = F)
+p2 <- data.frame(x = x, y = y2) %>%
+  ggplot(.,aes(x = x, y = y))+
+  geom_point()+
+  ggtitle("Strongly negative", subtitle = paste0("r = ", round(cor(x,y2), 2))) +
+  geom_smooth(method = "lm", se = F)
+p3 <- data.frame(x = x, y = y3) %>%
+  ggplot(.,aes(x = x, y = y))+
+  geom_point()+
+  ggtitle("Uncorrelated", subtitle = paste0("r = ", round(cor(x,y3), 2))) +
+  geom_smooth(method = "lm", se = F)
+gridExtra::grid.arrange(p1, p2, p3, nrow = 1)
+```
+
+Note, the two plots below are generated with different sets of data. 
 
 ```{r echo = F}
 set.seed(1)
@@ -75,13 +105,13 @@ y[id] <- y[id]*5
 r_all <- cor(x,y)
 r_no_out <- cor(x[-id], y[-id])
 
-data.frame(x = x, y =y ) %>%
+p1 <- data.frame(x = x, y =y ) %>%
   mutate(outlier = ifelse(row_number() == id, T, F)) %>%
   ggplot(., aes(x =x , y = y, col = outlier))+
   geom_point() +
   scale_color_manual(values = c("black", "orange"))+
   guides(col = "none") +
-  ggtitle(paste0("All points: r = ", round(r_all, 2), "\nOmitting orange point: r = ", round(r_no_out,2)))
+  ggtitle(paste0("All points: r = ", round(r_all, 2), "\nOmitting orange point: r = ", round(r_no_out,2))) 
 ```
 
 
@@ -90,15 +120,19 @@ set.seed(1)
 n <- 100
 x <- rnorm(n)
 y <- 1 + x + x^3 + rnorm(n, 0, 0.25)
-data.frame(x = x, y =y ) %>%
+p2 <- data.frame(x = x, y =y ) %>%
   ggplot(., aes(x =x , y= y))+
   geom_point() +
   ggtitle(paste0("r = ", round(cor(x,y),2)))
 ```
 
-a) Based on these plots, what are some cautions when it comes to interpreting Pearson's correlation coefficient (with respect to linearity, outliers). 
+```{r fig.width=8}
+gridExtra::grid.arrange(p1, p2, ncol = 2)
+```
 
-b) Scale and/or location invariance
+Based on these plots, what are some cautions when it comes to interpreting Pearson's correlation coefficient (with respect to linearity, outliers). 
+
+## Exercise 3
 
 The formula for $r$ is $$r = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 (y_{i} - \bar{y})^2 }}$$
 
@@ -111,12 +145,12 @@ print.data.frame(df)
 
 ```
 
-Calculate $\bar{x}$ and $\bar{y}$.
+a) Calculate $\bar{x}$ and $\bar{y}$.
 
-Calculate the correlation $r$ between $x$ and $y$ using this data. 
+b) Calculate the correlation $r$ between $x$ and $y$ using this data. 
 
 
-Now, suppose we actually measured `x2 = 5x`. That is, `x2` is simply a *scaled* version of the original `x`: 
+c) Now, suppose we actually measured `x2 = 5x`. That is, `x2` is simply a *scaled* version of the original `x`: 
 
 ```{r}
 print.data.frame(df %>% mutate(x = 5*x) %>% rename("x2" = "x"))
@@ -124,7 +158,7 @@ print.data.frame(df %>% mutate(x = 5*x) %>% rename("x2" = "x"))
 
 Calculate the correlation between  $x2$ and $y$.
 
-Now, supposed we actually measured `x3 = x + 1`. That is, `x3` is just a shifted version of the original `x`. 
+d) Now, supposed we actually measured `x3 = x + 1`. That is, `x3` is just a shifted version of the original `x`. 
 
 ```{r}
 print.data.frame(df %>% mutate(x = x+1) %>%  rename("x3" = "x"))
@@ -132,26 +166,18 @@ print.data.frame(df %>% mutate(x = x+1) %>%  rename("x3" = "x"))
 
 Calculate the correlation between  $x3$ and $y$.
 
+e) Based on your answers in (b)-(d), how does shifting or scaling variables affect the correlation?
 
-
-## Exercise 3
-Relationship to correlation: confirm empirically
-
-```{r}
-n <- 200
-x <- rnorm(n)
-y <- 1 + 0.25*x + rnorm(n, 0, 0.5)
-cor(x,y)
-lm_fit <- lm(y ~ x)
-summary(lm_fit)
-sqrt(0.1329)
-```
+f) One advantage of the correlation coefficient $r$ is that it is "unitless". Can you demonstrate why that is? How do (b)-(e) support this statement?
 
 ## Exercise 4
 
-Recall from the slides that our ordinary least squares estimate for $\beta_{1}$ is
+Recall from the slides that our least squares estimate for $\beta_{1}$ is
 
 $$\hat{\beta}_{1} = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{ \sum_{i=1}^{n}(x_{i} - \bar{x})^2 }$$
+
+Assume that we are in the simple linear regression setting, i.e. $$y = \beta_{0} + \beta_{1}x + \epsilon$$
+
 
 a) Re-write $\hat{\beta}_{1}$ as a function of $r$.
 
@@ -159,12 +185,93 @@ b) True or False: $\hat{\beta}_{1}$ has the same sign as $r$. Explain.
 
 c) What is the interpretation of $\beta_{1} = 0$ in terms of the correlation?
 
-## Exercise 5?
+## Exercise 5
 
-Prediction intervals vs confidence intervals
+In this course, we will focused mainly on how close the predicted value $\hat{y}$ is to the true $y$. We will rarely discuss the amount of *uncertainty* there is about the prediction. (even though the discipline of Statistics studies uncertainty!) However, we will spend a little time on the idea of uncertainty here.
+
+In the lab, we saw how given a fitted linear regression model, the `predict()` function provides confidence and prediction intervals for the response for fixed values of the predictors. We also saw how that for given $x$,  the prediction interval was wider than the confidence interval. Why is this the case?
+
+The **confidence interval** of a prediction yields a range that likely contains the *mean *value of $y$ given specific values of the predictors $x$. These yield a *population* average, where the particular population is defined by the values $x$. The confidence interval does not tell you anything about the spread of the individual data points around the population mean. 
+
+A **prediction interval** yields a range that likely contains the value of $y$ given specific values of the predictors $x$. With this type of interval, we predict ranges for *individual* observations rather than the mean value. The prediction intervals are wider than confidence intervals because they account for the inherent variability of the individual data points (i.e. the irreducible error $\epsilon$).
 
 
+Consider the following simulated data. In the plot on the left, we have generated $n = 20$ data points. The plot on the right adds an additional 80 data points for a total of $n = 100$ observations. The orange dashed lines are the 95% confidence intervals at various `x` values,  and blue dashed lines are the 95% prediction intervals. The vertical gray line marks the sample mean $\bar{x}$ of the predictor. Note, both plots have the same $x$ and $y$ axes for ease of comparison,
+
+```{r, fig.width=8}
+set.seed(1)
+n <- 20
+x <- rnorm(n)
+y <- 1 + 0.3*x + rnorm(n, 0, 0.5)
+df <- data.frame(x = x, y = y)
+xx <- seq(-4,4,0.1)
+mod0 <- lm(y ~ x, data = df)
+pred <- predict(mod0, newdata = data.frame(x = xx), interval = "prediction")
+conf <- predict(mod0, newdata = data.frame(x = xx), interval = "confidence")
+
+p1 <- ggplot()+
+  geom_point(data = df, aes(x = x, y = y))+
+  geom_abline(intercept = coef(mod0)[1], slope = coef(mod0)[2]) +
+  geom_smooth(data = data.frame(x = xx, y = pred[,2]),
+              aes(x = x, y=y), linetype = "dashed")+
+  geom_smooth(data = data.frame(x = xx, y = pred[,3]),
+              aes(x = x, y=y), linetype = "dashed")+
+    geom_smooth(data = data.frame(x = xx, y = conf[,2]),
+              aes(x = x, y=y), linetype = "dashed", col = "orange")+
+  geom_smooth(data = data.frame(x = xx, y = conf[,3]),
+              aes(x = x, y=y), linetype = "dashed", col = "orange") +
+  ggtitle(paste0("n = ", n)) +
+  ylim(c(-1, 3))+
+  xlim(range(xx))+
+  geom_vline(xintercept = mean(x),size = 0.1)
+
+
+n2 <- 100
+x2 <- c(x, rnorm(n2 - n))
+y2 <- c(y,1 + 0.3*x2[-(1:n)] + rnorm(n2 -n, 0, 0.5))
+df <- data.frame(x = x2, y = y2)
+mod2 <- lm(y ~ x, data = df)
+pred <- predict(mod2, newdata = data.frame(x = xx), interval = "prediction")
+conf <- predict(mod2, newdata = data.frame(x = xx), interval = "confidence")
+
+p2 <- ggplot()+
+  geom_point(data = df, aes(x = x2, y = y2))+
+  geom_abline(intercept = coef(mod0)[1], slope = coef(mod0)[2]) +
+  geom_smooth(data = data.frame(x =xx, y = pred[,2]),
+              aes(x = x, y=y), linetype = "dashed")+
+  geom_smooth(data = data.frame(x = xx, y = pred[,3]),
+              aes(x = x, y=y), linetype = "dashed")+
+    geom_smooth(data = data.frame(x = xx, y = conf[,2]),
+              aes(x = x, y=y), linetype = "dashed", col = "orange")+
+  geom_smooth(data = data.frame(x = xx, y = conf[,3]),
+              aes(x = x, y=y), linetype = "dashed", col = "orange") +
+  ggtitle(paste0("n = ", n2))+
+  ylim(c(-1, 3))+
+  xlim(range(xx)) +
+  labs(x = "x", y = "y")+
+  geom_vline(xintercept = mean(x2), size = 0.1)
+
+gridExtra::grid.arrange(p1, p2, nrow = 1)
+```
+
+The formula for the confidence interval at predictors $x_{0}$ is:
+
+$$\hat{y_{0}} \pm t^{*}\sqrt{\text{MSE} \times \left( \frac{1}{n}+ \frac{(x_{0} - \bar{x})^2}{\sum(x_{i} - \bar{x})^2}\right )} $$
+The formula for the prediction interval at predictors $x_{0}$ is:
+
+$$\hat{y_{0}} \pm t^{*}\sqrt{\text{MSE} \times \left(1+ \frac{1}{n}+ \frac{(x_{0} - \bar{x})^2}{\sum(x_{i} - \bar{x})^2}\right )} $$
+
+
+a) Explain why, intuitively, the confidence and prediction intervals are centered around the same predicted value.
+
+b) Looking at the plots above: for which value of the predictor $x$ are both intervals narrowest? Explain why this is the case.
+
+c)  Looking at the plots above: for a given value of $x_{0}$ and interval type (prediction or confidence), are the intervals narrower when $n = 20$ or $n = 100$? Explain why this is the case.
+
+d) Assume $t^{*} > 0$ and $MSE >> 0$ (here $>>$ means "much greater than"). Can we make it so the confidence interval width approaches 0 (i.e. we are extremely confident in the predicted population response)? If so, how? If not, why not?
+
+e) Assume $t^{*} > 0$ and $MSE >> 0$. Can we make it so the prediction interval width approaches 0 (i.e. we are extremely confident in the predicted individual response)? If so, how? If not, why not?
 
 ## Submission 
 
-Upload your to Gradescope. Associate the "Overall" graded section with the first page of your PDF, and mark where each answer is  to the exercises. If any answer spans multiple pages, then mark all pages.
+Upload your assignment as a PDF file to Canvas. Please show all work!

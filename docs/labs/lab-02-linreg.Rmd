@@ -66,6 +66,8 @@ The `predict()` function can be used to obtain confidence and prediction interva
 Compare the widths of the intervals. Why is there a difference?
 ```
 
+`fit` is the estimated value, and `lwr` and `upr` give the lower and upper bounds of the 95%  intervals, respectively.
+
 ```{r}
 predict(mod0, data.frame(BodyLength = c(15, 30, 45)), interval = "confidence")
 predict(mod0, data.frame(BodyLength = c(15, 30, 45)), interval = "prediction")
