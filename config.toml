@@ -5,7 +5,7 @@ title = "Math 218"
 theme = "material"
 #disqusShortname = ""
 # googleAnalytics = ""
-paginate = 4
+paginate = 5
 relativeURLs = true
 uglyURLs = true
 publishDir = "docs"
@@ -53,11 +53,17 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 [[menu.main]]
   weight = 4
+  identifier = "campuswire"
+  name = "Campuswire"
+  pre = "<i class=\"material-icons\">forum</i>"
+  url = "https://campuswire.com/"
+
+[[menu.main]]
+  weight = 5
   identifier = "canvas"
   name = "Canvas"
   pre = "<i class=\"material-icons\">grading</i>"
   url = "https://middlebury.instructure.com/"
-
 
 [params]
   dateFormat = "January 2, 2006"
