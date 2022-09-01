@@ -188,3 +188,5 @@ knitr::include_graphics("figs/01-intro/phd_comics_vc.gif")
 - Accept the invite to join `math218-fall2022` organization on GitHub TODAY!! 
 
 - If you have not already done so "Getting to know you" survey on Canvas - due end of today today!
+
+  - After filling out the survey, [schedule](https://calendly.com/beckytang/10min) a brief 1:1 meeting with me! 
