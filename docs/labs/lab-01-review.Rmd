@@ -305,7 +305,7 @@ str(auto)
 
 
 
-Exercises 2-9 will continue working with the `auto` dataset. Make sure that the missing values have been removed from the data.
+Exercises 3-9 will continue working with the `auto` dataset. Make sure that the missing values have been removed from the data.
 
 ```{r eval = T}
 auto <- auto %>%
@@ -316,9 +316,13 @@ auto <- auto %>%
 
 4. Which of variables are quantitative, and which are qualitative?
 
-5. What is the mean and standard deviation of each quantiative variable?
+```{marginfigure}
+Hint: look up the `apply()` function by typing `?apply` in the console. The example are particularly useful, but don't forget to read the Description, Usage, and Arguments sections first!
 
-6. Obtain the correlations of the numeric variables. This can be achieved using the `cor()` function, where the input is a data frame or matrix of numeric values. Which two variables exhibit the most correlation? Which two variable exhibit are least correlated?
+```
+5. What is the mean and standard deviation of each quantitative variable?
+
+6. Obtain the correlations of the numeric variables. This can be achieved using the `cor()` function, where the input is a data frame or matrix of numeric values. Which two variables exhibit the most correlation? Which two variable are least correlated?
 
 
 7. Suppose we are interested in predicting gas milage (`mpg`). Make a histogram of `mpg`. Don't forget to add a title!
