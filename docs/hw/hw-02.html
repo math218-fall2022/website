@@ -506,6 +506,15 @@ demonstrate why that is? How do (b)-(e) support this statement?</p></li>
 </div>
 <div id="exercise-4" class="section level2">
 <h2>Exercise 4</h2>
+<p>I have claimed that in the case of simple linear regression of Y onto
+X, the <span class="math inline">\(R^2\)</span> statistic is equal to
+the square of the correlation <span class="math inline">\(r\)</span>
+between X and Y. Prove that this is the case. For simplicity, you may
+assume that <span class="math inline">\(\bar{x} = \bar{y} =
+0\)</span>.</p>
+</div>
+<div id="exercise-5" class="section level2">
+<h2>Exercise 5</h2>
 <p>Recall from the slides that our least squares estimate for <span class="math inline">\(\beta_{1}\)</span> is</p>
 <p><span class="math display">\[\hat{\beta}_{1} =
 \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{
@@ -522,8 +531,8 @@ a function of <span class="math inline">\(r\)</span>.</p></li>
 correlation?</p></li>
 </ol>
 </div>
-<div id="exercise-5" class="section level2">
-<h2>Exercise 5</h2>
+<div id="exercise-6" class="section level2">
+<h2>Exercise 6</h2>
 <p>In this course, we will focused mainly on how close the predicted
 value <span class="math inline">\(\hat{y}\)</span> is to the true <span class="math inline">\(y\)</span>. We will rarely discuss the amount of
 <em>uncertainty</em> there is about the prediction. (even though the
@@ -585,6 +594,29 @@ If not, why not?</p></li>
 the prediction interval width approaches 0 (i.e. we are extremely
 confident in the predicted individual response)? If so, how? If not, why
 not?</p></li>
+</ol>
+</div>
+<div id="exercise-7" class="section level2">
+<h2>Exercise 7</h2>
+<p>I collect a set of data (n = 100 observations) containing a single
+predictor and a quantitative response. I then fit a linear regression
+model to the data, as well as a separate cubic regression, i.e. <span class="math inline">\(Y = \beta_{0} + \beta_{1} X + \beta_{2} X^{2} +
+\beta_{3} X^{3} + \epsilon\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Suppose the true relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is linear, i.e. <span class="math inline">\(Y = \beta_{0} + \beta_{1} X + \epsilon\)</span>.
+Consider the training residual sum of squares (RSS) for the linear
+regression, and also the training RSS for the cubic regression. Would we
+expect one to be lower than the other, would we expect them to be the
+same, or is there not enough information to tell? Justify your
+answer.</p></li>
+<li><p>Answer (a) using test rather than training RSS.</p></li>
+<li><p>Suppose that the true relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is not linear, but we don’t know how
+far it is from linear. Consider the training RSS for the linear
+regression, and also the training RSS for the cubic regression. Would we
+expect one to be lower than the other, would we expect them to be the
+same, or is there not enough information to tell? Justify your
+answer.</p></li>
+<li><p>Answer (c) using test rather than training RSS.</p></li>
 </ol>
 </div>
 <div id="submission" class="section level2">
