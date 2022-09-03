@@ -26,7 +26,6 @@ R is the name of the programming language itself and RStudio is a convenient int
 
 The goal of this lab is to refresh your knowledge of R and RStudio, which we will be using throughout the course both to learn the statistical methods discussed in the course and to analyze real data and come to informed conclusions. 
 
-
 # Basic Commands
 
 ```{marginfigure}
@@ -301,8 +300,13 @@ str(auto)
 
 1. Create three vectors  `x`, `y`, and `z`  with integers of your choice such that each vector has 3 elements. Combine the three vectors to become a 3×3 matrix  `A` where each column represents a vector. 
 
+<div class = "commit"> This is a good place to pause, knit and <b>commit changes</b> with the commit message "Added answer for Ex 1." Push these changes when you're done.
+</div>
+
 2. Create a 2 x 2 matrix `B` that contains the values 1-4, filled row-wise. Then create another 2 x 2 matrix `C` that contains the values 5-8, filled column-wise. Perform the operations `B * C` and `B %*% C`. Comment on what each operation does.
 
+<div class = "commit"> This is a good place to pause, knit and <b>commit changes</b> with the commit message "Added answer for Ex 2." Push these changes when you're done.
+</div>
 
 
 Exercises 3-9 will continue working with the `auto` dataset. Make sure that the missing values have been removed from the data.
@@ -317,10 +321,13 @@ auto <- auto %>%
 4. Which of variables are quantitative, and which are qualitative?
 
 ```{marginfigure}
-Hint: look up the `apply()` function by typing `?apply` in the console. The example are particularly useful, but don't forget to read the Description, Usage, and Arguments sections first!
-
+Hint: There are many ways to do this. You may want to look up the `apply()` function by typing `?apply` in the console. The example are particularly useful, but don't forget to read the Description, Usage, and Arguments sections first!
 ```
+
 5. What is the mean and standard deviation of each quantitative variable?
+
+<div class = "commit"> This is a good place to pause, knit and <b>commit changes</b> with the commit message "Added answer for Ex 3-5." Push these changes when you're done.
+</div>
 
 6. Obtain the correlations of the numeric variables. This can be achieved using the `cor()` function, where the input is a data frame or matrix of numeric values. Which two variables exhibit the most correlation? Which two variable are least correlated?
 
@@ -334,6 +341,15 @@ Histograms can be plotted using the baseR `hist()` function, or the `geom_histog
 8. Create a scatterplot of `mpg` against another variable of your choice, and color by a third variable. Comment on what you see.
 
 9. Create and store a new data frame that only contains the observations from `auto` whose `year` lies within the range 75 and 80, inclusive. What is the mean `mpg` of these cars?
+
+
+# Submission
+
+Once you are finished, knit one last time and push your changes to GitHub. Then submit the PDF file to Canvas!
+
+**Before you wrap up the assignment, make sure all documents are updated on your GitHub repo. I will be checking these to make sure you have been practicing how to commit and push changes.**
+
+**Remember -- you must turn in a .pdf file to the Canvas page before the submission deadline for full credit.** 
 
 
 

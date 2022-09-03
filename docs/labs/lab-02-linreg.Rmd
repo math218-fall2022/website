@@ -12,6 +12,32 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Getting started
+
+```{marginfigure}
+**IMPORTANT:** If there is no GitHub repo created for you for this assignment, it means I didn't have your GitHub username as of when I assigned the homework. Please let me know your GitHub username asap, and I can create your repo.
+```
+
+Go to the course GitHub organization and locate your HW 02 repo, which should be named `lab-02-linear-regression-[GITHUB USERNAME]`. Grab the URL of the repo, and clone it in RStudio. Refer to Lab 01 for step-by-step for cloning a repo and creating a new RStudio project.
+
+
+## Configure git
+
+```{marginfigure}
+The name should be your github username and your email address is the one tied to your GitHub account.
+```
+
+Before we can get started we need to do one more thing.  Specifically,  we need to configure your git so that RStudio can communicate with GitHub. This requires two pieces of information: your email address and your GitHub username.
+
+To do so, run the following:
+
+```{r eval=FALSE}
+library(usethis)
+use_git_config(user.name = "github username", user.email = "your email")
+```
+
+# Packages
+
 Here, we will make use of the package `ggfortify`. Check if it is installed by running 
 
 ```{r eval = F}
@@ -251,6 +277,10 @@ summary(lm(y ~ x))
 summary(lm(y ~ x + I(x^2)))
 ```
 
+<div class = "commit"> This is a good place to pause, knit and <b>commit changes</b> with the commit message "Added answer for Ex 1." Push these changes when you're done.
+</div>
+
+
 ## Exercise 2
 
 Here, we explore the *collinearity* problem. Run the following by changing to `eval = T`:
@@ -293,7 +323,14 @@ y <- c(y, 6)
 
 Refit the linear models from (c) - (e) using this new data. What effect does this new observation have on the each of the models? In each model, is this observation an outlier? A high-leverage point? Both? Explain your answers.
     
+<div class = "commit"> This is a good place to pause, knit and <b>commit changes</b> with the commit message "Added answer for Ex 2." Push these changes when you're done.
+</div>
+
+
 ## Exercise 3
 
-Create a function called `dist` that takes two vectors as input and returns their Euclidean distance. 
+Create a function called `dist` that takes two vectors of the same length as input and returns their Euclidean distance. 
 
+# Submission
+
+Once you are finished, knit one last time, commit your changes, and push to GitHub. Then submit the PDF file to Canvas!

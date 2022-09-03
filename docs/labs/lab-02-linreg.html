@@ -469,21 +469,54 @@ font-size: 10pt;
 
 <div id="TOC">
 <ul>
+<li><a href="#getting-started" id="toc-getting-started">Getting
+started</a></li>
+<li><a href="#packages" id="toc-packages">Packages</a></li>
 <li><a href="#simple-linear-regression" id="toc-simple-linear-regression">Simple linear regression</a></li>
 <li><a href="#diagnostics" id="toc-diagnostics">Diagnostics</a></li>
 <li><a href="#multiple-linear-regression" id="toc-multiple-linear-regression">Multiple linear regression</a></li>
 <li><a href="#writing-functions" id="toc-writing-functions">Writing
 functions</a></li>
 <li><a href="#your-turn" id="toc-your-turn">Your turn!</a></li>
+<li><a href="#submission" id="toc-submission">Submission</a></li>
 </ul>
 </div>
 
+<div id="getting-started" class="section level1">
+<h1>Getting started</h1>
+<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;"><strong>IMPORTANT:</strong> If there is no
+GitHub repo created for you for this assignment, it means I didn’t have
+your GitHub username as of when I assigned the homework. Please let me
+know your GitHub username asap, and I can create your
+repo.</span></span></p>
+<p>Go to the course GitHub organization and locate your HW 02 repo,
+which should be named
+<code>lab-02-linear-regression-[GITHUB USERNAME]</code>. Grab the URL of
+the repo, and clone it in RStudio. Refer to Lab 01 for step-by-step for
+cloning a repo and creating a new RStudio project.</p>
+<div id="configure-git" class="section level2">
+<h2>Configure git</h2>
+<p><label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><span style="display: block;">The name should be your
+github username and your email address is the one tied to your GitHub
+account.</span></span></p>
+<p>Before we can get started we need to do one more thing. Specifically,
+we need to configure your git so that RStudio can communicate with
+GitHub. This requires two pieces of information: your email address and
+your GitHub username.</p>
+<p>To do so, run the following:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(usethis)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">use_git_config</span>(<span class="at">user.name =</span> <span class="st">&quot;github username&quot;</span>, <span class="at">user.email =</span> <span class="st">&quot;your email&quot;</span>)</span></code></pre></div>
+</div>
+</div>
+<div id="packages" class="section level1">
+<h1>Packages</h1>
 <p>Here, we will make use of the package <code>ggfortify</code>. Check
 if it is installed by running</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggfortify)</span></code></pre></div>
 <p>If you receive an error message, then run the following command in
 your Console once:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;ggfortify&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;ggfortify&quot;</span>)</span></code></pre></div>
+</div>
 <div id="simple-linear-regression" class="section level1">
 <h1>Simple linear regression</h1>
 <p>We will begin by working with some data about fish. The data consist
@@ -494,50 +527,53 @@ its other characteristics. We have access to the following predictors:
 tail), <code>TotalLength</code> (nose to end of tail),
 <code>Height</code>, and <code>Width</code>. All physical measurements
 are in cm.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fish <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/fish.csv&quot;</span>, <span class="at">header =</span> T)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(fish)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fish <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/fish.csv&quot;</span>, <span class="at">header =</span> T)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(fish)</span></code></pre></div>
 <p>We will begin by using the <code>lm()</code> function to fit a simple
 linear model, with <code>Weight</code> and the response and
 <code>BodyLength</code> as the predictor. The <code>summary()</code>
 function gives us estimates, standard errors, and <span class="math inline">\(p\)</span>-values for the coefficients, as well as
 the <span class="math inline">\(R^2\)</span> for the model.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> BodyLength, <span class="at">data =</span> fish)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod0)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mod0 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> BodyLength, <span class="at">data =</span> fish)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod0)</span></code></pre></div>
 <p>We can access just the estimates <span class="math inline">\(\hat{\beta}\)</span> using the <code>coef()</code>
 function, and obtain confidence intervals (default are 95%).</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(mod0)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mod0)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">coef</span>(mod0)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(mod0)</span></code></pre></div>
 <p>The <code>predict()</code> function can be used to obtain confidence
 and prediction intervals for the response, for a given value of the
 predictors:</p>
-<p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;">Compare the widths of
+<p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;">Compare the widths of
 the intervals. Why is there a difference?</span></span></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod0, <span class="fu">data.frame</span>(<span class="at">BodyLength =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">45</span>)), <span class="at">interval =</span> <span class="st">&quot;confidence&quot;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod0, <span class="fu">data.frame</span>(<span class="at">BodyLength =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">45</span>)), <span class="at">interval =</span> <span class="st">&quot;prediction&quot;</span>)</span></code></pre></div>
+<p><code>fit</code> is the estimated value, and <code>lwr</code> and
+<code>upr</code> give the lower and upper bounds of the 95% intervals,
+respectively.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod0, <span class="fu">data.frame</span>(<span class="at">BodyLength =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">45</span>)), <span class="at">interval =</span> <span class="st">&quot;confidence&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(mod0, <span class="fu">data.frame</span>(<span class="at">BodyLength =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">45</span>)), <span class="at">interval =</span> <span class="st">&quot;prediction&quot;</span>)</span></code></pre></div>
 </div>
 <div id="diagnostics" class="section level1">
 <h1>Diagnostics</h1>
 <p>Here, I plot the response and predictors, along with the least
 squares regression line. There is some evidence for non-linearity
 between <code>Weight</code> and <code>BodyLength</code>…</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(fish, <span class="fu">aes</span>(<span class="at">x =</span> BodyLength,<span class="at">y =</span> Weight))<span class="sc">+</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> F)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(fish, <span class="fu">aes</span>(<span class="at">x =</span> BodyLength,<span class="at">y =</span> Weight))<span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> F)</span></code></pre></div>
 <p>We can compute the residuals from a linear regression fit using the
 <code>residuals()</code> function. Here, it is clear that we have
 non-linearity.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>resids <span class="ot">&lt;-</span> <span class="fu">residuals</span>(mod0)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">predict</span>(mod0), <span class="at">residuals =</span> resids) <span class="sc">%&gt;%</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> residuals))<span class="sc">+</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>resids <span class="ot">&lt;-</span> <span class="fu">residuals</span>(mod0)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">predict</span>(mod0), <span class="at">residuals =</span> resids) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> residuals))<span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
 <p>Leverage statistics can be computed using the
 <code>hatvalues()</code> function. Here, I plot the leverage in the
 order of data collection:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lev <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(mod0)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">leverage =</span> lev) <span class="sc">%&gt;%</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">order =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> order, <span class="at">y =</span> leverage)) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>lev <span class="ot">&lt;-</span> <span class="fu">hatvalues</span>(mod0)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">leverage =</span> lev) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">order =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> order, <span class="at">y =</span> leverage)) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
 <p>Alternatively, we can take advantage of the <code>autoplot()</code>
 function from the <code>ggfortify</code> library we loaded. We pass in a
 fitted <code>lm()</code> object, and <code>autoplot()</code> will plot
@@ -546,7 +582,7 @@ fitted, Normal q-q plot, standardized residuals vs fitted, and residuals
 vs leverage. Notice that <code>autoplot</code> will provide the indices
 of points of interest (possible outliers or high leverage) in the
 respective plots.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(mod0, <span class="at">which =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">autoplot</span>(mod0, <span class="at">which =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">5</span>))</span></code></pre></div>
 </div>
 <div id="multiple-linear-regression" class="section level1">
 <h1>Multiple linear regression</h1>
@@ -554,11 +590,11 @@ respective plots.</p>
 squares, we again use the <code>lm()</code> function. The
 <code>summary()</code> function now outputs the regression coefficients
 for all the predictors.</p>
-<p><label for="tufte-mn-2" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-2" class="margin-toggle"><span class="marginnote"><span style="display: block;">This is a bad example
+<p><label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote"><span style="display: block;">This is a bad example
 of naming models…oops! Usually we would want to have more informative
 variable names.</span></span></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> BodyLength <span class="sc">+</span> Height, <span class="at">data =</span> fish)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mod1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> BodyLength <span class="sc">+</span> Height, <span class="at">data =</span> fish)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod1)</span></code></pre></div>
 <p>Suppose I want to fit a multiple linear regression model using all
 the quantitative predictors. Rather than type them all out, I can use
 shorthand. On the right side of the <code>~</code>, typing a period
@@ -567,18 +603,18 @@ specified dataset (minus the specified response). Because I am currently
 only interested in the quantitative predictors, I will add
 <code>- Species</code> to tell <code>R</code> to use all the predicotrs
 <em>except</em> for <code>Species</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> . <span class="sc">-</span> Species, <span class="at">data =</span> fish)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod2)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> . <span class="sc">-</span> Species, <span class="at">data =</span> fish)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod2)</span></code></pre></div>
 <div id="interactions" class="section level2">
 <h2>Interactions</h2>
 <p>It is easy to include interaction terms in a linear model using the
 <code>lm()</code> function. The syntax <code>BodyLength:Height</code>
 tells <code>R</code> to include an interaction term between the two
 predictors. Here, we will use shorthand:</p>
-<p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;">Note, this is
+<p><label for="tufte-mn-5" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-5" class="margin-toggle"><span class="marginnote"><span style="display: block;">Note, this is
 equivalent to <code>BodyLength + Height +
 BodyLength:Height</code></span></span></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(Weight <span class="sc">~</span> BodyLength <span class="sc">*</span> Height, <span class="at">data =</span> fish))</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(Weight <span class="sc">~</span> BodyLength <span class="sc">*</span> Height, <span class="at">data =</span> fish))</span></code></pre></div>
 </div>
 <div id="non-linear-transformations-of-predictors" class="section level2">
 <h2>Non-linear transformations of predictors</h2>
@@ -588,18 +624,18 @@ create a predictor <span class="math inline">\(X^{k}\)</span> using
 the carat <code>^</code> has a special meaning. The following regresses
 <code>Weight</code> on <code>BodyLength</code> and
 <code>BodyLength^2</code>.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mod_poly <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> BodyLength <span class="sc">+</span> <span class="fu">I</span>(BodyLength<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> fish)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_poly)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>mod_poly <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> BodyLength <span class="sc">+</span> <span class="fu">I</span>(BodyLength<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> fish)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod_poly)</span></code></pre></div>
 <p>The <span class="math inline">\(p\)</span>-value for the quadratic
 term is significant, and suggests that the quadratic model might be an
 improvement over the simple linear regression model. We can use the
 <code>anova()</code> function to further quantify the extent to which
 the quadratic fit is superior to the linear fit.</p>
-<p><label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote"><span style="display: block;">Note, the
+<p><label for="tufte-mn-6" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-6" class="margin-toggle"><span class="marginnote"><span style="display: block;">Note, the
 <code>anova()</code> function can only compare nested models. That is,
 <code>mod0</code> is a “subset” of
 <code>mod_poly</code>.</span></span></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod0, mod_poly)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(mod0, mod_poly)</span></code></pre></div>
 <p>The <code>anova()</code> function performs a hypothesis test
 comparing the two models, where the null hypothesis is that the two
 models fit the data equally well, and the alternative hypothesis is that
@@ -613,20 +649,20 @@ as we earlier saw evidence for non-linearity in the relationship between
 <h2>Qualitative predictors</h2>
 <p>Now, I will fit a linear regression model using all the predictors,
 including the qualitative <code>Species</code> variable.</p>
-<p><label for="tufte-mn-5" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-5" class="margin-toggle"><span class="marginnote"><span style="display: block;">What is our baseline
+<p><label for="tufte-mn-7" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-7" class="margin-toggle"><span class="marginnote"><span style="display: block;">What is our baseline
 level for <code>Species</code>?</span></span></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> ., <span class="at">data =</span> fish)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod3)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Weight <span class="sc">~</span> ., <span class="at">data =</span> fish)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mod3)</span></code></pre></div>
 <p>Looking at a plot of residuals vs fitted values, it is clear that a
 linear model is still insufficient. However, it appears to be an
 improvement from the simpler model.</p>
-<p><label for="tufte-mn-6" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-6" class="margin-toggle"><span class="marginnote"><span style="display: block;">What are some other
+<p><label for="tufte-mn-8" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-8" class="margin-toggle"><span class="marginnote"><span style="display: block;">What are some other
 predictors that you think would be helpful in predicting the
 <code>Weight</code> of these species?</span></span></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>resids <span class="ot">&lt;-</span> <span class="fu">residuals</span>(mod3)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">predict</span>(mod3), <span class="at">residuals =</span> resids) <span class="sc">%&gt;%</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> residuals))<span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>resids <span class="ot">&lt;-</span> <span class="fu">residuals</span>(mod3)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">predict</span>(mod3), <span class="at">residuals =</span> resids) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> residuals))<span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
 </div>
 </div>
 <div id="writing-functions" class="section level1">
@@ -641,16 +677,16 @@ placeholder for the input is <code>name</code>. You could really change
 this to anything you want, so long as it is consistent throughout the
 function definition. We can type as many commands between the curly
 braces as we wish.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>greeting <span class="ot">&lt;-</span> <span class="cf">function</span>(name){</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Hello, &quot;</span>, name, <span class="st">&quot;!&quot;</span>))</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>greeting <span class="ot">&lt;-</span> <span class="cf">function</span>(name){</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">paste0</span>(<span class="st">&quot;Hello, &quot;</span>, name, <span class="st">&quot;!&quot;</span>))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <p>If we type <code>greeting</code>, <code>R</code> will tell us what is
 in the function:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>greeting</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>greeting</span></code></pre></div>
 <p>To call the function, simply pass in a name of your choice:</p>
-<p><label for="tufte-mn-7" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-7" class="margin-toggle"><span class="marginnote"><span style="display: block;">What happens if you
+<p><label for="tufte-mn-9" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-9" class="margin-toggle"><span class="marginnote"><span style="display: block;">What happens if you
 don’t pass in a parameter?</span></span></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">greeting</span>(<span class="st">&quot;student&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">greeting</span>(<span class="st">&quot;student&quot;</span>)</span></code></pre></div>
 </div>
 <div id="your-turn" class="section level1">
 <h1>Your turn!</h1>
@@ -682,20 +718,25 @@ evidence that the quadratic terms improve model fit? Explain.</p></li>
 might we do that? Would you expect the confidence intervals for <span class="math inline">\(\beta_{0}\)</span> and <span class="math inline">\(\beta_{1}\)</span> to be wider, narrower, or about
 the same as compared to the original data?</p></li>
 </ol>
+<div class="commit">
+<p>This is a good place to pause, knit and <b>commit changes</b> with
+the commit message “Added answer for Ex 1.” Push these changes when
+you’re done.</p>
+</div>
 </div>
 <div id="exercise-2" class="section level2">
 <h2>Exercise 2</h2>
 <p>Here, we explore the <em>collinearity</em> problem. Run the following
 by changing to <code>eval = T</code>:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)<span class="sc">/</span><span class="dv">10</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x1 <span class="sc">+</span> <span class="fl">0.3</span><span class="sc">*</span>x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)<span class="sc">/</span><span class="dv">10</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x1 <span class="sc">+</span> <span class="fl">0.3</span><span class="sc">*</span>x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li>Write out the form of the linear model. What are the regression
 coefficients?</li>
 </ol>
-<p><label for="tufte-mn-8" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-8" class="margin-toggle"><span class="marginnote"><span style="display: block;">Hint: the
+<p><label for="tufte-mn-10" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-10" class="margin-toggle"><span class="marginnote"><span style="display: block;">Hint: the
 <code>cor()</code> function may be useful</span></span></p>
 <ol start="2" style="list-style-type: lower-alpha">
 <li><p>What is the correlation between <code>x1</code> and
@@ -722,23 +763,33 @@ to be mismeasured. Be sure to run this code by changing
 <code>eval = F</code> to <code>eval = T</code> in the <code>R</code>
 chunk header.</p></li>
 </ol>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)<span class="sc">/</span><span class="dv">10</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x1 <span class="sc">+</span> <span class="fl">0.3</span><span class="sc">*</span>x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">c</span>(x1, <span class="fl">0.1</span> )</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(x2, <span class="fl">0.8</span>)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, <span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fl">0.5</span> <span class="sc">*</span> x1 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)<span class="sc">/</span><span class="dv">10</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x1 <span class="sc">+</span> <span class="fl">0.3</span><span class="sc">*</span>x2 <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">c</span>(x1, <span class="fl">0.1</span> )</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">c</span>(x2, <span class="fl">0.8</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(y, <span class="dv">6</span>)</span></code></pre></div>
 <p>Refit the linear models from (c) - (e) using this new data. What
 effect does this new observation have on the each of the models? In each
 model, is this observation an outlier? A high-leverage point? Both?
 Explain your answers.</p>
+<div class="commit">
+<p>This is a good place to pause, knit and <b>commit changes</b> with
+the commit message “Added answer for Ex 2.” Push these changes when
+you’re done.</p>
+</div>
 </div>
 <div id="exercise-3" class="section level2">
 <h2>Exercise 3</h2>
-<p>Create a function called <code>dist</code> that takes two vectors as
-input and returns their Euclidean distance.</p>
+<p>Create a function called <code>dist</code> that takes two vectors of
+the same length as input and returns their Euclidean distance.</p>
 </div>
+</div>
+<div id="submission" class="section level1">
+<h1>Submission</h1>
+<p>Once you are finished, knit one last time, commit your changes, and
+push to GitHub. Then submit the PDF file to Canvas!</p>
 </div>
 
 

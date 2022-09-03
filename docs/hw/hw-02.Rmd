@@ -19,11 +19,11 @@ air <- airquality %>% na.omit()
 
 ## Introduction
 
-In class, we learned about the coefficient of determination $R^2$. In linear regression models, $R^2$ quantifies that proportion of variation in the response that is explained by the predictors. 
+In class, we learned about the coefficient of determination $R^2$. In linear regression models, $R^2$ quantifies the proportion of variation in the response that is explained by the predictors. 
 
 Recall that $R^2$ is defined as $$R^2 = 1 - \frac{\text{RSS}}{\text{TSS}}$$ where $\text{RSS} = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2$ and $\text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2$
 
-As it turns out, in simple linear regression, the $R^2$ value is exactly the square of the correlation coefficient $r$ (defined below) between the predictor $x$ and the response $y$! However, $R^2$ and $r$ have two very different meanings. We will explore both in terms in this homework.
+As it turns out, in simple linear regression, the $R^2$ value is exactly the square of the correlation coefficient $r$ (defined below) between the predictor $x$ and the response $y$! However, $R^2$ and $r$ have two very different meanings. We will explore both quantities in this homework.
 
 
 
@@ -37,7 +37,7 @@ summary(mod)
 
 ```
 
-a) Interpret the coefficient for `Temp`. How does the model's $R^2$ information/affect your interpretation?
+a) Interpret the coefficient for `Temp`. Does the model's $R^2$ inform/affect your interpretation? If so, how?
 
 b) The following plot displays 95% confidence intervals for predicted ozone for various `Temp` values.
 
@@ -65,7 +65,7 @@ data.frame(residuals = mod$residuals, fitted = mod$fitted.values) %>%
 
 ## Exercise 2
 
-In statistics, correlation coefficients measure the strength of the relationship between two variables. They are a quantitative assessment that measures both the direction and the strength of the tendency to vary together. We will focus on a common correlation coefficient known as the Pearson correlation, $r$ or $\rho$. This correlation coefficient is a single number that measures both the strength and direction of the *linear* relationship between two continuous variables. $-1 \leq r \leq 1$. Here are some examples:
+In statistics, correlation coefficients measure the strength of the relationship between two variables. They are a quantitative assessment that measures both the direction and the strength of the tendency to vary together. We will focus on a common correlation coefficient known as the Pearson correlation, $r$ (when estimated from a sample) or $\rho$ (population parameter). This correlation coefficient is a single number that measures both the strength and direction of the *linear* relationship between two continuous variables. It is always the case that $-1 \leq r \leq 1$. Here are some examples:
 
 ```{r fig.width=10}
 # examples
@@ -92,6 +92,8 @@ p3 <- data.frame(x = x, y = y3) %>%
   geom_smooth(method = "lm", se = F)
 gridExtra::grid.arrange(p1, p2, p3, nrow = 1)
 ```
+
+While we can always calculate the correlation $r$ between two quantitative variables, we should exercise some caution. The next two plots display the relationship between two variables `x` and `y`, as well as the calculate correlated coefficient.
 
 Note, the two plots below are generated with different sets of data. 
 
@@ -130,11 +132,11 @@ p2 <- data.frame(x = x, y =y ) %>%
 gridExtra::grid.arrange(p1, p2, ncol = 2)
 ```
 
-Based on these plots, what are some cautions when it comes to interpreting Pearson's correlation coefficient (with respect to linearity, outliers). 
+Based on these two plots, what are some cautions when it comes to interpreting Pearson's correlation coefficient (with respect to linearity and outliers)?
 
 ## Exercise 3
 
-The formula for $r$ is $$r = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 (y_{i} - \bar{y})^2 }}$$
+The formula for the correlation coefficient $r$ is $$r = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 (y_{i} - \bar{y})^2 }}$$
 
 Suppose we have the following data:
 
