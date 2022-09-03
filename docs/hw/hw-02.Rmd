@@ -23,6 +23,10 @@ In class, we learned about the coefficient of determination $R^2$. In linear reg
 
 Recall that $R^2$ is defined as $$R^2 = 1 - \frac{\text{RSS}}{\text{TSS}}$$ where $\text{RSS} = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2$ and $\text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2$
 
+```{marginfigure}
+$r$ is the quantity calculated when you use the `cor()` function, as in Lab 02.
+```
+
 As it turns out, in simple linear regression, the $R^2$ value is exactly the square of the correlation coefficient $r$ (defined below) between the predictor $x$ and the response $y$! However, $R^2$ and $r$ have two very different meanings. We will explore both quantities in this homework.
 
 

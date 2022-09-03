@@ -261,21 +261,10 @@ $$Y = -2 + 0.5X + \epsilon$$
 
   d) Fit a least squares linear model to predict `y` using `x`. How do $\hat{\beta}_{0}$ and  $\hat{\beta}_{1}$ compare to $\beta_{0}$ and $\beta_{1}$?
 
-  e) Now fit a polynomial regression model that predicts `y` using `x` and `x^2`. Is there evidence that the quadratic terms improve model fit? Explain. 
+  e) Now fit a polynomial regression model that predicts `y` using `x` and `x^2`. Is there evidence that the quadratic term improves model fit? Explain. 
 
   f) Suppose we wanted to generate data with *more* noise. How might we do that? Would you expect the confidence intervals for $\beta_{0}$ and $\beta_{1}$ to be wider, narrower, or about the same as compared to the original data?
 
-```{r echo = F, eval = F}
-set.seed(2)
-x <- rnorm(100)
-eps <- rnorm(100, 0, sqrt(0.25))
-y <- -1 + 0.5*x + eps
-df <- data.frame(x =x , y = y)
-ggplot(df, aes(x = x, y = y))+
-  geom_point()
-summary(lm(y ~ x))
-summary(lm(y ~ x + I(x^2)))
-```
 
 <div class = "commit"> This is a good place to pause, knit and <b>commit changes</b> with the commit message "Added answer for Ex 1." Push these changes when you're done.
 </div>
@@ -298,7 +287,7 @@ y <- 2 + 2*x1 + 0.3*x2 + rnorm(100)
 Hint: the `cor()` function may be useful
 ```
 
-  b) What is the correlation between `x1` and `x2`? Create a scatterplot displaying a relationship between the two variables.
+  b) What is the correlation between `x1` and `x2`? Create a scatterplot displaying a relationship between the two variables, and comment on what you see.
 
   c) Using this data, fit a least squares regression line to predict `y` using `x1` and `x2`. Describe the results obtained. How do the estimates $\hat{\beta}_{j}$ relate to the true $\beta_{j}$? Can you reject the null hypothesis $H_{0}: \beta_{1} = 0$ or the null hypothesis $H_{0}: \beta_{2} = 0$?
 
