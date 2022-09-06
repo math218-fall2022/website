@@ -364,7 +364,7 @@ pre code {
 
 <h1 class="title toc-ignore">HW 02: Regression</h1>
 <h4 class="author">Total: ? points</h4>
-<h4 class="date">Due: 11:59pm</h4>
+<h4 class="date">Due: Thursday, Sept. 29 at 11:59pm</h4>
 
 </div>
 
@@ -458,8 +458,8 @@ linearity and outliers)?</p>
 <h2>Exercise 3</h2>
 <p>The formula for the correlation coefficient <span class="math inline">\(r\)</span> is <span class="math display">\[r =
 \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} -
-\bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 (y_{i} - \bar{y})^2
-}}\]</span></p>
+\bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 \sum_{i=1}^{n}(y_{i}
+- \bar{y})^2 }}\]</span></p>
 <p>Suppose we have the following data:</p>
 <pre><code>##    x  y
 ## 1 -1  0
@@ -470,8 +470,7 @@ linearity and outliers)?</p>
 ## 6 -2 -2</code></pre>
 <ol style="list-style-type: lower-alpha">
 <li><p>Calculate <span class="math inline">\(\bar{x}\)</span> and <span class="math inline">\(\bar{y}\)</span>.</p></li>
-<li><p>Calculate the correlation <span class="math inline">\(r\)</span>
-between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> using this data.</p></li>
+<li><p>Calculate (manually) the correlation <span class="math inline">\(r\)</span> between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> using this data.</p></li>
 <li><p>Now, suppose we actually measured <code>x2 = 5x</code>. That is,
 <code>x2</code> is simply a <em>scaled</em> version of the original
 <code>x</code>:</p></li>
@@ -527,12 +526,19 @@ i.e. <span class="math display">\[y = \beta_{0} + \beta_{1}x +
 a function of <span class="math inline">\(r\)</span>.</p></li>
 <li><p>True or False: <span class="math inline">\(\hat{\beta}_{1}\)</span> has the same sign as
 <span class="math inline">\(r\)</span>. Explain.</p></li>
-<li><p>What is the interpretation of <span class="math inline">\(\beta_{1} = 0\)</span> in terms of the
-correlation?</p></li>
+<li><p>If <span class="math inline">\(r=0\)</span>, what is the
+implication for <span class="math inline">\(\beta_1\)</span>? Why does
+this make sense?</p></li>
 </ol>
 </div>
 <div id="exercise-6" class="section level2">
 <h2>Exercise 6</h2>
+<p>Show that the least squares regression line always passes through the
+sample mean of the data. For simplicity, you may assume we are in the
+case of simple linear regression.</p>
+</div>
+<div id="exercise-7" class="section level2">
+<h2>Exercise 7</h2>
 <p>In this course, we will focused mainly on how close the predicted
 value <span class="math inline">\(\hat{y}\)</span> is to the true <span class="math inline">\(y\)</span>. We will rarely discuss the amount of
 <em>uncertainty</em> there is about the prediction. (even though the
@@ -580,7 +586,7 @@ at predictors <span class="math inline">\(x_{0}\)</span> is:</p>
 are centered around the same predicted value.</p></li>
 <li><p>Looking at the plots above: for which value of the predictor
 <span class="math inline">\(x\)</span> are both intervals narrowest?
-Explain why this is the case.</p></li>
+Explain why this is the case intuitively.</p></li>
 <li><p>Looking at the plots above: for a given value of <span class="math inline">\(x_{0}\)</span> and interval type (prediction or
 confidence), are the intervals narrower when <span class="math inline">\(n = 20\)</span> or <span class="math inline">\(n =
 100\)</span>? Explain why this is the case.</p></li>
@@ -596,8 +602,8 @@ confident in the predicted individual response)? If so, how? If not, why
 not?</p></li>
 </ol>
 </div>
-<div id="exercise-7" class="section level2">
-<h2>Exercise 7</h2>
+<div id="exercise-8" class="section level2">
+<h2>Exercise 8</h2>
 <p>I collect a set of data (n = 100 observations) containing a single
 predictor and a quantitative response. I then fit a linear regression
 model to the data, as well as a separate cubic regression, i.e. <span class="math inline">\(Y = \beta_{0} + \beta_{1} X + \beta_{2} X^{2} +

@@ -1,6 +1,6 @@
 ---
 title: "HW 02: Regression"
-date: "Due:  11:59pm"
+date: "Due: Thursday, Sept. 29 at 11:59pm"
 author: "Total: ? points"
 output: html_document
 editor_options: 
@@ -140,7 +140,7 @@ Based on these two plots, what are some cautions when it comes to interpreting P
 
 ## Exercise 3
 
-The formula for the correlation coefficient $r$ is $$r = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 (y_{i} - \bar{y})^2 }}$$
+The formula for the correlation coefficient $r$ is $$r = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 \sum_{i=1}^{n}(y_{i} - \bar{y})^2 }}$$
 
 Suppose we have the following data:
 
@@ -153,7 +153,7 @@ print.data.frame(df)
 
 a) Calculate $\bar{x}$ and $\bar{y}$.
 
-b) Calculate the correlation $r$ between $x$ and $y$ using this data. 
+b) Calculate (manually) the correlation $r$ between $x$ and $y$ using this data. 
 
 
 c) Now, suppose we actually measured `x2 = 5x`. That is, `x2` is simply a *scaled* version of the original `x`: 
@@ -192,11 +192,18 @@ Assume that we are in the simple linear regression setting, i.e. $$y = \beta_{0}
 
 a) Re-write $\hat{\beta}_{1}$ as a function of $r$.
 
+
+
 b) True or False: $\hat{\beta}_{1}$ has the same sign as $r$. Explain.
 
-c) What is the interpretation of $\beta_{1} = 0$ in terms of the correlation?
+c) If $r=0$, what is the implication for $\beta_1$? Why does this make sense?
+
 
 ## Exercise 6
+
+Show that the least squares regression line always passes through the sample mean of the data. For simplicity, you may assume we are in the case of simple linear regression.
+
+## Exercise 7
 
 In this course, we will focused mainly on how close the predicted value $\hat{y}$ is to the true $y$. We will rarely discuss the amount of *uncertainty* there is about the prediction. (even though the discipline of Statistics studies uncertainty!) However, we will spend a little time on the idea of uncertainty here.
 
@@ -275,7 +282,7 @@ $$\hat{y_{0}} \pm t^{*}\sqrt{\text{MSE} \times \left(1+ \frac{1}{n}+ \frac{(x_{0
 
 a) Explain why, intuitively, the confidence and prediction intervals are centered around the same predicted value.
 
-b) Looking at the plots above: for which value of the predictor $x$ are both intervals narrowest? Explain why this is the case.
+b) Looking at the plots above: for which value of the predictor $x$ are both intervals narrowest? Explain why this is the case intuitively.
 
 c)  Looking at the plots above: for a given value of $x_{0}$ and interval type (prediction or confidence), are the intervals narrower when $n = 20$ or $n = 100$? Explain why this is the case.
 
@@ -283,7 +290,7 @@ d) Assume $t^{*} > 0$ and $MSE >> 0$ (here $>>$ means "much greater than"). Can 
 
 e) Assume $t^{*} > 0$ and $MSE >> 0$. Can we make it so the prediction interval width approaches 0 (i.e. we are extremely confident in the predicted individual response)? If so, how? If not, why not?
 
-## Exercise 7
+## Exercise 8
 
 I collect a set of data (n = 100 observations) containing a single predictor and a quantitative response. I then fit a linear regression model to the data, as well as a separate cubic regression, i.e. $Y = \beta_{0} + \beta_{1} X + \beta_{2} X^{2} + \beta_{3} X^{3} + \epsilon$.
 
@@ -296,9 +303,6 @@ c) Suppose that the true relationship between $X$ and $Y$ is not linear, but we 
 d) Answer (c) using test rather than training RSS.
 
 
-## Exercise 8
-
-Show that the least squares regression line always passes through the sample mean of the data. For simplicity, you may assume we are in the case of simple linear regression.
 
 
 ## Submission 

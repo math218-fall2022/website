@@ -1,117 +1,113 @@
 ---
-title: "HW 03: Multiple Linear Regression"
-subtitle: "due Friday, July 16 at 11:59p"
-output: 
-  tufte::tufte_html:
-    tufte_variant: "envisioned"
-    highlight: pygments
-    css: "sta199-hw.css"
-link-citations: yes
+title: "HW 03: Classification"
+subtitle: "due Thursday, Oct. 6 at 11:59pm"
+output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
-# Clone assignment repo + start new project
 
-- Go to [course organization](https://github.com/sta199-summer2021) on GitHub.
+### Exercise 1
 
-- In addition to your private individual repositories, you should now see a repo with the prefix **hw-03-life-expectancy-**. Go to that repository.
-  
-- Clone the repo and start a new project in RStudio.
+When the number of features $p$ is large, there tends to be a deterioration in the performance of KNN and other local approaches that perform prediction using only observations that are near the test observation for which a prediction must be made. Organizing/clustering/searching data often relies on detecting spaces where objects form groups with similar properties. When $p$ is large, we will see that the objects (features) will seem very dissimilar.
+This phenomenon is known as the *curse of dimensionality*, and it ties into the fact that non-parametric approaches often perform poorly when $p$ is large. We
+will now investigate this curse (which is common in many disciplines, e.g. genetics). 
 
-- Don't forget to configure git:
 
-```{r eval=FALSE}
-library(usethis)
-usethis::use_git_config(user.name = "github username", user.email = "your email")
-```
+a) Suppose that we have a set of observations, each with measurements on $p = 1$ feature, $X$. We assume that $X$ is uniformly (evenly) distributed on $[0, 1]$. Associated with each observation is a response value $Y$. Suppose that we wish to predict a test observation’s response using only observations that are within 10% of the range of $X$ closest to that test observation. For instance, in order to predict the response for a test observation with $X = 0.6$, we will use observations with associated $X$ in the range $[0.55,0.65]$. On average, what fraction of the available observations will we use to make the prediction? 
 
-# Data
 
-In Lab 08, we considered simple linear regression models where we estimated the average `life_expectancy` of each country using each one of the following variables: the number of years of `schooling`, `adult_mortality`, and average BMI category (`BMI_cat`). In this homework, we will now fit multiple linear regression models for `life_expectancy`. The data were modified from this [Kaggle](https://www.kaggle.com/kumarajarshi/life-expectancy-who) dataset, and are available in Sakai. Upload the data just like you did in Lab 08. Once you have done so, you can run the following code to load the packages and data to get started.
+b) Now suppose that we have a set of observations, each with measurements on $p = 2$ features, $X_1$ and $X_2$. We assume that $(X_1, X_2)$ are uniformly distributed on $[0, 1] \times [0, 1]$. We wish to predict a test observation’s response using only observations that are within 10% of the range of $X_{1}$ and within 10% of the range of $X_{2}$ closest to that test observation. For instance, in order to predict the response for a test observation with $X_1 = 0.6$ and $X_2 = 0.35$, we will use observations in the range $[0.55, 0.65]$ for $X_1$ and in the range $[0.3,0.4]$ for $X_2$. On average, what fraction of the available observations will we use to make the prediction?
 
-```{r packages, eval = F}
+
+c) Now suppose that we have a set of observations on $p = 100$ features. Again the observations are uniformly distributed on each feature, and again each feature ranges in value from 0 to 1. We wish to predict a test observation’s response using observations within the 10% of each feature’s range that is closest to that test observation. What fraction of the available observations will we use to make the prediction?
+
+
+d) Using your answers to parts (a)–(c), argue that a drawback of KNN when $p$ is large is that there are very few training observations “near” any given test observation.
+
+
+e)  Now suppose that we wish to make a prediction for a test observation by creating a $p$-dimensional hypercube centered around the test observation that contains, on average, 10% of the training observations. For $p$ = 1,2, and 100, what is the length of each side of the hypercube? Comment on your answer.
+
+*Note: A hypercube is a generalization of a cube to an arbitrary number of dimensions. When $p = 1$, a hypercube is simply a line segment, when $p = 2$ it is a square, and when $p = 100$ it is a 100-dimensional cube.*
+
+
+### Exercise 2
+
+Suppose that we take a data set, divide it into equally-sized training and test sets, and then try out two different classification procedures. First we use logistic regression and get an error rate of 25% on the training data and 30% on the test data. Next we use 1-nearest neighbors (i.e. $K = 1$) and get an average error rate (averaged over both test and training data sets) of 17%. Based on these results, which method should we prefer to use for classification of new observations? Why?
+
+
+### Exercise 3
+
+In the slides, we compared logistic regression and LDA for the 2-class (binary) response case. Let's now consider the more general $K$ class case.  We assign an observation to the class that maximizes $Pr(Y = k|X = x)$. Equivalently, we can set the last group $K$ as the baseline class and assign an observation to the class that maximizes $$\log\left(\frac{\text{Pr}(Y=k | X=x)}{\text{Pr}(Y = K|X=x)}\right)$$
+
+
+For LDA with $p$ features, the mean for class $k$ has mean vector $\mathbf{\mu}_{k}$ of length $p$, with a $p \times p$ covariance matrix $\mathbf{\Sigma}$. However, the case of $p=1$ is much simpler because we have scalars for means $\mu_{1}, \ldots, \mu_{K}$ and variance $\sigma^2$. In this $p=1$ case, $$\log\left(\frac{\text{Pr}(Y=k | X=x)}{\text{Pr}(Y = K|X=x)}\right) = a_{k}  + b_{k}x$$
+
+Provide expressions for $a_{k}$ and $b_k$ in terms of $\pi_{k}, \pi_{K}, \mu_{k}, \mu_{K}$, and $\sigma^2$. To get you started:
+
+\begin{align*}
+\log\left(\frac{\text{Pr}(Y=k | X=x)}{\text{Pr}(Y = K|X=x)}\right) &=
+\log\left(\frac{\pi_{k}f_{k}(x)}{\pi_{K}f_{K}(x)}\right) \\
+&= \log\left(\frac{\pi_{k}\exp\{-\frac{1}{2\sigma^2}(x - \mu_{k})^2\}}{\pi_{K}\exp\{-\frac{1}{2\sigma^2}(x - \mu_{K})^2\}}\right) 
+\end{align*}
+
+
+### Exercise 4
+
+Suppose that you wish to classify an observation $X \in \mathbb{R}$ into `toxic` and `nontoxic`. You fit a logistic regression model and find that
+
+$$\widehat{\text{Pr}}(Y = \text{toxic}| X=x) = \frac{e^{\hat{\beta}_{0} + \hat{\beta}_{1}x}}{1+e^{\hat{\beta}_{0} + \hat{\beta}_{1}x}}$$
+
+I also fit a logistic regression model to the same data, but I use the *softmax* formulation and find that 
+
+$$\widehat{\text{Pr}}(Y = \text{toxic}| X=x) = \frac{e^{\hat{\alpha}_{0,\text{toxic}} + \hat{\alpha}_{1, \text{toxic}}x}}{e^{\hat{\alpha}_{0,\text{toxic}} + \hat{\alpha}_{1,\text{toxic}}x} + e^{\hat{\alpha}_{0,\text{nontoxic}} + \hat{\alpha}_{1,\text{nontoxic}}x}}$$
+
+
+a) In your model, what are the log-odds of `toxic` vs `nontoxic`?
+
+
+b) In my model, what are the log-odds of `toxic` vs `nontoxic`?
+
+c) Suppose that in your model, $\hat{\beta}_{0} = -2$  and $\hat{\beta}_{1} = 3$. What are the coefficient estimates in my model? Be as specific as possible.
+
+d) Now suppose that we fit the same two models on a different data set. This time, I estimate the coefficients $\hat{\alpha}_{0,\text{toxic}} = -1.5$, $\hat{\alpha}_{1,\text{toxic}} = 2$, $\hat{\alpha}_{0,\text{nontoxic}} = 1$, and $\hat{\alpha}_{1,\text{nontoxic}} = -1.25$.  What are the coefficient estimates in your model?
+
+
+e)  Finally, suppose you apply both models from (d) to a data set with 2000 test observations. What fraction of the time do you expect the predicted class labels from your model to agree with those from my model? Explain your answer.
+
+f) In the binary response case, would you prefer the usual logistic regression with the logit (also known as sigmoid) coding, or the softmax coding? Why?
+
+### Exercise 5
+
+Recall that the Naive Bayes classifier assumes that the $p$ features are independent, i.e.
+$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p})$.
+
+Assume in this problem that we have $p=2$ features, $X_{1}$ and $X_{2}$, and the response has $K=3$ classes. Further, assume that $X_{1}$ and $X_{2}$ are both qualitative. An estimate for each of the $f_{kj}$ is simply the proportion of training observations for the $j$-th predictor corresponding to each class. Suppose we have $n = 200$ training observations, and observe the following 
+
+```{r echo = F, message= F, warning = F}
 library(tidyverse)
-library(broom)
-life_expect <- read_csv("data/life_expectancy.csv") 
+set.seed(2)
+n <- 200
+
+Y <- sample(1:3, n, replace = T, prob = c(0.3, 0.3, 0.4))
+X1 <- sample(c("red", "white", "brown"), size = n, replace = T, prob = c(0.2, 0.4, 0.4))
+X2 <- sample(c("tree", "ground"), size = n, replace = T, prob = c(0.2, 0.8))
+
+data.frame(X1 , Y) %>%
+  group_by(X1, Y) %>% count %>% knitr::kable()
+data.frame(X2 , Y) %>%
+  group_by(X2, Y) %>% count %>% knitr::kable()
 ```
 
-## Codebook
-
-| Variable name    | Description 
-|:--------|:-------------------------------
-| `country` 		     | Country
-| `year` 		       | Year (2000-2015)
-| `status` 	   | Developed or Developing country status
-| `life_expectancy` 		       | life expentancy in age
-| `adult_mortality` 	     | Adult Mortality Rates of both sexes (probability of dying between 15 and 60 years per 1000 population)
-| `infant_deaths` 		       | Number of Infant Deaths per 1000 population
-| `alcohol`  | Alcohol, recorded per capita (15+) consumption (in litres of pure alcohol)
-| `percentage_expenditure`   | Expenditure on health as a percentage of Gross Domestic Product per capita (%)
-| `hepB`   | Hepatitis B immunization coverage among 1-year-olds (%)
-| `measles` 	   | Number of reported cases of Measles per 1000 population
-| `BMI` 	   | Average Body Mass Index (BMI) of entire population
-| `under_five_deaths`    | Number of under-five deaths per 1000 population
-| `polio`    | Polio immunization coverage among 1-year-olds (%)
-| `total expenditure`    | General government expenditure on health as a percentage of total government expenditure (%)
-| `diphtheria`    | Diphtheria tetanus toxoid and pertussis immunization coverage among 1-year-olds (%)
-| `HIV_AIDS`    | Deaths per 1000 live births HIV/AIDS (0-4 years)
-| `GDP`    | Gross Domestic Product per capita (in USD)
-| `population`    | Population of the country
-| `thinness_10_19`    | Prevalence of thinness among children and adolescents for Age 10 to 19 (% )
-| `thinness_5_9`    | Prevalence of thinness among children for Age 5 to 9(%)
-| `income_composition`    | Human Development Index in terms of income composition of resources (index ranging from 0 to 1)
-| `schooling`    | Number of years of schooling
-
-# Exercises
-
-## Part 1: Data Manipulation 
-
-1.  Identical to Lab 08, we will be focusing on a single year of data. Filter the data to only retain observations from 2015. Additionally, create the following new variable:
-
-- `BMI_cat`: the category that each BMI falls into, where BMI < 18.5 is "underweight", 
-18.5 $\leq$ BMI $<$ 25 is "normal", 25 $\leq$ BMI $<$ 30 is "overweight", and BMI $\geq 30$ is "obese".
-
-Once you have created these variable, createa new dataset that retains only the following variables: `country`, `life_expectancy`, `schooling`, `adult_mortality`, `BMI_cat`, and `status`.  Then omit all NAs. This is the dataset you will use for the remainder of the exercises.
+a) What are $f_{kj}(x_{j})$ for $k = 1, 2, 3$ and $j = 1,2$?
 
 
-## Part 2: Exploratory Data Analysis
+b) Assume that $\hat{\pi}_{1} = 0.3$,  $\hat{\pi}_{2} = 0.3$, and $\hat{\pi}_{3} = 0.4$.
+Suppose that we wish to classify a new observation $x^∗ = (\text{red},\text{ground})'$. Under the Naive Bayes classifier, calculate $\text{Pr}(Y = k | X = x^{*})$ for each $k$. Based on your answer, what would you classify this new observation as?
 
-2. Visualize the relationship between the number of years of `schooling`, `life_expectancy`, and the `BMI_cat` of each country. Describe what you see.
+c) Now let's say that our new observation is  $x^∗ = (\text{green},\text{ground})'$. For this new observation, what would $\text{Pr}(Y = k | X = x^{*})$ be for each $k = 1,2,3$, and why? This is known as the *zero-frequency* problem. 
 
-## Part 3: Multiple linear regression
+## Submission 
 
-3. Fit a linear main effects model to predict average `life expectancy` using the following variables: `schooling`, `status`, `BMI_cat`, `adult_morality`. Write out the equation of the fitted model, and interpret all the coefficients.
-
-4. Obtain and interpet the $R^2$ for the main effects model.
-
-5. Fit a linear model to predict average `life expectancy` using the same main effects as above, but now with the addition of an interaction between `BMI_cat` and `schooling`.  Write out the equation of the fitted model.
-
-6. Write the regression equations for each level of `BMI_cat`.
-
-7. Compare the adjusted $R^2$ for both models. Which model do you prefer and why?
-
-### Part 4: Inference
-
-8. Use the model you ultimately selected in Exercise 7 for the remainder of this section. Examine if the conditions to perform inference on the regression coefficients are satisfied.
-
-9. Conduct a hypothesis test evaluating whether or not `adult_mortality` is associated with `life_expectancy`.
-
-10. Compute the mean adult mortality for each BMI category. Replace the dashes in the following code with the mean adult mortality for each respective `BMI_cat`. This code creates a new data frame to predict average life expectancy for hypothetical countries with the corresponding values for the explanatory variables.
-
-```{marginfigure}
-**Hint**: Remember, we use the `augment()` function to predict from a fitted model. You can use `augment(<model>, newdata = <data_frame_for_prediction>)` to obtain predictions.
-```
-
-What are the predicted life expectancies for these hypothetical countries?
-
-
-```{r eval = F}
-new_country <- tibble(
-  schooling = c(9.9, 14.2, 10.9, 12.3),
-  adult_mortality = c(___, ___, ___, ____),
-  BMI_cat = c("normal", "obese", "overweight", "underweight"),
-  status = c("Developed", "Developed", "Developed", "Developed")
-)
-```
-
-
+Upload your assignment as a PDF file to Canvas. Please show all work!
 
