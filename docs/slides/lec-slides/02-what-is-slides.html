@@ -4,6 +4,7 @@
     <title>Math 218: Statistical Learning</title>
     <meta charset="utf-8" />
     <meta name="author" content="What is statistical learning?" />
+    <script src="02-what-is-slides_files/header-attrs-2.16/header-attrs.js"></script>
     <link rel="stylesheet" href="math218-slides.css" type="text/css" />
   </head>
   <body>
@@ -25,18 +26,26 @@ class: center, middle, inverse, title-slide
 
 
 
-class: center, middle
 
-# Housekeeping
-
----
 
 ## Abalone
 
+.pull-left[
+&lt;img src="figs/02-what-is/red_abalone.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+&lt;img src="figs/02-what-is/white_abalone.png" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+.footnote[
+*Source: https://caseagrant.ucsd.edu/news/abalone-the-story-of-a-treasured-mollusk-on-the-california-coast
+*Source: https://shopoysters.hogislandoysters.com/products/red-abalone
+]
+
 
 ---
 
-&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-1-1.png" height="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-3-1.png" height="40%" style="display: block; margin: auto;" /&gt;
 
 - `\(\color{blue}{\text{age}}\)` of abalone plotted against `\(\color{blue}{\text{height}}\)`, `\(\color{blue}{\text{length}}\)`, `\(\color{blue}{\text{weight}}\)`.
 
@@ -44,6 +53,8 @@ class: center, middle
 
 
 ---
+
+# Modeling
 
 - Maybe `\(\color{blue}{\text{age}} = f(\color{blue}{\text{height}} + \color{blue}{\text{length}} + \color{blue}{\text{weight}})\)`?
 
@@ -63,7 +74,7 @@ class: center, middle
 
 ---
 
-## What care about `\(f(x)\)`?
+## Why care about `\(f\)`?
 
 `$$Y = f(X) + \epsilon$$`
 - The function `\(f(X)\)` represents the systematic information that `\(X\)` tells us about `\(Y\)`. 
@@ -116,7 +127,9 @@ class: center, middle
   - Absolute error = `\(|Y - \hat{Y}|\)`
   - Squared error = `\((Y - \hat{Y})^2\)`
   
+--
 
+- Intuitively, large error indicates bad prediction
 
 ---
 
@@ -143,7 +156,10 @@ class: center, middle
 
 --
 
-  - In the prediction setting, estimate `\(\hat{f}\)` for the purpose of `\(\hat{Y}\)` and `\(Y\)`. 
+  - In the prediction setting, estimate `\(\hat{f}\)` for the purpose of `\(\hat{Y}\)` and `\(Y\)`.
+  
+--
+
   - In the inference setting, estimate `\(\hat{f}\)` for the purpose of `\(X\)` and `\(Y\)`
 
 --
@@ -180,7 +196,7 @@ For example,
 
 - Assuming a linear model: `$$\color{blue}{\text{age}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{length}}$$`
 
-&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -192,7 +208,7 @@ For example,
 
   - Often more flexible
 
-&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -218,7 +234,7 @@ For example,
 
 - In regression setting, we often use **mean squared error (MSE)**
 
-`$$MSE=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{f}(x_{i}))^2$$` 
+`$$\text{MSE}=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{f}(x_{i}))^2$$` 
 
 --
 
@@ -246,11 +262,11 @@ For example,
 - Let `\(n_{train}\)` and `\(n_{test}\)` be number of observations in train and test sets, respectively.
 
 `$$MSE_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$`
-`$$MSE_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$`
+`$$\text{MSE}_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$`
+
 
 ---
 
---- 
 ## Example 1
 
 
@@ -268,6 +284,8 @@ For example,
 ## Bias-Variance trade-off
 
 - As model flexibility increases, the training MSE will decrease but test MSE may not.
+
+--
 
 - Flexible models may **overfit** the data, which leads to low train MSE and high test MSE
   - The supposed patterns in train data do not exist in test data
@@ -294,7 +312,7 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 
 
 
-&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -309,7 +327,11 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
   
   - Education level: `\(\mathcal{C} = \{\text{high school}, \text{college}, \text{graduate}\}\)`
   
+--
+
 - Each category in `\(\mathcal{C}\)` is also known as a *label*
+
+--
 
 - In this setting, we want our model to be **classifier**, i.e. given predictors `\(X\)`, predict a label from the pool of all possible categories `\(\mathcal{C}\)`
 
@@ -319,9 +341,11 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 
 - We will still have to estimate `\(f\)` 
 
+--
+
 - `\(\hat{y}_{i}\)` is the predicted class label for observation `\(i\)` using estimate `\(\hat{f}\)`
 
-- How to assess model accuracy? Error is more intuitive: we have error if we predict the incorrect label, and no error otherwise
+- How to assess model accuracy? Error is more intuitive: we make an error if we predict the incorrect label, and no error otherwise
 
 --
 
@@ -330,11 +354,11 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 `$$\mathbf{I}(y_{i} = \hat{y}_{i}) = \begin{cases} 1 &amp; \text{ if } y_{i} = \hat{y}_{i}\\ 0 &amp; \text{ if } y_{i} \neq \hat{y}_{i} \end{cases}$$`
 ---
 
-## CLassification error rate
+## Classification error rate
 
 - To quantify accuracy of estimated classifier `\(\hat{f}\)`, can calculate the *error rate*, which is the proportion of mistakes we make in labeling: `$$\frac{1}{n} \sum_{i=1}^{n} \mathbf{I}(y_{i} \neq \hat{y}_{i})$$`
 
--- 
+--
 
 - Small error rate is preferred 
 
@@ -348,6 +372,8 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 
 - Assume we have a total of `\(J\)` possible labels in `\(\mathcal{C}\)`
 
+--
+
 - For a given observation `\(i\)`, can calculate the following probability for each possible label `\(j\)`:
 `$$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$`
 
@@ -358,6 +384,8 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 ## Bayes optimal classifier
 
 - The **Bayes optimal** classifier will assign/predict the label which has the largest conditional class probability
+
+--
 
   - It can be shown that the *test* error rate `\(\frac{1}{n_{test}} \sum_{i=1}^{n_{test}} \mathbf{I}(y_{i} \neq \hat{y}_{i})\)` is minimized when using the Bayes optimal classifier
   
@@ -376,11 +404,11 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 
 ## Example
 
-&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
-## `\(K\)`-Nearest Neighbors
+## K-Nearest Neighbors
 
 - Bayes classifier is "gold standard"
 
@@ -388,21 +416,24 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 
 - Instead, we need to estimate these `\(p_{ij}(x_{i})\)`
 
-- One method to estimate the probabilities is the **KNN** ($K$-nearest neighbors) classifier
+- One method to estimate the probabilities is the **KNN** (K-nearest neighbors) classifier
 
 ---
 
-## `\(K\)`-Nearest Neighbors
+## K-Nearest Neighbors
 
-0. Choose a positive integer `\(K\)`
+First choose a positive integer `\(K\)`.
 
 Then, for a given test observation `\(x_{0}\)`:
 
-1. Identify the `\(K\)` points in the training data that are closes to `\(x_{0}\)`. Call this set `\(\mathcal{N}_{0}\)`.
+1. Identify the `\(K\)` points in the training data that are closest to `\(x_{0}\)`. Call this set `\(\mathcal{N}_{0}\)`.
+
+--
 
 2. Estimate the conditional probability for class `\(j\)`:
 
 `$$\widehat{p}_{j}(x_{0}) = Pr(Y = j | X = x_{0}) = \frac{1}{K}\sum_{i \in \mathcal{N}_{0}} \mathbf{I}(y_{i} = j)$$`
+--
 
 3. Classify/predict `\(\hat{y}_{0}\)` to have label with largest estimated probability
 
@@ -410,7 +441,7 @@ Then, for a given test observation `\(x_{0}\)`:
 
 ## `\(K\)`-Nearest Neighbors
 
-&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 
 - Suppose we are interested in classifying the test observation as blue or red.
   
@@ -421,7 +452,19 @@ Then, for a given test observation `\(x_{0}\)`:
   
 ---
 
-&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+  
+- Black lines are true Bayes decision boundaries, and purple are the estimdated boundaries under KNN
+
+---
+
+## Before next class 
+
+- Accept the invite to join `math218-fall2022` organization on GitHub TODAY!! 
+
+- If you have not already done so "Getting to know you" survey on Canvas - due end of today today!
+
+  - After filling out the survey, [schedule](https://calendly.com/beckytang/10min) a brief 1:1 meeting with me! 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

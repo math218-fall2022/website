@@ -32,18 +32,30 @@ abalone <- abalone %>%
          weight = whole_wt)
 ```
 
-class: center, middle
 
-# Housekeeping
-
----
 
 ## Abalone
 
+.pull-left[
+```{r fig.align="center",out.width="70%",echo=FALSE}
+knitr::include_graphics("figs/02-what-is/red_abalone.png")
+```
+]
+.pull-right[
+```{r fig.align="center",out.width="70%",echo=FALSE}
+knitr::include_graphics("figs/02-what-is/white_abalone.png")
+```
+]
+
+.footnote[
+*Source: https://caseagrant.ucsd.edu/news/abalone-the-story-of-a-treasured-mollusk-on-the-california-coast
+*Source: https://shopoysters.hogislandoysters.com/products/red-abalone
+]
+
 
 ---
 
-```{r fig.align="center",out.height="50%"}
+```{r fig.align="center",out.height="40%"}
 abalone %>%
   dplyr::select(c(age, length, height, weight)) %>%
   pivot_longer(cols = -1, names_to = "variable") %>%
@@ -59,6 +71,8 @@ abalone %>%
 
 
 ---
+
+# Modeling
 
 - Maybe $\color{blue}{\text{age}} = f(\color{blue}{\text{height}} + \color{blue}{\text{length}} + \color{blue}{\text{weight}})$?
 
@@ -78,7 +92,7 @@ abalone %>%
 
 ---
 
-## What care about $f(x)$?
+## Why care about $f$?
 
 $$Y = f(X) + \epsilon$$
 - The function $f(X)$ represents the systematic information that $X$ tells us about $Y$. 
@@ -131,7 +145,9 @@ $$\hat{Y} = \hat{f}(X)$$
   - Absolute error = $|Y - \hat{Y}|$
   - Squared error = $(Y - \hat{Y})^2$
   
+--
 
+- Intuitively, large error indicates bad prediction
 
 ---
 
@@ -158,7 +174,10 @@ $$\hat{Y} = \hat{f}(X)$$
 
 --
 
-  - In the prediction setting, estimate $\hat{f}$ for the purpose of $\hat{Y}$ and $Y$. 
+  - In the prediction setting, estimate $\hat{f}$ for the purpose of $\hat{Y}$ and $Y$.
+  
+--
+
   - In the inference setting, estimate $\hat{f}$ for the purpose of $X$ and $Y$
 
 --
@@ -195,7 +214,7 @@ For example,
 
 - Assuming a linear model: $$\color{blue}{\text{age}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{length}}$$
 
-```{r fig.align = "center", fig.height=4, fig.width=6}
+```{r fig.align = "center", fig.height=5, fig.width=8}
 p_rand <- ggplot(abalone, aes(x = weight, y = age))+
   geom_point()+
   geom_abline(intercept = 7, slope = 3, col = "orange", lwd = 1)
@@ -279,7 +298,8 @@ $$MSE_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$
 $$\text{MSE}_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$
 
 
---- 
+---
+
 ## Example 1
 
 ```{r mse_dat1}
@@ -422,6 +442,8 @@ gridExtra::grid.arrange(p_fit, p_mse, nrow = 1)
 
 - As model flexibility increases, the training MSE will decrease but test MSE may not.
 
+--
+
 - Flexible models may **overfit** the data, which leads to low train MSE and high test MSE
   - The supposed patterns in train data do not exist in test data
   
@@ -556,7 +578,11 @@ rbind(bv_df1, bv_df2) %>%
   
   - Education level: $\mathcal{C} = \{\text{high school}, \text{college}, \text{graduate}\}$
   
+--
+
 - Each category in $\mathcal{C}$ is also known as a *label*
+
+--
 
 - In this setting, we want our model to be **classifier**, i.e. given predictors $X$, predict a label from the pool of all possible categories $\mathcal{C}$
 
@@ -566,9 +592,11 @@ rbind(bv_df1, bv_df2) %>%
 
 - We will still have to estimate $f$ 
 
+--
+
 - $\hat{y}_{i}$ is the predicted class label for observation $i$ using estimate $\hat{f}$
 
-- How to assess model accuracy? Error is more intuitive: we have error if we predict the incorrect label, and no error otherwise
+- How to assess model accuracy? Error is more intuitive: we make an error if we predict the incorrect label, and no error otherwise
 
 --
 
@@ -577,11 +605,11 @@ rbind(bv_df1, bv_df2) %>%
 $$\mathbf{I}(y_{i} = \hat{y}_{i}) = \begin{cases} 1 & \text{ if } y_{i} = \hat{y}_{i}\\ 0 & \text{ if } y_{i} \neq \hat{y}_{i} \end{cases}$$
 ---
 
-## CLassification error rate
+## Classification error rate
 
 - To quantify accuracy of estimated classifier $\hat{f}$, can calculate the *error rate*, which is the proportion of mistakes we make in labeling: $$\frac{1}{n} \sum_{i=1}^{n} \mathbf{I}(y_{i} \neq \hat{y}_{i})$$
 
--- 
+--
 
 - Small error rate is preferred 
 
@@ -595,6 +623,8 @@ $$\mathbf{I}(y_{i} = \hat{y}_{i}) = \begin{cases} 1 & \text{ if } y_{i} = \hat{y
 
 - Assume we have a total of $J$ possible labels in $\mathcal{C}$
 
+--
+
 - For a given observation $i$, can calculate the following probability for each possible label $j$:
 $$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$
 
@@ -605,6 +635,8 @@ $$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$
 ## Bayes optimal classifier
 
 - The **Bayes optimal** classifier will assign/predict the label which has the largest conditional class probability
+
+--
 
   - It can be shown that the *test* error rate $\frac{1}{n_{test}} \sum_{i=1}^{n_{test}} \mathbf{I}(y_{i} \neq \hat{y}_{i})$ is minimized when using the Bayes optimal classifier
   
@@ -623,7 +655,7 @@ $$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$
 
 ## Example
 
-```{r fig.align = "center", fig.height=4, fig.width=6}
+```{r fig.align = "center", fig.height=5, fig.width=8}
 set.seed(1)
 n <- 100
 lb <- -2; ub = 2
@@ -663,7 +695,7 @@ ggplot() +
 
 ---
 
-## $K$-Nearest Neighbors
+## K-Nearest Neighbors
 
 - Bayes classifier is "gold standard"
 
@@ -671,21 +703,24 @@ ggplot() +
 
 - Instead, we need to estimate these $p_{ij}(x_{i})$
 
-- One method to estimate the probabilities is the **KNN** ($K$-nearest neighbors) classifier
+- One method to estimate the probabilities is the **KNN** (K-nearest neighbors) classifier
 
 ---
 
-## $K$-Nearest Neighbors
+## K-Nearest Neighbors
 
-0. Choose a positive integer $K$
+First choose a positive integer $K$.
 
 Then, for a given test observation $x_{0}$:
 
-1. Identify the $K$ points in the training data that are closes to $x_{0}$. Call this set $\mathcal{N}_{0}$.
+1. Identify the $K$ points in the training data that are closest to $x_{0}$. Call this set $\mathcal{N}_{0}$.
+
+--
 
 2. Estimate the conditional probability for class $j$:
 
 $$\widehat{p}_{j}(x_{0}) = Pr(Y = j | X = x_{0}) = \frac{1}{K}\sum_{i \in \mathcal{N}_{0}} \mathbf{I}(y_{i} = j)$$
+--
 
 3. Classify/predict $\hat{y}_{0}$ to have label with largest estimated probability
 
@@ -717,7 +752,7 @@ ggplot() +
   
 ---
 
-```{r fig.align="center", fig.width=12, fig.height=8}
+```{r fig.align="center", fig.width=12, fig.height=7}
 k <- 1
 knn4 <- knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = F)
 knn4_probs <-  knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = T)
@@ -782,5 +817,14 @@ gridExtra::grid.arrange(p_knn1, p_knn2, p_knn3, nrow = 1, ncol = 3)
 
 ```
   
+- Black lines are true Bayes decision boundaries, and purple are the estimdated boundaries under KNN
 
+---
 
+## Before next class 
+
+- Accept the invite to join `math218-fall2022` organization on GitHub TODAY!! 
+
+- If you have not already done so "Getting to know you" survey on Canvas - due end of today today!
+
+  - After filling out the survey, [schedule](https://calendly.com/beckytang/10min) a brief 1:1 meeting with me! 
