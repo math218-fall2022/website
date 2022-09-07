@@ -1,0 +1,264 @@
+---
+title: "Lab 04 - Resampling"
+subtitle: "Due Sunday, 10/9 at 11:59pm"
+output: 
+  tufte::tufte_html:
+    css: "./math218-labs.css"
+    tufte_variant: "envisioned"
+    highlight: tango
+    toc: true
+    toc_depth: 1
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message = F, warning = F}
+library(tidyverse)
+```
+
+# Introduction
+
+This lab explores the resampling techniques learned in class this week. In particular, we will learn how to manually code some of the techniques in order to truly understand the processes of cross-validation and the bootstrap. You will most likely ned to install the package `boot`. 
+
+# Leave-one-out CV (LOOCV)
+
+First, we will implement LOOCV for linear regression by hand using a `for` loop. Then we will learn how to automate this process using the `cv.glm()` function.
+
+```{r}
+# generate data
+set.seed(1)
+n <- 150
+x <- rnorm(n)
+eps <- rnorm(n)
+y <- -1 + 2*x + 0.5*x^2 + eps
+df <- data.frame(x,y)
+```
+
+## Coding by hand
+
+```{marginfigure}
+If you've never coded a `for` loop in R (or elsewhere), this could be helpful: https://intro2r.com/loops.html
+```
+
+Using a `for` loop, the following code obtains the LOOCV error estimate. In particular, the `for` loop indexes from `i = 1` to `i = n`, where `n` is the number of observations in the dataset. Then, for iteration `i`:
+
+  - Fit the linear regression model $y = \beta_{0} + \beta_{1}$ using all the data except the $i$-th observation
+  
+  - Then for the held-out i-th observation, calculate the squared error when comparing it to the true value. This error is stored in a pre-defined vector called `mse_vec`
+  
+After the `for` loop finishes, we can obtain the LOOCV error estimate by taking the average over the `n` errors.
+
+```{r}
+mse_vec <- rep(NA,n) # intial vector to store values
+for(i in 1:n){
+  train_mod <- lm(y ~ x, subset = (1:n)[-i])
+  pred <- predict(train_mod, newdata = list(x = x[i]))
+  mse_vec[i] <- (y[i] - pred)^2
+}
+mean(mse_vec)
+```
+
+## `R` function
+
+The LOOCV estimate can be automatically computed for any generalized linear model using the `glm()` and `cv.glm()` functions in `R`. The latter comes from the `boot` library. 
+
+First we fit our model to the data
+
+```{marginfigure}
+Note: the default `family` for `glm()` is gaussian, but we are specifying it here just to be safe!
+```
+
+```{r}
+glm.fit <- glm(y~x, family = gaussian, data= data.frame(y=y,x=x))
+```
+
+Then we can use the `cv.glm()` function to perform cross-validation. We pass in, at minimum, the `data` and the fitted model `glmfit`. We could also specify the number of groups $K$, but the default is $K = n$ (i.e. LOOCV).
+
+```{marginfigure}
+Recall that there is not random splitting in LOOCV, so you should get the same LOOCV error every time.
+```
+
+Check to see if the answer above matches the following output. 
+
+```{r}
+library(boot)
+cv.err <- cv.glm(data = data.frame(y=y,x=x), glmfit = glm.fit)
+cv.err$delta[1]
+```
+
+# $k$-fold CV
+
+## `R` function
+
+As alluded to above, the `cv.glm()` function can also be used to implement $k$-fold CV. A common choice for $k$ is 5 or 10. Because $k$-fold randomly splits the data, it's good practice to set a seed to ensure the same results everytime.
+
+```{r}
+set.seed(10)
+cv.err10 <- cv.glm(data = data.frame(y=y,x=x), glmfit = glm.fit, K = 10)
+cv.err10$delta[1]
+```
+
+We see that the LOOCV and 10-fold CV estimates are very similar. 
+
+## Coding $k$-fold CV
+
+The following code manually codes $K$-fold CV for this linear regression setting. Unlike LOOCV, we must  now randomly split the data into $K$ groups. The following code does this by first shuffling the indices randomly, then splitting the indices into a list of length $K$, where each element in the list holds the indices belonging to the $k$-th group.
+
+```{r}
+set.seed(1)
+K <- 10
+
+# randomly split the indices/observations into K groups of roughly equal size
+rand <- sample(1:n)
+group_ids <- split(rand, cut(seq_along(rand), K, labels = FALSE))
+```
+
+The following code is quite similar to the LOOCV code above. The only real distance is that we are looping over $K < n$, and that at the end of every iteration, we are computing the mean squared error (MSE) for the $k$-th group. In LOOCV, we didn't use the `mean()` function because with only one value, MSE is equivalent to the squared error. 
+
+```{r}
+mse_vec <- rep(NA, K)
+for(k in 1:K){
+  test_ids <- group_ids[[k]]
+  train_ids <- (1:n)[-test_ids]
+  fit <- lm(y~x, data = df, subset = train_ids)
+  preds <-  predict(fit, newdata = df[test_ids,])
+  mse_vec[k] <- mean((df$y[test_ids] - preds )^2)
+}
+mean(mse_vec)
+```
+
+Due to the random splitting, we won't get the same exact estimated MSE as calculated using the `cv.glm()` function. However, we should get something similar. If not, we need to check our code again!
+
+
+# The Bootstrap
+
+The Bootstrap can be using in almost any scenario, which makes it extremely appealing. One area where this is especially is learning about the distribution of a parameter. Suppose we have observed some data `x` and we don't know the underlying distribution. We want to learn about the distribution of the *median*. 
+
+```{r}
+set.seed(2)
+n <- 20
+x <- rgamma(n, 5, 2)
+```
+
+```{r echo = F, fig.align="center", fig.height=4, fig.width=4}
+ggplot(data.frame(x = x), aes(x=x)) +
+  geom_histogram(bins = 15) +
+  geom_vline(xintercept = median(x), col = "blue", linetype = "dashed") +
+  ggtitle(paste0("Observed median: ", round(median(x),2)))
+```
+
+Our best guess at the median $m$ is probably the median of the observed data. But how confident are we? We can bootstrap to get a range of reasonable/plausible values for the median of this data.
+
+```{r}
+set.seed(1)
+G <- 1000 # make sure we have a sufficient number of iterations
+boot_meds <- rep(NA, G)
+for(g in 1:G){
+  samps <- sample(x, n, replace = T)# repeatedly sample with replacement from observed data
+  boot_meds[g] <- median(samps) # calculate statistic of interest
+}
+
+boot_se <- sd(boot_meds)
+```
+
+The bootstrap estimate for the standard error of the median is $\text{SE}(\hat{m}) = $`r round(boot_se, 3)`.
+
+```{r echo = F, fig.align="center", fig.height=4, fig.width=4}
+ggplot(data.frame(x = boot_meds), aes(x=x)) +
+  geom_histogram(bins = 10) +
+  geom_vline(xintercept = quantile(boot_meds, 0.025), col = "blue", linetype = "dashed") +
+  geom_vline(xintercept = quantile(boot_meds, 0.755), col = "blue", linetype = "dashed") +
+  ggtitle("95% Bootstrap Confidencee Interval for the Median") +
+  xlab("Median")
+```
+
+The `boot()` function automates this approach. You pass in the `data`, a function that calculates the `statistic` (quantity), and the number of repetitions `R`.
+
+The function passed into `statistic` must take at least two arguments: the first being the data, and the second will be a vector of indices that define the bootstrap sample. In the following code, these arguments are `x` and `inds`, respectively. 
+
+```{r}
+set.seed(1)
+med_fun <- function(x, inds){
+  median(x[inds])
+}
+boot_out <- boot(data = x, statistic = med_fun, R = 1000)
+```
+
+The bootstrap estimate for the standard error of the median is $\text{SE}(\hat{m}) = $`r round(sd(boot_out$t), 3)`, which is similar to what we found above.
+
+
+# YOUR TURN!
+
+1. Bootstrap practice
+
+We will revisit the `bmd` data that we saw last week. We will predict the probability of a `fracture` status given the patient's bone mineral density `bmd` and height `height_cm`.
+
+In particular, we will now compute estimates for the standard errors of the logistic regression coefficients in two different ways: (1) using the bootstrap, and (2) using the standard formula for computing the standard errors in the `glm()` function. Do not forget to set a random seed before beginning your analysis.
+
+
+```{r}
+bmd_dat <- read.csv("data/bmd.csv", header = T) %>%
+  mutate(status = factor(fracture, levels = c("no fracture", "fracture")))
+```
+
+a) Using the `summary()` and glm() `functions`, determine the estimated standard errors for the coefficients associated with `bmd` and `height_cm` in a multiple logistic regression model that uses both predictors.
+
+
+b) Write a function that takes in as input the `bmd_dat` dataset as well as an index of the observations, and outputs the coefficient estimates for `bmd` and `height_cm` in the multiple logistic regression model.
+
+c) Use the `boot()` function as well as your written function in (c) to estimate the standard errors of the logistic regression coefficients. Don't forget to set a seed.
+
+d) Comment on the estimated standard errors obtained using the `glm()` function and using your bootstrap function.
+
+
+2. LOOCV practice
+
+In the write-up above, we explored LOOCV for a quantitative approach. You will now explore (and code) LOOCV for the binary classification case. We will continue to use the `bmd_dat` dataset.
+
+a) Write a for-loop to hand-code LOOCV for logistic regression. The for loop should go from `i = 1` to `i = n`, where `n` is the number of observations in the data set. At each iteration `i`, perform each of the following steps:
+
+  - Fit a logistic regression model using all but the i-th observation to predict fracture `status` using `bmd`.
+  
+  - Compute the estimated probability of fracture for the i-th (held-out) observation.
+  
+  - Use the probability for the i-th observation in order to predict whether that observation is a fracture or no fracture.
+  
+  - Determine whether or not an error was made in predicting the `status` for the i-th observation. If an error was made, then record this as a 1, and otherwise record it as a 0
+
+
+b) Take the average of the $n$ numbers obtained in at the last step in (a) in order to obtain the LOOCV estimate for the test error. Comment on the results.
+
+3. More bootstrap practice
+
+We will work with `Boston` dataset from the `ISLR2` package, which contains housing values in 506 suburbs of Boston.
+
+```{r}
+library(ISLR2)
+data("Boston")
+```
+
+a) Based on this data set, provide an estimate for the population mean of the median value of owner-pccupied homes `medv` (in thousands). Call this estimate $\hat{mu}$.
+
+
+b) Provide an estimate of the standard error of $\hat{mu}$. Interpret this result. *Hint: We can compute the standard error of the sample mean by dividing the sample standard deviation by the square root of the number of observations.*
+
+c) Now estimate the standard error of $\hat{\mu}$ using the bootstrap. How does this compare to your answer from (b)?
+
+
+d) Based on your bootstrap estimate from (c), provide a 95 % confidence interval for the mean of `medv`. Compare it to the results obtained using `t.test(Boston$medv)`.
+*Hint: You can approximate a 95 % confidence interval using the formula* $\hat{\mu} \pm 2 \text{SE}(\hat{\mu})$
+
+
+```{marginfigure}
+Hint: use the `quantile()` function
+```
+
+e)  Based on this data set, provide an estimate for the fifteenth percentile of `medv` in Boston census tracts. Call this quantity $\hat{p}_{15}$.
+
+
+```{marginfigure}
+Try writing a function that allows you to pass in the percentile, rather than hard coding the fifteenth percentile.
+```
+
+f) Use the bootstrap to estimate the standard error of $\hat{p}_{15}$. This will entail writing a function to calculate the 15-th percentile. Comment on your findings. 
+

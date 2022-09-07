@@ -340,12 +340,16 @@ tidy(seeds_multi)
 - In softmax coding, we do not choose a baseline but rather, treat all classes symmetrically. For each $k = 1,\ldots, K$:
 
 $$Pr(Y= k | X =x ) =  \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$
+--
+
+- Notice that these probabilities sum to one
 
 ---
 
-## Another method: Discriminant analysis
+class: center, middle
 
--
+# Discriminant analysis
+
 
 ---
 

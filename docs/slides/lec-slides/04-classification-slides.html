@@ -4,6 +4,7 @@
     <title>Math 218: Statistical Learning</title>
     <meta charset="utf-8" />
     <meta name="author" content="Classification" />
+    <script src="04-classification-slides_files/header-attrs-2.16/header-attrs.js"></script>
     <script src="04-classification-slides_files/kePrint-0.0.1/kePrint.js"></script>
     <link href="04-classification-slides_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
     <link rel="stylesheet" href="math218-slides.css" type="text/css" />
@@ -321,6 +322,9 @@ and
 - In softmax coding, we do not choose a baseline but rather, treat all classes symmetrically. For each `\(k = 1,\ldots, K\)`:
 
 `$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$`
+--
+
+- Notice that these probabilities sum to one
 
 ---
 
