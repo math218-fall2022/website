@@ -80,6 +80,13 @@ knitr::include_graphics("figs/00/cotw_08232022.jpg")
 ]
 ---
 
+# TA
+
+- TA for the course: Doug Rosin
+
+- Office hours: Sunday evenings in Warner (TBD)
+
+---
 
 ## Where to find information
 
@@ -108,7 +115,7 @@ knitr::include_graphics("figs/00/cotw_08232022.jpg")
 
 I assume you have taken Math 118 prior to this course, and are comfortable with R and RStudio. There is a large emphasis on computing.
 
-This is not a theory course. We will focus more on applications and developing intuition. The goal is to develop a toolbox of methods that you may use in future analyses.
+We will focus more on applications and developing intuition. The goal is to develop a toolbox of methods that you may use in future analyses. 
 
 
 ---
@@ -192,11 +199,11 @@ class: middle, center
 
 ## Activities & Assessments
 
-- <font class="vocab">Homework</font>: Almost weekly individual homework assignments focused on deepening conceptual understanding of the concepts covered in lecture. In weeks with labs, homework will be assigned on Mondays after class. In weeks without lab, homework will be assigned on Friday after class. In both cases, the homework assignment is due the following Thursday at 11:59pm. Completed homework (written or typed) should be submitted as a PDF onto Canvas.  *Lowest score will be dropped.*
+- <font class="vocab">Problem sets</font>: Almost weekly assignments focused on deepening conceptual understanding of the concepts covered in lecture. In weeks with problem sets, the assignment will be released on Friday after class, and is due the following Thursday at 11:59pm. Completed homework (written or typed) should be submitted as a PDF onto Canvas. These problem sets are to be turned in individually.  *Lowest score will be dropped.*
 
 --
 
-- <font class="vocab">Labs</font>: Almost weekly lab assignments focused on learning how to implement the methods learned in class in R. Labs will begin as individual assignments, but may become partnered as the semester progresses.  When assigned, labs will be started in class on Fridays, and due the following Sunday at 11:59pm. Your completed lab should be submitted as a PDF onto Canvas. *Lowest score will be dropped.*
+- <font class="vocab">Labs</font>: Almost weekly lab assignments focused on learning how to implement the methods learned in class in R. Labs will begin as individual assignments, but may become partnered as the semester progresses.  When assigned, labs will be started in class on Fridays, and due the immediately following Sunday at 11:59pm. Your completed lab should be submitted as a PDF onto Canvas. *Lowest score will be dropped.*
 
 
 ---
@@ -257,7 +264,7 @@ class: middle, center
     - After the assigned deadline, there is a 10% penalty for each day the assignment is late
     - Please communicate with me early if you will need a homework extension!
     
-- Late work will not be accepted for the take-home exams or final project. 
+- Late work will not be accepted for the take-home exam or final project. 
 
 - Regrade requests must be submitted within one week of when the assignment is returned 
 
@@ -291,7 +298,7 @@ Any violations will automatically result in a grade of 0 on the assignment and w
 
 --
 
-- **Office Hours**: A lot of questions are most effectively answered in-person, so office hours are a valuable resource. Please use them! If my scheduled office hours do not work for you, feel free to send me an e-mail!
+- **Office Hours**: A lot of questions are most effectively answered in-person, so my our the TA's office hours are a valuable resource. Please use them! If my scheduled office hours do not work for you, feel free to send me an e-mail!
 
 --
 
