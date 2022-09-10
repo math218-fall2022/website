@@ -55,14 +55,17 @@ knitr::include_graphics("figs/02-what-is/white_abalone.png")
 
 ---
 
-```{r fig.align="center",out.height="40%"}
+# EDA
+
+```{r fig.align="center", fig.width=8, fig.height=5}
 abalone %>%
   dplyr::select(c(age, length, height, weight)) %>%
   pivot_longer(cols = -1, names_to = "variable") %>%
   ggplot(.,aes(x = value, y  = age))+
   geom_point() +
   geom_smooth(method = "lm") +
-  facet_wrap(~variable, scales = "free", nrow = 1)
+  facet_wrap(~variable, scales = "free", nrow = 1) +
+  theme(text = element_text(size= 16))
 ```
 
 - $\color{blue}{\text{age}}$ of abalone plotted against $\color{blue}{\text{height}}$, $\color{blue}{\text{length}}$, $\color{blue}{\text{weight}}$.
@@ -72,7 +75,7 @@ abalone %>%
 
 ---
 
-# Modeling
+## Modeling
 
 - Maybe $\color{blue}{\text{age}} = f(\color{blue}{\text{height}} + \color{blue}{\text{length}} + \color{blue}{\text{weight}})$?
 
@@ -92,31 +95,44 @@ abalone %>%
 
 ---
 
-## Why care about $f$?
+## Why care about f?
 
-$$Y = f(X) + \epsilon$$
+- Model: $Y = f(X) + \epsilon$
+
+
 - The function $f(X)$ represents the systematic information that $X$ tells us about $Y$. 
 
+--
+
 - If $f$ is "good", then we can make reliable predictions of $Y$ at new points $X = x$
+
+-- 
+
 - If $f$ is "good", then we can identify which components of $X$ are important to explaining $Y$
--- Depending on $f$, we may be able to learn how each component $X_{j}$ of $X$ affects $Y$
+
+  - Depending on $f$, we may be able to learn how each component $X_{j}$ of $X$ affects $Y$
 
 ---
 
-## Why care about $f$?
+## Why care about f?
 
 - We assume that $f$ is fixed but unknown
 - Goal of statistical learning: how to estimate $f$?
-  - Subgoals: **prediction** and **inference**
+  - Sub-goals: **prediction** and **inference**
 
-- The subgoal may affect the kind of $f$ we choose
+--
+
+- The sub-goal may affect the kind of $f$ we choose
 
 ---
 
 ## Prediction
 
-- We have a set of inputs or predictors $X$ and want to predict a corresponding $Y$
-- Assuming the error $\epsilon$ is 0 on average, obtain predictions of $Y$ as 
+- We have a set of inputs or predictors $X$, and we want to predict a corresponding $Y$
+
+--
+
+- Assuming the error $\epsilon$ is 0 on average, we can obtain predictions of $Y$ as 
 $$\hat{Y} = \hat{f}(X)$$
 
 - If we knew the true $Y$, we could evaluate the accuracy of the prediction $\hat{Y}$
@@ -131,9 +147,17 @@ $$\hat{Y} = \hat{f}(X)$$
 
 ## Types of error
 
+- Model: $Y = f(X) + \epsilon$
+
+--
+
 - Irreducible error: $\epsilon$
   - Even if we knew $f$ perfectly, there is still some inherent variability
   - $\epsilon$ may also contained unmeasured variables that are not available to us
+  
+--
+
+
 - Reducible error: how far $\hat{f}$ is from the true $f$
   
 ---
@@ -147,7 +171,7 @@ $$\hat{Y} = \hat{f}(X)$$
   
 --
 
-- Intuitively, large error indicates bad prediction
+- Intuitively, large error indicates worse prediction
 
 ---
 
@@ -188,7 +212,7 @@ $$\hat{Y} = \hat{f}(X)$$
 
 class: center, middle
 
-# How to estimate $f$?
+# How to estimate f?
 
 ---
 
@@ -210,18 +234,20 @@ For example,
 
 ## Parametric methods
 
-- Consider again the abalone data, and assume $X = \color{blue}{\text{length}}$. 
+- Consider again the `abalone` data, and assume $X = \color{blue}{\text{length}}$. 
 
 - Assuming a linear model: $$\color{blue}{\text{age}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{length}}$$
 
 ```{r fig.align = "center", fig.height=5, fig.width=8}
 p_rand <- ggplot(abalone, aes(x = weight, y = age))+
   geom_point()+
-  geom_abline(intercept = 7, slope = 3, col = "orange", lwd = 1)
+  geom_abline(intercept = 7, slope = 3, col = "orange", lwd = 1) +
+  theme(text = element_text(size = 16))
 
 p_ols <- ggplot(abalone, aes(x = weight, y = age))+
   geom_point()+
-  geom_smooth(method = "lm", se = F)
+  geom_smooth(method = "lm", se = F)+
+  theme(text = element_text(size = 16))
 
 gridExtra::grid.arrange(p_rand, p_ols, nrow = 1, top = "Linear models with different parameter estimates")
 ```
@@ -240,7 +266,8 @@ gridExtra::grid.arrange(p_rand, p_ols, nrow = 1, top = "Linear models with diffe
 ggplot(abalone, aes(x = weight, y = age))+
   geom_point()+
   geom_smooth(method = "gam", se = F) +
-  ggtitle("GAM fit")
+  ggtitle("GAM fit")+
+  theme(text = element_text(size = 16))
 ```
 
 ---
@@ -251,7 +278,11 @@ ggplot(abalone, aes(x = weight, y = age))+
 
   - More restrictive models may be easier to interpret (better for inference)
   
+--
+
 - Good fit vs. over- or under-fit
+
+--
 
 - Parsimony vs. black box
 
@@ -264,6 +295,8 @@ ggplot(abalone, aes(x = weight, y = age))+
 - No single method is superior over all possible data sets
 
 - How can we know how well a chosen $\hat{f}$ is performing? 
+
+--
 
 - In regression setting, we often use **mean squared error (MSE)**
 
@@ -294,7 +327,11 @@ $$\text{MSE}=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{f}(x_{i}))^2$$
 
 - Let $n_{train}$ and $n_{test}$ be number of observations in train and test sets, respectively.
 
+--
+
 $$MSE_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$
+--
+
 $$\text{MSE}_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$
 
 
@@ -345,13 +382,14 @@ mse_df <- data.frame(train = mse_train, test = mse_test)%>%
                      flexibility = c(2, 6, 11))
 ```
 
-```{r plot_mse1, fig.align="center", fig.width=8, fig.height=5}
+```{r plot_mse1, fig.align="center", fig.width=10, fig.height=5}
 
 p_fit <- ggplot()+
   geom_point(data = point_df, aes(x = x, y=y))+
   geom_line(data = fit_df, aes(x = x, y = value, col= mod), lwd = 1) +
   guides(col = "none") +
-  ggtitle("Various fits to observed data")
+  ggtitle("Various fits to observed data")+
+  theme(text = element_text(size = 16))
                     
 p_mse <- ggplot(data = mse_df %>%
          pivot_longer(cols = 1:2, values_to = "MSE", names_to = "set"),
@@ -361,7 +399,8 @@ p_mse <- ggplot(data = mse_df %>%
   guides(col= "none") +
   labs(y = "Mean squared error")+
   geom_hline(yintercept = sd^2) +
-  ggtitle("Mean squared error for test and train data")
+  ggtitle("Mean squared error for test and train data")+
+  theme(text = element_text(size = 16))
 
 
 gridExtra::grid.arrange(p_fit, p_mse, nrow = 1)
@@ -415,13 +454,14 @@ mse_df <- data.frame(train = mse_train, test = mse_test)%>%
                      flexibility = c(2, 6, 11))
 ```
 
-```{r plot_mse2, fig.align="center", fig.width=8, fig.height=5}
+```{r plot_mse2, fig.align="center", fig.width=10, fig.height=5}
 
 p_fit <- ggplot()+
   geom_point(data = point_df, aes(x = x, y=y))+
   geom_line(data = fit_df, aes(x = x, y = value, col= mod), lwd = 1) +
   guides(col = "none") +
-  ggtitle("Various fits to observed data")
+  ggtitle("Various fits to observed data")+
+  theme(text = element_text(size = 16))
                     
 p_mse <- ggplot(data = mse_df %>%
          pivot_longer(cols = 1:2, values_to = "MSE", names_to = "set"),
@@ -431,7 +471,8 @@ p_mse <- ggplot(data = mse_df %>%
   guides(col= "none") +
   labs(y = "Mean squared error")+
   geom_hline(yintercept = sd^2) +
-  ggtitle("Mean squared error for test and train data")
+  ggtitle("Mean squared error for test and train data")+
+  theme(text = element_text(size = 16))
 
 
 gridExtra::grid.arrange(p_fit, p_mse, nrow = 1)
@@ -457,6 +498,8 @@ gridExtra::grid.arrange(p_fit, p_mse, nrow = 1)
 - The expected test MSE for given $x_{0}$ can be decomposed as follows:
 
 $$\mathsf{E}[(y_{0} - \hat{f}(x_{0}))^2] = \text{Var}(\hat{f}(x_{0})) + [\text{Bias}(\hat{f}(x_{0}))]^2 + \text{Var}(\epsilon)$$
+
+
 where $\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0})$.
 
 ```{r bv1, cache =T}
@@ -562,7 +605,7 @@ rbind(bv_df1, bv_df2) %>%
   facet_wrap(~scenario, scales = "free")+
   scale_color_manual(labels = c("MSE", "Squared bias", "Variance"), values = c("blue", "red", "orange"))  +
   ggtitle( bquote( "Test MSE components"))+
-  theme(text = element_text(size = 12))
+  theme(text = element_text(size = 16))
 ```
 
 
@@ -570,7 +613,7 @@ rbind(bv_df1, bv_df2) %>%
 
 ## Classification
 
-- Up until now, we have focused on quantiative responses $y_{i}$
+- Up until now, we have focused on quantitative responses $y_{i}$
 
 - What happens when $y_{i}$ is qualitative? Examples include:
 
@@ -628,7 +671,7 @@ $$\mathbf{I}(y_{i} = \hat{y}_{i}) = \begin{cases} 1 & \text{ if } y_{i} = \hat{y
 - For a given observation $i$, can calculate the following probability for each possible label $j$:
 $$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$
 
-- These probabilities are called *conditional class probabilities* at $x_{i}$
+- These probabilities are called **conditional class probabilities** at $x_{i}$
 
 ---
 
@@ -644,7 +687,7 @@ $$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$
 
 - For example, consider a binary problem with levels "yes" and "no".
 
-- For observation $i$, if $Pr(y_{i} = \text{yes} | X = x_{i}) > 0.5$, then $\hat{y}_{i} = \text{yes}$. 
+- For observation $i$, if $Pr(y_{i} = \text{yes} | X = x_{i}) > 0.5$, then $\hat{y}_{i} =$ "yes". 
 
 --
 
@@ -655,7 +698,7 @@ $$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$
 
 ## Example
 
-```{r fig.align = "center", fig.height=5, fig.width=8}
+```{r fig.align = "center", fig.height=7.5, fig.width=7.5}
 set.seed(1)
 n <- 100
 lb <- -2; ub = 2
@@ -687,7 +730,8 @@ ggplot() +
                breaks = 0.1,
                col = "black")+
   theme_bw()+
-  guides(col = "none")
+  guides(col = "none")+
+  theme(text = element_text(size = 16))
 
 
 
@@ -700,6 +744,8 @@ ggplot() +
 - Bayes classifier is "gold standard"
 
 - In practice, we cannot compute $p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$ because we do know the conditional distribution of $y$ given $x$
+
+--
 
 - Instead, we need to estimate these $p_{ij}(x_{i})$
 
@@ -740,10 +786,13 @@ ggplot() +
   aes(x = X1, y = X2, col = class), size = 3) +
   geom_point(data = circle_df, aes(x =  x0, y = y0), col = "black", pch = 4, size =3)+
   guides(col ="none")+
-  theme_bw()
+  theme_bw()+
+  theme(text = element_text(size = 16))
 ```
 
-- Suppose we are interested in classifying the test observation as blue or red.
+- Suppose we wish to classify the test observation as blue or red.
+  
+  - What is $K$?
   
   - What is the estimated conditional probability for each class?
 
@@ -771,7 +820,8 @@ p_knn1 <- ggplot() +
                col = "black")+
   theme_bw()+
   guides(col = "none") +
-  ggtitle(paste0("K = ", k))
+  ggtitle(paste0("K = ", k))+
+  theme(text = element_text(size = 16))
 
 k <- 50
 knn4 <- knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = F)
@@ -791,7 +841,8 @@ p_knn2 <- ggplot() +
                col = "black")+
   theme_bw()+
   guides(col = "none") +
-  ggtitle(paste0("K = ", k))
+  ggtitle(paste0("K = ", k))+
+  theme(text = element_text(size = 16))
 
 k <- 15
 knn4 <- knn(points_df[,1:2], x_grid, points_df[,3], k = k, prob = F)
@@ -811,13 +862,14 @@ p_knn3 <- ggplot() +
                col = "black")+
   theme_bw()+
   guides(col = "none") +
-  ggtitle(paste0("K = ", k))
+  ggtitle(paste0("K = ", k))+
+  theme(text = element_text(size = 16))
 
 gridExtra::grid.arrange(p_knn1, p_knn2, p_knn3, nrow = 1, ncol = 3)
 
 ```
   
-- Black lines are true Bayes decision boundaries, and purple are the estimdated boundaries under KNN
+- Black lines are true Bayes decision boundaries, and purple are the estimated boundaries under KNN
 
 ---
 

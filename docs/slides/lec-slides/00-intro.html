@@ -6,6 +6,15 @@
     <meta name="author" content="Becky Tang" />
     <meta name="date" content="2022-09-12" />
     <script src="libs/font-awesome/header-attrs/header-attrs.js"></script>
+    <script src="libs/font-awesome/htmlwidgets/htmlwidgets.js"></script>
+    <link href="libs/font-awesome/datatables-css/datatables-crosstalk.css" rel="stylesheet" />
+    <script src="libs/font-awesome/datatables-binding/datatables.js"></script>
+    <script src="libs/font-awesome/jquery/jquery-3.6.0.min.js"></script>
+    <link href="libs/font-awesome/dt-core/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <link href="libs/font-awesome/dt-core/css/jquery.dataTables.extra.css" rel="stylesheet" />
+    <script src="libs/font-awesome/dt-core/js/jquery.dataTables.min.js"></script>
+    <link href="libs/font-awesome/crosstalk/css/crosstalk.min.css" rel="stylesheet" />
+    <script src="libs/font-awesome/crosstalk/js/crosstalk.min.js"></script>
     <link rel="stylesheet" href="math218-slides.css" type="text/css" />
   </head>
   <body>
@@ -41,13 +50,18 @@ class: regular
 
 [Becky Tang](https://beckytang.rbind.io/)
 
-&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[becky.tang@duke.edu](mailto:btang@midlebury.edu)&lt;br&gt;
-&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp;  W 3:00-5:00pm; Su 6:00-8:00pm (and by appointment)
+&lt;i class="material-icons"&gt;mail_outline&lt;/i&gt; &amp;nbsp;[btang@middlebury.edu](mailto:btang@midlebury.edu)&lt;br&gt;
+&lt;i class="material-icons"&gt;calendar_today&lt;/i&gt;&amp;nbsp;  W 3:00-5:00pm (and by appointment)
+
+
 
 --
 
 .pull-left[
-&lt;img src="figs/00/eBird.png" width="100%" style="display: block; margin: auto;" /&gt;
+&lt;img src="figs/00/eBird.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+&lt;img src="figs/00/beautiful_bird.png" width="70%" style="display: block; margin: auto;" /&gt;
+
 ]
 
 --
@@ -57,6 +71,13 @@ class: regular
 ]
 ---
 
+# TA
+
+- TA for the course: Doug Rosin
+
+- Office hours: Sunday evenings in Warner (TBD)
+
+---
 
 ## Where to find information
 
@@ -85,7 +106,7 @@ class: regular
 
 I assume you have taken Math 118 prior to this course, and are comfortable with R and RStudio. There is a large emphasis on computing.
 
-This is not a theory course. We will focus more on applications and developing intuition. The goal is to develop a toolbox of methods that you may use in future analyses.
+We will focus more on applications and developing intuition. The goal is to develop a toolbox of methods that you may use in future analyses. 
 
 
 ---
@@ -109,11 +130,11 @@ Go to https://github.com/, and create an account (unless you already have one). 
 Tips for creating a username from [Happy Git with R](http://happygitwithr.com/github-acct.html#username-advice).
 
 - Incorporate your actual name!
-- Reuse your username from other contexts if you can, e.g., Twitter or Slack.
+- Reuse your username from other contexts if you can.
 - Pick a username you will be comfortable revealing to your future boss.
 - Shorter is better than longer.
 - Be as unique as possible in as few characters as possible.
-- Make it timeless. Don’t highlight your current university, employer, or place of residence.
+- Make it timeless.
 - Avoid words laden with special meaning in programming, like `NA`.
 
 &lt;/small&gt;
@@ -125,11 +146,35 @@ Raise your hand if you have any questions.
 
 ---
 
+## Get to know each other
+
+Let's create the following plot together:
+
+&lt;img src="00-intro_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Data
+
+
+```r
+cat_lovers %&gt;%
+  datatable(options = list(pageLength = 5))
+```
+
+<div id="htmlwidget-c9d1b9f2b1524994988f" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c9d1b9f2b1524994988f">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60"],["Bernice Warren","Woodrow Stone","Willie Bass","Tyrone Estrada","Alex Daniels","Jane Bates","Latoya Simpson","Darin Woods","Agnes Cobb","Tabitha Grant","Perry Cross","Wanda Silva","Alicia Sims","Emily Logan","Woodrow Elliott","Brent Copeland","Pedro Carlson","Patsy Luna","Brett Robbins","Oliver George","Calvin Perry","Lora Gutierrez","Charlotte Sparks","Earl Mack","Leslie Wade","Santiago Barker","Jose Bell","Lynda Smith","Bradford Marshall","Irving Miller","Caroline Simpson","Frances Welch","Melba Jenkins","Veronica Morales","Juanita Cunningham","Maurice Howard","Teri Pierce","Phil Franklin","Jan Zimmerman","Leslie Price","Bessie Patterson","Ethel Wolfe","Naomi Wright","Sadie Frank","Lonnie Cannon","Tony Garcia","Darla Newton","Ginger Clark","Lionel Campbell","Florence Klein","Harriet Leonard","Terrence Harrington","Travis Garner","Doug Bass","Pat Norris","Dawn Young","Shari Alvarez","Tamara Robinson","Megan Morgan","Kara Obrien"],["0","0","1","3","3","2","1","1","0","0","0","0","1","3","3","2","1","1","0","0","1","1","0","0","4","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","1","3","3","2","1","1.5 - honestly I think one of my cats is half human","0","0","0","0","1","three","1","1","1","0","0","2"],["left","left","left","left","left","left","left","left","left","left","left","left","left","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","right","ambidextrous","ambidextrous","ambidextrous","ambidextrous","ambidextrous"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>name<\/th>\n      <th>number_of_cats<\/th>\n      <th>handedness<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+
+
+---
+
 ## Discussion 
 
 Share with the class!
 
-1. Start by introducing yourself! Name, year, major/ academic interest, favorite hobby.
+1. Start by introducing yourself! Name, year, major/ academic interest
+
+2. What is the next line of code you would write, or action you would take?
 
 ---
 
@@ -169,11 +214,11 @@ class: middle, center
 
 ## Activities &amp; Assessments
 
-- &lt;font class="vocab"&gt;Homework&lt;/font&gt;: Almost weekly individual homework assignments focused on deepening conceptual understanding of the concepts covered in lecture. In weeks with labs, homework will be assigned on Mondays after class. In weeks without lab, homework will be assigned on Friday after class. In both cases, the homework assignment is due the following Thursday at 11:59pm. Completed homework (written or typed) should be submitted as a PDF onto Canvas.  *Lowest score will be dropped.*
+- &lt;font class="vocab"&gt;Problem sets&lt;/font&gt;: Almost weekly assignments focused on deepening conceptual understanding of the concepts covered in lecture. In weeks with problem sets, the assignment will be released on Friday after class, and is due the following Thursday at 11:59pm. Completed homework (written or typed) should be submitted as a PDF onto Canvas. These problem sets are to be turned in individually.  *Lowest score will be dropped.*
 
 --
 
-- &lt;font class="vocab"&gt;Labs&lt;/font&gt;: Almost weekly lab assignments focused on learning how to implement the methods learned in class in R. Labs will begin as individual assignments, but may become partnered as the semester progresses.  When assigned, labs will be started in class on Fridays, and due the following Sunday at 11:59pm. Your completed lab should be submitted as a PDF onto Canvas. *Lowest score will be dropped.*
+- &lt;font class="vocab"&gt;Labs&lt;/font&gt;: Almost weekly lab assignments focused on learning how to implement the methods learned in class in R. Labs will begin as individual assignments, but may become partnered as the semester progresses.  When assigned, labs will be started in class on Fridays, and due the immediately following Sunday at 11:59pm. Your completed lab should be submitted as a PDF onto Canvas. *Lowest score will be dropped.*
 
 
 ---
@@ -234,7 +279,7 @@ class: middle, center
     - After the assigned deadline, there is a 10% penalty for each day the assignment is late
     - Please communicate with me early if you will need a homework extension!
     
-- Late work will not be accepted for the take-home exams or final project. 
+- Late work will not be accepted for the take-home exam or final project. 
 
 - Regrade requests must be submitted within one week of when the assignment is returned 
 
@@ -268,7 +313,7 @@ Any violations will automatically result in a grade of 0 on the assignment and w
 
 --
 
-- **Office Hours**: A lot of questions are most effectively answered in-person, so office hours are a valuable resource. Please use them! If my scheduled office hours do not work for you, feel free to send me an e-mail!
+- **Office Hours**: A lot of questions are most effectively answered in-person, so my our the TA's office hours are a valuable resource. Please use them! If my scheduled office hours do not work for you, feel free to send me an e-mail!
 
 --
 
@@ -288,9 +333,7 @@ In this course, we will strive to create a learning environment that is welcomin
 
 Additionally, if you are experiencing something outside of class that is affecting your performance in the course, please feel free to talk with me and/or your academic dean.  &lt;br&gt;&lt;br&gt; 
 
---
 
-We will finish class today with a discussion about what we want our classroom community to look like.
 
 ---
 

@@ -45,7 +45,9 @@ class: center, middle, inverse, title-slide
 
 ---
 
-&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-3-1.png" height="40%" style="display: block; margin: auto;" /&gt;
+# EDA
+
+&lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
 
 - `\(\color{blue}{\text{age}}\)` of abalone plotted against `\(\color{blue}{\text{height}}\)`, `\(\color{blue}{\text{length}}\)`, `\(\color{blue}{\text{weight}}\)`.
 
@@ -54,7 +56,7 @@ class: center, middle, inverse, title-slide
 
 ---
 
-# Modeling
+## Modeling
 
 - Maybe `\(\color{blue}{\text{age}} = f(\color{blue}{\text{height}} + \color{blue}{\text{length}} + \color{blue}{\text{weight}})\)`?
 
@@ -74,31 +76,44 @@ class: center, middle, inverse, title-slide
 
 ---
 
-## Why care about `\(f\)`?
+## Why care about f?
 
-`$$Y = f(X) + \epsilon$$`
+- Model: `\(Y = f(X) + \epsilon\)`
+
+
 - The function `\(f(X)\)` represents the systematic information that `\(X\)` tells us about `\(Y\)`. 
 
+--
+
 - If `\(f\)` is "good", then we can make reliable predictions of `\(Y\)` at new points `\(X = x\)`
+
+-- 
+
 - If `\(f\)` is "good", then we can identify which components of `\(X\)` are important to explaining `\(Y\)`
--- Depending on `\(f\)`, we may be able to learn how each component `\(X_{j}\)` of `\(X\)` affects `\(Y\)`
+
+  - Depending on `\(f\)`, we may be able to learn how each component `\(X_{j}\)` of `\(X\)` affects `\(Y\)`
 
 ---
 
-## Why care about `\(f\)`?
+## Why care about f?
 
 - We assume that `\(f\)` is fixed but unknown
 - Goal of statistical learning: how to estimate `\(f\)`?
-  - Subgoals: **prediction** and **inference**
+  - Sub-goals: **prediction** and **inference**
 
-- The subgoal may affect the kind of `\(f\)` we choose
+--
+
+- The sub-goal may affect the kind of `\(f\)` we choose
 
 ---
 
 ## Prediction
 
-- We have a set of inputs or predictors `\(X\)` and want to predict a corresponding `\(Y\)`
-- Assuming the error `\(\epsilon\)` is 0 on average, obtain predictions of `\(Y\)` as 
+- We have a set of inputs or predictors `\(X\)`, and we want to predict a corresponding `\(Y\)`
+
+--
+
+- Assuming the error `\(\epsilon\)` is 0 on average, we can obtain predictions of `\(Y\)` as 
 `$$\hat{Y} = \hat{f}(X)$$`
 
 - If we knew the true `\(Y\)`, we could evaluate the accuracy of the prediction `\(\hat{Y}\)`
@@ -113,9 +128,17 @@ class: center, middle, inverse, title-slide
 
 ## Types of error
 
+- Model: `\(Y = f(X) + \epsilon\)`
+
+--
+
 - Irreducible error: `\(\epsilon\)`
   - Even if we knew `\(f\)` perfectly, there is still some inherent variability
   - `\(\epsilon\)` may also contained unmeasured variables that are not available to us
+  
+--
+
+
 - Reducible error: how far `\(\hat{f}\)` is from the true `\(f\)`
   
 ---
@@ -129,7 +152,7 @@ class: center, middle, inverse, title-slide
   
 --
 
-- Intuitively, large error indicates bad prediction
+- Intuitively, large error indicates worse prediction
 
 ---
 
@@ -170,7 +193,7 @@ class: center, middle, inverse, title-slide
 
 class: center, middle
 
-# How to estimate `\(f\)`?
+# How to estimate f?
 
 ---
 
@@ -192,7 +215,7 @@ For example,
 
 ## Parametric methods
 
-- Consider again the abalone data, and assume `\(X = \color{blue}{\text{length}}\)`. 
+- Consider again the `abalone` data, and assume `\(X = \color{blue}{\text{length}}\)`. 
 
 - Assuming a linear model: `$$\color{blue}{\text{age}} \approx \beta_{0} + \beta_{1}\color{blue}{\text{length}}$$`
 
@@ -218,7 +241,11 @@ For example,
 
   - More restrictive models may be easier to interpret (better for inference)
   
+--
+
 - Good fit vs. over- or under-fit
+
+--
 
 - Parsimony vs. black box
 
@@ -231,6 +258,8 @@ For example,
 - No single method is superior over all possible data sets
 
 - How can we know how well a chosen `\(\hat{f}\)` is performing? 
+
+--
 
 - In regression setting, we often use **mean squared error (MSE)**
 
@@ -261,7 +290,11 @@ For example,
 
 - Let `\(n_{train}\)` and `\(n_{test}\)` be number of observations in train and test sets, respectively.
 
+--
+
 `$$MSE_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$`
+--
+
 `$$\text{MSE}_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$`
 
 
@@ -300,6 +333,8 @@ For example,
 - The expected test MSE for given `\(x_{0}\)` can be decomposed as follows:
 
 `$$\mathsf{E}[(y_{0} - \hat{f}(x_{0}))^2] = \text{Var}(\hat{f}(x_{0})) + [\text{Bias}(\hat{f}(x_{0}))]^2 + \text{Var}(\epsilon)$$`
+
+
 where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0})\)`.
 
 
@@ -319,7 +354,7 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 
 ## Classification
 
-- Up until now, we have focused on quantiative responses `\(y_{i}\)`
+- Up until now, we have focused on quantitative responses `\(y_{i}\)`
 
 - What happens when `\(y_{i}\)` is qualitative? Examples include:
 
@@ -377,7 +412,7 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 - For a given observation `\(i\)`, can calculate the following probability for each possible label `\(j\)`:
 `$$p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})$$`
 
-- These probabilities are called *conditional class probabilities* at `\(x_{i}\)`
+- These probabilities are called **conditional class probabilities** at `\(x_{i}\)`
 
 ---
 
@@ -393,7 +428,7 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 
 - For example, consider a binary problem with levels "yes" and "no".
 
-- For observation `\(i\)`, if `\(Pr(y_{i} = \text{yes} | X = x_{i}) &gt; 0.5\)`, then `\(\hat{y}_{i} = \text{yes}\)`. 
+- For observation `\(i\)`, if `\(Pr(y_{i} = \text{yes} | X = x_{i}) &gt; 0.5\)`, then `\(\hat{y}_{i} =\)` "yes". 
 
 --
 
@@ -413,6 +448,8 @@ where `\(\text{Bias}(\hat{f}(x_{0})) = \mathsf{E}[\hat{f}(x_{0})] - \hat{f}(x_{0
 - Bayes classifier is "gold standard"
 
 - In practice, we cannot compute `\(p_{ij}(x_{i}) = Pr(y_{i} = j | X = x_{i})\)` because we do know the conditional distribution of `\(y\)` given `\(x\)`
+
+--
 
 - Instead, we need to estimate these `\(p_{ij}(x_{i})\)`
 
@@ -443,7 +480,9 @@ Then, for a given test observation `\(x_{0}\)`:
 
 &lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 
-- Suppose we are interested in classifying the test observation as blue or red.
+- Suppose we wish to classify the test observation as blue or red.
+  
+  - What is `\(K\)`?
   
   - What is the estimated conditional probability for each class?
 
@@ -454,7 +493,7 @@ Then, for a given test observation `\(x_{0}\)`:
 
 &lt;img src="02-what-is-slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
   
-- Black lines are true Bayes decision boundaries, and purple are the estimdated boundaries under KNN
+- Black lines are true Bayes decision boundaries, and purple are the estimated boundaries under KNN
 
 ---
 

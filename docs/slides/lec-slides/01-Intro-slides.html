@@ -4,6 +4,7 @@
     <title>Math 218: Statistical Learning</title>
     <meta charset="utf-8" />
     <meta name="author" content="Introduction" />
+    <script src="01-Intro-slides_files/header-attrs-2.16/header-attrs.js"></script>
     <link rel="stylesheet" href="math218-slides.css" type="text/css" />
   </head>
   <body>
@@ -37,11 +38,15 @@ class: center, middle
 
 ---
 
-![](01-Intro-slides_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+## Predict disease given demographic and health measurements
+
+&lt;img src="01-Intro-slides_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
-&lt;img src="01-Intro-slides_files/figure-html/unnamed-chunk-2-1.png" height="70%" style="display: block; margin: auto;" /&gt;
+## Relationship between earnings and demographics
+
+&lt;img src="01-Intro-slides_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -51,13 +56,15 @@ class: center, middle
 
 ---
 
+## Classify pixels in imagery
+
 &lt;img src="figs/01-intro/landsat.jpg" width="70%" style="display: block; margin: auto;" /&gt;
 .footnote[
 *Source: [A comparative study of ALOS-2 PALSAR and landsat-8 imagery for land cover classification using maximum likelihood classifier](https://www.sciencedirect.com/science/article/pii/S1110982317301205)
 ]
 ---
 
-## Examples of statistical learning problems
+## Categories of statistical learning problems
 
 - Classification
 - Learning relationships
@@ -71,14 +78,23 @@ class: center, middle
 - For each observation `\(i\)`, we have:
   - Outcome/response: `\(y_{i}\)`
   - Vector of `\(p\)` predictors/covariates: `\(\mathbf{x}_{i} = (x_{i1}, x_{i2}, \ldots, x_{ip})'\)`
+  
+--
+
 - **Regression**: the `\(y_{i}\)` are quantitative (e.g. height, price)
-- **Classficiation**: the `\(y_{i}\)` are categorical/qualitative (e.g. education level, diagnosis)
+
+--
+
+- **Classification**: the `\(y_{i}\)` are categorical/qualitative (e.g. education level, diagnosis)
+
+--
+
 - Goal: relate response `\(y_{i}\)` to the various predictors
 
 
 ---
 
-## Objectives
+## Objectives in Supervised Learning
 
 1. Explanatory: understand which predictors affect the response, and how 
 2. Prediction: accurately predict unobserved cases for new measurements of predictors
@@ -89,7 +105,10 @@ class: center, middle
 ## Unsupervised Learning
 
 - We only observe the `\(\mathbf{x}_{i}\)`, but no associated response `\(y_{i}\)`
-- ''Unsupervised" because there is no response variable guiding the analysis!
+- "Unsupervised" because there is no response variable guiding the analysis!
+
+--
+
 - Objective may not be as clearly defined
 - Difficult to assess how well your are doing
 
@@ -157,9 +176,16 @@ with human readable messages
 
 ## Before next class 
 
-- Accept the invite to join `math218-fall2022` organization on GitHub TODAY!! 
 
-- If you have not already done so "Getting to know you" survey on Canvas - due end of today today!
+- Fill out the **Getting To Know You Survey on Canvas** - due Wednesday, 9/14 at 11:59pm
+
+  - After filling out the survey, [schedule](https://calendly.com/beckytang/10min) a brief 1:1 meeting with me! 
+
+- Please make sure you can access the [course website](https://math218-fall2022.github.io/website/)
+
+- Fill out the [form](https://forms.gle/9McLQvHGTzWoqAeM7) with your Github username
+
+- Please create a folder on your desktop called "Math218"
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

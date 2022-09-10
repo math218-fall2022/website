@@ -32,7 +32,9 @@ class: center, middle
 
 ---
 
-```{r echo = F}
+## Predict disease given demographic and health measurements
+
+```{r echo = F, fig.align = "center"}
 vars <- c("Age","AlcoholDay", "SmokeNow", "BMI", "BPDiaAve")
 nhanes <- NHANES %>%
   dplyr::select(all_of(vars)) %>%
@@ -45,19 +47,22 @@ pairs(nhanes %>% dplyr::select(-SmokeNow), col = cols)
 
 ---
 
-```{r fig.align="center",out.height = "70%",echo=FALSE}
+## Relationship between earnings and demographics
+
+```{r fig.align="center", fig.width = 8, fig.height = 5, echo=FALSE}
 library(ISLR)
 attach(Wage) #Mid-Atlantic Wage Data
 p1 <- Wage %>%
   ggplot(., aes(x = age , y = wage))+
   geom_point()+
   geom_smooth()+
-  theme_classic()
+  theme_classic() +
+  theme( text = element_text(size = 16))
 p2 <- Wage %>%
   ggplot(., aes(x = education, y = wage, fill = education)) + 
   geom_boxplot()+
   theme_classic() +
-  theme(axis.text.x = element_blank())
+  theme(axis.text.x = element_blank(), text = element_text(size = 16))
 gridExtra::grid.arrange(p1,p2, nrow =1)
 ```
 
@@ -71,6 +76,8 @@ knitr::include_graphics("figs/01-intro/mnist2.jpeg")
 
 ---
 
+## Classify pixels in imagery
+
 ```{r fig.align="center",out.width="70%",echo=FALSE}
 knitr::include_graphics("figs/01-intro/landsat.jpg")
 ```
@@ -79,7 +86,7 @@ knitr::include_graphics("figs/01-intro/landsat.jpg")
 ]
 ---
 
-## Examples of statistical learning problems
+## Categories of statistical learning problems
 
 - Classification
 - Learning relationships
@@ -93,14 +100,23 @@ knitr::include_graphics("figs/01-intro/landsat.jpg")
 - For each observation $i$, we have:
   - Outcome/response: $y_{i}$
   - Vector of $p$ predictors/covariates: $\mathbf{x}_{i} = (x_{i1}, x_{i2}, \ldots, x_{ip})'$
+  
+--
+
 - **Regression**: the $y_{i}$ are quantitative (e.g. height, price)
-- **Classficiation**: the $y_{i}$ are categorical/qualitative (e.g. education level, diagnosis)
+
+--
+
+- **Classification**: the $y_{i}$ are categorical/qualitative (e.g. education level, diagnosis)
+
+--
+
 - Goal: relate response $y_{i}$ to the various predictors
 
 
 ---
 
-## Objectives
+## Objectives in Supervised Learning
 
 1. Explanatory: understand which predictors affect the response, and how 
 2. Prediction: accurately predict unobserved cases for new measurements of predictors
@@ -111,7 +127,10 @@ knitr::include_graphics("figs/01-intro/landsat.jpg")
 ## Unsupervised Learning
 
 - We only observe the $\mathbf{x}_{i}$, but no associated response $y_{i}$
-- ''Unsupervised" because there is no response variable guiding the analysis!
+- "Unsupervised" because there is no response variable guiding the analysis!
+
+--
+
 - Objective may not be as clearly defined
 - Difficult to assess how well your are doing
 
@@ -185,8 +204,13 @@ knitr::include_graphics("figs/01-intro/phd_comics_vc.gif")
 
 ## Before next class 
 
-- Accept the invite to join `math218-fall2022` organization on GitHub TODAY!! 
 
-- If you have not already done so "Getting to know you" survey on Canvas - due end of today today!
+- Fill out the **Getting To Know You Survey on Canvas** - due Wednesday, 9/14 at 11:59pm
 
   - After filling out the survey, [schedule](https://calendly.com/beckytang/10min) a brief 1:1 meeting with me! 
+
+- Please make sure you can access the [course website](https://math218-fall2022.github.io/website/)
+
+- Fill out the [form](https://forms.gle/9McLQvHGTzWoqAeM7) with your Github username
+
+- Please create a folder on your desktop called "Math218"

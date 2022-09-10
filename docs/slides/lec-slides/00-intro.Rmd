@@ -60,15 +60,22 @@ class: regular
 
 [Becky Tang](https://beckytang.rbind.io/)
 
-<i class="material-icons">mail_outline</i> &nbsp;[becky.tang@duke.edu](mailto:btang@midlebury.edu)<br>
-<i class="material-icons">calendar_today</i>&nbsp;  W 3:00-5:00pm; Su 6:00-8:00pm (and by appointment)
+<i class="material-icons">mail_outline</i> &nbsp;[btang@middlebury.edu](mailto:btang@midlebury.edu)<br>
+<i class="material-icons">calendar_today</i>&nbsp;  W 3:00-5:00pm (and by appointment)
+
+
 
 --
 
 .pull-left[
-```{r, echo=FALSE,out.width = '100%'} 
+```{r echo=FALSE,out.width = '70%'} 
 knitr::include_graphics("figs/00/eBird.png")
 ```
+
+```{r echo=FALSE,out.width = '70%'}
+knitr::include_graphics("figs/00/beautiful_bird.png")
+```
+
 ]
 
 --
@@ -139,11 +146,11 @@ Go to https://github.com/, and create an account (unless you already have one). 
 Tips for creating a username from [Happy Git with R](http://happygitwithr.com/github-acct.html#username-advice).
 
 - Incorporate your actual name!
-- Reuse your username from other contexts if you can, e.g., Twitter or Slack.
+- Reuse your username from other contexts if you can.
 - Pick a username you will be comfortable revealing to your future boss.
 - Shorter is better than longer.
 - Be as unique as possible in as few characters as possible.
-- Make it timeless. Don’t highlight your current university, employer, or place of residence.
+- Make it timeless.
 - Avoid words laden with special meaning in programming, like `NA`.
 
 </small>
@@ -155,11 +162,47 @@ Raise your hand if you have any questions.
 
 ---
 
+## Get to know each other
+
+Let's create the following plot together:
+
+```{r echo = F, fig.align="center", fig.width=8, fig.height=5}
+library(DT)
+cat_lovers <- read.csv("data/cat-lovers.csv")
+cat_df <- cat_lovers %>%
+  mutate(number_of_cats = case_when(
+    name == "Ginger Clark" ~ "2",
+    name == "Doug Bass"    ~ "3",
+    TRUE                   ~ number_of_cats
+    ),
+    number_of_cats = as.numeric(number_of_cats))
+cat_df %>%
+  ggplot(., aes(x = number_of_cats))+
+  geom_bar()+
+  ggtitle(paste0("Average number of cats: ", round(mean(cat_df$number_of_cats), 2))) +
+  xlab("Number of cats")+
+  theme(text = element_text(size = 16))
+```
+
+---
+
+## Data
+
+```{r}
+cat_lovers %>%
+  datatable(options = list(pageLength = 5))
+```
+
+
+---
+
 ## Discussion 
 
 Share with the class!
 
-1. Start by introducing yourself! Name, year, major/ academic interest, favorite hobby.
+1. Start by introducing yourself! Name, year, major/ academic interest
+
+2. What is the next line of code you would write, or action you would take?
 
 ---
 
@@ -318,9 +361,7 @@ In this course, we will strive to create a learning environment that is welcomin
 
 Additionally, if you are experiencing something outside of class that is affecting your performance in the course, please feel free to talk with me and/or your academic dean.  <br><br> 
 
---
 
-We will finish class today with a discussion about what we want our classroom community to look like.
 
 ---
 
