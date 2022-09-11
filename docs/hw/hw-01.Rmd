@@ -180,6 +180,8 @@ c) The number of predictors $p$ is extremely large relative to the number of obs
 
 d) You are confident in your assumptions about the underlying function.
 
+## Exercise 7
+
 ## Submission 
 
 Please upload your finished assignment to Canvas as a PDF (either scanned or converted document). 

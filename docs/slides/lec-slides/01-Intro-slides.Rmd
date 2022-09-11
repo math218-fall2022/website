@@ -204,12 +204,11 @@ knitr::include_graphics("figs/01-intro/phd_comics_vc.gif")
 
 ## Before next class 
 
+- Read [Nature article](reproducibility_crisis.pdf) on reproducibility (also available on Canvas) for discussion on Friday
 
 - Fill out the **Getting To Know You Survey on Canvas** - due Wednesday, 9/14 at 11:59pm
 
   - After filling out the survey, [schedule](https://calendly.com/beckytang/10min) a brief 1:1 meeting with me! 
-
-- Please make sure you can access the [course website](https://math218-fall2022.github.io/website/)
 
 - Fill out the [form](https://forms.gle/9McLQvHGTzWoqAeM7) with your Github username
 
