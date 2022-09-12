@@ -18,7 +18,7 @@ markup: "mmark"
 {.table .table1 .table-condensed .table-striped .text-left}
 <span></span>     | <span></span>     | <span></span>    | <span></span>    |  <span></span>      
 ------------------|-------------------|------------------|------------------|------------------ 
-Professor        | [Becky Tang](https://beckytang.rbind.io/) | <a href="mailto:btang@middlebury.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> | W 3:00-5:00pm; Su 6:00-8:00pm; by appointment | 
+Professor        | [Becky Tang](https://beckytang.rbind.io/) | <a href="mailto:btang@middlebury.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/beckytang" title="GitHub"><i class="fa fa-github"></i></a> | W 3:00-5:00pm; by appointment | 
 
 ### Texts
 

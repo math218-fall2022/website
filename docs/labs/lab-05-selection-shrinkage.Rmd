@@ -1,0 +1,579 @@
+---
+title: "Lab 05 - Linear Model Selection and Regularization"
+subtitle: "Due Sunday, 10/23 at 11:59pm"
+output: 
+  tufte::tufte_html:
+    css: "./math218-labs.css"
+    tufte_variant: "envisioned"
+    highlight: tango
+    toc: true
+    toc_depth: 1
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message = F, warning = F}
+knitr::opts_chunk$set(warning = F, message = F, fig.align = "center")
+library(tidyverse)
+library(ISLR2)
+```
+
+# Introduction
+
+We will examine selection and shrinkage methods for linear models using the `Hitters` data from the `ISLR2` package. This data contains 322 observations of major league baseball players from the 1986 and 1987 seasons. 
+
+We wish to predict a baseball player's `Salary` in 1987 using several other variables/statistics that were measured in the previous year. 
+
+First, if you `View(Hitters)`, you will notice that `Salary` is missing for some players. How many?
+
+```{r}
+sum(is.na(Hitters$Salary))
+```
+
+We will only work with the rows (players) that have complete data:
+
+```{r}
+Hitters <- na.omit(Hitters)
+```
+
+# Subset Selection Methods
+
+## Best Subset Selection
+
+We can use the `regsubsets()` function from the library `leaps` to perform best subset selection to identify the best model that contains a given number of predictors. Here, "best" is quantified using the residual sum of squares RSS. We use the same syntax as for `lm()`. The `summary()` function will  display the best set of variables for each model size.
+
+```{marginfigure}
+You will most likely have to install this package.
+```
+
+```{r}
+library(leaps)
+best_sub_fit <- regsubsets(Salary ~ ., Hitters)
+summary(best_sub_fit)
+```
+
+An asterisk indicates that a given variable is included in the corresponding model. For instance, this output indicates that the best three-variable model contains `Hits`, `CRBI`, and `PutOuts`. By default, `regsubsets()` only reports results up to the best eight-variable model, but we can change that by specifying the `nvmax` argument:
+
+```{r}
+best_sub_fit <- regsubsets(Salary ~ ., data = Hitters, nvmax = 19)
+best_summary <- summary(best_sub_fit)
+```
+
+The `summary()` function also returns $R^2$, RSS, adjusted $R^2$, $C_{p}$ and BIC:
+
+```{r}
+names(best_summary)
+```
+
+We can look at all these statistics (except $R^2$) at once to help decide which model to select:
+
+```{marginfigure}
+If you are not familiar with the `pivot_longer()` function (or any of the following code), feel free to ask!
+```
+
+```{r}
+metric_df <- data.frame(RSS = best_summary$rss, 
+                        R2_adj = best_summary$adjr2,
+                        Cp = best_summary$cp, 
+                        BIC = best_summary$bic) %>%
+  mutate(n_vars = 1:19) 
+metric_df %>%
+  pivot_longer(cols = 1:4, names_to = "statistic", values_to = "value") %>%
+  ggplot(., aes(x = n_vars, y = value)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~ statistic, scales = "free")
+```
+
+Which model is the best? Depends on the metric! The `which.max()` and `which.min()` functions can be used to identify the location of the maximum and minimum points of a vector.
+
+```{marginfigure}
+Recall that we prefer large adjusted $R^2$, but small values for the the other three metrics.
+```
+
+```{r}
+which.max(metric_df$R2_adj)
+apply(metric_df[,c(1,3,4)], 2, which.min)
+```
+
+The following code creates the same plot as before, but now colors the "best" model according to the metric. 
+
+```{r}
+best_df <- data.frame(n_vars = c(which.max(metric_df$R2_adj),
+                        apply(metric_df[,c(1,3,4)], 2, which.min)),
+                      statistic = names(metric_df)[c(2,1,3,4)]) %>%
+  mutate(best = T)
+metric_df %>%
+  pivot_longer(cols = 1:4, names_to = "statistic", values_to = "value")  %>%
+  left_join(., best_df, by = c("n_vars","statistic")) %>%
+  mutate(best = ifelse(is.na(best), F, T)) %>%
+  ggplot(., aes(x = n_vars, y = value)) +
+  geom_line() +
+  geom_point(aes(col = best)) +
+  facet_wrap(~ statistic, scales = "free") +
+  scale_color_manual(values = c("black", "orange"))
+```
+
+If we wanted to examine the coefficients for a given model, we can use the `coef()` function. For example, the best subset model according to BIC is the model with 6 predictors.
+
+```{r}
+coef(best_sub_fit, 6)
+```
+
+## Forward and Backward Stepwise Selection
+
+We can use the same `regsubsets()` function to perform forward or backward stepwise selection. This is specified using the `method` argument:
+
+```{r}
+fwd_mod <- regsubsets(Salary  ~ ., data= Hitters, nvmax = 10, method = "forward")
+summary(fwd_mod)
+```
+
+```{marginfigure}
+Does the forward selection method pick the same models as the best subset selection method?
+```
+
+For example, using forward selection, the best one-predictor model contains `CRBI` and the best two-predictor model also contains `Hits`. 
+
+## Choosing Among Models Using the Validation-Set Approach 
+
+Rather than rely on a statistic/metric such as adjusted $R^2$, we might wantt to select a model using some sort of validation hold-out method. In order for these approaches to yield accurate estimates of the test error, we must use *only the training observations* to perform all aspects of model-fitting—including variable selection.
+
+For the validation set approach, we begin by splitting the the observations into train and test sets. The following code creates vectors of the indices for each set:
+
+```{r}
+set.seed(1)
+n <- nrow(Hitters)
+train_ids <- sample(1:n, n/2)
+test_ids <- (1:n)[-train_ids]
+```
+
+Assume we are interested in performing best subsect selection. The will apply the `regsubsets()` function to the training set:
+
+```{r}
+best_train <- regsubsets(Salary ~., data = Hitters[train_ids,], nvmax = 19)
+```
+
+Now we must compute the validation set error for the best model of *each* model size. We begin by making a *model matrix* (also called design matrix) for the test data. This is achieved by using the `model.matrix()` function that creates an "X" matrix from the data.
+
+```{marginfigure}
+Note: `model.matrix()` by default includes a column of ones for the intercept. Additionally, it automatically transforms any qualitative variables into dummy variables.
+```
+
+```{r}
+test_X <- model.matrix(Salary ~ . , data = Hitters[test_ids,])
+head(test_X)
+```
+
+We run a `for` loop for each sized model `i`, extract the coefficients from `best_train` for the best model of that size, obtain predictions for test data using `test_X`, then compute the test MSE.
+
+```{r}
+mse_vec <- rep(NA, 19)
+for(i in 1:19){
+  coefs <- coef(best_train, id = i)
+  preds <- test_X[,names(coefs)] %*% coefs
+  mse_vec[i] <- mean((Hitters$Salary[test_ids] - preds)^2)
+}
+```
+
+This was a little tedious, partly due to the fact that there is no `predict()` method for a `regsubsets()` object. If we want to use this function again, we might want to write our own predict method:
+
+```{r}
+predict.regsubsets <- function(object, newdata, id, ...){
+  form <- as.formula(object$call[[2]])
+  X_mat <- model.matrix(form, newdata)
+  coefs <- coef(object, id = id)
+  xvars <- names(coefs)
+  X_mat[, xvars] %*% coefs
+}
+```
+
+Our function pretty much mimics what we did above. The only complex part is how we extracted the formula used in the call to `regsubsets()`.
+
+We could use this function as follows. Notice that `R` automatically uses our `predict.regsubsets()` function when we call `predict()` because the object passed in as the first argument (`best_train`) is of class `regsubsets`.
+
+```{r}
+mse_vec <- rep(NA, 19)
+for(i in 1:19){
+  preds <- predict(best_train, Hitters[test_ids,], id= i)
+  mse_vec[i] <- mean((Hitters$Salary[test_ids] - preds)^2)
+}
+```
+
+We find that the best model (using our given `seed`) is the one that contains six variables.
+
+```{r}
+which.min(mse_vec)
+coef(best_train, which.min(mse_vec))
+```
+
+Now that we've chosen the model, we should go back and re-fit the seven-variable model using *all* the available data. It is important that we make use of the full data set in order to obtain more accurate coefficient estimates. Note that we perform best subset selection on the full data set and select the best seven-variable model, rather than simply using the variables that were obtained from the training set, because the best seven-variable model on the full data set may differ from the corresponding model on the training set.
+
+```{r}
+best_full <- regsubsets(Salary ~ ., data = Hitters, nvmax = 19)
+coef(best_full, which.min(mse_vec))
+```
+
+In fact, we see that the best six-variable model on the full data set has a different set of variables than the best six-variable model on the training set.
+
+# Ridge regression
+
+The `glmnet` package helps us perform ridge regression. The main function is, unsurprisingly, `glmnet()`. The syntax is slightly different from `lm()` in that we have to pass in an `x` matrix of predictors as well as a `y` vector of responses. This is opposed to the familiar `y ~ x` syntax. We will once again use the `model.matrix()` function to create an `x` matrix.
+
+```{r}
+library(glmnet)
+x <- model.matrix(Salary ~ ., Hitters)[,-1]
+y <- Hitters$Salary
+```
+
+Note that we create a design matrix `x` excluding an intercept. This is because `glmnet()` will automatically include one for us.
+
+The `glmnet()` function has an argument called `alpha`. Setting `alpha = 0` runs ridge regression. The following code also specifies a grid of values for the tuning parameter $\lambda$, ranging from $\lambda = 10^{10}$ to $\lambda = 10^{-2}$. If we didn't specify `lambda`, the function would automatically select a range of values.
+
+```{marginfigure}
+glmnet()` standardizes the variables by default. If we wanted to turn this off, we would set `standardize = FALSE`.
+```
+
+```{r}
+grid <- 10^seq(10,-2,length = 100)
+ridge_mod <- glmnet(x, y, alpha = 0, lambda = grid)
+```
+
+Associated with each value of $\lambda$ is a vector of ridge regression coefficients, stored in a matrix that can be accessed by `coef()`. In this case, it is a $20 \times 100$ matrix, with 20 rows (one for each predictor, plus an intercept) and 100 columns (one for each value of $\lambda$).
+
+```{r}
+dim(coef(ridge_mod))
+```
+
+We expect that the coefficients estimates will be much smaller when a large value of $\lambda$ is used, compared to when a smaller value is used. 
+
+```{r}
+grid[50]
+coef(ridge_mod)[,50]
+
+# l2 norm
+sqrt(sum((coef(ridge_mod)[-1,50])^2))
+
+# versus
+grid[70]
+coef(ridge_mod)[,70]
+
+# l2 norm
+sqrt(sum((coef(ridge_mod)[-1,70])^2))
+
+```
+
+We now split the samples into a training set and a test set in order to estimate the test error of ridge regression. Above, we randomly chose a subset of of numbers between 1 and $n$ to create a vector of training set indices. Another approach to create training/test sets is to produce a random vector of `TRUE`, `FALSE` elements and select the observations corresponding to `TRUE` for the training data:
+
+```{r}
+set.seed(2)
+train_set <- sample(c(TRUE, FALSE), n, replace = T)
+y_test <- y[!train_set]
+```
+
+Next we fit a ridge regression model on the training set, and evaluate its MSE on a the test set using predictions obtained from `predict()`. We will arbitrarily use $\lambda = 5$ for the test set.
+
+```{marginfigure}
+In `predict()`, the `s` argument denotes the penalty parameter $\lambda$.   Default is the entire sequence used to create the model.
+```
+
+```{r}
+ridge_mod <- glmnet(x[train_set,], y[train_set], alpha = 0, lambda = grid)
+ridge_preds <- predict(ridge_mod, s = 5, newx = x[!train_set,])
+mean((ridge_preds - y_test)^2)
+```
+
+We now check whether there is any benefit to performing ridge regression with $\lambda = 5$ instead of just performing least squares regression. Recall that least squares is simply ridge regression with $\lambda = 0$. 
+
+```{r}
+lm_mod <- lm(Salary ~., Hitters[train_set,])
+lm_preds <- predict(lm_mod, newdata = Hitters[!train_set,])
+mean((lm_preds - y_test)^2)
+```
+
+Already, it seems like ridge regression yields better predictions than least squares regression.
+
+It would be better to use cross-validation to choose the tuning parameter, rather than arbitrarily choosing a value for $\lambda$. We can do this using the built-in cross-validation function, `cv.glmnet()`. 
+
+```{r}
+set.seed(2)
+cv_out <- cv.glmnet(x[train_set,], y[train_set], alpha = 0, nfolds = 5)
+(best_lam <- cv_out$lambda.min)
+```
+
+The test MSE associated with the "best" $\lambda$ is:
+
+```{r}
+ridge_preds <- predict(ridge_mod, s= best_lam, newx = x[!train_set,])
+mean((ridge_preds - y_test)^2)
+```
+
+which is quite a bit better than the test MSE when we had arbitrarily chosen $\lambda = 5$. 
+
+Finally, we refit our ridge regression model on the full data set, using the value of $\lambda$ chosen by cross-validation, and examine the coefficient estimates.
+
+```{r}
+ridge_final <- glmnet(x, y, alpha = 0, lambda = best_lam)
+round(coef(ridge_final), 3)
+```
+
+As expected, none of the coefficients are zero—ridge regression does not perform variable selection!
+
+# The Lasso
+
+The lasso model can be fit using `glmnet()`, but this time setting `alpha = 1`.
+
+```{r}
+lasso_mod <- glmnet(x[train_set,], y[train_set], alpha = 1, lambda = grid)
+plot(lasso_mod)
+```
+
+We can see from the coefficient plot that depending on the choice of tuning parameter, some of the coefficients will be exactly equal to zero.
+
+Now we perform cross-validation to select an optimal lambda and compute the associated test error:
+
+```{r}
+set.seed(4)
+cv_out <- cv.glmnet(x[train_set,], y[train_set], alpha = 1, nfolds = 5)
+(best_lam <- cv_out$lambda.min)
+lasso_preds <- predict(lasso_mod, s = best_lam, newx = x[!train_set,])
+mean((lasso_preds - y_test)^2)
+```
+
+This is lower than the test set MSE of the least squares model, but larger than the test MSE of ridge regression with $\lambda$ chosen by cross-validation. That being said, the lasso results in sparse coefficients estimates. 
+
+```{r}
+lasso_full <- glmnet(x,y,alpha = 1, lambda = grid)
+lasso_coef <- predict(lasso_full, type = "coefficients", s = best_lam)[1:20,]
+lasso_coef
+```
+
+The lasso model with $\lambda$ chosen by cross-validation only contains eight of the nineteen variables:
+
+```{r}
+lasso_coef[lasso_coef != 0]
+```
+
+
+
+# YOUR TURN!
+
+1. Choosing Among Models Using Cross-Validation
+
+Here, we will work again with the `Hitters` data to predict `Salary` using the other variables. Above, we chose a best subset model with a validation set approach. Here, we will try choosing among the models of different sizes using cross-validation.
+
+```{r}
+Hitters <- na.omit(Hitters)
+
+predict.regsubsets <- function(object, newdata, id, ...){
+  form <- as.formula(object$call[[2]])
+  X_mat <- model.matrix(form, newdata)
+  coefs <- coef(object, id = id)
+  xvars <- names(coefs)
+  X_mat[, xvars] %*% coefs
+}
+```
+
+a)  Write a `for` loop that performs cross-validation with $k = 10$ folds. You should use the `predict.regsubsets()` function we defined above (and re-defined here in case you deleted it)
+
+The following code will help you get started. Here, `group_ids` is a list of length $k$, where each element is a vector of the indices of observations belonging to that fold. `mse_mat` is a matrix where the element $(j,i)$ holds the test MSE for the $j$-th CV fold for the best $i$-variable model.
+
+
+```{r}
+set.seed(1)
+k <- 10
+n <- nrow(Hitters)
+rand <- sample(1:n)
+group_ids <- split(rand, cut(seq_along(rand), k, labels = FALSE))
+
+mse_mat <- matrix(NA, nrow = k, ncol = 19)
+colnames(mse_mat) <- paste(1:19)
+```
+
+```{marginfigure}
+Don't forget to set `eval = T` before knitting!
+```
+
+```{r eval = F}
+for(j in 1:k){
+  # to add: fit model
+  
+  for(i in 1:19){
+    # to add: predict
+    
+    # to add: calculate MSE and store
+    mse_mat[j,i] <- 
+    
+  }
+}
+
+```
+
+b) For each size model $i$, obtain the average CV error across the folds to select the best model. What model does cross-validation select?
+
+c) Perform best subset selection on the full data using the model you selected in (b). Output the coefficients. 
+
+2. In this exercise we will generate simulated data and then examine the fit of different models to this data.
+
+a) Use the `rnorm()` function to generate a predictor $X$ of length $n = 100$, as well as a noise vector $\epsilon$ of length $n = 100$.
+
+b) Generate a response vector $Y$ according to the model
+
+$$Y = \beta_{0} + \beta_{1}X + \beta_{2} X^2 + \beta_{3} X^3 + \epsilon,$$
+
+where the regression coefficients are constants of your choice.
+
+c) Use the `regsubsets()` function to perform best subset selection in order to choose the best model containing the predictors $X, X^2, \ldots, X^{10}$. What is the best model obtained according to $C_p$, BIC, and adjusted $R^2$? Show some plots to provide evidence for your answer, and report the coefficients of the best model obtained. Note you will need to use the `data.frame()` function to create a single data set containing both `X` and `Y`.
+
+
+```{r}
+set.seed(2)
+n <- 100
+x <- rnorm(n); eps <- rnorm(n)
+y <- 1 + 2*x + 0.5*x^2 - 1*x^3 + eps
+df <- data.frame(x = x, y = y)
+
+subset_fit <- regsubsets( y ~ poly(x, 10, raw = T), data = df, nvmax = 10)
+best_summary <- summary(subset_fit)
+metric_df <- data.frame(
+                        R2_adj = best_summary$adjr2,
+                        Cp = best_summary$cp, 
+                        BIC = best_summary$bic) %>%
+  mutate(n_vars = 1:10) 
+metric_df %>%
+  pivot_longer(cols = 1:3, names_to = "statistic", values_to = "value") %>%
+  ggplot(., aes(x = n_vars, y = value)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~ statistic, scales = "free") +
+  scale_x_continuous(breaks = 1:10)
+
+# 
+coef(subset_fit, id = 3)
+```
+
+d) Repeat (c) using backwards stepwise selection. How does you answer compare to results in (c)?
+
+```{r}
+back_fit <- regsubsets( y ~ poly(x, 10, raw = T), data = df, nvmax = 10,  method = "backward")
+best_summary <- summary(back_fit)
+metric_df <- data.frame(
+                        R2_adj = best_summary$adjr2,
+                        Cp = best_summary$cp, 
+                        BIC = best_summary$bic) %>%
+  mutate(n_vars = 1:10) 
+metric_df %>%
+  pivot_longer(cols = 1:3, names_to = "statistic", values_to = "value") %>%
+  ggplot(., aes(x = n_vars, y = value)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~ statistic, scales = "free") +
+  scale_x_continuous(breaks = 1:10)
+```
+
+e) Now fit a lasso model to the simulated data, again using $X, X^2, \ldots, X^{10}$ as predictors. Use cross-validation to selection the optimal value of $\lambda$. The number of folds is up to you.  Report the resulting coefficient estimates, and discuss the results obtained. 
+
+```{r}
+set.seed(2)
+train_set <- sample(c(T, F), n, replace = T)
+X <- model.matrix(y ~ poly(x, 10, raw = T), df)[,-1]
+cv_out <- cv.glmnet(X[train_set,], y[train_set], alpha = 1, nfolds = 10)
+lasso_mod <- glmnet(X[train_set,], y[train_set], alpha = 1, lambda = cv_out$lambda)
+
+lasso_preds <- predict(lasso_mod, s = cv_out$lambda, newx = X[!train_set,])
+lasso_mse <- apply(lasso_preds, 2, function(x){ mean((x - y[!train_set])^2) })
+
+data.frame(lambda = cv_out$lambda, mse = lasso_mse) %>%
+  ggplot(., aes(x = lambda, y = mse)) +
+  geom_point()+
+  geom_line()
+
+best_lam <- cv_out$lambda.min
+
+# fit on full data
+lasso_final <- glmnet(X, y, alpha = 1, lambda = best_lam)
+coef(lasso_final)[1:10,]
+```
+
+3. We have seen that as the number of features used in a model increases, the training error will necessarily decrease, but the test error may not. We will now explore this in a simulated data set.
+
+a) Generate a data set with $p = 20$  (plus an intercept), $n = 1000$ observations, and an associated quantitative response vector generated according to the model
+
+$$Y = X\beta + \epsilon,$$
+
+where $\beta$ has some elements that are exactly equal to zero.
+
+```{r}
+set.seed(5)
+p <- 20
+n <- 1000
+X <- cbind(1,matrix(rnorm(n*p), nrow = n, ncol = p))
+eps <- rnorm(n)
+beta<- rnorm(p+1, 0, 2)
+beta[1+9:p] <- 0
+
+y <- X %*% beta + eps
+```
+
+b) Splits your data into a training set of 100 observations and a test set containing 900 observations.
+
+```{r}
+train_ids <- sample(1:n, 100)
+test_ids <- c(1:n)[-train_ids]
+```
+
+c) Perform best subset selection on the training set, and plot the training set MSE associated with the best model of each size.
+
+```{r}
+predict.regsubsets <- function(object, newdata, id, ...){
+  form <- as.formula(object$call[[2]])
+  X_mat <- model.matrix(form, newdata)
+  coefs <- coef(object, id = id)
+  xvars <- names(coefs)
+  X_mat[, xvars] %*% coefs
+}
+
+df <- data.frame(X[,-1]) %>%
+  mutate(y = y)
+best_train <- regsubsets( y ~ ., data = df[train_ids,], nvmax = p)
+mse_vec <- rep(NA, p)
+for(i in 1:p){
+  preds <- predict(best_train, df[train_ids,], id= i)
+  mse_vec[i] <- mean((y[train_ids] - preds)^2)
+}
+data.frame(nvar = 1:p, MSE = mse_vec) %>%
+  ggplot(.,aes(x = nvar, y = MSE)) +
+  geom_point() +
+  geom_line()
+```
+
+d) Plot the test set MSE associated with the best model of each size.
+
+```{r}
+mse_vec <- rep(NA, p)
+for(i in 1:p){
+  preds <- predict(best_train, df[test_ids,], id= i)
+  mse_vec[i] <- mean((y[test_ids] - preds)^2)
+}
+
+data.frame(nvar = 1:p, MSE = mse_vec) %>%
+  ggplot(.,aes(x = nvar, y = MSE)) +
+  geom_point() +
+  geom_line()
+```
+
+e) For which model size does the test set MSE take on its minimum value? Comment on your results. If it takes on its minimum value for a model containing only an intercept or a model containing all of the features, then play around with the way that you are generating the data in (a) until you come up with a scenario in which the test set MSE is minimized for an intermediate model size.
+
+```{r}
+which.min(mse_vec)
+```
+
+f) How does the model at which the test set MSE is minimized compare to the true model used to generate the data? Comment on the coefficient values.
+
+```{r}
+best_full <- regsubsets( y ~ ., data = df, nvmax = p)
+coef(best_full, id = which.min(mse_vec))
+beta[-1]
+sum(beta[-1] != 0)
+```
+
