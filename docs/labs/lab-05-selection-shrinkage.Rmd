@@ -358,11 +358,11 @@ lasso_coef[lasso_coef != 0]
 
 # YOUR TURN!
 
-1. Choosing Among Models Using Cross-Validation
+## Exercise 1: Choosing Among Models Using Cross-Validation
 
 Here, we will work again with the `Hitters` data to predict `Salary` using the other variables. Above, we chose a best subset model with a validation set approach. Here, we will try choosing among the models of different sizes using cross-validation.
 
-```{r}
+```{r echo = F}
 Hitters <- na.omit(Hitters)
 
 predict.regsubsets <- function(object, newdata, id, ...){
@@ -374,9 +374,7 @@ predict.regsubsets <- function(object, newdata, id, ...){
 }
 ```
 
-a)  Write a `for` loop that performs cross-validation with $k = 10$ folds. You should use the `predict.regsubsets()` function we defined above (and re-defined here in case you deleted it)
-
-The following code will help you get started. Here, `group_ids` is a list of length $k$, where each element is a vector of the indices of observations belonging to that fold. `mse_mat` is a matrix where the element $(j,i)$ holds the test MSE for the $j$-th CV fold for the best $i$-variable model.
+a)  Write a `for` loop that performs cross-validation with $k = 10$ folds. You should use the `predict.regsubsets()` function we defined above (and re-defined here in case you deleted it). The following code will help you get started. Here, `group_ids` is a list of length $k$, where each element is a vector of the indices of observations belonging to that fold. `mse_mat` is a matrix where the element $(j,i)$ holds the test MSE for the $j$-th CV fold for the best $i$-variable model.
 
 
 ```{r}
@@ -413,7 +411,9 @@ b) For each size model $i$, obtain the average CV error across the folds to sele
 
 c) Perform best subset selection on the full data using the model you selected in (b). Output the coefficients. 
 
-2. In this exercise we will generate simulated data and then examine the fit of different models to this data.
+## Exercise 2: practicing various methods
+
+In this exercise we will generate simulated data and then examine the fit of different models to this data.
 
 a) Use the `rnorm()` function to generate a predictor $X$ of length $n = 100$, as well as a noise vector $\epsilon$ of length $n = 100$.
 
@@ -495,7 +495,9 @@ lasso_final <- glmnet(X, y, alpha = 1, lambda = best_lam)
 coef(lasso_final)[1:10,]
 ```
 
-3. We have seen that as the number of features used in a model increases, the training error will necessarily decrease, but the test error may not. We will now explore this in a simulated data set.
+## Exericse 3: Train vs test MSE
+
+We have seen that as the number of features used in a model increases, the training error will necessarily decrease, but the test error may not. We will now explore this in a simulated data set.
 
 a) Generate a data set with $p = 20$  (plus an intercept), $n = 1000$ observations, and an associated quantitative response vector generated according to the model
 
@@ -515,7 +517,7 @@ beta[1+9:p] <- 0
 y <- X %*% beta + eps
 ```
 
-b) Splits your data into a training set of 100 observations and a test set containing 900 observations.
+b) Split your data into a training set of 100 observations and a test set containing 900 observations.
 
 ```{r}
 train_ids <- sample(1:n, 100)
