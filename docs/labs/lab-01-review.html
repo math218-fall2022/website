@@ -734,7 +734,7 @@ Clicking on the object name will open up the data in another tab.</p>
 <code>View(auto)</code> in the console to open up the new
 tab.</span></span></p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>auto <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;data/Auto.data&quot;</span>)</span></code></pre></div>
-<p>You will notice that the dataset is not loaded correctly becuase
+<p>You will notice that the dataset is not loaded correctly because
 <code>R</code> has not differentiated the variable names from the rest
 of the data. The data set also includes a number of missing
 observations, indicated by a question mark.</p>
@@ -786,7 +786,7 @@ column will be called <code>obs</code>, and should hold the 9 elements
 you created in Exercise 1. The second column will be called
 <code>var</code> and should hold the corresponding values of
 <code>x</code>, <code>y</code>, and <code>z</code>. Try to make this as
-reproducible as possible!</li>
+generic as possible!</li>
 </ol>
 <div class="commit">
 <p>This is a good place to pause, knit and <b>commit changes</b> with
@@ -799,7 +799,8 @@ data.</p>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>auto <span class="ot">&lt;-</span> auto <span class="sc">%&gt;%</span></span>
 <span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">na.omit</span>()</span></code></pre></div>
 <ol start="3" style="list-style-type: decimal">
-<li><p>How many observations are in the cleaned data set?</p></li>
+<li><p>How many observations are in the cleaned data set? Use code to
+answer this.</p></li>
 <li><p>Which of variables are quantitative, and which are
 qualitative?</p></li>
 </ol>
@@ -822,7 +823,7 @@ you’re done.</p>
 achieved using the <code>cor()</code> function, where the input is a
 data frame or matrix of numeric values. Which two variables exhibit the
 most correlation? Which two variable are least correlated?</p></li>
-<li><p>Suppose we are interested in predicting gas milage
+<li><p>Suppose we are interested in predicting gas mileage
 (<code>mpg</code>). Make a histogram of <code>mpg</code>. Don’t forget
 to add a title!</p></li>
 </ol>
@@ -841,6 +842,8 @@ these cars?</p></li>
 </div>
 <div id="submission" class="section level1">
 <h1>Submission</h1>
+<p>When submitting, please only submit code chunks and text relevant to
+the exercises. That is, please do not include any “test code”.</p>
 <p>Once you are finished, knit one last time and push your changes to
 GitHub. Then submit the PDF file to Canvas!</p>
 <p><strong>Before you wrap up the assignment, make sure all documents

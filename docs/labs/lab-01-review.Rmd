@@ -266,7 +266,7 @@ Alternatively, type `View(auto)` in the console to open up the new tab.
 auto <- read.table("data/Auto.data")
 ```
 
-You will notice that the dataset is not loaded correctly becuase `R` has not differentiated the variable names from the rest of the data. The data set also includes a number of missing observations, indicated by a question mark.
+You will notice that the dataset is not loaded correctly because `R` has not differentiated the variable names from the rest of the data. The data set also includes a number of missing observations, indicated by a question mark.
 
 ```{marginfigure}
 In the new window displaying the data, try searching for `?`
@@ -307,7 +307,7 @@ str(auto)
 Data frames can be created using the function `data.frame()`
 ```
 
-2. Create a **data frame** that has two columns. The first column will be called `obs`, and should hold the 9 elements you created in Exercise 1. The second column will be called `var` and should hold the corresponding values of `x`, `y`, and `z`. Try to make this as reproducible as possible!
+2. Create a **data frame** that has two columns. The first column will be called `obs`, and should hold the 9 elements you created in Exercise 1. The second column will be called `var` and should hold the corresponding values of `x`, `y`, and `z`. Try to make this as generic as possible!
 
 
 
@@ -323,7 +323,7 @@ auto <- auto %>%
  na.omit()
 ```
 
-3. How many observations are in the cleaned data set?
+3. How many observations are in the cleaned data set? Use code to answer this.
 
 4. Which of variables are quantitative, and which are qualitative?
 
@@ -339,7 +339,7 @@ Hint: There are many ways to do this. You may want to look up the `apply()` func
 6. Obtain the correlations of the numeric variables. This can be achieved using the `cor()` function, where the input is a data frame or matrix of numeric values. Which two variables exhibit the most correlation? Which two variable are least correlated?
 
 
-7. Suppose we are interested in predicting gas milage (`mpg`). Make a histogram of `mpg`. Don't forget to add a title!
+7. Suppose we are interested in predicting gas mileage (`mpg`). Make a histogram of `mpg`. Don't forget to add a title!
 
 ```{marginfigure}
 Histograms can be plotted using the baseR `hist()` function, or the `geom_histogram()` function in ggplot.
@@ -351,6 +351,8 @@ Histograms can be plotted using the baseR `hist()` function, or the `geom_histog
 
 
 # Submission
+
+When submitting, please only submit code chunks and text relevant to the exercises. That is, please do not include any "test code". 
 
 Once you are finished, knit one last time and push your changes to GitHub. Then submit the PDF file to Canvas!
 
