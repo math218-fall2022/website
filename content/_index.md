@@ -33,7 +33,10 @@ All books are freely available online. Hardcopies are also available for purchas
 
 You should have a fully-charged laptop, tablet with keyboard, or comparable device to every lecture and lab session.
 
-<br><br><br><br>
+<a href = "installation.pdf"><i class="material-icons">dashboard</i></a>
+You have have R and RStudio installed. Click the icon for some basic installation instructions.
+
+<br><br>
 
 ### Syllabus
 
