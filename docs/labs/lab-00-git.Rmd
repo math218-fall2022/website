@@ -24,13 +24,49 @@ We will be working with Git and GitHub as our version control system.
 
 - If you see a pending invite at the top of the page, accept the invite to join the course invite.
 
-#### Clone a GitHub repo and make a new RStudio project 
+#### Creating personal access token 
+
+- On the top-right corner with, click on the drop down arrow next to the graphic and then click on "Settings"
+
+  - On the left-hand side, find and click on "< > Developer settings" (should be on bottom)
+  
+  - Click "Personal access tokens"
+  
+  - Click "Generate new token". Under "Expiration", choose Custom and then select date 12/31/2023. Then scroll down and click "Generate token"
+  
+  - You will see a green bar with text that starts as "ghp_pA....". *Copy* this token and paste it somewhere safe.
+  
+
+#### For first time only: Clone a GitHub repo  
+
+- Go to the [course organization](https://github.com/math218-fall2022) on GitHub  and find the repo with the prefix **getting-started-**. 
+
+- Click on the green **Clone or download** button, select **Use HTTPS** (this might already be selected by default, and if it is, you'll see the text **Clone with HTTPS** as in the image below). Click on the clipboard icon to copy the repo URL.
+
+```{r clone-repo-link, echo = FALSE, fig.width = 5}
+knitr::include_graphics("img/00-git/clone_repo.png")
+```
+
+- Open up RStudio
+
+- Go to the "Terminal" tab
+
+- Type the following: git clone *copied URL*  (e.g. `git clone https://github.com/...`)
+
+  - When prompted to enter your username: type in your GitHub username
+  
+  - When prompted to enter you password: **paste in your personal access token**
+
+- Your new project should now be created! Note, we only go through this workflow once to tell GitHub that it should communicate with RStudio
+
+
+#### For future projects: Clone a GitHub repo and make a new RStudio project 
 
 - Go to the [course organization](https://github.com/math218-fall2022) on GitHub  and find the repo with the prefix **lab-01-review-**. 
 
 - Click on the green **Clone or download** button, select **Use HTTPS** (this might already be selected by default, and if it is, you'll see the text **Clone with HTTPS** as in the image below). Click on the clipboard icon to copy the repo URL.
 
-```{r clone-repo-link, echo = FALSE, fig.width = 5}
+```{r clone-repo-link2, echo = FALSE, fig.width = 5}
 knitr::include_graphics("img/00-git/clone_repo.png")
 ```
 
@@ -45,45 +81,6 @@ knitr::include_graphics("img/00-git/clone_git.png")
 - Copy and paste the URL of your assignment repo into the dialog box *Repository URL*. You can leave *Project Directory Name* empty. It will default to the name of the GitHub repo. In *Create project as a subdirectory of*, hit "Browse" and find your Math218 folder.
 
 - Click *Create Project*, and the files from your GitHub repo will be displayed the *Files* pane in RStudio. 
-
-
-#### Configure Git
-
-- We will need to allow RStudio to communicate with Github. We will do this by utilizing the `usethis` package. Install the package by typing the following in your **Console**:
-
-```{r eval = F}
-install.packages("usethis")
-```
-
-  - You will see some red text flying across the Console. If you eventually see some black text beginning with "The downloaded binary packages are in...", then you are good!
-
-- Next, load the package by typing the following in your Console:
-
-```{r eval  = F}
-library(usethis)
-```
-
-- Configure git by running the following code in the Console. Fill in your GitHub username and the email address associated with your GitHub account. **Note**: you must keep the quotation marks!
-
-```{marginfigure}
-The email address is the one tied to your GitHub account. 
-```
-
-```{r eval  = F}
-use_git_config(user.name = "GitHub username", user.email="your email")
-```
-
-For example, mine would be 
-
-```{r eval=FALSE}
-library(usethis)
-use_git_config(user.name="beckytang", user.email="btang@middlebury.edu")
-```
-
-
-Once you run the configuration code, your values for `user.name` and `user.email` will display in the console. If your `user.name` and `user.email` are correct, you're good to go! Otherwise, run the code again with the necessary changes.
-
-**Note**: if you close RStudio and then return to a project at a later date, you may need to re-configure Git. When this happens, simply load the library `usethis` and run the `use_git_config()` function again! Later, we will change this so you only have to enter the your information once per project.
 
 
 #### Making a change locally, committing, and pushing

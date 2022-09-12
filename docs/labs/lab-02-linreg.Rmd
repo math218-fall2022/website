@@ -18,7 +18,7 @@ editor_options:
 **IMPORTANT:** If there is no GitHub repo created for you for this assignment, it means I didn't have your GitHub username as of when I assigned the homework. Please let me know your GitHub username asap, and I can create your repo.
 ```
 
-Go to the course GitHub organization and locate your HW 02 repo, which should be named `lab-02-linear-regression-[GITHUB USERNAME]`. Grab the URL of the repo, and clone it in RStudio. Refer to Lab 01 for step-by-step for cloning a repo and creating a new RStudio project.
+Go to the course GitHub organization and locate your HW 02 repo, which should be named `lab-02-linear-regression-[GITHUB USERNAME]`. Grab the URL of the repo, and clone it in RStudio. Refer to Lab 01 for step-by-step instructions for cloning a repo and creating a new RStudio project.
 
 
 ## Configure git
