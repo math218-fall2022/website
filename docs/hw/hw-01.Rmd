@@ -13,12 +13,11 @@ knitr::opts_chunk$set(echo = F)
 library(tidyverse)
 ```
 
+**Please show your work for all exercises where you are asked to calculate something.**
 
 ## Introduction
 
-For the $K$-Nearest Neighbors classifier, after choosing $K$ we need to somehow find the nearest neighbors. That is, for a new point $x_{0}$, we need to determine the neighboring set $\mathcal{N}_{0}$. 
-
-Here, "nearest" gives off a notion of closeness or distance. Therefore, we want to somehow measure distance between features/predictors. How might we do that?
+For the $K$-Nearest Neighbors (KNN) classifier, after choosing $K$ we need to somehow find the nearest neighbors. That is, for a new point $x_{0}$, we need to determine the neighboring set $\mathcal{N}_{0}$. Here, "nearest" gives off a notion of closeness or distance. Therefore, we want to somehow measure distance between features/predictors. How might we do that?
 
 ### Euclidean distance
 
@@ -72,7 +71,7 @@ df1 <- data.frame(X1 = x1, X2 = x2, X3 = x3, Y = y)
 knitr::kable(df1)
 ```
 
-Suppose we want to use this data set to make a prediction for Y when (X1, X2, X3) = (0,0,0) using K-nearest neighbors.
+Suppose we want to use this data set to make a prediction for Y when (X1, X2, X3) = (0,0,0) using KNN.
 
 
 
@@ -104,7 +103,7 @@ knitr::kable(df2)
 ```
 
 a) Calculate the Hamming distances between a new test point where the individual does not smoke, does not consume alcohol, and does not play a sport.
-
+Please "show"/explain your work.
 
 
 b) Hamming distance is commonly used to measure distance between words or phrases. What is the Hamming distance between the words "MIDDLEBURY" and "SWARTHMORE"?
@@ -139,7 +138,7 @@ c) If we go with Option 3, what is our resulting neighbor set? Do you see any is
 
 d) Suppose we go with Option 3 to choose our neighbors. Now we need to classify the starred point. However, what issue arises if we apply the usual "majority vote" rule?
 
-e) Suggest at least two methods for addressing the concern in (d). For each suggestion, describe what you would classify the starred point as. Of your suggestions, which would you prefer and why?
+e) Suggest two methods for addressing the concern in (d). For each suggestion, describe what you would classify the starred point as. Of your suggestions, which would you prefer and why?
 
 f) Although the issues in Part 1 and Part 2 are similar, clearly state the differences between the two.
 
@@ -165,13 +164,15 @@ df3 <- data.frame(y_true = y_true, yhat1 = yhat1, yhat2 = yhat2)
 knitr::kable(df3)
 ```
 
-a) Calculate the MSE for both models.
+a) Calculate the MSE for both models. 
 
 
-b) Calculate the MAE for both models.
+b) Calculate the MAE for both models. 
 
 
 c) Based on your results in (a) and (b), which model performs better predictions?
+
+d) What are the implications of your answer in (c)?
 
 ### Exercise 5
 
@@ -184,18 +185,18 @@ df4 <- data.frame(y_true = y_true, yhat = ypred)
 knitr::kable(df4)
 ```
 
-a) Calculate the MSE and MAE.
+a) Calculate the MSE and MAE. 
 
 
-b) Now, suppose we measure a 7th point, where $y_{7} = 5$ and $\hat{y}_{7} = 15$. Clearly our prediction is way off! Calculate the MSE and MAE including this new observation, and comment on how they compare to the errors obtained on the original six data points in part (a).
+b) Now, suppose we measure a 7th point, where $y_{7} = 5$ and $\hat{y}_{7} = 15$. Clearly our prediction is way off! Calculate the MSE and MAE including this new observation. Comment on how the new MSE and MAE compare to the errors obtained on the original six data points in part (a). 
 
-c) Are there scenarios where we might prefer one error metric over the other?
+c) Are there scenarios where we might prefer one error metric over the other? Explain.
 
 ### Exercise 6
 
 For (a) and (b), explain whether each scenario is a classification or regression problem, and indicate whether we are most interested in inference or prediction. Also provide $n$ and $p$.
 
-a) We are foraging for mushrooms and happen to find a mushroom we have never seen before. How exciting! We would like to determine if it is poisonous based on thirty mushrooms we have previously collected. For each of these thirty mushrooms, we know its color, shape, where it was found, spore dispersal method, and poison status. **While statistical learning methods are powerful, please do not trust them to rely on identifying poisonous mushrooms!**
+a) We are foraging for mushrooms and happen to find a mushroom we have never seen before. How exciting! We would like to determine if it is poisonous based on thirty mushrooms we have previously collected. For each of these thirty mushrooms, we know its color, shape, where it was found, spore dispersal method, and poison status. *While statistical learning methods are powerful, please do not trust them to rely on identifying poisonous mushrooms!*
 
 b) We collect data on 300 national universities, recording the average school expenditures per student, average SAT scores, tuition cost, and average family income. We would like to understand what factors might influence the average salary of alumni from these universities.
 
