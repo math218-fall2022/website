@@ -1,9 +1,10 @@
 ---
-title: "HW 01: Introduction"
-subtitle: "Due: Thursday, 9/15 at 11:59pm"
-author: "Total: ? points"
-output: html_document
-editor_options: 
+title: "Problem Set 01"
+subtitle: 'Due: Thursday, 9/15 at 11:59pm'
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
   chunk_output_type: console
 ---
 
@@ -53,7 +54,7 @@ One approach is to assign numeric values for each possible category. For example
 Alternatively, consider that all our $p$ features are binary in that they each take one of two values. Example: $X_{1}$ = smoker status (non-smoker/smoker) and $X_{2}$ = drinks alcohol (no/yes). The Hamming distance is the number (or proportion, depending on the context) of features for which the two values do not match.
 
 
-## Exercise 1
+### Exercise 1
 
 ```{r echo = F}
 n <- 6
@@ -68,7 +69,7 @@ x2 <- c(3, -1, 1, 0, 1, 1)
 x3 <- c(1, 2, -1, 0, 0, 0)
 y <- c("red", "red", "blue", "red", "blue", "red")
 df1 <- data.frame(X1 = x1, X2 = x2, X3 = x3, Y = y)
-print.data.frame(df1)
+knitr::kable(df1)
 ```
 
 Suppose we want to use this data set to make a prediction for Y when (X1, X2, X3) = (0,0,0) using K-nearest neighbors.
@@ -90,7 +91,7 @@ f) Using the Manhattan distance metric, what is our prediction with $K = 3$? Why
 g) Can you think of certain scenarios where we might prefer one distance metric over another? 
 
 
-## Exercise 2
+### Exercise 2
 
 a) Suppose we have `r n` training data points as follows
  
@@ -99,7 +100,7 @@ x1 <- c("smoker", "non-smoker", "smoker", "smoker", "smoker","non-smoker")
 x2 <- c("yes", "no", "no", "yes", "yes", "no")
 x3 <- c("no", "yes", "no", "yes", "no", "yes")
 df2 <- data.frame("Smoke status" = x1, "Alcohol" = x2, "Athlete" = x3)
-print.data.frame(df2)
+knitr::kable(df2)
 ```
 
 Calculate the Hamming distance between a new test point where the individual does not smoke, does not consume alcohol, and does not play a sport.
@@ -110,8 +111,40 @@ b) Hamming distance is commonly used to measure distance between words or phrase
 
 c) For points with $p$ features, are the minimum and maximum possible Hamming distances?
 
+### Exercise 3
 
-## Exercise 3
+Suppose we are still classification setting, but we have 4 different classes: $\{A, B, C, D\}$. We wish to classify the starred observation using the KNN classification method with $K = 2$. After calculating distances, we have 4 nearest neighbors:
+
+```{r echo = F, fig.align="center", out.width="20%"}
+knitr::include_graphics("img/knn_tie.png")
+```
+
+#### Part 1 (a-c)
+
+Unfortunately, besides one obvious neighbor belonging to class $B$, the three other points are equidistant to our unclassified star observation. How do we solve this?
+
+Option 1: *choose a different* K. 
+
+Option 2: *randomly choose between the tied neighbors*. 
+
+Option 3: *allow at least* K *neighbors until a natural stopping point*. In this example, the idea is to choose the smallest number such that $K$ is greater than or equal to 2, and that no ties exist.
+
+a) What are some issues with Option 1?
+
+b) If we go with Option 2, what are the possible $K$-neighbor sets?
+
+c) If we go with Option 3, what is our resulting neighbor set?
+
+#### Part 2 (d-e)
+
+d) Suppose we go with Option 3 to choose our neighbors. Now we need to classify the starred point. However, what issue arises if we apply the usual "majority vote" rule?
+
+e) Suggest at least two methods for addressing the concern in (d). For each suggestion, describe what you would classify the starred point as. Of your suggestions, which would you prefer and why?
+
+f) Although the issues in Part 1 and Part 2 are similar, clearly state the differences between the two.
+
+
+### Exercise 4
 
 In class, we introduced the notion of mean squared error (MSE):
 
@@ -129,7 +162,7 @@ y_true <- c(1, 3, 1, -1, 0, 5)
 yhat1 <- c(0, 1, 0, 0, -1, 3)
 yhat2 <- c(2, 3, 2, 2, 1, 4)
 df3 <- data.frame(y_true = y_true, yhat1 = yhat1, yhat2 = yhat2)
-print.data.frame(df3)
+knitr::kable(df3)
 ```
 
 a) Calculate the MSE for both models.
@@ -140,7 +173,7 @@ b) Calculate the MAE for both models.
 
 c) Based on your results in (a) and (b), which model performs better predictions?
 
-## Exercise 4
+### Exercise 5
 
 Now, let's consider some new data with just one model for predictions: 
 
@@ -148,7 +181,7 @@ Now, let's consider some new data with just one model for predictions:
 y_true <- c(1, 3, 1, -1, 0, 2)
 ypred <- c(0, 2, 0, -3, -1, 1)
 df4 <- data.frame(y_true = y_true, yhat = ypred)
-print.data.frame(df4)
+knitr::kable(df4)
 ```
 
 a) Calculate the MSE and MAE.
@@ -158,7 +191,7 @@ b) Now, suppose we measure a 7th point, where $y_{7} = 5$ and $\hat{y}_{7} = 15$
 
 c) Are there scenarios where we might prefer one error metric over the other?
 
-## Exercise 5
+### Exercise 6
 
 For (a) and (b), explain whether each scenario is a classification or regression problem, and indicate whether we are most interested in inference or prediction. Also provide $n$ and $p$.
 
@@ -168,7 +201,7 @@ b) We collect data on 300 national universities, recording the average school ex
 
 c) What are some other variables/features that may be useful for the problem described in (b)?
 
-## Exercise 6
+### Exercise 7
 
 For each of the following, indicate whether we would generally expect the performance of a flexible statistical learning methods to be better or worse than an inflexible method. Justify your answer.
 
@@ -180,7 +213,6 @@ c) The number of predictors $p$ is extremely large relative to the number of obs
 
 d) You are confident in your assumptions about the underlying function.
 
-## Exercise 7
 
 ## Submission 
 

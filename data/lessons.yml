@@ -14,6 +14,7 @@ lessons:
  - title: "Lab 01: R review"
    # lab: "lab-01-review.html"
  - title: "HW 01 assigned"
+   hw: "hw-01.pdf"
  - date: "Sunday, Sep. 18"
    title: "Lab 01 due"
    lab: "HW_upload.html"
