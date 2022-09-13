@@ -93,7 +93,7 @@ g) Can you think of certain scenarios where we might prefer one distance metric 
 
 ### Exercise 2
 
-a) Suppose we have `r n` training data points as follows
+Suppose we have `r n` training data points as follows
  
 ```{r echo = F}
 x1 <- c("smoker", "non-smoker", "smoker", "smoker", "smoker","non-smoker")
@@ -103,7 +103,7 @@ df2 <- data.frame("Smoke status" = x1, "Alcohol" = x2, "Athlete" = x3)
 knitr::kable(df2)
 ```
 
-Calculate the Hamming distance between a new test point where the individual does not smoke, does not consume alcohol, and does not play a sport.
+a) Calculate the Hamming distances between a new test point where the individual does not smoke, does not consume alcohol, and does not play a sport.
 
 
 
@@ -113,7 +113,7 @@ c) For points with $p$ features, are the minimum and maximum possible Hamming di
 
 ### Exercise 3
 
-Suppose we are still classification setting, but we have 4 different classes: $\{A, B, C, D\}$. We wish to classify the starred observation using the KNN classification method with $K = 2$. After calculating distances, we have 4 nearest neighbors:
+Suppose we are still in the classification setting, but we have 4 different classes: $\{A, B, C, D\}$. We wish to classify the starred observation using the KNN classification method with $K = 2$. After calculating distances, we have 4 nearest neighbors:
 
 ```{r echo = F, fig.align="center", out.width="20%"}
 knitr::include_graphics("img/knn_tie.png")
@@ -131,9 +131,9 @@ Option 3: *allow at least* K *neighbors until a natural stopping point*. In this
 
 a) What are some issues with Option 1?
 
-b) If we go with Option 2, what are the possible $K$-neighbor sets?
+b) If we go with Option 2, what are the possible $K$-neighbor sets? Do you see any issues with this approach? If so, explain.
 
-c) If we go with Option 3, what is our resulting neighbor set?
+c) If we go with Option 3, what is our resulting neighbor set? Do you see any issues with this approach? If so, explain.
 
 #### Part 2 (d-e)
 
