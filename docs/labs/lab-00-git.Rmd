@@ -1,12 +1,16 @@
 ---
 title: "GitHub Tour"
-date: "9/16/2022"
-output: 
-  html_document: 
+subtitle: GitHub Desktop
+output:
+  html_document:
     theme: readable
+  pdf_document: default
 ---
 
-## Git and GitHub
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = F, fig.align = "center", out.width = "50%")
+```
 
 We will be working with Git and GitHub as our version control system.
 
@@ -18,89 +22,98 @@ We will be working with Git and GitHub as our version control system.
 - Making a change locally, committing, and pushing
 - Making a change on GitHub and pulling
 
-### Getting started
+### Download GitHub Desktop
 
-- Go to the course GitHub organization: https://github.com/math218-fall2022. 
+- Go to the GitHub Desktop website: https://desktop.github.com/
 
-- If you see a pending invite at the top of the page, accept the invite to join the course invite.
+- Click the purple button that says "Download for..."
 
-#### Creating personal access token 
-
-- On the top-right corner with, click on the drop down arrow next to the graphic and then click on "Settings"
-
-  - On the left-hand side, find and click on "< > Developer settings" (should be on bottom)
+  - A zipped file will eventually appear in your Downloads folder. Open up your Downloads folder.
   
-  - Click "Personal access tokens"
-  
-  - Click "Generate new token". Under "Expiration", choose Custom and then select date 12/31/2023. Then scroll down and click "Generate token"
-  
-  - You will see a green bar with text that starts as "ghp_pA....". *Copy* this token and paste it somewhere safe.
-  
+- After unzipping the folder, you should see the purple GitHub Desktop icon. I suggest dragging this to your Dock. 
 
-#### For first time only: Clone a GitHub repo  
-
-- Go to the [course organization](https://github.com/math218-fall2022) on GitHub  and find the repo with the prefix **getting-started-**. 
-
-- Click on the green **Clone or download** button, select **Use HTTPS** (this might already be selected by default, and if it is, you'll see the text **Clone with HTTPS** as in the image below). Click on the clipboard icon to copy the repo URL.
-
-```{r clone-repo-link, echo = FALSE, fig.width = 5}
-knitr::include_graphics("img/00-git/clone_repo.png")
+```{r}
+knitr::include_graphics("img/00-git/github_zip.jpeg")
 ```
 
-- Open up RStudio
 
-- Go to the "Terminal" tab
+- Open GitHub Desktop. At some point, you might get the following pop-up:
 
-- Type the following: git clone *copied URL*  (e.g. `git clone https://github.com/...`)
+```{r}
+knitr::include_graphics("img/00-git/github_applications.jpeg")
+```
 
-  - When prompted to enter your username: type in your GitHub username
+
+  - Check the "Do not show this message again", and choose the white "Not now" button.
   
-  - When prompted to enter you password: **paste in your personal access token**
+  
+### Login from GitHub Desktop
+  
+- Once GitHub Desktop is open, we should login with your new account
 
-- Your new project should now be created! Note, we only go through this workflow once to tell GitHub that it should communicate with RStudio
-
-
-#### For future projects: Clone a GitHub repo and make a new RStudio project 
-
-- Go to the [course organization](https://github.com/math218-fall2022) on GitHub  and find the repo with the prefix **lab-01-review-**. 
-
-- Click on the green **Clone or download** button, select **Use HTTPS** (this might already be selected by default, and if it is, you'll see the text **Clone with HTTPS** as in the image below). Click on the clipboard icon to copy the repo URL.
-
-```{r clone-repo-link2, echo = FALSE, fig.width = 5}
-knitr::include_graphics("img/00-git/clone_repo.png")
+  - Mac users: Next to the Apple icon, click GitHub Desktop -> Preferences -> Accounts -> Sign-in
+  
+```{r}
+knitr::include_graphics("img/00-git/mac-choose-preferences.png")
+```
+  
+  - Windows users: Next to the app icon, click File -> Options -> Accounts -> Sign-in
+  
+```{r}
+knitr::include_graphics("img/00-git/windows-choose-options.png")
 ```
 
-- Open up RStudio
+- You will be direct to the github.com broswer to sign-in. Enter your corresponding GitHub account information.
 
-- Go to *File* $\rightarrow$ *New Project* $\rightarrow$ *Version Control* $\rightarrow$ *Git*. 
+- Once authenticated, your GitHub Desktop client should be set up!
 
-```{r paste-gh-repo-url, echo = FALSE,  out.width = "80%"}
-knitr::include_graphics("img/00-git/clone_git.png")
+### Clone a GitHub repo and make a new RStudio project
+
+- Go to the [course organization](https://github.com/math118-fall2022) on GitHub  and find the repo with the prefix **lab-01-review**. 
+
+- Click on the green **Code** button, select the second option "Open with GitHub Desktop"
+
+```{r}
+knitr::include_graphics("img/00-git/clone.png")
 ```
 
-- Copy and paste the URL of your assignment repo into the dialog box *Repository URL*. You can leave *Project Directory Name* empty. It will default to the name of the GitHub repo. In *Create project as a subdirectory of*, hit "Browse" and find your Math218 folder.
+- The GitHub Desktop application will open up, with a white window that says "Clone a Repository". **Important**: in the second line that says "Local Path", there is a button that says `Choose...`. Click on it, and find and select the folder we created for this course. Then hit the blue `Clone` button.
 
-- Click *Create Project*, and the files from your GitHub repo will be displayed the *Files* pane in RStudio. 
+```{r}
+knitr::include_graphics("img/00-git/find_folder.png")
+```
 
+- After successfully cloning, the window will disappear and you will see the that Current Repository is the one you just cloned.
 
-#### Making a change locally, committing, and pushing
+- Success!
 
-- Open the RMarkdown file **lab-01-review.Rmd**. We will use that for the next part of class. 
+### Making a change locally, committing, and pushing
 
-- Put your name for the author, then knit the document. 
+- Open the RMarkdown file **lab-01-review.Rmd** in RStudio. We will use that for the next part of lab. 
 
-- Select/check **all** of the updated files in the Git pane, click the "Commit" button, and write the commit message "Updated author name". 
+- Put your name for the author, then knit the document. *It's important to knit the document, as this saves your progress!*
 
-- Click to **push** your changes (you may have to enter your GitHub password).
+- Open GitHub Desktop. On the left, you should see the names of files you changed or created. That's good! That means that your version locally is different than the previous version.
+
+- On the left hand side next to your photo/graphic, type a *brief* comment such as "Update author name". Push the blue `Commit to main` button. After that, the third tab at the top that says `Push origin` should have an upward arrow with a number next to it. That means you are ready to send your changes to GitHub. Click `Push origin`, and you should see that it successfully completes the action.
+
+```{r}
+knitr::include_graphics("img/00-git/commit_push.png")
+```
+
+  - *Note*: sometimes, the push doesn't execute properly and the application "hangs" (i.e. doesn't complete and says it is still in progress). In this event, quit out of GitHub Desktop. Then re-open it. Your commit message should still be there. Try pushing again.
 
 - If you refresh your repo on GitHub, you will see the updated files with your commit message. 
 
-#### Making a change on GitHub and pulling
+
+
+### Making a change on GitHub and pulling
 
 - On the corresponding repository in GitHub, find the README.md file at the bottom. Edit this file by clicking on the pencil and typing your name + major + year. 
 
 - Once you're finished editing, hit the green "Commit changes" button.
 
-- Back in RStudio, navigate to the Git tab and **pull** the changes by hitting the down arrow. A small window should pop up with some text.
+- Back in GitHub Desktop, find the `Fetch origin` tab. Since your local version is not up to date, you should **pull** the changes by hitting the button. 
 
-- Find and open the README.md file in the Files pane. You should see your changes here locally!
+- Find and open the README.md file in the Files pane of RStudio. You should see your changes here locally!
+

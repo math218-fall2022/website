@@ -14,27 +14,27 @@ editor_options:
 
 # Getting started
 
-```{marginfigure}
-**IMPORTANT:** If there is no GitHub repo created for you for this assignment, it means I didn't have your GitHub username as of when I assigned the homework. Please let me know your GitHub username asap, and I can create your repo.
+## Clone the repo & start new RStudio project
+
+- Go to the Math 218 organization on GitHub (http://www.github.com/math218-fall2022). Click on the repo with the prefix **lab-02-linear-regression-**. It contains the starter documents you need to complete the lab.
+
+- Click on the green **Code** button, select the second option "Open with GitHub Desktop"
+
+```{r echo = F, fig.align="center", out.width="70%"}
+knitr::include_graphics("img/00-git/clone.png")
 ```
 
-Go to the course GitHub organization and locate your HW 02 repo, which should be named `lab-02-linear-regression-[GITHUB USERNAME]`. Grab the URL of the repo, and clone it in RStudio. Refer to Lab 01 for step-by-step instructions for cloning a repo and creating a new RStudio project.
+- The GitHub Desktop application will open up, with a white window that says "Clone a Repository". **Important**: in the second line that says "Local Path", there is a button that says `Choose...`. Click on it, and find and select the folder we created for this course. Then hit the blue `Clone` button.
 
-
-## Configure git
-
-```{marginfigure}
-The name should be your github username and your email address is the one tied to your GitHub account.
+```{r echo = F, fig.align="center", out.width="70%"}
+knitr::include_graphics("img/00-git/find_folder.png")
 ```
 
-Before we can get started we need to do one more thing.  Specifically,  we need to configure your git so that RStudio can communicate with GitHub. This requires two pieces of information: your email address and your GitHub username.
+- After successfully cloning, the window will disappear and you will see the that Current Repository is the one you just cloned. Success!
 
-To do so, run the following:
+- **Note**: if you want to commit and push changes  for a different project (e.g. an application exercise), you can switch to the other project by hitting the first top=left button `Current Repository`. You should see all of your cloned projects here. Simply pick the one you would like to commit changes for!
 
-```{r eval=FALSE}
-library(usethis)
-use_git_config(user.name = "github username", user.email = "your email")
-```
+
 
 # Packages
 
@@ -318,7 +318,19 @@ Refit the linear models from (c) - (e) using this new data. What effect does thi
 
 ## Exercise 3
 
-Create a function called `dist` that takes two vectors of the same length as input and returns their Euclidean distance. 
+Create a function called `mse` that takes two vectors, one of true values `true` and one of predicted values `preds`, and returns the mean squared error.
+
+## Exercise 4
+
+Create a function called `dist` that takes in three arguments: the first two arguments are vectors `x1`, `x2` of the same length. The third argument is a boolean value called `euclidean`. When `euclidean = T`, your `dist()` function should return the Euclidean distance between `x1` and `x2`. When `euclidean = F`, your `dist()` function should return the Manhattan distance. The following code should be used somewhere in your function:
+
+```{r eval = F}
+if(euclidean == T){
+  ## code 
+} else{
+  ## code 
+}
+```
 
 # Submission
 

@@ -34,6 +34,30 @@ abalone <- abalone %>%
 
 ## Announcements
 
+---
+
+## Example of Unsupervised 
+
+Marine eco-provinces 
+
+```{r fig.align = "center", fig.width = 8, fig.height = 5}
+knitr::include_graphics("figs/01-intro/ecoprovince.jpeg")
+```
+
+.footnote[
+*Source: https://www.science.org/doi/10.1126/sciadv.aay4740
+]
+
+---
+
+## Example of Unsupervised 
+
+Topic modeling (source: https://arxiv.org/abs/2106.09533)
+
+```{r fig.align = "center", fig.width = 8, fig.height = 4.5}
+knitr::include_graphics("figs/01-intro/lda_topics.png")
+```
+
 
 ---
 
@@ -197,19 +221,30 @@ $$\hat{Y} = \hat{f}(X)$$
 ## Inference
 
 - We are often interested in learning how $Y$ and the $X_{1}, \ldots, X_{p}$ are related or associated
-- In this mindset, we want to estimate $f$ to learn the relationships, rather than make predictions
+- In this mindset, we want to estimate $f$ to learn the relationships, rather than obtain a $\hat{Y}$
+
 
 --
 
-  - In the prediction setting, estimate $\hat{f}$ for the purpose of $\hat{Y}$ and $Y$.
+
+---
+
+## Prediction vs Inference
+
+- In the prediction setting, estimate $\hat{f}$ for the purpose of $\hat{Y}$ and $Y$.
   
 --
 
-  - In the inference setting, estimate $\hat{f}$ for the purpose of $X$ and $Y$
+- In the inference setting, estimate $\hat{f}$ for the purpose of $X$ and $Y$
 
 --
 
 - Some problems will call for prediction, inference, or both
+
+  - To what extent is $\color{blue}{\text{length}}$ associated with $\color{blue}{\text{age}}$?
+  
+  - Given some physical characters, how old is the abalone?
+
 
 ---
 

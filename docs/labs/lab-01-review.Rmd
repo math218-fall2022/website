@@ -300,7 +300,11 @@ str(auto)
 
 1. Create three vectors  `x`, `y`, and `z`  with integers of your choice such that each vector has 3 elements. Combine the three vectors to become a 3×3 matrix  `A` where each column represents a vector. 
 
-<div class = "commit"> This is a good place to pause, knit and <b>commit changes</b> with the commit message "Added answer for Ex 1." Push these changes when you're done.
+```{marginfigure}
+Refer to the bottom of this page for a refresher on pushing changes to GitHub!
+```
+
+<div class = "commit"> This is a good place to pause, knit and <b>commit changes</b> with the commit message "Added answer for Ex 1." Push these changes when you're done. 
 </div>
 
 ```{marginfigure}
@@ -359,6 +363,23 @@ Once you are finished, knit one last time and push your changes to GitHub. Then 
 **Before you wrap up the assignment, make sure all documents are updated on your GitHub repo. I will be checking these to make sure you have been practicing how to commit and push changes.**
 
 **Remember -- you must turn in a .pdf file to the Canvas page before the submission deadline for full credit.** 
+
+
+# Refresher on comitting and pushing to GitHub:
+
+## Commiting changes:
+
+Open up the GitHub Desktop application. If you have made changes to your .Rmd file or created new files, you should see it listed here.
+
+Next, write a meaningful commit message (for instance, "Updated author name") in the text box next to your GitHub profile image. Click the **Commit to main** blue button.
+
+Of course, you don't have to commit after every change, as this would get quite cumbersome. You should consider committing states that are *meaningful to you* for inspection, comparison, or restoration. In the first few assignments we will tell you exactly when to commit and in some cases, what commit message to use. As the semester progresses we will let you make these decisions.
+
+## Pushing changes: 
+
+Now that you have made an update and committed this change, it's time to push these changes to the web! Or more specifically, to your repo on GitHub so that others can see your changes. By others, we mean the course teaching team (your repos) in this course are private to you and us, only). 
+
+In order to push your changes to GitHub, you must have committed your changes in the previous step. At the top of the application, the third tab should have changed to say `Push origin` with some arrows displayed. Go ahead and **push**!
 
 
 
