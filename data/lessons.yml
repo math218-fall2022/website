@@ -7,7 +7,7 @@ lessons:
    title: "Course introduction"
    slides: "lec-slides/01-Intro-slides.html"
  - title: "What is statistical learning?"
-   #slides: "lec-slides/02-what-slides.html"
+   slides: "lec-slides/02-what-slides.html"
  - date: "Friday, Sep. 16"
    title: "Working with GitHub"
    lab: "lab-00-git.html"
