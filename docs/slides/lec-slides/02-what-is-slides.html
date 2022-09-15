@@ -198,19 +198,30 @@ Topic modeling (source: https://arxiv.org/abs/2106.09533)
 ## Inference
 
 - We are often interested in learning how `\(Y\)` and the `\(X_{1}, \ldots, X_{p}\)` are related or associated
-- In this mindset, we want to estimate `\(f\)` to learn the relationships, rather than make predictions
+- In this mindset, we want to estimate `\(f\)` to learn the relationships, rather than obtain a `\(\hat{Y}\)`
+
 
 --
 
-  - In the prediction setting, estimate `\(\hat{f}\)` for the purpose of `\(\hat{Y}\)` and `\(Y\)`.
+
+---
+
+## Prediction vs Inference
+
+- In the prediction setting, estimate `\(\hat{f}\)` for the purpose of `\(\hat{Y}\)` and `\(Y\)`.
   
 --
 
-  - In the inference setting, estimate `\(\hat{f}\)` for the purpose of `\(X\)` and `\(Y\)`
+- In the inference setting, estimate `\(\hat{f}\)` for the purpose of `\(X\)` and `\(Y\)`
 
 --
 
 - Some problems will call for prediction, inference, or both
+
+  - To what extent is `\(\color{blue}{\text{length}}\)` associated with `\(\color{blue}{\text{age}}\)`?
+  
+  - Given some physical characters, how old is the abalone?
+
 
 ---
 
@@ -315,7 +326,7 @@ For example,
 
 --
 
-`$$MSE_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$`
+`$$\text{MSE}_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$`
 --
 
 `$$\text{MSE}_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$`
@@ -337,6 +348,7 @@ For example,
 &lt;img src="02-what-is-slides_files/figure-html/plot_mse2-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
+
 ## Bias-Variance trade-off
 
 - As model flexibility increases, the training MSE will decrease but test MSE may not.

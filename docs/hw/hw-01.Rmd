@@ -204,11 +204,11 @@ c) What are some other variables/features that may be useful for the problem des
 
 ### Exercise 7
 
-For each of the following, indicate whether we would generally expect the performance of a flexible statistical learning methods to be better or worse than an inflexible method. Justify your answer.
+For each of the following, indicate whether we would generally expect the performance of a flexible statistical learning method to be better or worse than an inflexible method. Justify your answer.
 
 a) The relationship between the predictors and response is highly complex.
 
-b) The variance of the errors terms ($\sigma^2 = \text{Var}(\epsilon)$) is extremely high.
+b) The variance of the error terms ($\sigma^2 = \text{Var}(\epsilon)$) is extremely high.
 
 c) The number of predictors $p$ is extremely large relative to the number of observations $n$.
 

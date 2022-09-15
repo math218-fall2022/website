@@ -367,7 +367,7 @@ $$\text{MSE}=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\hat{f}(x_{i}))^2$$
 
 --
 
-$$MSE_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$
+$$\text{MSE}_{train}=\frac{1}{n_{train}}\sum_{i=1}^{n_{train}}(y_{i}-\hat{f}(x_{i}))^2$$
 --
 
 $$\text{MSE}_{test}=\frac{1}{n_{test}}\sum_{i=1}^{n_{test}}(y_{i}-\hat{f}(x_{i}))^2$$
@@ -517,6 +517,7 @@ gridExtra::grid.arrange(p_fit, p_mse, nrow = 1)
 ```
 
 ---
+
 ## Bias-Variance trade-off
 
 - As model flexibility increases, the training MSE will decrease but test MSE may not.
