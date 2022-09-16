@@ -119,7 +119,7 @@ x^2
 
 The `rnorm()` functions generate a vector of normally-distributed random variables. The first argument `n` is the sample size. By default, `rnorm()` generates standard normal random variables (mean 0, sd 1). We can change this by specifying other values:
 
-```{r}
+```{r eval = T}
 x <- rnorm(50)
 y <- rnorm(50, mean = 1, sd = 0.1)
 ```
@@ -145,7 +145,7 @@ y <- rnorm(100)
 mean(y)
 var(y)
 sd(y)
-sqrt(sd(y))
+sd(y)^2
 ```
 
 # Plotting
