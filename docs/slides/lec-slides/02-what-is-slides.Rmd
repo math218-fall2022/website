@@ -34,6 +34,14 @@ abalone <- abalone %>%
 
 ## Announcements
 
+- Lab 01: started today, due Sunday 9/18 at 11:59pm to Canvas
+
+- HW 01: released today, due Thursday 9/22 at 11:59pm to Canvas
+
+- If you haven't yet scheduled a 1:1 meeting with me, there are still some slots [available](https://calendly.com/beckytang/10min) 
+
+- TA
+
 ---
 
 ## Example of Unsupervised 
@@ -910,10 +918,3 @@ gridExtra::grid.arrange(p_knn1, p_knn2, p_knn3, nrow = 1, ncol = 3)
   
 - Black lines are true Bayes decision boundaries, and purple are the estimated boundaries under KNN
 
----
-
-## Before next class 
-
-- If you haven't yet scheduled a 1:1 meeting with me, there are still some slots [available](https://calendly.com/beckytang/10min) 
-
-- Start Lab 01 today, due Sunday 9/18 at 11:59pm on Canvas
