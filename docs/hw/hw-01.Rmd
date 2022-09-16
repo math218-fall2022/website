@@ -1,9 +1,8 @@
 ---
 title: "Problem Set 01"
-subtitle: 'Due: Thursday, 9/15 at 11:59pm'
+subtitle: 'Due: Thursday, 9/22 at 11:59pm'
 output:
   pdf_document: default
-  html_document: default
 editor_options:
   chunk_output_type: console
 ---
