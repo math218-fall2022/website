@@ -21,6 +21,7 @@ lessons:
  - date: "Week 02"
  - date: "Monday, Sep. 19"
    title: "Linear regression"
+   slides: "lec-slides/03-linear-regression-slides.html"
  - date: "Wednesday, Sep. 21"
    title: "Linear regression (cont.)"
  - date: "Friday, Sep. 23"

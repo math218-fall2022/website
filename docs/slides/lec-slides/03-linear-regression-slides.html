@@ -237,7 +237,7 @@ Least squares fit for `\(\color{blue}{\text{age}}\)` regressed on `\(\color{blue
 
 - Typically `\(\sigma^2\)` is not known, but can be estimated from the data.
 
-- Estimate `\(\hat{\sigma}\)` is *residual standard error (RSE)*, given by:
+- Estimate `\(\hat{\sigma}\)` is **residual standard error (RSE)**, given by:
 
 `$$\hat{\sigma}= \text{RSE} = \sqrt{\frac{1}{n-2}\text{RSS}}$$`
 
@@ -311,7 +311,7 @@ Least squares fit for `\(\color{blue}{\text{age}}\)` regressed on `\(\color{blue
 
 - `\(t\)` is very large (positive or negative) when `\(\hat{\beta}_{1}\)` is very far from 0 and standard error is not too large
 
-- Can calculate **p-value**, which is the probability of observaing any value equal to `\(|t|\)` or larger
+- Can calculate **p-value**, which is the probability of observing any value equal to `\(|t|\)` or larger
 
 ---
 
@@ -340,9 +340,7 @@ Least squares fit for `\(\color{blue}{\text{age}}\)` regressed on `\(\color{blue
 
 - How well does the model fit the data?
 
-- **Residual standard error** (RSE) `$$\text{RSE} = \sqrt{\frac{1}{n-2}\text{RSS}} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_{i} - \hat{y}_{i})^2}$$`
-
-  - Recall that `\(\text{RSE}\)` is estimate of the standard deviation of `\(\epsilon\)`
+- Recall residual standard error (RSE) `$$\text{RSE} = \sqrt{\frac{1}{n-2}\text{RSS}} = \sqrt{\frac{1}{n-2} \sum_{i=1}^{n} (y_{i} - \hat{y}_{i})^2}$$`
   
 --
   
@@ -592,7 +590,7 @@ class: center, middle
 
 ### Qualitative predictors: Abalone data
 
-- Simple linear regression model for `\(\color{blue}{\text{age}}\)` regression on `\(\color{blue}{\text{sex}}\)`:
+- Simple linear regression model for `\(\color{blue}{\text{age}}\)` regressed on `\(\color{blue}{\text{sex}}\)`:
 
 `$$y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} = \begin{cases} \beta_{0} + \beta_{1} + \epsilon_{i} &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
 \beta_{0} + \epsilon_{i} &amp; \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \end{cases}$$`
@@ -934,17 +932,23 @@ Estimated regression lines
 
 ### Problem 1: outliers
 
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Problem 1: outliers
+
 - May not have too large an impact on estimated regression line, but can impact overall accuracy of model
 
 --
 
 - Residual standard error `\((\hat{\sigma})\)`:
-  - Model fit on all data: 1.113
-  - Model fit after removing outlier: 1
+  - Model fit on all data: 0.38
+  - Model fit after removing outlier: 0.25
   
 - `\(R^2\)`:
-  - Model fit on all data: 0.164
-  - Model fit after removing outlier: 0.213
+  - Model fit on all data: 0.863
+  - Model fit after removing outlier: 0.938
 
 ---
 
@@ -954,12 +958,18 @@ Estimated regression lines
 
 - Same data as previous slide + one additional point in orange
 
-&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
 
 - Blue line is fit to all data
 
 - Orange line is fitted line omitting the orange point
 
+
+---
+
+### Problem 2: high leverage points
+
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -991,7 +1001,7 @@ Estimated regression lines
 
 - As mentioned before, **collinearity** occurs when two or more predictors are closely related to one another
 
-&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-linear-regression-slides_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
 
 - In ablone data above, can be hard to separate the individual effects of `\(\color{blue}{\text{weight}}\)` and `\(\color{blue}{\text{length}}\)` on `\(\color{blue}{\text{age}}\)`
 

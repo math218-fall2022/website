@@ -416,7 +416,7 @@ tidy(lm_abalane)
 
 - How well does the model fit the data?
 
-- Recall residual standard error (RSE) $$\text{RSE} = \sqrt{\frac{1}{n-2}\text{RSS}} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_{i} - \hat{y}_{i})^2}$$
+- Recall residual standard error (RSE) $$\text{RSE} = \sqrt{\frac{1}{n-2}\text{RSS}} = \sqrt{\frac{1}{n-2} \sum_{i=1}^{n} (y_{i} - \hat{y}_{i})^2}$$
   
 --
   
@@ -678,7 +678,7 @@ $$x_{i} = \begin{cases} 1 & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Mal
 
 ### Qualitative predictors: Abalone data
 
-- Simple linear regression model for $\color{blue}{\text{age}}$ regression on $\color{blue}{\text{sex}}$:
+- Simple linear regression model for $\color{blue}{\text{age}}$ regressed on $\color{blue}{\text{sex}}$:
 
 $$y_{i} = \beta_{0} + \beta_{1}x_{i} + \epsilon_{i} = \begin{cases} \beta_{0} + \beta_{1} + \epsilon_{i} & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Male} \\
 \beta_{0} + \epsilon_{i} & \text{ if } \color{blue}{\text{sex}_{i}} = \text{Female} \end{cases}$$
