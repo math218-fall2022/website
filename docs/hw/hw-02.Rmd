@@ -1,9 +1,9 @@
 ---
-title: "HW 02: Regression"
-date: "Due: Thursday, Sept. 29 at 11:59pm"
-author: "Total: ? points"
-output: html_document
-editor_options: 
+title: 'HW 02: Regression'
+date: 'Due: Thursday, Sept. 29 at 11:59pm'
+output:
+  pdf_document: default
+editor_options:
   chunk_output_type: console
 ---
 
@@ -21,13 +21,10 @@ air <- airquality %>% na.omit()
 
 In class, we learned about the coefficient of determination $R^2$. In linear regression models, $R^2$ quantifies the proportion of variation in the response that is explained by the predictors. 
 
-Recall that $R^2$ is defined as $$R^2 = 1 - \frac{\text{RSS}}{\text{TSS}}$$ where $\text{RSS} = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2$ and $\text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2$
+Recall that $R^2$ is defined as $$R^2 = 1 - \frac{\text{RSS}}{\text{TSS}}$$ where $\text{RSS} = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2$ and $\text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2$.
 
-```{marginfigure}
-$r$ is the quantity calculated when you use the `cor()` function, as in Lab 02.
-```
-
-As it turns out, in simple linear regression, the $R^2$ value is exactly the square of the correlation coefficient $r$ (defined below) between the predictor $x$ and the response $y$! However, $R^2$ and $r$ have two very different meanings. We will explore both quantities in this homework.
+As it turns out, in simple linear regression, the $R^2$ value is exactly the square of the correlation coefficient $r$ (defined below) between the predictor $x$ and the response $y$! However, $R^2$ and $r$ have two very different meanings. We will explore both quantities in this homework. (Note: $r$ is the quantity calculated when you use the `cor()` function, as in Lab 02.
+)
 
 
 
@@ -43,7 +40,6 @@ summary(mod)
 
 a) Interpret the coefficient for `Temp`. Does the model's $R^2$ inform/affect your interpretation? If so, how?
 
-b) The following plot displays 95% confidence intervals for predicted ozone for various `Temp` values.
 
 ```{r}
 preds <- predict(mod, newdata = data.frame(Temp = seq(55,90,2)), interval = "confidence")
@@ -55,9 +51,9 @@ data.frame(preds) %>%
   labs(x = "Temperature (F)", y = "Predicted ozone + 95% CIs (ppb)")
 ```
 
-What do you think about the quality of our predictions for Ozone? Are you comfortable with all of these intervals? 
+b) The above plot displays 95% confidence intervals for predicted ozone for various `Temp` values. What do you think about the quality of our predictions for Ozone? Are you comfortable with all of these intervals? 
 
-c) We should look at some diagnostic plots. Below is a plot of the residuals vs fitted values. What does this plot reveal about the fit of the linear model? How does the $R^2$ inform about whether the linear model is a good choice?
+c) We should look at some diagnostic plots. Below is a plot of the residuals vs fitted values. What does this plot reveal about the fit of the linear model? Does the $R^2$ inform about whether the linear model is a good choice?
 
 ```{r}
 data.frame(residuals = mod$residuals, fitted = mod$fitted.values) %>%
@@ -147,7 +143,7 @@ Suppose we have the following data:
 ```{r}
 df <- data.frame(x = c(-1, 0, 1, 0, 2, -2),
            y = c(0, 2, 1, 2, 3, -2))
-print.data.frame(df)
+knitr::kable(df)
 
 ```
 
@@ -156,21 +152,21 @@ a) Calculate $\bar{x}$ and $\bar{y}$.
 b) Calculate (manually) the correlation $r$ between $x$ and $y$ using this data. 
 
 
-c) Now, suppose we actually measured `x2 = 5x`. That is, `x2` is simply a *scaled* version of the original `x`: 
+c) Now, suppose we actually measured `x2 = 5x`. That is, `x2` is simply a *scaled* version of the original `x`. Calculate the correlation between  $x_2$ and $y$.
+
 
 ```{r}
-print.data.frame(df %>% mutate(x = 5*x) %>% rename("x2" = "x"))
+knitr::kable(df %>% mutate(x = 5*x) %>% rename("x2" = "x"))
 ```
 
-Calculate the correlation between  $x2$ and $y$.
 
-d) Now, supposed we actually measured `x3 = x + 1`. That is, `x3` is just a shifted version of the original `x`. 
+d) Now, supposed we actually measured `x3 = x + 1`. That is, `x3` is just a shifted version of the original `x`. Calculate the correlation between  $x_3$ and $y$.
+
 
 ```{r}
-print.data.frame(df %>% mutate(x = x+1) %>%  rename("x3" = "x"))
+knitr::kable(df %>% mutate(x = x+1) %>%  rename("x3" = "x"))
 ```
 
-Calculate the correlation between  $x3$ and $y$.
 
 e) Based on your answers in (b)-(d), how does shifting or scaling variables affect the correlation?
 

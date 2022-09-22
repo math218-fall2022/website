@@ -1,6 +1,6 @@
 ---
 title: "Lab 02 - Linear Regression"
-subtitle: "due ? at 11:59pm"
+subtitle: "due Sunday, 9/25 at 11:59pm"
 output: 
   tufte::tufte_html:
     css: "./math218-labs.css"
@@ -52,10 +52,10 @@ install.packages("ggfortify")
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(eval = F, 
+knitr::opts_chunk$set(eval = T, 
                       warning = FALSE, 
                       message  = FALSE,
-                      fig.align="center", fig.width=4, fig.height=4)
+                      fig.align="center", fig.width=6, fig.height=4)
 library(tidyverse)
 library(MASS)
 library(ISLR2)
@@ -109,23 +109,34 @@ ggplot(fish, aes(x = BodyLength,y = Weight))+
   geom_smooth(method = "lm", se = F)
 ```
 
-We can compute the residuals from a linear regression fit using the `residuals()` function. Here, it is clear that we have non-linearity.
+We can compute the residuals from a linear regression fit using the `residuals()` function. Once we compute them, we can plot them! The following code also provides a horizontal line at 0 as a point of reference. It is clear that we have non-linearity.
 
 ```{r}
 resids <- residuals(mod0)
 data.frame(fitted = predict(mod0), residuals = resids) %>%
   ggplot(., aes(x = fitted, y = residuals))+
-  geom_point()
+  geom_point() +
+  geom_hline(yintercept = 0, linetype = "dashed", col = "red")
 ```
 
-Leverage statistics can be computed using the `hatvalues()` function. Here, I plot the leverage in the order of data collection:
- 
+Leverage statistics can be computed using the `hatvalues()` function. Also, recall that the average leverage is calculated as $(p+1)/n$. I obtain average leverage as well:
+
 ```{r}
 lev <- hatvalues(mod0)
+p <- 1
+n <- nrow(fish)
+av_lev <- (p+1)/n
+```
+
+
+Here, I plot the leverage in the order of data collection, with a reference for the average leverage:
+ 
+```{r}
 data.frame(leverage = lev) %>%
   mutate(order = row_number()) %>%
   ggplot(., aes(x = order, y = leverage)) +
-  geom_point()
+  geom_point() +
+  geom_hline(yintercept = av_lev, col = "red", linetype = "dashed")
 ```
 
 Alternatively, we can take advantage of the `autoplot()` function from the `ggfortify` library we loaded. We pass in a fitted `lm()` object, and `autoplot()` will plot up to six diagnostic plots. Here, we will focus on four: residuals vs fitted, Normal q-q plot, standardized residuals vs fitted, and residuals vs leverage. Notice that `autoplot` will provide the indices of points of interest (possible outliers or high leverage) in the respective plots. 
@@ -133,6 +144,7 @@ Alternatively, we can take advantage of the `autoplot()` function from the `ggfo
 ```{r}
 autoplot(mod0, which = c(1,2,3,5))
 ```
+
 
 # Multiple linear regression
 
@@ -147,7 +159,7 @@ mod1 <- lm(Weight ~ BodyLength + Height, data = fish)
 summary(mod1)
 ```
 
-Suppose I want to fit a multiple linear regression model using all the quantitative predictors. Rather than type them all out, I can use shorthand. On the right side of the `~`, typing a period `.` will tell `R` to use all the variables in the specified dataset (minus the specified response). Because I am currently only interested in the quantitative predictors, I will add `- Species` to tell `R` to use all the predicotrs *except* for `Species`.
+Suppose I want to fit a multiple linear regression model using all the quantitative predictors. Rather than type them all out, I can use shorthand. On the right side of the `~`, typing a period `.` will tell `R` to use all the variables in the specified dataset (minus the specified response). Because I am currently only interested in the quantitative predictors, I will add `- Species` to tell `R` to use all the predictors *except* for `Species`.
 
 ```{r}
 mod2 <- lm(Weight ~ . - Species, data = fish)
@@ -156,19 +168,49 @@ summary(mod2)
 
 ## Interactions
 
-It is easy to include interaction terms in a linear model using the `lm()` function. The syntax `BodyLength:Height` tells `R` to include an interaction term between the two predictors. Here, we will use shorthand:
-
-```{marginfigure}
-Note, this is equivalent to `BodyLength + Height + BodyLength:Height`
-```
+It is easy to include interaction terms in a linear model using the `lm()` function. The syntax `BodyLength:Height` tells `R` to include an interaction term between the two predictors. We can also use `*` as shorthand:
 
 ```{r}
-summary(lm(Weight ~ BodyLength * Height, data = fish))
+# these two models are equivalent!
+int_mod <- lm(Weight ~ BodyLength + Height + BodyLength:Height, data = fish)
+int_mod <- lm(Weight ~ BodyLength * Height, data = fish)
+summary(int_mod)
+```
+
+Let's visualize what this interaction implies about the model fit. In the following code, I am generating estimates of $\color{blue}{\text{weight}}$ from the model for a range of  $\color{blue}{\text{height}}$ values, at three different, fixed values of  $\color{blue}{\text{BodyLength}}$. Then we plot them. Notice how the relationship between  $\color{blue}{\text{height}}$ and  $\color{blue}{\text{weight}}$ really changes at different values of  $\color{blue}{\text{BodyLength}}$!
+
+```{r}
+beta_hat <- coef(int_mod)
+height_seq <- seq(min(fish$Height), max(fish$Height), 0.1)
+body_length1 <- 30
+
+y_pred1 <- beta_hat[1] + beta_hat[2]*body_length1 + beta_hat[3]*height_seq +
+  beta_hat[4]*body_length1*height_seq
+
+df1 <- data.frame(height = height_seq, body_length = body_length1, weight = y_pred1)
+
+body_length2 <- 25
+y_pred2 <- beta_hat[1] + beta_hat[2]*body_length2 + beta_hat[3]*height_seq +
+  beta_hat[4]*body_length2*height_seq
+
+df2 <- data.frame(height = height_seq, body_length = body_length2, weight = y_pred2)
+
+body_length3 <- 20
+y_pred3 <- beta_hat[1] + beta_hat[2]*body_length3 + beta_hat[3]*height_seq +
+  beta_hat[4]*body_length3*height_seq
+
+df3 <- data.frame(height = height_seq, body_length = body_length3, weight = y_pred3)
+
+
+rbind(df1, df2, df3) %>%
+  mutate(body_length = factor(body_length)) %>%
+  ggplot(., aes(x = height, y = weight, col = body_length)) + 
+  geom_line()
 ```
 
 ## Non-linear transformations of predictors
 
-Given a predictor $X$, we can create a predictor $X^{k}$ using `I(X^k)`. The function `I()` is necessary because the carat `^` has a special meaning. The following regresses `Weight` on `BodyLength` and `BodyLength^2`.
+Given a predictor $X$, we can create a predictor $X^{k}$ using `I(X^k)`. The function `I()` is necessary because the carat `^` has a special meaning in R. The following regresses `Weight` on `BodyLength` and `BodyLength^2`.
 
 ```{r}
 mod_poly <- lm(Weight ~ BodyLength + I(BodyLength^2), data = fish)
@@ -250,7 +292,7 @@ greeting("student")
 
 You will create some simulated data and will fit simple linear regression models to it. Make sure to use `set.seed(2)` prior to starting Exercise 1 to ensure consistent results.
 
-  a. Using the `rnorm()` function, create a vector `x` that contains 100 observations drawn from a $N(0,1)$ distirbution. This represents a feature or predictor, $X$. 
+  a. Using the `rnorm()` function, create a vector `x` that contains 100 observations drawn from a $N(0,1)$ distribution. This represents a feature or predictor, $X$. 
   
   b. Using the `rnorm()` function, create a vector `eps` that contains 100 observations drawn from a $N(0,0.25)$ distribution -- a Normal distribution with mean 0 and variance 0.25. 
 

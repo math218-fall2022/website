@@ -1,0 +1,537 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Survival Analysis"
+date: "9/14/2022"
+output: 
+   xaringan::moon_reader:
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r}
+knitr::opts_chunk$set(echo = F, warning = F,
+                      message = F, fig.align = "center", fig.width = 5, fig.height = 5)
+library(tidyverse)
+library(ISLR2)
+library(survival)
+library(DT)
+library(ggfortify)
+
+```
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Survival Analysis
+
+- Survival analysis concerns a special kind of outcome/response variable: the **time until an event occurs**
+
+  - Suppose we are conducting a three-year medical study about patients who have had one heart attack
+  
+  - We would like to fit a model to predict the time until the second heart attack, using features such as baseline health measurement, weight, sex, etc.
+  
+--
+
+- May sound like a regression problem, but important complication: survival data is often **censored**
+
+---
+
+## Survival and Censored data
+
+- **Censoring** refers to a type of missing data
+
+- Why? It is very likely that some of the patients:
+
+  - drop out of the medical study, or
+  
+  - do not have a second heart attack within the three-year study window
+  
+--
+
+- Does not mean the patient will never experience the event, but that the event *did not happen while under observation*
+
+--
+
+- Do not want to discard this subset of patients, because surviving beyond study window is still valubale information! 
+
+---
+
+## Another example
+
+- A company (e.g. Netflix) wants to model *churn*, the event when customers cancel their subscription to a service (e.g. account)
+
+- Netflix might collect data on customers over some timer period in order to predict each customer's time to cancellation
+
+  - Presumably, not all customers will have cancelled their subscription by the end of this time period
+  
+  - Time to cancellation is censored for this group of customers
+  
+---
+
+## Survival and Censoring Times
+
+- For each individual, we suppose there is a true
+
+  - **survival**/**failure**/**event** time $T$, and
+  
+  - **censoring** time $C$
+  
+- Survival time $T$ represents the time at which the event of interest occurs (e.g. heart attack)
+
+- Censoring time $C$ is time at which the censoring occurs (e.g. study ends or patient drops out)
+
+---
+
+## What we observe
+
+- We observe *either* the survival time $T$ or the censoring time $C$ (not both)
+
+- Specifically, we observe the random variable $$Y = \min(T,C)$$
+
+--
+
+- If the event occurs before censoring, do we observe $T$ or $C$?
+
+- If the censoring occurs before event, do we observe $T$ or $C$?
+
+--
+
+- Thus, we also observe status indicator:
+
+$$\delta = \begin{cases}1 & \text{ if } T \leq C  \\ 
+0 & \text{ if } T > C\end{cases}$$
+
+--
+
+- In our data, we observe $n$ pairs $(y_{i}, \delta_{i}), \ldots, (y_{n}, \delta_{n})$
+
+---
+
+## Illustration
+
+---
+
+
+## Closer look
+
+- Suppose we have data from a study on cancer treatment over a five-year window. Want to model time until death
+
+- Many patients drop out of the study early because they are very sick
+
+  - Our analysis should incorporate the reason why the patients dropped out early. Why?
+
+- Suppose that males who are very sick are more likely to drop out than females who are very sick
+
+  - Comparison of male and female survival times may wrongly suggest that males survive longer
+  
+--
+
+- **Assumption**: conditional on the features $X$, the event time $T$ is *independent* of the censoring time $C$
+
+---
+
+## Types of censoring
+
+- Left, right, and interval
+
+- We will focus on *right*-censoring: when $T \geq Y$ (i.e. true event time is at least as large as observed time)
+
+---
+
+
+## Survival Curve
+
+- **Survival curve** or function is defined as
+
+$$S(t) = \text{Pr}(T > t)$$
+
+  - i.e. $S(t)$ is the probability that we survive beyond time $t$
+  
+--
+
+- $S(t)$ is a decreasing function of $t$. Why?
+
+--
+
+- For given $t$, a larger $S(t)$ implies lower probability that patient will die before time $t$
+
+---
+
+## Brain Cancer Data
+
+```{r}
+datatable(BrainCancer, options = list(pageLength = 5)) %>%
+  formatStyle(columns = 1:ncol(BrainCancer), fontSize = '90%')
+```
+
+---
+
+## Brain Cancer Data
+
+- Survival times for patients with primary brain tumors undergoing treatment with stereotactic radiation methods
+
+- $\color{blue}{\text{sex}}$: Female, Male
+
+- $\color{blue}{\text{diagnosis}}$: Meningioma, LG glioma, HG glioma, Other
+
+- $\color{blue}{\text{loc}}$ (location): Infratentorial, Supratentorial
+
+- $\color{blue}{\text{ki}}$: Karnofsky index
+
+- $\color{blue}{\text{gtc}}$: Gross tumor volume (cm$^3$)
+
+- $\color{blue}{\text{stereo}}$ (method): SRS, SRT
+
+- $\color{orange}{\text{status}}$ (whether still alive at end of study): 0 = Yes, 1 = No
+
+- $\color{orange}{\text{time}}$:  the time to the event (death or censoring), in months
+
+---
+
+## Brain Cancer Data
+
+How long was the study?
+
+How many patients still alive at end of study?
+
+```{r echo = T}
+max(BrainCancer$time)
+
+table(BrainCancer$status)
+```
+
+---
+
+
+```{r}
+BrainCancer %>%
+  mutate(status = as.factor(status)) %>%
+  ggplot(., aes(x = time, y = status)) +
+  geom_boxplot() +
+  ggtitle("Time until event", subtitle = "0 = still alive, 1 = died")
+```
+
+---
+
+
+## Estimating Survival Curve
+
+- Suppose we want to estimate $S(20) = \text{Pr}(T > 20)$, the probability that a patients survives for at least 20 months. 
+
+question[How might we do that?]
+
+---
+
+## Estimating Survival Curve
+
+- Should we compute the proportion of patients who are known to have survived beyond 20 months (i.e. $Y > 20$)? 
+
+```{r echo = T}
+n <- nrow(BrainCancer)
+(n_surv20 <- sum(BrainCancer$time > 20))
+n_surv20/n
+```
+
+- Issue: those with $y_{i} < 20$ did not necessarily die!
+
+```{r echo = T}
+# number of patients who dropped-out before 20 months
+sum(BrainCancer$time < 20 & BrainCancer$status == 0)
+```
+
+---
+
+## Estimating Survival Curve (cont.)
+
+- Instead, maybe we compute the proportion of patients for whom $Y>20$ among the patient who were *not* censored by time $t = 20$
+
+```{r}
+n_not_cens20 <- sum(BrainCancer$time < 20 & BrainCancer$status == 0)
+n_surv20/(n - n_not_cens20)
+```
+
+- Issue: ignores patients who were censored before $t = 20$
+
+---
+
+### Kaplan-Meier estimator of survival curve
+
+```{r fig.width=9, fig.height=5}
+attach(BrainCancer)
+fit.surv <- survfit(Surv(time, status) ~ 1)
+autoplot(fit.surv) +
+  labs(x = "Time (months)", y = "Estimated probability of survival") +
+  ggtitle("Kaplan-Meier Estimate of Survival Curve for Brain Cancer data")+
+  theme(text = element_text(size = 16))
+```
+
+--
+
+- Based on KM estimate, approximately what is $S(20)$?
+
+  - How does this compare to our "naive" estimates?
+  
+---
+
+### Stratifying
+
+```{r fig.width=9, fig.height=5}
+fit.surv.strat <- survfit(Surv(time, status) ~ sex)
+autoplot(fit.surv.strat, conf.int = F) +
+  labs(x = "Time (months)", y = "Estimated probability of survival") +
+  ggtitle("Kaplan-Meier Estimate of Survival Curve for Brain Cancer data",
+          subtitle = "Stratified by sex")+
+  theme(text = element_text(size = 16)) +
+  labs(col = "sex")
+```
+
+---
+
+## Log-rank test?
+
+---
+
+## Regression with survival response
+
+- Want to learn how features $X$ might influence the probability of survival. 
+
+- How to fit a regression model to survival data? 
+
+--
+
+- Want to predict true survival time $T$, but we only observe $Y = \min(T, C)$
+
+- Solution: sequential construction
+
+---
+
+## Hazard function
+
+- The **hazard function** is formally defined as
+
+$$h(t) = \lim_{\Delta t \rightarrow 0} \frac{\text{Pr}(t < T \leq t + \Delta t| T > t)}{\Delta t}$$
+where $T$ is true survival time.
+
+- Interpretation: death rate in the instant right after time $t$, given survival up to time $t$
+
+--
+
+- Implies that for arbitrarily small $\Delta t$,
+
+$$h(t) \approx \frac{\text{Pr}(t < T \leq t + \Delta t| T > t)}{\Delta t}$$
+---
+
+## Hazard function and Survival curve
+
+$$
+\begin{align*}
+h(t) &= \lim_{\Delta t \rightarrow 0}\frac{\text{Pr}(t < T \leq t + \Delta t| T > t)}{\Delta t} \\
+&= \lim_{\Delta t \rightarrow 0}\frac{\text{Pr}((t < T \leq t + \Delta t) \cap (T > t))/\Delta t}{\text{Pr}(T > t)} \\
+&= \lim_{\Delta t \rightarrow 0}\frac{\text{Pr}(t < T \leq t + \Delta t)/\Delta t}{S(t)} \\
+&= \frac{f(t)}{S(t)}
+\end{align*} 
+$$
+
+where $f(t) = \lim_{\Delta t \rightarrow 0}\frac{\text{Pr}(t < T \leq t + \Delta t)}{\Delta t}$ is probability density function of $T$
+
+---
+
+## Proportional Hazards Model
+
+- We would like to model survival time as a function of predictors. 
+
+- There are many ways, but we will discuss the **proportional hazards** model which assumes
+
+$$h(t | x_{i}) = h_{0}(t) \exp\left(\sum_{j=1}^{p} x_{ij} \beta_{j}\right)$$
+
+- $h_{0}(t) \geq 0$ is the *baseline hazard*, typically unspecified function
+
+  - Why baseline? Hazard function for individual with $x_{i1} = \ldots = x_{ip} = 0$
+
+- Name "proportional" hazards comes from the fact that the hazard function given a set of predictors $x_{i}$ is simply proportional to the baseline
+
+  - The factor $\exp\left(\sum_{j=1}^{p} x_{ij} \beta_{j}\right)$ is called the **relative risk** for feature vector $\mathbf{x}_{i} = (x_{i1}, \ldots, x_{ip})'$, relative to that for $\mathbf{x}_{0} = (0, \ldots, 0)'$
+  
+---
+
+## Proportional Hazards Model
+
+- What do we mean that $h_{0}(t)$ is unspecified?
+
+  - We make no assumptions about its functional form
+  
+  - Allows the instantaneous probability of event (e.g. death) at time $t$ to take any form (given survival to time $t$)
+  
+  - Extremely flexible, allowing a wide range of relationships between $x$'s and the survival time
+  
+--
+
+- Our only assumption: a one-unit increase in $x_{ij}$ corresponds to an increase in $h(t|x_{i})$ by a *factor* of $e^{\beta_{j}}$
+
+--
+
+.question[Is proportional hazards model parametric or nonparametric?]
+
+---
+
+## Example: proportional hazards
+
+- $p=1$ where $x$ is binary predictor (blue, red). Plots of $\log h(t)$ and $S(t)$
+
+```{r prop_hazard, fig.width=10, fig.height=5}
+time <- seq(0.05,3,0.1)
+h0 <- function(t){
+  (t/2)^1.5
+}
+
+b <- 1
+
+h0_t <- c(h0(time)*exp(b*1) , h0(time)*exp(b*0))
+df1 <- data.frame(x = c(rep(c(1,0), each = length(time))),
+                  t = rep(time,2),
+                  stat = "Log Hazard",
+                  val= log(h0_t)) 
+
+S1 <-  S0 <- rep(NA, length(time))
+for(t in 1:length(time)){
+  S1[t] <- exp(-exp(b*1)*integrate(h0, lower = 0, upper = time[t])$value)
+  S0[t] <- exp(-exp(b*0)*integrate(h0, lower = 0, upper = time[t])$value)
+}
+
+df2 <- data.frame(x = c(rep(c(1,0), each = length(time))),
+                  t = rep(time,2),
+                  stat = "Survival Probability",
+                  val = c(S1, S0)) 
+
+rbind(df1,df2) %>%
+  mutate(x = factor(x)) %>%
+  ggplot(., aes(x = t, y = val, col = x))+
+  geom_line()+
+  facet_wrap(~stat, scales = "free_y")+
+  theme(text = element_text(size = 16)) +
+  guides(col = "none") +
+  labs(x = "Time", y = "")
+
+```
+
+---
+
+## Example: non-proportional hazards
+
+```{r non_prop_hazard, fig.width=10, fig.height=5}
+h0_t <- c(h0(time)*exp(b*1) , h0(time)*exp(b*0)+ 0.5)
+df1 <- data.frame(x = c(rep(c(1,0), each = length(time))),
+                  t = rep(time,2),
+                  stat = "Log Hazard",
+                  val= log(h0_t)) 
+
+S1 <-  S0 <- rep(NA, length(time))
+for(t in 1:length(time)){
+  S1[t] <- exp(-exp(b*1)*integrate(h0, lower = 0, upper = time[t])$value)
+  S0[t] <- exp(-(exp(b*0)*integrate(h0, lower = 0, upper = time[t])$value + time[t]*0.5))
+}
+
+df2 <- data.frame(x = c(rep(c(1,0), each = length(time))),
+                  t = rep(time,2),
+                  stat = "Survival Probability",
+                  val = c(S1, S0)) 
+
+rbind(df1,df2) %>%
+  mutate(x = factor(x)) %>%
+  ggplot(., aes(x = t, y = val, col = x))+
+  geom_line()+
+  facet_wrap(~stat, scales = "free_y")+
+  theme(text = element_text(size = 16)) +
+  guides(col = "none") +
+  labs(x = "Time", y = "")
+
+```
+
+---
+
+## Estimating coefficients
+
+- How to estimate the $\beta_{j}$'s?
+
+- Because $h_{0}(t)$ is unknown, cannot straightforwardly estimate the $\beta_{j}$'s as usual
+
+--
+
+- However, we  can still estimate $\beta$ *without having the specific form of* $h_{0}(t)$ using the partial likelihood
+
+---
+
+## Partial likelihood
+
+- Assume that the failure/event times are unique (i.e. only one patient dies at a particular time), and $i$-th observation is uncensored
+
+  - Thus, observation $y_{i}$ is the failure time
+  
+- Hazard function for $i$-th observation at time $y_{i}$ is $h(y_{i}|x_{i}) = h_{0}(y_{i}) \exp\left(\sum_{j=1}^{p} x_{ij}\beta_{j}\right)$
+
+- Total hazard at time $y_{i}$ for the *at risk* observations is
+
+$$\sum_{i': y_{i'} \geq y_{i}} h_{0}(y_{i})\exp\left(\sum_{j=1}^{p} x_{i'j}\beta_{j}\right)$$
+---
+
+
+## Partial likelihood (cont.)
+
+- Thus, probability that the $i$-th observation is the one to fail at time $y_{i}$ is
+
+$$\frac{h_{0}(y_{i}) \exp\left(\sum_{j=1}^{p} x_{ij}\beta_{j}\right)}{\sum_{i': y_{i'} \geq y_{i}} h_{0}(y_{i})\exp\left(\sum_{j=1}^{p} x_{i'j}\beta_{j}\right)} = \frac{ \exp\left(\sum_{j=1}^{p} x_{ij}\beta_{j}\right)}{\sum_{i': y_{i'} \geq y_{i}} \exp\left(\sum_{j=1}^{p} x_{i'j}\beta_{j}\right)}$$
+
+- The baseline function is cancelled out!
+
+--
+
+- Partial likelihood (PL): product of these probabilities over all the uncensored observations:
+
+$$\text{PL}(\beta) = \prod_{i:\delta_{i} = 1}\frac{ \exp\left(\sum_{j=1}^{p} x_{ij}\beta_{j}\right)}{\sum_{i': y_{i'} \geq y_{i}} \exp\left(\sum_{j=1}^{p} x_{i'j}\beta_{j}\right)}$$
+
+  - Use PL to estimate the $\beta_{j}$'s, as it is valid regardless of true $h_{0}(t)$!
+  
+---
+
+## Illustration
+
+---
+
+## Proportional Hazards (details)
+
+- There is no intercept $\beta_{0}$
+
+- This presentation assumed that there are no ties in failure times (i.e. each $y_{i}$ for uncensored $i$ is unique)
+
+- The baseline $h_{0}(t)$ can be estimated, but is beyond the scope here
+
+---
+
+## Brain Cancer data
+
+```{r}
+fit.cox <- coxph(Surv(time, status) ~ ., data = BrainCancer)
+coeff_sum <- (summary(fit.cox)$coefficients)[,c(1,3,4,5)]
+round(coeff_sum, 3)
+```
+
+- Estimated hazard for a male patient is $e^{0.184}$ = 1.202 times greater than for a female patient
+
+  - Holding other features fixed, males have a 1.2 times greater chance of dying than females, at any point in time. But not significant
+  
+--
+
+- Each one-unit increase in the Karnofsky index corresponds to a multiplier of $e^{-0.055}$ = 0.946 in the instantaneous chance of dying
+
+  - The higher the Karnofsky index, the lower the chance of dying at any given point in time
+

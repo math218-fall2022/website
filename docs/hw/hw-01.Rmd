@@ -121,11 +121,11 @@ knitr::include_graphics("img/knn_tie.png")
 
 Unfortunately, besides one obvious neighbor belonging to class $B$, the three other points are equidistant to our unclassified star observation. How do we solve this?
 
-Option 1: *choose a different* K. 
+Option 1: *choose a different* K that will apply to all future observations we would like to make a prediction for.
 
 Option 2: *randomly choose between the tied neighbors*. 
 
-Option 3: *allow at least* K *neighbors until a natural stopping point*. In this example, the idea is to choose the smallest number such that $K$ is greater than or equal to 2, and that no ties exist.
+Option 3: *allow at least* K *neighbors until a natural stopping point*, custom to each new observation. In this example, the idea is to choose the smallest number such that $K$ is greater than or equal to 2, and that no ties exist.
 
 a) What are some issues with Option 1?
 
