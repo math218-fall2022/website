@@ -28,7 +28,7 @@ As it turns out, in simple linear regression, the $R^2$ value is exactly the squ
 
 **Note 1**: this is the most "math"-y homework I will assign. Please do not be scared!
 
-**Note 2**: Exercise 5 contains two problems. You only need to answer one of them to receive full credit on this exercise. I do encourage you to attempt both if you can!
+**Note 2**: There is a bonus problem at the end. Successfully answering this problem will give you extra points on this assignment!
 
 
 ## Exercise 1
@@ -145,8 +145,8 @@ The formula for the correlation coefficient $r$ is $$r = \frac{\sum_{i=1}^{n}(x_
 Suppose we collected data on two variables `x` and `y`. These are presented into the first two columns of the table below.
 
 ```{r}
-df <- data.frame(x = c(-1, 0, 1, 0, 2, -2),
-           y = c(0, 2, 1, 2, 3, -2)) %>%
+df <- data.frame(x = c(-1, 0, 1, 0),
+           y = c(0, 2, 1, 2)) %>%
   mutate(x2 = 5*x, 
          x3 = x+1)
 knitr::kable(df)
@@ -155,9 +155,9 @@ knitr::kable(df)
 
 a) Calculate $\bar{x}$ and $\bar{y}$.
 
-b) Calculate (manually) the correlation $r$ between $x$ and $y$ using this data. 
+b) Calculate the correlation $r$ between $x$ and $y$ using this data. 
 
-c) Now, suppose we had actually measured `x2 = 5x` (third column of table above). That is, `x2` is simply a *scaled* version of the original `x`. Calculate the correlation between  `x2` and `y`.
+c) Now, suppose we had actually measured `x2 = 5*x` (third column of table above). That is, `x2` is simply a *scaled* version of the original `x`. Calculate the correlation between  `x2` and `y`. 
 
 
 d) Now, supposed we actually measured `x3 = x + 1`  (fourth column of table above). That is, `x3` is just a shifted version of the original `x`. Calculate the correlation between  `x3` and `y`.
@@ -186,12 +186,9 @@ b) True or False: $\hat{\beta}_{1}$ has the same sign as $r$. Explain.
 c) If $r=0$, what is the implication for $\beta_1$? Why does this make sense?
 
 
-## Exercise 5 (choose at least one of the following to answer)
+## Exercise 5 
 
-i) I have claimed that in the case of simple linear regression of Y onto X, the $R^2$ statistic is equal to the square of the correlation $r$ between X and Y. Prove that this is the case. For simplicity, you may assume that $\bar{x} = \bar{y} = 0$.
-
-
-ii) Show that the least squares regression line always passes through the sample mean of the data. For simplicity, you may assume we are in the case of simple linear regression.
+Show that the least squares regression line always passes through the sample mean of the data. For simplicity, you may assume we are in the case of simple linear regression. The formulas for $\hat{\beta}_{0}$ and $\hat{\beta}_{1}$ might be useful here.
 
 ## Exercise 6
 
@@ -278,9 +275,9 @@ b) Looking at the plots above: for which value of the predictor $x$ are both int
 
 c)  Looking at the plots above: for a given value of $x_{0}$ and interval type (prediction or confidence), are the intervals narrower when $n = 20$ or $n = 100$? Explain why this is the case.
 
-d) Assume $t^{*} > 0$ and $MSE >> 0$ (here $>>$ means "much greater than"). Can we make it so the confidence interval width approaches 0 (i.e. we are extremely confident in the predicted population response)? If so, how? If not, why not?
+d) Assume $t^{*} > 0$ and $RSE >> 0$ (here $>>$ means "much greater than"). Can we make it so the confidence interval width approaches 0 (i.e. we are extremely confident in the predicted population response)? If so, how? If not, why not?
 
-e) Assume $t^{*} > 0$ and $MSE >> 0$. Can we make it so the prediction interval width approaches 0 (i.e. we are extremely confident in the predicted individual response)? If so, how? If not, why not?
+e) Assume $t^{*} > 0$ and $RSE >> 0$. Can we make it so the prediction interval width approaches 0 (i.e. we are extremely confident in the predicted individual response)? If so, how? If not, why not?
 
 ## Exercise 7
 
@@ -295,6 +292,9 @@ c) Suppose that the true relationship between $X$ and $Y$ is not linear, but we 
 d) Answer (c) using test rather than training RSS.
 
 
+## BONUS
+
+I have claimed that in the case of simple linear regression of Y onto X, the $R^2$ statistic is equal to the square of the correlation $r$ between X and Y. Prove that this is the case. For simplicity, assume that $\bar{x} = \bar{y} = 0$.
 
 
 ## Submission 

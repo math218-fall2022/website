@@ -51,11 +51,14 @@ install.packages("ggfortify")
 ```
 
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, echo = F}
 knitr::opts_chunk$set(eval = T, 
                       warning = FALSE, 
                       message  = FALSE,
                       fig.align="center", fig.width=6, fig.height=4)
+```
+
+```{r packages}
 library(tidyverse)
 library(MASS)
 library(ISLR2)
@@ -101,7 +104,7 @@ predict(mod0, data.frame(BodyLength = c(15, 30, 45)), interval = "prediction")
 
 # Diagnostics
 
-Here, I plot the response and predictors, along with the least squares regression line. There is some evidence for non-linearity between `Weight` and `BodyLength`...
+Here, I plot the response and predictors, along with the fitted least squares regression line. There is some evidence for non-linearity between `Weight` and `BodyLength`...
 
 ```{r}
 ggplot(fish, aes(x = BodyLength,y = Weight))+
@@ -109,7 +112,7 @@ ggplot(fish, aes(x = BodyLength,y = Weight))+
   geom_smooth(method = "lm", se = F)
 ```
 
-We can compute the residuals from a linear regression fit using the `residuals()` function. Once we compute them, we can plot them! The following code also provides a horizontal line at 0 as a point of reference. It is clear that we have non-linearity.
+We can compute the residuals from a linear regression fit using the `residuals()` function. Once we compute them, we can plot them! The following code also provides a horizontal line at 0 as a point of reference. It is clear the the assumption of linearity is violated.
 
 ```{r}
 resids <- residuals(mod0)
@@ -119,7 +122,7 @@ data.frame(fitted = predict(mod0), residuals = resids) %>%
   geom_hline(yintercept = 0, linetype = "dashed", col = "red")
 ```
 
-Leverage statistics can be computed using the `hatvalues()` function. Also, recall that the average leverage is calculated as $(p+1)/n$. I obtain average leverage as well:
+Leverage statistics can be computed using the `hatvalues()` function. Also, recall that the average leverage is calculated as $(p+1)/n$. The following code obtains the leverage of each point, as well as the  average leverage:
 
 ```{r}
 lev <- hatvalues(mod0)
@@ -294,6 +297,10 @@ You will create some simulated data and will fit simple linear regression models
 
   a. Using the `rnorm()` function, create a vector `x` that contains 100 observations drawn from a $N(0,1)$ distribution. This represents a feature or predictor, $X$. 
   
+```{marginfigure}
+Be careful about variance vs. standard deviation in `rnorm()` !
+```
+
   b. Using the `rnorm()` function, create a vector `eps` that contains 100 observations drawn from a $N(0,0.25)$ distribution -- a Normal distribution with mean 0 and variance 0.25. 
 
   c. | Using `x` and `eps`, generate a vector `y` according to the model
@@ -316,6 +323,10 @@ $$Y = -2 + 0.5X + \epsilon$$
 
 Here, we explore the *collinearity* problem. Run the following by changing to `eval = T`:
 
+```{marginfigure}
+The argument `eval = F` in the chunk header tells R to *not* evaluate/run this chunk when knitting.
+```
+
 ```{r eval = F}
 set.seed(2)
 x1 <- runif(100)
@@ -323,7 +334,7 @@ x2 <- 0.5 * x1 + rnorm(100)/10
 y <- 2 + 2*x1 + 0.3*x2 + rnorm(100)
 ```
 
-  a) Write out the form of the linear model. What are the regression coefficients?
+  a) Write out the form of the linear model (you may use "b" in place of $\beta$). What are the regression coefficients?
   
 ```{marginfigure}
 Hint: the `cor()` function may be useful
