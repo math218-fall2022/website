@@ -8,7 +8,7 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE, message = FALSE, warning = FALSE, echo = FALSE}
-knitr::opts_chunk$set(echo = F, message = F, warning = F, fig.height = 4, fig.width = 4, fig.align = "center")
+knitr::opts_chunk$set(echo = F, message = F, warning = F, fig.height = 3, fig.width = 3, fig.align = "center", cache = T)
 library(tidyverse)
 library(ggfortify)
 data("airquality")
@@ -23,23 +23,27 @@ In class, we learned about the coefficient of determination $R^2$. In linear reg
 
 Recall that $R^2$ is defined as $$R^2 = 1 - \frac{\text{RSS}}{\text{TSS}}$$ where $\text{RSS} = \sum_{i=1}^{n}(y_{i} - \hat{y}_{i})^2$ and $\text{TSS} = \sum_{i=1}^{n}(y_{i} - \bar{y})^2$.
 
-As it turns out, in simple linear regression, the $R^2$ value is exactly the square of the correlation coefficient $r$ (defined below) between the predictor $x$ and the response $y$! However, $R^2$ and $r$ have two very different meanings. We will explore both quantities in this homework. (Note: $r$ is the quantity calculated when you use the `cor()` function, as in Lab 02.
+As it turns out, in simple linear regression, the $R^2$ value is exactly the square of the correlation coefficient $r$ (defined below) between the predictor $x$ and the response $y$! However, $R^2$ and $r$ have two very different meanings. We will explore both quantities in this homework. (Recall: $r$ is the quantity calculated when you use the `cor()` function, as in Lab 02.
 )
 
+**Note 1**: this is the most "math"-y homework I will assign. Please do not be scared!
+
+**Note 2**: Exercise 5 contains two problems. You only need to answer one of them to receive full credit on this exercise. I do encourage you to attempt both if you can!
 
 
 ## Exercise 1
 
 It is not uncommon to want to chase a "good" $R^2$. However, a low $R^2$  isn’t necessarily a problem, and a high value doesn’t automatically indicate that you have a good model. (You don’t get paid in proportion to R-squared!) Consider the following data about air quality measurements in New York during May to September 1973. Here, we are regressing `Ozone` levels (ppb) on the temperature `Temp` (F). Note that ozone levels are always non-negative.
 
-```{r}
-mod <- lm(Ozone ~ Temp, air)
+```{r echo = T}
+mod <- lm(Ozone ~ Temp, data = air)
 summary(mod)
 
 ```
 
-a) Interpret the coefficient for `Temp`. Does the model's $R^2$ inform/affect your interpretation? If so, how?
+a) Interpret the coefficient for `Temp` using the `R` output above. Does the model's $R^2$ inform/affect your interpretation? If so, how?
 
+b) The plot below displays 95% confidence intervals for predicted ozone for various `Temp` values. What do you think about the quality of our predictions for Ozone? Are you comfortable with all of these intervals? 
 
 ```{r}
 preds <- predict(mod, newdata = data.frame(Temp = seq(55,90,2)), interval = "confidence")
@@ -51,7 +55,7 @@ data.frame(preds) %>%
   labs(x = "Temperature (F)", y = "Predicted ozone + 95% CIs (ppb)")
 ```
 
-b) The above plot displays 95% confidence intervals for predicted ozone for various `Temp` values. What do you think about the quality of our predictions for Ozone? Are you comfortable with all of these intervals? 
+
 
 c) We should look at some diagnostic plots. Below is a plot of the residuals vs fitted values. What does this plot reveal about the fit of the linear model? Does the $R^2$ inform about whether the linear model is a good choice?
 
@@ -138,11 +142,13 @@ Based on these two plots, what are some cautions when it comes to interpreting P
 
 The formula for the correlation coefficient $r$ is $$r = \frac{\sum_{i=1}^{n}(x_{i} - \bar{x})( y_{i} - \bar{y})}{\sqrt{\sum_{i=1}^{n} (x_{i} - \bar{x})^2 \sum_{i=1}^{n}(y_{i} - \bar{y})^2 }}$$
 
-Suppose we have the following data:
+Suppose we collected data on two variables `x` and `y`. These are presented into the first two columns of the table below.
 
 ```{r}
 df <- data.frame(x = c(-1, 0, 1, 0, 2, -2),
-           y = c(0, 2, 1, 2, 3, -2))
+           y = c(0, 2, 1, 2, 3, -2)) %>%
+  mutate(x2 = 5*x, 
+         x3 = x+1)
 knitr::kable(df)
 
 ```
@@ -151,21 +157,10 @@ a) Calculate $\bar{x}$ and $\bar{y}$.
 
 b) Calculate (manually) the correlation $r$ between $x$ and $y$ using this data. 
 
-
-c) Now, suppose we actually measured `x2 = 5x`. That is, `x2` is simply a *scaled* version of the original `x`. Calculate the correlation between  $x_2$ and $y$.
-
-
-```{r}
-knitr::kable(df %>% mutate(x = 5*x) %>% rename("x2" = "x"))
-```
+c) Now, suppose we had actually measured `x2 = 5x` (third column of table above). That is, `x2` is simply a *scaled* version of the original `x`. Calculate the correlation between  `x2` and `y`.
 
 
-d) Now, supposed we actually measured `x3 = x + 1`. That is, `x3` is just a shifted version of the original `x`. Calculate the correlation between  $x_3$ and $y$.
-
-
-```{r}
-knitr::kable(df %>% mutate(x = x+1) %>%  rename("x3" = "x"))
-```
+d) Now, supposed we actually measured `x3 = x + 1`  (fourth column of table above). That is, `x3` is just a shifted version of the original `x`. Calculate the correlation between  `x3` and `y`.
 
 
 e) Based on your answers in (b)-(d), how does shifting or scaling variables affect the correlation?
@@ -174,10 +169,6 @@ f) One advantage of the correlation coefficient $r$ is that it is "unitless". Ca
 
 
 ## Exercise 4
-
-I have claimed that in the case of simple linear regression of Y onto X, the $R^2$ statistic is equal to the square of the correlation $r$ between X and Y. Prove that this is the case. For simplicity, you may assume that $\bar{x} = \bar{y} = 0$.
-
-## Exercise 5
 
 Recall from the slides that our least squares estimate for $\beta_{1}$ is
 
@@ -195,11 +186,14 @@ b) True or False: $\hat{\beta}_{1}$ has the same sign as $r$. Explain.
 c) If $r=0$, what is the implication for $\beta_1$? Why does this make sense?
 
 
+## Exercise 5 (choose at least one of the following to answer)
+
+i) I have claimed that in the case of simple linear regression of Y onto X, the $R^2$ statistic is equal to the square of the correlation $r$ between X and Y. Prove that this is the case. For simplicity, you may assume that $\bar{x} = \bar{y} = 0$.
+
+
+ii) Show that the least squares regression line always passes through the sample mean of the data. For simplicity, you may assume we are in the case of simple linear regression.
+
 ## Exercise 6
-
-Show that the least squares regression line always passes through the sample mean of the data. For simplicity, you may assume we are in the case of simple linear regression.
-
-## Exercise 7
 
 In this course, we will focused mainly on how close the predicted value $\hat{y}$ is to the true $y$. We will rarely discuss the amount of *uncertainty* there is about the prediction. (even though the discipline of Statistics studies uncertainty!) However, we will spend a little time on the idea of uncertainty here.
 
@@ -268,12 +262,14 @@ p2 <- ggplot()+
 gridExtra::grid.arrange(p1, p2, nrow = 1)
 ```
 
-The formula for the confidence interval at predictors $x_{0}$ is:
+The formula for the confidence interval at predictor $x_{0}$ is:
 
-$$\hat{y_{0}} \pm t^{*}\sqrt{\text{MSE} \times \left( \frac{1}{n}+ \frac{(x_{0} - \bar{x})^2}{\sum(x_{i} - \bar{x})^2}\right )} $$
-The formula for the prediction interval at predictors $x_{0}$ is:
+$$\hat{y_{0}} \pm t^{*} \times \text{RSE}\sqrt{\frac{1}{n} + \frac{(x_{0} - \bar{x})^2}{(n-1)s_{x}^2}}$$
+where $s_{x}^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_{i}-\bar{x})^2$.
 
-$$\hat{y_{0}} \pm t^{*}\sqrt{\text{MSE} \times \left(1+ \frac{1}{n}+ \frac{(x_{0} - \bar{x})^2}{\sum(x_{i} - \bar{x})^2}\right )} $$
+The formula for the prediction interval at predictor $x_{0}$ is:
+
+$$\hat{y_{0}} \pm t^{*} \times \text{RSE}\sqrt{1+\frac{1}{n} + \frac{(x_{0} - \bar{x})^2}{(n-1)s_{x}^2}}$$
 
 
 a) Explain why, intuitively, the confidence and prediction intervals are centered around the same predicted value.
@@ -286,7 +282,7 @@ d) Assume $t^{*} > 0$ and $MSE >> 0$ (here $>>$ means "much greater than"). Can 
 
 e) Assume $t^{*} > 0$ and $MSE >> 0$. Can we make it so the prediction interval width approaches 0 (i.e. we are extremely confident in the predicted individual response)? If so, how? If not, why not?
 
-## Exercise 8
+## Exercise 7
 
 I collect a set of data (n = 100 observations) containing a single predictor and a quantitative response. I then fit a linear regression model to the data, as well as a separate cubic regression, i.e. $Y = \beta_{0} + \beta_{1} X + \beta_{2} X^{2} + \beta_{3} X^{3} + \epsilon$.
 
