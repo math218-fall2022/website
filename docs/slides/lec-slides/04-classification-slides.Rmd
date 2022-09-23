@@ -16,7 +16,8 @@ editor_options:
 
 
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
-knitr::opts_chunk$set(echo = F, warning = F, message = F)
+knitr::opts_chunk$set(echo = F, warning = F, message = F,
+                      fig.align = "center", fig.width = 5, fig.height = 5)
 
 library(tidyverse)
 library(broom)
@@ -58,11 +59,54 @@ class: center, middle
 
   - Supervised learning task
 
-- Goal of classification: build a function $C(X)$ that predicts a labelfor $Y$
+- Goal of classification: build a function $C(X)$ that predicts a label for $Y$
 
 --
 
   - We are often interested in the estimated *probabilities* that $X$ belongs to a given category in $\mathcal{C}$
+
+---
+
+## Probability warm-up: discuss!
+
+A fair, six-sided die is rolled. Let $X$ denote the result of the die roll. 
+
+1. What is $\text{Pr}(X = 1)$?
+
+2. What is $\text{Pr}(X \text{ is even})$?
+
+Now we are rolling two dice.  Let $X_{1}$ denote the result of the first, and $X_{2}$ the second. 
+
+3. What is $\text{Pr}(X_{1} + X_{2} = 1)$?
+
+4. What is $\text{Pr}(X_{1} + X_{2} < 13)$?
+---
+
+## Probability crash-course!
+
+- The *multiplication rule of independent events* in probability: if two events $A$ and $B$ are independent, then the probability of them both occurring at the same time is equal to the product of the individual probabilities
+
+  - $\text{Pr}(A \text{ and } B) = \text{Pr}(A, B) =  \text{Pr}(A) \times \text{Pr}(B)$
+
+- The *conditional probability* is the probability of an event occurring, given that another event has already occurred
+
+  - $\text{Pr}(A | B)$, read as "probability of $A$ given $B$"
+---
+
+## Discuss!
+
+- Assume that we have two independent six-sided dice. What are:
+  
+  - $\text{Pr}(X_{1} = 1, X_{2} = 4)$?
+  - $\text{Pr}(X_{1} \text{ and } X_{2} \text{ are even})$?
+
+- Focusing on just the first die, what are:
+
+  - $\text{Pr}(X_{1} = 1 | X_{1} \text{ is even})$?
+  
+  - $\text{Pr}(X_{1} = 1 | X_{1} \text{ is odd})$?
+  
+  - $\text{Pr}(X_{1} = \text{ is odd} | X_{1}  = 1)$?
 
 ---
 
@@ -151,8 +195,9 @@ ggplot(heart, aes(x = age, y = target)) +
   geom_point()+
   geom_abline(intercept = heart_lm$coefficients[1] , slope = heart_lm$coefficients[2],
               col = "blue") +
-  ggtitle("Observed disease vs. age", subtitle = "Estimated regression line for females")+
-  theme(text = element_text(size = 20))
+  ggtitle("Observed disease vs. age", subtitle = "Estimated regression line for males")+
+  theme(text = element_text(size = 20))+
+  ylim(c(-0.2, 1))
 ```
 
 --
@@ -182,6 +227,36 @@ ggplot(data = heart, aes(x = age, y = target)) +
 
 ---
 
+## "exp"
+
+- $\exp(x)$ is shorthand for $e^{x}$
+
+- $e \approx$ `r exp(1)` is a special number
+
+```{r, fig.width=6, fig.height=4}
+xseq <- seq(-3,3, 0.1)
+data.frame(x = xseq) %>%
+  mutate(exp = exp(x)) %>%
+  ggplot(., aes(x = x, y = exp))+
+  geom_line() +
+  labs(y = expression(e^x)) +
+  theme(text = element_text(size = 16))
+```
+
+---
+
+## "exp"
+
+- $e^{0} = 1$
+
+- $e^{a} \times e^{b} = e^{a+b}$
+
+- $\frac{e^{a}}{e^{b}} = e^{a-b}$
+
+- $e^{a} + e^{b} = \ldots e^{a} + e^{b}$
+
+---
+
 ## Logistic regression
 
 - Let $p(X) = \text{Pr}(Y = 1 | X)$. Need to somehow restrict $0 \leq p(X) \leq 1$
@@ -190,7 +265,21 @@ ggplot(data = heart, aes(x = age, y = target)) +
 
 $$p(X) = \frac{e^{\beta_{0} + \beta_{1}X}}{1 + e^{\beta_{0} + \beta_{1}X}}$$
 
---
+```{r, fig.width=6, fig.height=4}
+xseq <- seq(-10,10, 0.1)
+data.frame(x = xseq) %>%
+  mutate(exp = exp(x)/(1+exp(x))) %>%
+  ggplot(., aes(x = x, y = exp))+
+  geom_line() +
+  labs(y = expression(p(X))) +
+  theme(text = element_text(size = 16)) +
+  ggtitle("Logistic function")
+```
+
+
+---
+
+## Logistic regression
 
 - Rearranging this equation yields the **odds**:
 
@@ -202,15 +291,28 @@ $$\frac{p(X)}{1 - p(X)} = e^{\beta_{0} + \beta_{1}X}$$
 
 $$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
 
+
+---
+
+## Logistic regression
+
+
+- Why is it called logistic "regression" if we are using it for classification?
+
+--
+
+- The logistic regression model has a logit that is linear in $X$
+
+
+$$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
+
+
+
 ---
 
 ## Logistic regression
 
 $$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
-
-- The logistic regression model has a logit that is linear in $X$
-
---
 
 - Interpretation of $\beta_{1}$: for every one-unit increase in $X$, we expect an average change of $\beta_{1}$ in the log odds (or average multiple of $e^{\beta_{1}}$ in the odds)
 
@@ -380,27 +482,137 @@ class: center, middle
 
 # Discriminant analysis
 
+---
+
+## Motivating example
+
+- Suppose I have two coins in my pocket, $C_{1}$ and $C_{2}$
+
+- I pull out a coin from random and flip it a bunch of times. Then repeat for a total of 7 iterations.  At each iteration, I record the following information:
+
+  - Which coin?
+  
+  - Order of heads and tails (Heads = 0, Tails = 1)
+  
+
+$$
+\begin{align*}
+&C_{1}: \text{0 1 1 1 1} \\
+&C_{1}: \text{1 1 0} \\
+&C_{2}: \text{1 0 0 0 0 0 0 1} \\
+&C_{1}: \text{0 1} \\
+&C_{1}: \text{1 1 0 1 1 1} \\
+&C_{2}: \text{0 0 1 1 0 1} \\
+&C_{2}: \text{1 0 0 0 0} \\
+\end{align*}
+$$
+---
+
+## Motivating example
+
+- Now you tell me that the next coin flip resulted in $\text{0 0 1}$. Did it come from $C_{1}$ or $C_{2}$?
+
+--
+
+- Let each coin flip be a covariate (specifically, an indicator)
+
+  - e.g. $X_{1} = 1$ if the first coin flip is a 1, and $X_{1} = 0$ otherwise
+
+- Writing $X = (X_{1}, X_{2}, X_{3})$, we want to know $\text{Pr}(C_{1} | X = (\text{0 0 1}))$
+
+--
+
+- This classification problem is challenging because
+
+  - Different number of covariates for each observation
+  
+  - Number of covariates can be large
+  
+--
+
+- Is there any structure at all? 
 
 ---
 
+### Motivating example: discuss!
+
+- Based on our data, regardless of the sequence of flips, what did you observe for:
+
+  - $\text{Pr}(C_{1})$ 
+  
+  - $\text{Pr}(C_{2})$
+
+--
+
+- Now let's consider the values of the flips. Given that we are using coin $C_{1}$, what did you observe
+
+  - $\text{Pr}(X_{1} = 1 |C_{1})$?
+
+  - $\text{Pr}(X_{1} = 1 |C_{2})$?
+
+---
+
+## Motivating example cont.
+
+- Assume that given a coin, the results from the flips are independent
+
+- $\text{Pr}(X = (\text{0 0 1}) | C_{1}) = \text{Pr}(X_{1} = 0 | C_{1}) \text{Pr}(X_{2} = 0 | C_{1})\text{Pr}(X_{3} = 1 | C_{1})$
+
+--
+
+- In summary, we have the following info:
+
+  - $\text{Pr}(C_{1})$, $\text{Pr}(C_{2})$
+  
+  - $\text{Pr}(\text{flips} | C_{1})$, $\text{Pr}(\text{flips} | C_{2})$
+
+- But we want $\text{Pr}(C_{1} | \text{flips})$. How can we use these quantities to estimate this probability?
+
+---
+
+
 ## Bayes theorem
+
 
 - For events $A$ and $B$: 
 
-$$Pr(A|B) = \frac{Pr(B|A)Pr(A)}{Pr(B)}$$
+$$\text{Pr}(A|B) = \frac{\text{Pr}(B|A)\text{Pr}(A)}{\text{Pr}(B)}$$
 --
 
-- Letting $A$ be the event $Y=k$ and $B$ the event $X=x$:
+- Letting $A$ be the event of coin $C_{1}$ and $B$ the $\text{flips}$:
 
-$$Pr(Y=k| X =x) = \frac{Pr(X=x|Y=k)Pr(Y=k)}{Pr(X=x)}$$
+
+$$
+\begin{align*}
+\text{Pr}(C_{1}| \text{flips}) &= \frac{\text{Pr}(\text{flips} | C_{1}) \text{Pr}(C_{1})}{\text{Pr}(\text{flips})} \\
+&= \frac{\text{Pr}(\text{flips} | C_{1}) \text{Pr}(C_{1})}{\sum_{j=1}^{2} \text{Pr}(\text{flips} | C_{j})\text{Pr}(C_{j})} \\
+&= \frac{\text{Pr}(\text{flips} | C_{1}) \text{Pr}(C_{1})}{\text{Pr}(\text{flips} | C_{1}) \text{Pr}(C_{1}) + \text{Pr}(\text{flips} | C_{2}) \text{Pr}(C_{2})} 
+\end{align*}
+$$
+
 ---
-
 ## Bayes theorem
 
-- For discriminant analysis:
+- Return to general setting with $K$ possible class labels for $Y$
+
+- We observe some data $X$
+
+- Want to obtain $\text{Pr}(Y = k | X)$. How? Using Bayes theorem
+
+$$
+\begin{align*}
+\text{Pr}(Y = k | X) &= \frac{\text{Pr}(X | Y = k) \text{Pr}(Y = k)}{\text{Pr(X)}} \\
+&= \frac{\text{Pr}(X | Y = k) \text{Pr}(Y = k)}{\text{Pr(X | Y = 1)}\text{Pr}(Y = 1) + \ldots + \text{Pr(X | Y = K)}\text{Pr}(Y = K)} 
+\end{align*}
+$$
+---
+
+## Notation
+
+- For remaining slides, let
 
   - $\pi_{k}(x) = Pr(Y = k)$ is marginal or **prior** probability for class $k$
-  - $f_{k}(x) = Pr(X =x | Y =k)$ is the **density** for $X$ in class $k$
+  - $f_{k}(x) = Pr(X = x | Y =k)$ is the **density** for $X$ in class $k$
   
   $$Pr(Y=k| X =x) = \frac{\pi_{k}(x) f_{k}(x)}{\sum_{l=1}^{K} \pi_{l}(x) f_{l}(x)}$$
 
@@ -466,7 +678,7 @@ gridExtra::grid.arrange(p1,p2, ncol = 2)
 
   - With mean $\mu_{k}$ and variance $\sigma_{k}^{2}$ for class $k$,
 
-$$f_{k}(x) = \frac{1}{\sqrt{2\pi\sigma_{k}^2}} e^{-\frac{1}{2\sigma_{k}^2}(x - \mu_{k})^2}$$
+$$f_{k}(x) = \frac{1}{\sqrt{2\pi\sigma_{k}^2}} \exp\left\{{-\frac{1}{2\sigma_{k}^2}(x - \mu_{k})^2}\right\}$$
 
 --
 
@@ -474,7 +686,7 @@ $$f_{k}(x) = \frac{1}{\sqrt{2\pi\sigma_{k}^2}} e^{-\frac{1}{2\sigma_{k}^2}(x - \
 
 --
 
-- Plugging into the formula: $$p_{k}(x) = \frac{\pi_{k} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(x - \mu_{k})^2}}{\sum_{l=1}^{K} \pi_{l} \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{1}{2\sigma^2}(x - \mu_{l})^2}}$$
+- Plugging into the formula: $$p_{k}(x) = \frac{\pi_{k} \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left\{-\frac{1}{2\sigma^2}(x - \mu_{k})^2\right\}}{\sum_{l=1}^{K} \pi_{l} \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left\{-\frac{1}{2\sigma^2}(x - \mu_{l})^2\right\}}$$
 
 
 ---
