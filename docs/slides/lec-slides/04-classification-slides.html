@@ -20,7 +20,7 @@ class: center, middle, inverse, title-slide
 ### Classification
 ]
 .date[
-### 9/14/2022
+### 9/26/2022
 ]
 
 ---
@@ -39,11 +39,17 @@ class: center, middle
 
 - Qualitative variables takes values in an unordered set `\(\mathcal{C}\)`, such as:
 
-`\(\color{blue}{\text{wine}} \in \{\color{blue}{\text{red}},\color{blue}{\text{white}},\color{blue}{\text{rose}}\}\)`
+  - `\(\color{blue}{\text{wine}} \in \{\color{blue}{\text{red}},\color{blue}{\text{white}},\color{blue}{\text{rose}}\}\)`
 
-`\(\color{blue}{\text{diagnosis}} \in \{\color{blue}{\text{yes}}, \color{blue}{\text{no}} \}\)`
+  - `\(\color{blue}{\text{diagnosis}} \in \{\color{blue}{\text{yes}}, \color{blue}{\text{no}} \}\)`
 
-- Given predictors (features) `\(X\)` and qualitative response `\(Y\)` that takes values in `\(\mathcal{C}\)`, classification task is to build a function `\(C(X)\)` that predicts a value for `\(Y\)`
+--
+
+- We have predictors `\(X\)` and a qualitative response `\(Y\)` that takes values in `\(\mathcal{C}\)`
+
+  - Supervised learning task
+
+- Goal of classification: build a function `\(C(X)\)` that predicts a labelfor `\(Y\)`
 
 --
 
@@ -67,6 +73,8 @@ class: center, middle
 
 &lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 
+* Ask about seed banks
+
 ---
 
 ## Why not linear regression?
@@ -80,7 +88,7 @@ class: center, middle
 2 &amp; \text{ if } \color{blue}{\text{Kama}}\\
 3 &amp; \text{ if } \color{blue}{\text{Rosa}} \end{cases}$$`
 
-and then fit a linear regression for this `\(Y\)`?
+`\(\quad\)` and then fit a linear regression for this `\(Y\)`?
 
 ---
 
@@ -100,9 +108,7 @@ The heart disease data is formatted as:
 
   - Maybe fit a linear regression and predict `\(\color{blue}{\text{heart disease}}\)` if `\(\hat{Y} &gt; 0.5\)`
   
-  --
-  
-  - Equivalent to *linear discriminant analysis*
+--
   
   - Can show that the estimate `\(\hat{\beta}_{0} + \hat{\beta}_{1} X_{1} + \ldots + \hat{\beta}_{p} X_{p}\)` is an estimate of `\(Pr(Y = 1 | X) = Pr(\color{blue}{\text{heart disease}} | X)\)`
   
@@ -111,9 +117,9 @@ The heart disease data is formatted as:
 
 ## Why not linear regression?
 
-&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
-
 - Fit a linear regression line for `\(\color{blue}{\text{disease}} = \beta_{0} + \beta_{1}\color{blue}{\text{age}} + \beta_{2}\color{blue}{\text{sex}}\)`
+
+&lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -123,6 +129,7 @@ The heart disease data is formatted as:
 
 ## Logistic regression
 
+- Fitting a *logistic* regression:
 
 &lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -130,7 +137,7 @@ The heart disease data is formatted as:
 
 ## Logistic regression
 
-- Let `\(p(X) = Pr(Y = 1 | X)\)`. Need to somehow restrict `\(0 \leq p(X) \leq 1\)`
+- Let `\(p(X) = \text{Pr}(Y = 1 | X)\)`. Need to somehow restrict `\(0 \leq p(X) \leq 1\)`
 
 - **Logistic** regression uses *logistic* function:
 
@@ -170,11 +177,11 @@ The heart disease data is formatted as:
   
 ---
 
-## Estimating the Regression Coefficients
+### Estimating the Regression Coefficients
 
 - Use the general method of *maximum likelihood* to estimate `\(\beta_{0}\)` and `\(\beta_{1}\)`
     
-- *Likelihood function* `\(l()\)` describes the probability of the observed data as a function of model parameters. For logistic regression model:
+- *Likelihood function* `\(\ l()\)` describes the probability of the observed data as a function of model parameters. For logistic regression model:
 
 `$$l(\beta_{0}, \beta_{1}) = \prod_{i: y_{i} = 1}p(x_{i}) \prod_{i:y_{i} = 0}(1 - p(x_{i}))$$`
 
@@ -183,6 +190,8 @@ The heart disease data is formatted as:
 ---
 
 ## Logistic regression: heart data
+
+- `\(\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}\color{blue}{\text{age}}\)`, where `\(p(X) = \text{Pr}(\color{blue}{\text{heart disease}})\)`:
 
 
 ```
@@ -199,11 +208,18 @@ What is the estimated probability of `\(\color{blue}{\text{heart disease}}\)` fo
 
 --
 
-`$$\hat{p}(X) = \frac{e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}}{1 + e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}} = \frac{e^{-3.006 + 0.052 \times 50}}{1+e^{-3.006 + 0.052 \times 50}} = 0.3998716$$`
+$$
+`\begin{align*}
+&amp;\hat{p}(X) = \frac{e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}}{1 + e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}} \\
+&amp;\hat{p}(X = 50) = \frac{e^{-3.006 + 0.052 \times 50}}{1+e^{-3.006 + 0.052 \times 50}} = 0.3998716
+\end{align*}`
+$$
 
 ---
 
 ## Logistic regression: heart data
+
+- `\(\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}\color{blue}{\text{sexM}}\)`, where `\(p(X) = \text{Pr}(\color{blue}{\text{heart disease}})\)`:
 
 
 ```
@@ -214,13 +230,18 @@ What is the estimated probability of `\(\color{blue}{\text{heart disease}}\)` fo
 ## 2 sexM            1.27     0.271      4.69 0.00000271
 ```
 
-Here, `\(\color{blue}{\text{sex}}\)` is the predictor
 
 --
 
-- `\(\hat{Pr}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Male}})=\frac{e^{-1.058 + 1.272 \times 1}}{1+e^{-1.058 + 1.272 \times 1}} = 0.5532968\)` 
+- `\(\hat{\text{Pr}}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Male}})=\frac{e^{-1.058 + 1.272 \times 1}}{1+e^{-1.058 + 1.272 \times 1}} = 0.5532968\)` 
 
-- `\(\hat{Pr}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Female}})=\frac{e^{-1.058 + 1.272 \times 0}}{1+e^{-1.058 + 1.272 \times 0}} = 0.2576918\)` 
+- `\(\hat{\text{Pr}}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Female}})=\frac{e^{-1.058 + 1.272 \times 0}}{1+e^{-1.058 + 1.272 \times 0}} = 0.2576918\)` 
+
+--
+
+- While the predicted probabilities are often of most interest, sometimes we do need to actually classify
+
+  - Recall Bayes classifier: classify new observation as label `\(k\)` if `\(\text{Pr}(Y = k | X= x)\)` is largest
 
 ---
 
@@ -234,6 +255,8 @@ Here, `\(\color{blue}{\text{sex}}\)` is the predictor
 `$$p(X) = \frac{e^{\beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}}}{1 + e^{\beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}}}$$`
 
 --
+
+- `\(\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}\color{blue}{\text{age}}+ \beta_{2}\color{blue}{\text{sexM}}\)`
 
 
 ```
@@ -258,14 +281,15 @@ Here, `\(\color{blue}{\text{sex}}\)` is the predictor
 - Then for class `\(k = 1,\ldots, K-1\)`:
 
 `$$Pr(Y = k | X= x) = \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$`
+--
 
-and
+`\(\quad\)` and by default, 
 
 `$$Pr(Y = K | X= x) = \frac{1}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$`
 
 --
 
-- Here there is a function  for *each* class
+- Here, there is a function  for *each* class
 
 ---
 
@@ -277,7 +301,11 @@ and
 
   - i.e. log odds between any pair of classes is linear in the predictors
   
---
+---
+
+## Seed data
+
+- Fit multinomial regression for the three classes of seeds: Kama, Rosa, and Canadian using `\(\color{blue}{\text{area}}\)` as a predictor:
 
 
 ```
@@ -307,11 +335,11 @@ and
 
 - Predicted probabilities of each class for seed with area of 14 `\(mm^2\)`?
 
-  - `\(Pr(\color{blue}{\text{Kama}} | X = 14) = \frac{e^{-30.56 +2.36\times 14}}{1 + e^{-30.56 +2.36\times 14} + e^{-66.98 +4.63\times 14}} = 0.9145776\)`
+  - `\(\hat{\text{Pr}}(\color{blue}{\text{Kama}} | X = 14) = \frac{e^{-30.56 +2.36\times 14}}{1 + e^{-30.56 +2.36\times 14} + e^{-66.98 +4.63\times 14}} = 0.915\)`
   
-  - `\(Pr(\color{blue}{\text{Rosa}} | X = 14) = \ldots = 0.0088327\)`
+  - `\(\hat{\text{Pr}}(\color{blue}{\text{Rosa}} | X = 14) = \ldots = 0.009\)`
   
-  - `\(Pr(\color{blue}{\text{Canadian}} | X = 14) = \ldots = \frac{1}{1 + e^{-30.56 +2.36\times 14} + e^{-66.98 +4.63\times 14}} =  0.0765897\)`
+  - `\(\hat{\text{Pr}}(\color{blue}{\text{Canadian}} | X = 14) = \ldots = \frac{1}{1 + e^{-30.56 +2.36\times 14} + e^{-66.98 +4.63\times 14}} =  0.077\)`
 
 ---
 
@@ -328,9 +356,10 @@ and
 
 ---
 
-## Another method: Discriminant analysis
+class: center, middle
 
--
+# Discriminant analysis
+
 
 ---
 
@@ -341,10 +370,12 @@ and
 `$$Pr(A|B) = \frac{Pr(B|A)Pr(A)}{Pr(B)}$$`
 --
 
-- Letting `\(A\)` be event `\(Y=k\)` and `\(B\)` the event `\(X=x\)`:
+- Letting `\(A\)` be the event `\(Y=k\)` and `\(B\)` the event `\(X=x\)`:
 
 `$$Pr(Y=k| X =x) = \frac{Pr(X=x|Y=k)Pr(Y=k)}{Pr(X=x)}$$`
---
+---
+
+## Bayes theorem
 
 - For discriminant analysis:
 
@@ -359,11 +390,19 @@ and
   
   - Will need to estimate the `\(f_{k}(x)\)` to approximate Bayes classifier
 
+
 ---
 
 ## Discriminant analysis
 
+- Dashed line is Bayes decision boundary between the two classes
+
 &lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Normal distribution
 
 ---
 
@@ -371,13 +410,15 @@ and
 
 - First, consider the case of `\(p =1\)` (one predictor)
 
-- Assumption 1: `\(f_{k}(x)\)` is normal distribution. With mean `\(\mu_{k}\)` and variance `\(\sigma_{k}^{2}\)` for class `\(k\)`,
+- **Assumption 1**: `\(f_{k}(x)\)` is normal distribution. 
+
+  - With mean `\(\mu_{k}\)` and variance `\(\sigma_{k}^{2}\)` for class `\(k\)`,
 
 `$$f_{k}(x) = \frac{1}{\sqrt{2\pi\sigma_{k}^2}} e^{-\frac{1}{2\sigma_{k}^2}(x - \mu_{k})^2}$$`
 
 --
 
-- Assumption 2: `\(\sigma_{k}^2= \sigma^{2}\)` for all classes `\(k\)`
+- **Assumption 2**: `\(\sigma_{k}^2= \sigma^{2}\)` for all classes `\(k\)`
 
 --
 
@@ -391,8 +432,11 @@ and
 - Taking logs and simplifying terms that do no depend on `\(k\)`, classifying based on largest `\(p_{k}(x)\)` is equivalent to classifying based on largest **discriminant score**
 
 `$$\delta_{k}(x) = x \cdot \frac{\mu_{k}}{\sigma^2} - \frac{\mu_{k}^{2}}{2\sigma^2} + \log(\pi_{k})$$`
+--
 
-- Bayes decision boundary is value `\(x^*\)` for which `\(\delta_{1}(x^*) = \delta_{2}(x^*) = \ldots = \delta_{K}(x^*)\)`
+- Bayes decision boundary are values `\(x^*\)` where the discriminant scores are equal across the `\(K\)` labels: 
+
+`$$\delta_{1}(x^*) = \delta_{2}(x^*) = \ldots = \delta_{K}(x^*)$$`
 
 
 ---
@@ -416,7 +460,26 @@ such that:
 
 ---
 
-## Linear discriminant analysis
+### LDA: example
+
+- Simulated `\(n=30\)` data points belonging to one of `\(K = 2\)` classes with a single predictor `\(x\)` according to the following:
+
+  - `\(f_{1}(x) = N(1.5, 1)\)`
+
+  - `\(f_{2}(x) = N(-1.5, 1)\)`
+  
+  - `\(\pi_{1} = 0.2\)`
+  
+  - `\(\pi_{2} = 0.8\)`
+
+--
+
+- In the following slide, blue is class 1 and red is class 2
+---
+
+### LDA: example
+
+- Solid line: true Bayes decision boundary. Dashed line: estimated decision boundary.
 
 &lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -427,6 +490,8 @@ such that:
 - What about when `\(p&gt;1\)`? 
 
 - Extend LDA classifier by assuming `\(X = (X_{1}, X_{2}, \ldots, X_{p})\)` is drawn from **multivariate normal** distribution
+
+--
 
 - Multivariate normal is characterized by mean vector `\(\mathbf{\mu}\)` and covariance matrix `\(\Sigma\)`
   
@@ -443,7 +508,9 @@ such that:
 
 ## Multivariate Normal
 
-- Contour plots of two multivariate densities with `\(p=2\)` and `\(\mathbf{\mu} = (0,0)\)`. Left: the two components are uncorrelated. Right: the two variables have correlation of 0.75.
+- Contour plots of two multivariate densities with `\(p=2\)` and `\(\mathbf{\mu} = (0,0)\)` (i.e. `\(MVN_{2}(\mu = (0,0)', \Sigma)\)`)
+
+- Left: the two components are uncorrelated. Right: the two variables have correlation of 0.75.
 
 &lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -475,7 +542,7 @@ such that:
 
 ---
 
-## LDA example
+### LDA example
 
 &lt;img src="04-classification-slides_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -483,7 +550,7 @@ Dashed lines are the Bayes decision boundaries. If known, would yield the fewest
 
 ---
 
-## LDA example
+### LDA example
 
 &lt;img src="04-classification-slides_files/figure-html/lda_ests-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -494,7 +561,9 @@ Solid lines are the estimated Bayesian decision boundaries.
 ## LDA: heart data
 
 
-Confusion matrix of LDA predicted (rows) vs true (columns) heart disease status, using predictors `\(\color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}\)`:
+**Confusion matrix** of predicted (rows) vs true (columns) heart disease status using LDA
+
+  - Predictors: `\(\color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}\)`:
 
 &lt;table&gt;
  &lt;thead&gt;
@@ -512,21 +581,21 @@ Confusion matrix of LDA predicted (rows) vs true (columns) heart disease status,
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 131 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 33 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 103 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Misclassification rate: (36 + 33)/303) = 0.228
+- Misclassification rate: (36 + 33)/303 = 0.228
 
-- Of the observations with true `\(\color{blue}{\text{heart disease}}\)`, we make 36/139 = 0.259 errors
+- Of the observations with true `\(\color{blue}{\text{heart disease}}\)`, we make 36/139 = 0.201 errors
 
-- Of the observation with true `\(\color{blue}{\text{no heart disease}}\)`, we make 33/164 = 0.201 errors
+- Of the observation with true `\(\color{blue}{\text{no heart disease}}\)`, we make 33/164 = 0.259 errors
 
 ---
 

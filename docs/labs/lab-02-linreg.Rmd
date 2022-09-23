@@ -183,27 +183,32 @@ summary(int_mod)
 Let's visualize what this interaction implies about the model fit. In the following code, I am generating estimates of $\color{blue}{\text{weight}}$ from the model for a range of  $\color{blue}{\text{height}}$ values, at three different, fixed values of  $\color{blue}{\text{BodyLength}}$. Then we plot them. Notice how the relationship between  $\color{blue}{\text{height}}$ and  $\color{blue}{\text{weight}}$ really changes at different values of  $\color{blue}{\text{BodyLength}}$!
 
 ```{r}
-beta_hat <- coef(int_mod)
-height_seq <- seq(min(fish$Height), max(fish$Height), 0.1)
+beta_hat <- coef(int_mod) # obtain estimated coefficients
+
+# create a sequence of height values that align with the observed data
+height_seq <- seq(min(fish$Height), max(fish$Height), 0.1) 
+
+# fix body length to be 30
 body_length1 <- 30
 
+# generate predictions at the different height values and the fixed body length
 y_pred1 <- beta_hat[1] + beta_hat[2]*body_length1 + beta_hat[3]*height_seq +
   beta_hat[4]*body_length1*height_seq
 
+# store into data frame
 df1 <- data.frame(height = height_seq, body_length = body_length1, weight = y_pred1)
 
+# repeat for body length fixed at 25
 body_length2 <- 25
 y_pred2 <- beta_hat[1] + beta_hat[2]*body_length2 + beta_hat[3]*height_seq +
   beta_hat[4]*body_length2*height_seq
-
 df2 <- data.frame(height = height_seq, body_length = body_length2, weight = y_pred2)
 
+# repeat for body length fixed at 20
 body_length3 <- 20
 y_pred3 <- beta_hat[1] + beta_hat[2]*body_length3 + beta_hat[3]*height_seq +
   beta_hat[4]*body_length3*height_seq
-
 df3 <- data.frame(height = height_seq, body_length = body_length3, weight = y_pred3)
-
 
 rbind(df1, df2, df3) %>%
   mutate(body_length = factor(body_length)) %>%
@@ -220,18 +225,7 @@ mod_poly <- lm(Weight ~ BodyLength + I(BodyLength^2), data = fish)
 summary(mod_poly)
 ```
 
-The $p$-value for the quadratic term is significant, and suggests that the quadratic model might be an improvement over the simple linear regression model. We can use the `anova()` function to further quantify the extent to which the quadratic fit is superior to the linear fit.
-
-```{marginfigure}
-Note, the `anova()` function can only compare nested models. That is, `mod0` is a "subset" of `mod_poly`.
-```
-
-```{r}
-anova(mod0, mod_poly)
-```
-
-The `anova()` function performs a hypothesis test comparing the two models, where the null hypothesis is that the two models fit the data equally well, and the alternative hypothesis is that the larger model is superior.The resulting $p$-value is small, and suggests that the model containing the quadratic term is superior to the simpler model that is only linear in `BodyLength`. This is not surprising, as we earlier saw evidence for non-linearity in the relationship between `Weight` and `BodyLength`.
-
+The $p$-value for the quadratic term is significant, and suggests that the quadratic model might be an improvement over the simple linear regression model. 
 
 ## Qualitative predictors
 
@@ -262,30 +256,44 @@ data.frame(fitted = predict(mod3), residuals = resids) %>%
 
 # Writing functions
 
-We will often be interested in performing an operation for which no function is available. In this case, we may want to write our own functions. As an example, below I am creating a function called `greeting()`, which takes in one parameter as an input. This simple function will simply greet you! 
+We will often be interested in performing an operation for which no function is available. In this case, we may want to write our own functions. As an example, below I am creating a function called `fahrenheit_to_celsius()`, which takes in one parameter as an input. This simple function will convert the passed in argument from degrees fahrenheit to celsius! 
 
-Notice that the function name goes on the left, and the generic placeholder for the input is `name`. You could really change this to anything you want, so long as it is consistent throughout the function definition. We can type as many commands between the curly braces as we wish.
+Notice that the function name goes on the left, and the generic placeholder for the input is `temp_F`. You could really change this to anything you want, so long as it is consistent throughout the function definition. We can type as many commands between the curly braces as we wish. Right before the closing curly brace, we need to `return()` or output the result of the function.
 
 ```{r}
-greeting <- function(name){
-  print(paste0("Hello, ", name, "!"))
+fahrenheit_to_celsius <- function(temp_F) {
+  temp_C <- (temp_F - 32) * 5 / 9
+  return(temp_C)
 }
 ```
 
-If we type `greeting`, `R` will tell us what is in the function:
-
-```{r}
-greeting
-```
-
-To call the function, simply pass in a name of your choice:
+To call the function, simply pass in a temperature:
 
 ```{marginfigure}
 What happens if you don't pass in a parameter?
 ```
 
 ```{r}
-greeting("student")
+fahrenheit_to_celsius(32)
+```
+
+
+# Normal distribution
+
+A **normal distribution** is a distribution that occurs naturally in many situations. It is a symmetric, bell-shaped curve. The normal distribution is specified by two quantities: a mean parameter $\mu$, and a variance (or standard deviation) $\sigma^2$ ($\sigma$). We say that a variable is distributed as $N(\mu, \sigma^2)$. In the linear regression model, the irreducible error $\epsilon$ is assumed to be distributed as $N(0, \sigma^2)$.
+
+The distribution is centered at $\mu$, and its spread is governed by $\sigma^2$. The larger the $\sigma$, the more spread out the the distribution. The following code uses the `rnorm()` function to generate 1000 random samples from the distributions $N(0,1)$, $N(0, 4)$, and $N(-3, 0.25)$. `rnorm()` expects three arguments as input: the number of random samples you want, the mean $\mu$, and the standard deviation $\sigma$.
+
+```{r}
+set.seed(5)
+dist1 <- rnorm(1000, 0, 1)
+dist2 <- rnorm(1000, 0, sqrt(4))
+dist3 <- rnorm(1000, -3, sqrt(0.25))
+data.frame(dist1,dist2,dist3) %>%
+  pivot_longer(., cols = 1:3, names_to = "distribution", values_to = "sample") %>%
+  ggplot(., aes(x = sample)) +
+  geom_histogram(binwidth = 0.5) +
+  facet_wrap(~distribution)
 ```
 
 # Your turn!
@@ -329,7 +337,7 @@ The argument `eval = F` in the chunk header tells R to *not* evaluate/run this c
 
 ```{r eval = F}
 set.seed(2)
-x1 <- runif(100)
+x1 <- runif(100) # this generates data from a Uniform distribution
 x2 <- 0.5 * x1 + rnorm(100)/10
 y <- 2 + 2*x1 + 0.3*x2 + rnorm(100)
 ```
