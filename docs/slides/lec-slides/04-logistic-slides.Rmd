@@ -1,0 +1,595 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Logistic Regression"
+date: "9/26/2022"
+output: 
+   xaringan::moon_reader:
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F,
+                      fig.align = "center", fig.width = 5, fig.height = 5)
+
+library(tidyverse)
+library(broom)
+library(ISLR)
+library(nnet)
+library(MASS)
+library(mvtnorm)
+library(mnormt)
+library(pROC)
+library(kableExtra)
+set.seed(1)
+heart<- read.table("data/heart_cleveland.txt", header = T, sep = ",") %>% 
+  mutate(cp = as.factor(cp),
+         sex = ifelse(sex == 1, "M", "F"),
+         target = ifelse(target == 0,0, 1))
+seeds <- read.table("data/seeds_dataset.txt", header = T) %>%
+  mutate(variety= case_when(variety == 1~ "Kama",
+                          variety == 2 ~ "Rosa",
+                          T ~ "Canadian"))
+```
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Classification
+
+- Qualitative variables takes values in an unordered set $\mathcal{C}$, such as:
+
+  - $\color{blue}{\text{wine}} \in \{\color{blue}{\text{red}},\color{blue}{\text{white}},\color{blue}{\text{rose}}\}$
+
+  - $\color{blue}{\text{diagnosis}} \in \{\color{blue}{\text{yes}}, \color{blue}{\text{no}} \}$
+
+--
+
+- We have predictors $X$ and a qualitative response $Y$ that takes values in $\mathcal{C}$
+
+  - Supervised learning task
+
+- Goal of classification: build a function $C(X)$ that predicts a label for $Y$
+
+--
+
+  - We are often interested in the estimated *probabilities* that $X$ belongs to a given category in $\mathcal{C}$
+
+---
+
+## Probability warm-up: discuss!
+
+A fair, six-sided die is rolled. Let $X$ denote the result of the die roll. 
+
+1. What is $\text{Pr}(X = 1)$?
+
+2. What is $\text{Pr}(X \text{ is even})$?
+
+Now we are rolling two dice.  Let $X_{1}$ denote the result of the first, and $X_{2}$ the second. 
+
+3. What is $\text{Pr}(X_{1} + X_{2} = 1)$?
+
+4. What is $\text{Pr}(X_{1} + X_{2} < 13)$?
+
+---
+
+## Heart attack data
+
+- Health measurements from `r nrow(heart)` patients, along with record of the presence of heart disease in the patient
+
+```{r fig.align ="center", fig.height=5, fig.width=8}
+heart %>%
+  mutate( target = as.factor(target)) %>%
+  dplyr::select(c(target, age, chol, trestbps))%>%
+  pivot_longer(cols = -1, names_to = "variable") %>%
+  ggplot(.,aes(y = value, x = target))+
+  geom_boxplot()+
+  facet_wrap(~variable, scales= "free")+
+  theme(text=element_text(size = 20))
+
+```
+
+---
+
+## Seeds data
+
+- Data come from UCI Machine Learning Repository 
+
+- Measurements of geometrical properties of kernels belonging to three different varieties of wheat
+
+```{r fig.align ="center", fig.height=5, fig.width=8}
+seeds %>%
+  ggplot(., aes(x = variety, y = area))+
+  geom_boxplot() +
+  theme(text =element_text(size = 20)) 
+
+```
+
+* Ask about seed banks
+
+---
+
+## Why not linear regression?
+
+- For seeds data, $\mathcal{C} = \{\text{Canadian, Kama, Rosa}\}$
+
+- Could we encode the values as a quantitative response, such as:
+
+$$Y = \begin{cases}
+1 & \text{ if } \color{blue}{\text{Canadian} }\\
+2 & \text{ if } \color{blue}{\text{Kama}}\\
+3 & \text{ if } \color{blue}{\text{Rosa}} \end{cases}$$
+
+$\quad$ and then fit a linear regression for this $Y$?
+
+---
+
+## Why not linear regression?
+
+The heart disease data is formatted as:
+
+$$Y = \begin{cases}
+0 & \text{ if } \color{blue}{\text{no heart disease} }\\
+1 & \text{ if } \color{blue}{\text{heart disease}}\end{cases}$$
+
+- Here, $Y$ is binary
+
+--
+
+- For binary response, could we use least squares to fit a linear regression model to $Y$?
+
+  - Maybe fit a linear regression and predict $\color{blue}{\text{heart disease}}$ if $\hat{Y} > 0.5$
+  
+--
+  
+  - Can show that the estimate $\hat{\beta}_{0} + \hat{\beta}_{1} X_{1} + \ldots + \hat{\beta}_{p} X_{p}$ is an estimate of $Pr(Y = 1 | X) = Pr(\color{blue}{\text{heart disease}} | X)$
+  
+
+---
+
+## Why not linear regression?
+
+- Fit a linear regression line for $\color{blue}{\text{disease}} = \beta_{0} + \beta_{1}\color{blue}{\text{age}} + \beta_{2}\color{blue}{\text{sex}}$
+
+```{r fig.align = "center", fig.width=8, fig.height=5}
+heart_lm <- lm(target ~ age + sex, heart)
+
+ggplot(heart, aes(x = age, y = target)) + 
+  geom_point()+
+  geom_abline(intercept = heart_lm$coefficients[1] , slope = heart_lm$coefficients[2],
+              col = "blue") +
+  ggtitle("Observed disease vs. age", subtitle = "Estimated regression line for males")+
+  theme(text = element_text(size = 20))+
+  ylim(c(-0.2, 1))
+```
+
+--
+
+- In certain cases, linear regression might produce estimated probabilities less than $0$ or bigger than $1$
+
+---
+
+## Logistic regression
+
+- Fitting a *logistic* regression:
+
+```{r fig.align = "center", fig.width=8, fig.height=5}
+heart_log <- glm(target ~ age + sex, heart, family = "binomial")
+
+x <- min(heart$age):max(heart$age)
+XB <- cbind(1,x,0) %*% coefficients(heart_log)
+preds <- exp(XB)/(1 + exp(XB))
+
+ggplot(data = heart, aes(x = age, y = target)) + 
+  geom_point()+
+  geom_path(data = data.frame(x = x, y = preds), mapping= aes(x =x, y = y),
+              col = "blue") +
+  ggtitle("Observed disease vs. age", subtitle = "Estimated regression line for males")+
+  theme(text = element_text(size = 20))
+```
+
+---
+
+## "exp"
+
+- $\exp(x)$ is shorthand for $e^{x}$
+
+- $e \approx$ `r exp(1)` is a special number
+
+```{r, fig.width=6, fig.height=4}
+xseq <- seq(-3,3, 0.1)
+data.frame(x = xseq) %>%
+  mutate(exp = exp(x)) %>%
+  ggplot(., aes(x = x, y = exp))+
+  geom_line() +
+  labs(y = expression(e^x)) +
+  theme(text = element_text(size = 16))
+```
+
+---
+
+## "exp"
+
+- $e^{0} = 1$
+
+- $e^{a} \times e^{b} = e^{a+b}$
+
+- $\frac{e^{a}}{e^{b}} = e^{a-b}$
+
+- $e^{a} + e^{b} = \ldots e^{a} + e^{b}$
+
+---
+
+## Logistic regression
+
+- Let $p(X) = \text{Pr}(Y = 1 | X)$. Need to somehow restrict $0 \leq p(X) \leq 1$
+
+- **Logistic** regression uses *logistic* function:
+
+$$p(X) = \frac{e^{\beta_{0} + \beta_{1}X}}{1 + e^{\beta_{0} + \beta_{1}X}}$$
+
+```{r, fig.width=6, fig.height=4}
+xseq <- seq(-10,10, 0.1)
+data.frame(x = xseq) %>%
+  mutate(exp = exp(x)/(1+exp(x))) %>%
+  ggplot(., aes(x = x, y = exp))+
+  geom_line() +
+  labs(y = expression(p(X))) +
+  theme(text = element_text(size = 16)) +
+  ggtitle("Logistic function")
+```
+
+
+---
+
+## Logistic regression
+
+- Rearranging this equation yields the **odds**:
+
+$$\frac{p(X)}{1 - p(X)} = e^{\beta_{0} + \beta_{1}X}$$
+
+--
+
+- Furthermore, we can obtain the **log odds** or **logit**: 
+
+$$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
+
+
+---
+
+## Logistic regression
+
+
+- Why is it called logistic "regression" if we are using it for classification?
+
+--
+
+- The logistic regression model has a logit that is linear in $X$
+
+
+$$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
+
+
+
+---
+
+## Logistic regression
+
+$$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
+
+- Interpretation of $\beta_{1}$: for every one-unit increase in $X$, we expect an average change of $\beta_{1}$ in the log odds (or average multiple of $e^{\beta_{1}}$ in the odds)
+
+--
+  
+  - $\beta_{1}$ does *not* correspond to the change in $p(X)$ associated with one-unit increase in $X$ (i.e., not a linear relationship between $X$ and $p(X)$)
+  
+--
+
+  - If $\beta_{1} > 0$, then increasing $X$ is associated with increasing $p(X)$
+  
+---
+
+### Estimating the Regression Coefficients
+
+- Use the general method of *maximum likelihood* to estimate $\beta_{0}$ and $\beta_{1}$
+    
+- *Likelihood function* $\ l()$ describes the probability of the observed data as a function of model parameters. For logistic regression model:
+
+$$l(\beta_{0}, \beta_{1}) = \prod_{i: y_{i} = 1}p(x_{i}) \prod_{i:y_{i} = 0}(1 - p(x_{i}))$$
+
+- We pick $\beta_{0}$ and $\beta_{1}$ that will maximize this likelihood
+
+---
+
+## Logistic regression: heart data
+
+- $\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}\color{blue}{\text{age}}$, where $p(X) = \text{Pr}(\color{blue}{\text{heart disease}})$:
+
+```{r}
+heart_log <- glm(target ~ age, heart, family = "binomial")
+heart_coeff <- round(coefficients(heart_log), 3)
+tidy(heart_log)
+```
+
+--
+
+What is the estimated probability of $\color{blue}{\text{heart disease}}$ for someone who is 50 years old?
+
+--
+
+$$
+\begin{align*}
+&\hat{p}(X) = \frac{e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}}{1 + e^{\hat{\beta}_{0} + \hat{\beta}_{1}X}} \\
+&\hat{p}(X = 50) = \frac{e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 50}}{1+e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 50}} = `r exp(heart_coeff[1] +  heart_coeff[2]*50)/(1+exp(heart_coeff[1] +  heart_coeff[2]*50))`
+\end{align*}
+$$
+
+---
+
+## Logistic regression: heart data
+
+- $\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}\color{blue}{\text{sexM}}$, where $p(X) = \text{Pr}(\color{blue}{\text{heart disease}})$:
+
+```{r}
+heart_log <- glm(target ~ sex, heart, family = "binomial")
+heart_coeff <- round(coefficients(heart_log), 3)
+tidy(heart_log)
+```
+
+
+--
+
+- $\hat{\text{Pr}}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Male}})=\frac{e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 1}}{1+e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 1}} = `r exp(heart_coeff[1] +  heart_coeff[2]*1)/(1+exp(heart_coeff[1] +  heart_coeff[2]*1))`$ 
+
+- $\hat{\text{Pr}}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Female}})=\frac{e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 0}}{1+e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 0}} = `r exp(heart_coeff[1])/(1+exp(heart_coeff[1]))`$ 
+
+--
+
+- While the predicted probabilities are often of most interest, sometimes we do need to actually classify
+
+  - Recall Bayes classifier: classify new observation as label $k$ if $\text{Pr}(Y = k | X= x)$ is largest
+
+---
+
+## Multiple logistic regression
+
+- Extend from simple to multiple logistic regression similar to linear model:
+
+$$\log\left(\frac{p(X)}{1-p(X)} \right)= \beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}$$
+--
+
+$$p(X) = \frac{e^{\beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}}}{1 + e^{\beta_{0} + \beta_{1}X_{1} + \beta_{2} X_{2} + \ldots + \beta_{p}X_{p}}}$$
+
+--
+
+- $\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}\color{blue}{\text{age}}+ \beta_{2}\color{blue}{\text{sexM}}$
+
+```{r}
+heart_log <- glm(target ~ age +sex, heart, family = "binomial")
+tidy(heart_log)
+```
+
+---
+
+## Multinomial regression
+
+- What if we have $K > 2$ classes? Can extend the logistic regression model to  **multinomial** regression
+
+- Here, we discuss the *softmax* encoding
+
+--
+
+- In softmax coding, we do not choose a baseline but rather, treat all classes symmetrically. Each class gets its own set of coefficients.
+
+- For each $k = 1,\ldots, K$:
+
+$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$
+--
+
+- Notice that these probabilities sum to one
+
+- Your homework will compare logistic encoding and softmax encoding for $K = 2$
+
+---
+
+## Model assessment
+
+- How well are we doing in our predictions?
+
+- With binary response, it is common to create a **confusion matrix**
+
+```{r fig.align = "center", fig.width=6, fig.height=6}
+knitr::include_graphics("figs/04-classification/confusion_matrix.png")
+```
+---
+
+## Heart disease data
+
+- Fit a logistic regression to predict heart $\color{blue}{\text{disease}}$ using predictors $\color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}$
+
+- Confusion matrix of predicted (rows) vs true (columns) heart disease status 
+
+```{r}
+heart_glm<- glm(target ~ age + sex + cp, heart, family = "binomial")
+heart_preds <- predict(heart_glm, heart, type = "response")
+heart_df <- data.frame(true = heart$target, prob = heart_preds) %>%
+  mutate(pred = ifelse(prob > 0.5, 1, 0))
+n <- nrow(heart); n0 <- sum(heart$target==0); n1 <- n - n0
+
+heart_df%>%
+  dplyr::select(pred, true) %>%
+  table() %>%
+  knitr::kable() %>%
+  add_header_above(header = c(" " =1, "True" = 2)) 
+
+fpr <- round(heart_df %>% filter(true == 0, pred==1) %>% nrow() / n0 , 3)
+fnr <- round(heart_df %>% filter(true == 1, pred==0) %>% nrow() / n1 , 3)
+
+```
+
+- Misclassification rate: (`r heart_df %>% filter(true == 1, pred==0) %>% nrow()` + `r heart_df %>% filter(true == 0, pred==1) %>% nrow()`)/`r n` = `r round((heart_df %>% filter(true == 1, pred==0) %>% nrow() + heart_df %>% filter(true == 0, pred==1) %>% nrow())/ n,3)`
+
+- Of the observations with true $\color{blue}{\text{heart disease}}$, we make `r heart_df %>% filter(true == 1, pred==0) %>% nrow()`/`r n1` = `r fpr` errors
+
+- Of the observation with true $\color{blue}{\text{no heart disease}}$, we make `r heart_df %>% filter(true == 0, pred==1) %>% nrow()`/`r n0` = `r fnr` errors
+
+---
+
+## Types of errors
+
+- **False positive rate** (FPR): fraction of negative observations incorrectly classified as positive -- `r fpr` in our example
+
+- **False negative rate** (FNR): fraction of positive observations incorrectly classified as negative example -- `r fnr` in our example
+
+--
+
+- Is a false positive or a false negative worse? In the heart data, maybe a false negative?
+
+--
+
+- This table was produced by classifying an observation at $\color{blue}{\text{heart disease}}$ if $\hat{Pr}(\color{blue}{\text{heart disease}} | \color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}) \geq 0.5$
+
+  - Here, 0.5 is the threshold for assigning an observation to $\color{blue}{\text{heart disease}}$ class
+  
+  - Can change threshold to any value in $[0,1]$, which will affect error rates
+  
+---
+
+## Varying threshold
+
+```{r lda_threshold, fig.align="center", fig.width=8, fig.height=5}
+th <- seq(0, 1, 0.025)
+TT <- length(th)
+err_mat <- matrix(NA, nrow = TT, ncol = 3)
+for(t in 1:length(th)){
+  fpr <- heart_df %>%
+    mutate(pred = ifelse(prob >= th[t], 1, 0 )) %>%
+    filter(true == 0, pred == 1)  %>%
+    nrow() / n0
+  fnr <- heart_df %>%
+    mutate(pred = ifelse(prob >= th[t], 1, 0 )) %>%
+    filter(true == 1, pred == 0)  %>%
+    nrow() / n1
+  
+  oe <- heart_df %>%
+    mutate(pred = ifelse(prob >= th[t], 1, 0 )) %>%
+    filter(true != pred)  %>%
+    nrow() / n
+  err_mat[t,] <- c(fpr, fnr, oe)
+}
+
+as.data.frame(err_mat) %>%
+  add_column(threshold = th) %>%
+  rename("False positive" = 1, "False negative" = 2, "Overall error" = 3) %>%
+  pivot_longer(cols = 1:3, names_to = "type", values_to = "error_rate") %>%
+  ggplot(., aes(x = threshold, y = error_rate, col = type))+
+  geom_path() +
+  labs(y = "Error rate")+
+  theme(legend.title = element_blank(), text = element_text(size = 20))
+```
+
+- Overall error rate minimized at threshold near 0.4
+- How to decide a threshold rate?
+
+---
+
+## ROC Curve
+
+
+- **sensitivity** (true positive rate) = probability of a positive, conditioned on truly being positive = 1 - FNR
+
+- **specificity** (true negative rate) = probability of a negative, conditioned on truly being negative = 1 - FPR
+
+- The **ROC curve** plots both simultaneously
+
+```{r fig.align="center", fig.height=4, fig.width=4}
+heart_roc <- roc(response = heart_df$true, predictor= as.numeric(heart_df$pred)-1, plot = F)
+auc <- round(heart_roc$auc, 3)
+ggroc(heart_roc)+
+  ggtitle(paste0('ROC Curve ', '(AUC = ', auc, ')')) +
+  geom_abline(slope = 1, intercept = 1, linetype = "dashed")
+```
+
+- **AUC** (area under the curve) summarizes overall performance
+
+---
+
+## Summary
+
+- Logistic regression is very commonly used when $K=2$
+
+- Does poorly in certain scenarios
+
+---
+
+class: middle, center
+
+## Optional 
+
+---
+
+## Multinomial regression
+
+- What if we have $K > 2$ classes? Can extend the logistic regression model to *multiple logistic* or **multinomial** regression
+
+- One method is to choose a single class to serve as *baseline* (it doesn't matter which, so we will choose the $K$-th class)
+
+--
+
+- Then for class $k = 1,\ldots, K-1$:
+
+$$Pr(Y = k | X= x) = \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$
+--
+
+$\quad$ and by default, 
+
+$$Pr(Y = K | X= x) = \frac{1}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$
+
+--
+
+- Here, there is a function  for *each* class
+
+---
+
+## Multinomial regression
+
+- For $k = 1, \ldots, K-1$:
+
+$$\log\left(\frac{Pr(Y = k | X =x)}{Pr(Y = K | X = x)}\right) = \beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp} x_{p}$$
+
+  - i.e. log odds between any pair of classes is linear in the predictors
+  
+---
+
+## Seed data
+
+- Fit multinomial regression for the three classes of seeds: Kama, Rosa, and Canadian using $\color{blue}{\text{area}}$ as a predictor:
+
+```{r message = F}
+seeds_multi <- multinom(variety ~ area, seeds)
+multi_coeffs <- round(coefficients(seeds_multi), 2)
+tidy(seeds_multi)
+```
+
+---
+
+## Multinomial regression
+
+- Predicted probabilities of each class for seed with area of 14 $mm^2$?
+
+  - $\hat{\text{Pr}}(\color{blue}{\text{Kama}} | X = 14) = \frac{e^{`r multi_coeffs[1,1]` +`r multi_coeffs[1,2]`\times 14}}{1 + e^{`r multi_coeffs[1,1]` +`r multi_coeffs[1,2]`\times 14} + e^{`r multi_coeffs[2,1]` +`r multi_coeffs[2,2]`\times 14}} = `r round(exp(multi_coeffs[1,1] + multi_coeffs[1,2]*14)/(1+exp(multi_coeffs[1,1] + multi_coeffs[1,2]*14)+exp(multi_coeffs[2,1] + multi_coeffs[2,2]*14)),3)`$
+  
+  - $\hat{\text{Pr}}(\color{blue}{\text{Rosa}} | X = 14) = \ldots = `r round(exp(multi_coeffs[2,1] + multi_coeffs[2,2]*14)/(1+exp(multi_coeffs[1,1] + multi_coeffs[1,2]*14)+exp(multi_coeffs[2,1] + multi_coeffs[2,2]*14)), 3)`$
+  
+  - $\hat{\text{Pr}}(\color{blue}{\text{Canadian}} | X = 14) = \ldots = \frac{1}{1 + e^{`r multi_coeffs[1,1]` +`r multi_coeffs[1,2]`\times 14} + e^{`r multi_coeffs[2,1]` +`r multi_coeffs[2,2]`\times 14}} =  `r round(1/(1+exp(multi_coeffs[1,1] + multi_coeffs[1,2]*14)+exp(multi_coeffs[2,1] + multi_coeffs[2,2]*14)), 3)`$
+

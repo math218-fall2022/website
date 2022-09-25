@@ -440,34 +440,6 @@ classification of new observations? Why?</p>
 </div>
 <div id="exercise-3" class="section level3">
 <h3>Exercise 3</h3>
-<p>In the slides, we compared logistic regression and LDA for the
-2-class (binary) response case. Let’s now consider the more general
-<span class="math inline">\(K\)</span> class case. We assign an
-observation to the class that maximizes <span class="math inline">\(Pr(Y
-= k|X = x)\)</span>. Equivalently, we can set the last group <span class="math inline">\(K\)</span> as the baseline class and assign an
-observation to the class that maximizes <span class="math display">\[\log\left(\frac{\text{Pr}(Y=k | X=x)}{\text{Pr}(Y
-= K|X=x)}\right)\]</span></p>
-<p>For LDA with <span class="math inline">\(p\)</span> features, the
-mean for class <span class="math inline">\(k\)</span> has mean vector
-<span class="math inline">\(\mathbf{\mu}_{k}\)</span> of length <span class="math inline">\(p\)</span>, with a <span class="math inline">\(p
-\times p\)</span> covariance matrix <span class="math inline">\(\mathbf{\Sigma}\)</span>. However, the case of
-<span class="math inline">\(p=1\)</span> is much simpler because we have
-scalars for means <span class="math inline">\(\mu_{1}, \ldots,
-\mu_{K}\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. In this <span class="math inline">\(p=1\)</span> case, <span class="math display">\[\log\left(\frac{\text{Pr}(Y=k | X=x)}{\text{Pr}(Y
-= K|X=x)}\right) = a_{k}  + b_{k}x\]</span></p>
-<p>Provide expressions for <span class="math inline">\(a_{k}\)</span>
-and <span class="math inline">\(b_k\)</span> in terms of <span class="math inline">\(\pi_{k}, \pi_{K}, \mu_{k}, \mu_{K}\)</span>, and
-<span class="math inline">\(\sigma^2\)</span>. To get you started:</p>
-<p><span class="math display">\[\begin{align*}
-\log\left(\frac{\text{Pr}(Y=k | X=x)}{\text{Pr}(Y = K|X=x)}\right)
-&amp;=
-\log\left(\frac{\pi_{k}f_{k}(x)}{\pi_{K}f_{K}(x)}\right) \\
-&amp;= \log\left(\frac{\pi_{k}\exp\{-\frac{1}{2\sigma^2}(x -
-\mu_{k})^2\}}{\pi_{K}\exp\{-\frac{1}{2\sigma^2}(x - \mu_{K})^2\}}\right)
-\end{align*}\]</span></p>
-</div>
-<div id="exercise-4" class="section level3">
-<h3>Exercise 4</h3>
 <p>Suppose that you wish to classify an observation <span class="math inline">\(X \in \mathbb{R}\)</span> into <code>toxic</code>
 and <code>nontoxic</code>. You fit a logistic regression model and find
 that</p>
@@ -504,15 +476,24 @@ regression with the logit (also known as sigmoid) coding, or the softmax
 coding? Why?</p></li>
 </ol>
 </div>
-<div id="exercise-5" class="section level3">
-<h3>Exercise 5</h3>
+<div id="exercise-4" class="section level3">
+<h3>Exercise 4</h3>
 <p>Recall that the Naive Bayes classifier assumes that the <span class="math inline">\(p\)</span> features are independent, i.e. <span class="math inline">\(f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2})
 \times \cdots \times f_{kp}(x_{p})\)</span>.</p>
 <p>Assume in this problem that we have <span class="math inline">\(p=2\)</span> features, <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span>, and the response has <span class="math inline">\(K=3\)</span> classes. Further, assume that <span class="math inline">\(X_{1}\)</span> and <span class="math inline">\(X_{2}\)</span> are both qualitative. An estimate
 for each of the <span class="math inline">\(f_{kj}\)</span> is simply
 the proportion of training observations for the <span class="math inline">\(j\)</span>-th predictor corresponding to each
 class. Suppose we have <span class="math inline">\(n = 200\)</span>
-training observations, and observe the following</p>
+training observations, and observe the following data.</p>
+<p><strong>Note</strong>: the following is “aggregated” or summary data.
+That is, you are provided with the total counts within each class and
+predictor combination, as opposed to the individual, raw
+observations.</p>
+<pre><code>##        Y
+## X1       1  2  3
+##   brown 22 16 33
+##   red   11  6 23
+##   white 29 23 37</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -625,6 +606,15 @@ For this new observation, what would <span class="math inline">\(\text{Pr}(Y = k
 <span class="math inline">\(k = 1,2,3\)</span>, and why? This is known
 as the <em>zero-frequency</em> problem.</p></li>
 </ol>
+<!-- ### Exercise 5 -->
+<!-- In the slides, we compared logistic regression and LDA for the 2-class (binary) response case. Let's now consider the more general $K$ class case.  We assign an observation to the class that maximizes $Pr(Y = k|X = x)$. Equivalently, we can set the last group $K$ as the baseline class and assign an observation to the class that maximizes $$\log\left(\frac{\text{Pr}(Y=k | X=x)}{\text{Pr}(Y = K|X=x)}\right)$$ -->
+<!-- For LDA with $p$ features, the mean for class $k$ has mean vector $\mathbf{\mu}_{k}$ of length $p$, with a $p \times p$ covariance matrix $\mathbf{\Sigma}$. However, the case of $p=1$ is much simpler because we have scalars for means $\mu_{1}, \ldots, \mu_{K}$ and variance $\sigma^2$. In this $p=1$ case, $$\log\left(\frac{\text{Pr}(Y=k | X=x)}{\text{Pr}(Y = K|X=x)}\right) = a_{k}  + b_{k}x$$ -->
+<!-- Provide expressions for $a_{k}$ and $b_k$ in terms of $\pi_{k}, \pi_{K}, \mu_{k}, \mu_{K}$, and $\sigma^2$. To get you started: -->
+<!-- \begin{align*} -->
+<!-- \log\left(\frac{\text{Pr}(Y=k | X=x)}{\text{Pr}(Y = K|X=x)}\right) &= -->
+<!-- \log\left(\frac{\pi_{k}f_{k}(x)}{\pi_{K}f_{K}(x)}\right) \\ -->
+<!-- &= \log\left(\frac{\pi_{k}\exp\{-\frac{1}{2\sigma^2}(x - \mu_{k})^2\}}{\pi_{K}\exp\{-\frac{1}{2\sigma^2}(x - \mu_{K})^2\}}\right)  -->
+<!-- \end{align*} -->
 </div>
 <div id="submission" class="section level2">
 <h2>Submission</h2>

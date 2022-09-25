@@ -12,7 +12,7 @@ library(tidyverse)
 
 ### Exercise 1 
 
-We will now derive the probability that a given observation is part of a bootstrap sample. Suppose that we obtain a bootstrap sample from a set of $n$ observations.
+We will now derive the probability that a given observation is part of a bootstrap sample. Suppose that we obtain a bootstrap sample from a set of $n$ observations. Remember that in bootstrap sampling we repeatedly sample with replacement from the original sample, so each draw is assumed independent of the next.
 
 a) What is the probability that the first bootstrap observation is not the $j$-th observation from the original sample? Justify your answer.
 
