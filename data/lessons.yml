@@ -32,7 +32,7 @@ lessons:
  - date: "Week 03"
  - date: "Monday, Sep. 26"
    title: "Classification: Logistic Regression"
-   slides: "lec-slides/04-logistic-slides.html"
+   #slides: "lec-slides/04-logistic-slides.html"
  - date: "Wednesday, Sep. 28"
    title: "Classification: Logistic Regression (cont.)"
  - date: "Wednesday, Sep. 28"
