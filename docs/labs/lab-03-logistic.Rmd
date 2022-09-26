@@ -104,7 +104,7 @@ Given these predictions, the `table()` function can be used to produce a confusi
 
 ```{r}
 glm_pred <- factor(glm_pred, levels = c("no fracture", "fracture") )
-table(glm_pred, truth = bmd_dat$status)
+table(pred = glm_pred, truth = bmd_dat$status)
 ```
 
 The diagonal elements of the confusion matrix indicate correct predictions, while the off-diagonals represent incorrect predictions. Our model correctly predicted 110 patients with no fractures and 34 with a fracture. We can compute the fraction of days for which the prediction was correct:
@@ -114,12 +114,27 @@ The diagonal elements of the confusion matrix indicate correct predictions, whil
 mean(glm_pred == bmd_dat$status)
 ```
 
-We can add other predictors into the logistic regression model:
+The false negative rate is the proportion of responses with true fracture that were predicted to be no fracture. Here is one way to get the false negative rate:
 
 ```{r}
-glm_mod2 <- glm(status ~ age + sex + bmd, data = bmd_dat, family = "binomial")
-summary(glm_mod2)
+data.frame(pred = glm_pred , true = bmd_dat$status) %>%
+  filter(true == "fracture") %>%
+  summarise(fnr = mean(pred != true)) %>%
+  pull(fnr)
 ```
+
+Similarly, the false positive rate is the proportion of responses with true no fracture that were predicted to be fracture:
+
+```{r}
+data.frame(pred = glm_pred , true = bmd_dat$status) %>%
+  filter(true == "no fracture") %>%
+  summarise(fnr = mean(pred != true)) %>%
+  pull(fnr)
+```
+
+
+Note: we can add other predictors into the logistic regression model just as we did in `lm()`.
+
 
 
 # Naive Bayes
@@ -171,7 +186,7 @@ knn_preds <- knn(train = bmd_dat_scale %>% dplyr::select(bmd,age),
                  test = bmd_dat_scale %>% dplyr::select(bmd,age),
                  cl = bmd_dat_scale$status, 
                  k = 3)
-table(knn_preds, truth = bmd_dat_scale$status)
+table(pred = knn_preds, truth = bmd_dat_scale$status)
 ```
 
 # YOUR TURN!
@@ -219,12 +234,13 @@ c) Perform a logistic regression on the full data using `texture`, `smoothness`,
 d) From your fitted model in (c), compute the confusion matrix and overall fraction of correct predictions. Explain what the confusion matrix is telling you about the types of mistakes made by logistic regression.
 
 
-Now split the data into a train set and a test set using the following code. Remember to set `eval = T` before you knit.
+Now split the data into a 50% train set and a 50% test set using the following code. Remember to set `eval = T` before you knit.
 
 ```{r eval = F}
 set.seed(5)
-train_ids <- sample(1:nrow(bdiag_dat), 0.5 * nrow(bdiag_dat))
-test_ids <- (1:nrow(bdiag_dat))[-train_ids]
+n <- nrow(bdiag_dat)
+train_ids <- sample(1:n, 0.5 * n) # randomly take 50% of indices as training
+test_ids <- (1:n)[-train_ids] # the non-training ids are left for the test set
 ```
 
 e) Fit a logistic regression model *on the training data* using the same predictors. Then obtain the confusion matrix and compute the fraction of correct predictions *for the test data*. 

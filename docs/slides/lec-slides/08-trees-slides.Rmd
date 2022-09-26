@@ -86,7 +86,8 @@ ggplot(diabetes, aes(x= age, y = total_chol, col =y))+
  geom_point()+
  scale_color_gradientn(colours = rainbow(5)[5:1]) +
  labs(y = "total cholesterol")+
- guides(col = "none")
+ guides(col = "none")+
+  theme(text = element_text(size = 20))
 ```
 
 ---
@@ -95,7 +96,7 @@ ggplot(diabetes, aes(x= age, y = total_chol, col =y))+
 
 - A regression tree for predicting diabetes progression based on a person's age and total cholesterol
 
-```{r diabetes_simple_tree}
+```{r diabetes_simple_tree, fig.width=8, fig.height=6}
 set.seed(1)
 tree_diabetes <- tree(y ~ age + total_chol, diabetes)
 plot(tree_diabetes, col = "blue")
@@ -159,7 +160,7 @@ ggplot(diabetes, aes(x= age, y = total_chol))+
  annotate("text", x = mean(c(xmin,xmax)), y = mean(c(c1, ymax)), label = expression(R[1]), size = 5) +
  annotate("text", x = mean(c(xmin,c2)), y = mean(c(c1, ymin)), label = expression(R[2]) ,size = 5) +
  annotate("text", x = mean(c(c2,xmax)), y = mean(c(c1, ymin)), label = expression(R[3]), size = 5) +
- theme(text = element_text(size = 12))
+ theme(text = element_text(size = 20))
 
 ```
 
@@ -190,11 +191,11 @@ ggplot(diabetes, aes(x= age, y = total_chol))+
 
 --
 
-2. For every observation that fall in $R_{l}$, we output the same prediction: the mean of the training responses in $R_{l}$, $\hat{y}_{R_{l}} = \frac{1}{n_{l}} \sum_{i \in R_{l}} y_{i}$
+2. For every observation that lands in $R_{l}$, we output the same prediction: the mean of the training responses in $R_{l}$, $\hat{y}_{R_{l}} = \frac{1}{n_{l}} \sum_{i \in R_{l}} y_{i}$
 
 --
 
-- What does these $R_{l}$ look like?
+What do these $R_{l}$ look like?
 
 ---
 
@@ -279,13 +280,15 @@ knitr::include_graphics("figs/08-trees/tree_ex.png")
 
 - A better strategy is to grow a very large tree $T_{0}$, and then **prune** it back in order to obtain a smaller **subtree**
 
- - Idea: remove sections of $T_{0}$ that are non-critical
+ - Idea: remove sections that are non-critical
  
 --
 
  - How to best prune the tree? A CV approach might be intuitive, but is expensive
  
--- **Cost complexity pruning** or weakest link pruning: consider a sequence of trees indexed by a nonnegative tuning parameter $\alpha$. For each value of $\alpha$, there is a subtree $T \subset T_{0}$ such that 
+--
+
+- **Cost complexity pruning** or weakest link pruning: consider a sequence of trees indexed by a nonnegative tuning parameter $\alpha$. For each value of $\alpha$, there is a subtree $T \subset T_{0}$ such that 
 
 $$\sum_{l=1}^{|T|} \sum_{i: x_{i} \in R_{l}} (y_{i} - \hat{y}_{R_{l}})^2 + \alpha |T|$$
  is as small as possible. 
@@ -308,6 +311,8 @@ $$\sum_{l=1}^{|T|} \sum_{i: x_{i} \in R_{l}} (y_{i} - \hat{y}_{R_{l}})^2 + \alph
 
 --
  - What happens as $\alpha$ increases? 
+ 
+--
 
   - Feels similar to the Lasso, maybe?
 
@@ -365,7 +370,7 @@ summary(tree_diabetes)
 
 ## Diabetes example cont.
 
-```{r diabetes_cv, cache = T}
+```{r diabetes_cv, cache = T, fig.width=8}
 # CV for different alpha levels k
 K<- 5
 cv_diabetes <- cv.tree(tree_diabetes, K = 10)
@@ -414,7 +419,7 @@ data.frame(size = M, test = test_mse, train = train_mse, cv = cv_mse) %>%
  geom_line()+
  scale_x_continuous(breaks = seq(1,max(M), 4))+
  labs(x = "Tree size", y = "Mean squared error")+
- theme(text = element_text(size = 14))
+ theme(text = element_text(size = 20))
 
 alpha_hat <- alphas[which(cv_mse == min(cv_mse))]
 min_size <- M[which(cv_mse == min(cv_mse))]
@@ -435,6 +440,12 @@ prune_final <- prune.tree(tree_full, k = alpha_hat)
 plot(prune_final)
 text(prune_final, pretty = 0)
 ```
+
+---
+
+class: middle, center
+
+## Classification trees
 
 ---
 
@@ -481,6 +492,26 @@ $$G_{l} = \sum_{k=1}^{K} \hat{p}_{lk} (1 - \hat{p}_{lk})$$
  
 
 ---
+## Gini index
+
+$$G_{l} = \sum_{k=1}^{K} \hat{p}_{lk} (1 - \hat{p}_{lk})$$
+
+- Example: 3 classes and 9 observations in three regions
+
+```{r}
+data.frame(Region1 = c(rep("A", 9), rep("B", 0), rep("C", 0)),
+           Region2 = c(rep("A", 2), rep("B", 2), rep("C", 5)),
+           Region3 = c(rep("A", 3), rep("B", 3), rep("C", 3))) %>%
+  print.data.frame()
+```
+
+- In these three regions, what are the Gini indices $G_{1}, G_{2}, G_{3}$?
+--
+  - $G_{1} = 1(1-1) + 0(1-0) + 0(1-0) = 0$
+  - $G_{2} = \frac{2}{9}(1-\frac{2}{9}) +\frac{2}{9}(1-\frac{2}{9}) + \frac{5}{9}(1-\frac{5}{9}) \approx 0.60$
+  - $G_{3} = \frac{1}{3}(1-\frac{1}{3}) + \frac{1}{3}(1-\frac{1}{3})+\frac{1}{3}(1-\frac{1}{3}) = \frac{2}{3} \approx 0.67$
+
+---
 
 ## Entropy
 
@@ -490,37 +521,39 @@ $$D_{l} = -\sum_{k=1}^{K} \hat{p}_{lk} \log\hat{p}_{lk}$$
 
 - Very similar to Gini index, so cross-entropy is also a measure of node purity
 
---
+---
+
+## Entropy
+
+$$D_{l} = -\sum_{k=1}^{K} \hat{p}_{lk} \log\hat{p}_{lk}$$
+
+- Same example: 3 classes and 9 observations in three regions
 
 ```{r}
-gini <- function(x){sum(x*(1-x))}
-ent <- function(x){
- temp <- x
- temp[which(temp==0)] <- 0.0000000000000001
- -sum(temp*log(temp))
-}
-p1 <- c(0.25, 0.25, 0.25,0.25)
-p2 <- c(0.1, 0.1, 0.2, 0.6)
-p3 <- c(0, 0, 0.05, 0.95)
-g1 <- gini(p1); d1 <- round(ent(p1),3 )
-g2 <- gini(p2); d2 <- round(ent(p2),3)
-g3 <- gini(p3); d3 <- round(ent(p3), 3)
-
+data.frame(Region1 = c(rep("A", 9), rep("B", 0), rep("C", 0)),
+           Region2 = c(rep("A", 2), rep("B", 2), rep("C", 5)),
+           Region3 = c(rep("A", 3), rep("B", 3), rep("C", 3))) %>%
+  print.data.frame()
 ```
 
-- If $K = 4$ and $(\hat{p}_{l1}, \hat{p}_{l2},\hat{p}_{l3},\hat{p}_{l4})$ = (`r p1`), then $G_{l} = `r g1`$ and $D_{l} = `r d1`$
+- In these three regions, what are the cross-entropies $D_{1}, D_{2}, D_{3}$?
 
-- If $(\hat{p}_{l1}, \hat{p}_{l2},\hat{p}_{l3},\hat{p}_{l4})$ = (`r p2`), then $G_{l} = `r g2`$ and $D_{l} = `r d2`$
- 
-- If $(\hat{p}_{l1}, \hat{p}_{l2},\hat{p}_{l3},\hat{p}_{l4})$ = (`r p3`), then $G_{l} = `r g3`$ and $D_{l} = `r d3`$
+--
+
+  - $D_{1} = -(1\log(1) + 0\log(0) + 0\log(0)) = 0$
+  - $D_{2} = -(\frac{2}{9}\log(\frac{2}{9}) +\frac{2}{9}\log(\frac{2}{9}) + \frac{5}{9}\log(\frac{5}{9})) \approx 1$
+  - $D_{3} = \frac{1}{3}(1-\frac{1}{3}) + \frac{1}{3}(1-\frac{1}{3})+\frac{1}{3}(1-\frac{1}{3}) = \frac{2}{3} \approx 1.1$
+
 
 ---
 
-## Seeds data: full tree
+### Seeds data: full tree
 
 - Recall the seeds data, where we have seven characteristics of three different grains: Kama, Rosa, and Canadian
 
-```{r seeds, fig.width=6, fig.height=6}
+--
+
+```{r seeds, fig.width=6, fig.height=7}
 seeds_full <- tree(variety ~., data = seeds,
                     control=tree.control(nobs = nrow(seeds), mindev = 0))
 plot(seeds_full)
@@ -532,7 +565,7 @@ title("Full tree")
 
 ## Seeds data: pruned tree
 
-```{r seeds_cv}
+```{r seeds_cv, fig.height=8}
 set.seed(2)
 train <- sample(1:nrow(seeds), nrow(seeds)/2)
 seeds_test <- seeds[-train,]
@@ -554,7 +587,9 @@ text(prune_seeds)
 
   - Why? The split increases node purity even if it may not reduce classification error
   
---
+---
+
+## Remarks
 
 - We can also split on qualitative predictors. Consider again the abalone data, and we want to create a regression tree for $\color{blue}{\text{age}}$ using the predictor $\color{blue}{\text{age}} \in \{I, F, M\}$
 
@@ -571,7 +606,7 @@ text(tree(age ~ sex, abalone_rl, control = tree.control(mindev= 0, nobs = nrow(a
 - Trees vs. linear models: which is better? Depends on the true relationships between the response and the predictors
 
 
-```{r out.width="66%"}
+```{r out.width="50%"}
 knitr::include_graphics("figs/08-trees/tree_linear.png")
 ```
 
@@ -582,9 +617,7 @@ knitr::include_graphics("figs/08-trees/tree_linear.png")
 
 - Advantages: 
 
- - Easy to explain 
- 
- - May more closely mirror human decision-making than other approaches we've seen
+ - Easy to explain, and may more closely mirror human decision-making than other approaches we've seen
  
  - Can be displayed graphically and interpreted by non-expert
  
@@ -604,27 +637,33 @@ However, we will see that aggregating many trees can improve predictie performan
 
 ---
 
-## Bagging
+class: middle, center
 
-- An **ensemble** method combines many simple "building block" models in order to obtain a single final model
+## Aggregating trees 
+
+---
+## Bagging
 
 - The decision trees described previously suffer from *high variance*, whereas linear regression tends to have low variance (when $n >> p$)
 
 --
 
+
+- An **ensemble method** is a method that combines many simple "building block" models in order to obtain a single final model
+
 - **Bootstrap aggregation** or **bagging** is a general-purpose procedure for reducing the variance of a statistical-learning method
 
-- Recall that given a set of $n$ independent observations $Z_{1}, \ldots, Z_{n}$, each with variance $\sigma^2$, then $\text{Var}(\bar{Z}) = \sigma^2/n$
-
 --
 
- - i.e. averaging a set of observations reduces variance. However, we typically don't have access to multiple training sets
+  - Given a set of $n$ independent observations $Z_{1}, \ldots, Z_{n}$, each with variance $\sigma^2$, then $\text{Var}(\bar{Z}) = \sigma^2/n$ (i.e. averaging a set of observations reduces variance)
 
---
+ -  However, we typically don't have access to multiple training sets
 
-## Bagging
+---
 
-- Instead, we can bootstrap! Take repeated samples from the single training set we have
+## Bagging (in general)
+
+- Instead, we can bootstrap by taking repeated samples from the single training set
 
 - **Bagging**:
 
@@ -642,15 +681,21 @@ However, we will see that aggregating many trees can improve predictie performan
 
 - To apply bagging to regression trees: 
 
- - Construct $B$ regression trees using $B$ bootstrapped training sets and average the resulting predictions
+ - Construct $B$ regression trees using $B$ bootstrapped training sets. For each tree, obtain predictions
  
- - Trees are grown deep but not pruned
+ - Average the resulting predictions
+ 
+ - Typically, trees are grown deep but not pruned
  
 --
 
 - For classification trees:
 
- - For each test observation, record the class $k$ predicted by each of the $B$ trees, and take a *majority vote*; the overall prediction is the most commonly occurring class among the B predictions
+  - Construct $B$ classification trees using $B$ bootstrapped training sets
+
+  - For each tree and each test observation, record the class $k$ predicted
+  
+  - Take a *majority vote*; the overall prediction for the test point is the most commonly occurring class among the B predictions
  
 ---
 
@@ -677,7 +722,9 @@ However, we will see that aggregating many trees can improve predictie performan
 
 ---
 
-```{r}
+## Seeds data
+
+```{r fig.width = 8, fig.height=5}
 set.seed(14)
 train <- sample(1: nrow(seeds), nrow(seeds)/2)
 n_trees <- seq(2,200,1)
@@ -713,7 +760,7 @@ seeds_bag_rf_df %>%
   # geom_point() + 
   geom_step() +
   labs(x = "Number of trees") +
-  theme(text =element_text(size = 14))+
+  theme(text =element_text(size = 20))+
   geom_hline(yintercept = dt_err, linetype = "dashed") +
   scale_color_manual(values = c("blue", "orange"))
 
@@ -735,14 +782,14 @@ seeds_bag_rf_df %>%
 
   - Bagging regression trees: record total amount that RSS is decreased due to splits over a given predictor, averaged over B
   
-  - Bagging classification trees: add up total amount that Gini indesx is decreased by splits over a given predictor, averaged over B
+  - Bagging classification trees: add up total amount that Gini index is decreased by splits over a given predictor, averaged over B
 
 
 ---
 
 ## Seeds data: importance 
 
-```{r importance}
+```{r importance, fig.width=8, fig.height=6}
 bag_seeds_all <- randomForest(variety ~., data = seeds, 
                            mtry = 7, ntree =200, importance= T)
 importance_df <- data.frame(predictors = rownames(importance(bag_seeds_all)),
@@ -752,10 +799,11 @@ importance_df <- data.frame(predictors = rownames(importance(bag_seeds_all)),
 importance_df %>%
   mutate(order = as.factor(order)) %>%
   ggplot(., aes(x  = order, y = mean_decrease))+
-  geom_point() +
+  geom_point(size = 3) +
   scale_x_discrete(labels = importance_df$predictors)+
   labs(y = "Mean decrease in Gini", x = "")+
-  coord_flip() 
+  coord_flip()  +
+  theme(text = element_text(size = 25))
 
 ```
 
@@ -763,7 +811,7 @@ importance_df %>%
 
 ## Random forests
 
-- **Random forests** provide improvement over bagged trees by providing small tweak that *decorrelates* the trees
+- **Random forests** provide improvement over bagged trees by providing a small tweak that *decorrelates* the trees
 
 - Like bagging, we build a number of decision trees on bootstrapped training samples
 
@@ -783,7 +831,7 @@ importance_df %>%
 
 - At each split, algorithm is *not allowed* to consider a majority of the available predictors
 
-- Intuition for why?
+  - Intuition for why?
 
 --
 
@@ -799,9 +847,9 @@ importance_df %>%
 
 ---
 
-## Seeds example
+## Seeds data
 
-```{r}
+```{r fig.width = 8, fig.height=6}
 seeds_bag_rf_df %>%
   pivot_longer(-B, names_to = "type", values_to = "Error")%>%
   ggplot(.,aes(x = B, y = Error, col = type))+
@@ -943,9 +991,6 @@ data.frame(mse_df) %>%
 - plot with better data
 
 
----
-
-## BART?
 
 ---
 

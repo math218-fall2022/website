@@ -216,9 +216,7 @@ data.frame(x = xseq) %>%
   theme(text = element_text(size = 16))
 ```
 
----
-
-## "exp"
+--
 
 - $e^{0} = 1$
 
@@ -226,9 +224,35 @@ data.frame(x = xseq) %>%
 
 - $\frac{e^{a}}{e^{b}} = e^{a-b}$
 
-- $e^{a} + e^{b} = \ldots e^{a} + e^{b}$
+- Output is always positive
 
 ---
+
+## log
+
+- We will work with the natural log, which is the inverse function to exp
+
+  - $\log(\exp(x)) = x$ and $\exp(\log(x)) = x$
+
+```{r, fig.width=6, fig.height=4}
+xseq <- seq(0,3, 0.01)
+data.frame(x = xseq) %>%
+  mutate(log = log(x)) %>%
+  ggplot(., aes(x = x, y= log))+
+  geom_line() +
+  labs(y = expression(log(x))) +
+  theme(text = element_text(size = 16))
+```
+
+--
+
+- Can only take log of positive numbers
+
+- Output can be negative or positive
+
+
+---
+
 
 ## Logistic regression
 
@@ -260,7 +284,7 @@ $$\frac{p(X)}{1 - p(X)} = e^{\beta_{0} + \beta_{1}X}$$
 
 --
 
-- Furthermore, we can obtain the **log odds** or **logit**: 
+- Furthermore, we can obtain the **log-odds** or **logit**: 
 
 $$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
 
@@ -287,7 +311,7 @@ $$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
 
 $$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
 
-- Interpretation of $\beta_{1}$: for every one-unit increase in $X$, we expect an average change of $\beta_{1}$ in the log odds (or average multiple of $e^{\beta_{1}}$ in the odds)
+- Interpretation of $\beta_{1}$: for every one-unit increase in $X$, we expect an average change of $\beta_{1}$ in the log-odds (or average multiple of $e^{\beta_{1}}$ in the odds)
 
 --
   
@@ -308,6 +332,24 @@ $$\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}X$$
 $$l(\beta_{0}, \beta_{1}) = \prod_{i: y_{i} = 1}p(x_{i}) \prod_{i:y_{i} = 0}(1 - p(x_{i}))$$
 
 - We pick $\beta_{0}$ and $\beta_{1}$ that will maximize this likelihood
+
+---
+
+## Logistic regression: heart data
+
+- $\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}\color{blue}{\text{age}}$, where $p(X) = \text{Pr}(\color{blue}{\text{heart disease}})$:
+
+```{r}
+heart_log <- glm(target ~ age, heart, family = "binomial")
+heart_coeff <- round(coefficients(heart_log), 3)
+tidy(heart_log)
+```
+
+--
+
+- Interpretation of $\hat{\beta}_{0}$: the average log-odds of heart disease of someone who is 0 years old is -3.01
+
+- Interpretation of $\hat{\beta}_{1}$: for every one-unit increase in $\color{blue}{\text{age}}$, we expect an average increase of $0.052$ in the log-odds  of heart disease
 
 ---
 
@@ -347,6 +389,22 @@ tidy(heart_log)
 ```
 
 
+- Interpretation: females have an average log-odds of heart disease of -1.06 
+
+- Interpretation: the log-odds of heart disease for males is on average 1.27 greater than the log-odds for females
+
+---
+
+## Logistic regression: heart data
+
+- $\log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_{0} + \beta_{1}\color{blue}{\text{sexM}}$, where $p(X) = \text{Pr}(\color{blue}{\text{heart disease}})$:
+
+```{r}
+heart_log <- glm(target ~ sex, heart, family = "binomial")
+heart_coeff <- round(coefficients(heart_log), 3)
+tidy(heart_log)
+```
+
 --
 
 - $\hat{\text{Pr}}(\color{blue}{\text{heart disease}}|\color{blue}{\text{sex = Male}})=\frac{e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 1}}{1+e^{`r heart_coeff[1]` + `r heart_coeff[2]` \times 1}} = `r exp(heart_coeff[1] +  heart_coeff[2]*1)/(1+exp(heart_coeff[1] +  heart_coeff[2]*1))`$ 
@@ -381,24 +439,37 @@ tidy(heart_log)
 
 ---
 
-## Multinomial regression
+## Alternative: softmax
 
-- What if we have $K > 2$ classes? Can extend the logistic regression model to  **multinomial** regression
+- Alternative encoding: **softmax**
 
-- Here, we discuss the *softmax* encoding
+  - Easily extends to $K > 2$ classes (*multinomial* regression)
 
 --
 
-- In softmax coding, we do not choose a baseline but rather, treat all classes symmetrically. Each class gets its own set of coefficients.
+- In softmax, we do not choose a baseline but rather, treat all classes symmetrically. Each class gets its own set of coefficients.
 
 - For each $k = 1,\ldots, K$:
 
-$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{l0} + \beta_{l1}x_{1} + \ldots + \beta_{lp}x_{p}}}$$
---
+$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{0,k} + \beta_{1,k}x_{1} + \ldots + \beta_{p,k}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{0,l} + \beta_{1,l}x_{1} + \ldots + \beta_{p,l}x_{p}}}$$
+---
+
+## Softmax
+
+- In binary case with one predictor (for simplicity):
+
+$$Pr(Y= 0 | X =x ) =  \frac{e^{\beta_{0,0} + \beta_{1,0}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$
+$$Pr(Y= 1 | X =x ) =  \frac{e^{\beta_{0,1} + \beta_{1,1}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$
 
 - Notice that these probabilities sum to one
 
-- Your homework will compare logistic encoding and softmax encoding for $K = 2$
+- Your homework will compare logistic encoding and softmax encoding 
+
+---
+
+class: middle, center
+
+## Model assessment
 
 ---
 
@@ -567,7 +638,7 @@ $$Pr(Y = K | X= x) = \frac{1}{1 + \sum_{l=1}^{K-1} e^{\beta_{l0} + \beta_{l1}x_{
 
 $$\log\left(\frac{Pr(Y = k | X =x)}{Pr(Y = K | X = x)}\right) = \beta_{k0} + \beta_{k1}x_{1} + \ldots + \beta_{kp} x_{p}$$
 
-  - i.e. log odds between any pair of classes is linear in the predictors
+  - i.e. log-odds between any pair of classes is linear in the predictors
   
 ---
 

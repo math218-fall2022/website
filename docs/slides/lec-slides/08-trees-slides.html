@@ -4,6 +4,7 @@
     <title>Math 218: Statistical Learning</title>
     <meta charset="utf-8" />
     <meta name="author" content="Tree-Based Methods" />
+    <script src="08-trees-slides_files/header-attrs-2.16/header-attrs.js"></script>
     <link rel="stylesheet" href="math218-slides.css" type="text/css" />
   </head>
   <body>
@@ -137,11 +138,11 @@ class: center, middle
 
 --
 
-2. For every observation that fall in `\(R_{l}\)`, we output the same prediction: the mean of the training responses in `\(R_{l}\)`, `\(\hat{y}_{R_{l}} = \frac{1}{n_{l}} \sum_{i \in R_{l}} y_{i}\)`
+2. For every observation that lands in `\(R_{l}\)`, we output the same prediction: the mean of the training responses in `\(R_{l}\)`, `\(\hat{y}_{R_{l}} = \frac{1}{n_{l}} \sum_{i \in R_{l}} y_{i}\)`
 
 --
 
-- What does these `\(R_{l}\)` look like?
+What do these `\(R_{l}\)` look like?
 
 ---
 
@@ -224,13 +225,15 @@ class: center, middle
 
 - A better strategy is to grow a very large tree `\(T_{0}\)`, and then **prune** it back in order to obtain a smaller **subtree**
 
- - Idea: remove sections of `\(T_{0}\)` that are non-critical
+ - Idea: remove sections that are non-critical
  
 --
 
  - How to best prune the tree? A CV approach might be intuitive, but is expensive
  
--- **Cost complexity pruning** or weakest link pruning: consider a sequence of trees indexed by a nonnegative tuning parameter `\(\alpha\)`. For each value of `\(\alpha\)`, there is a subtree `\(T \subset T_{0}\)` such that 
+--
+
+- **Cost complexity pruning** or weakest link pruning: consider a sequence of trees indexed by a nonnegative tuning parameter `\(\alpha\)`. For each value of `\(\alpha\)`, there is a subtree `\(T \subset T_{0}\)` such that 
 
 `$$\sum_{l=1}^{|T|} \sum_{i: x_{i} \in R_{l}} (y_{i} - \hat{y}_{R_{l}})^2 + \alpha |T|$$`
  is as small as possible. 
@@ -253,6 +256,8 @@ class: center, middle
 
 --
  - What happens as `\(\alpha\)` increases? 
+ 
+--
 
   - Feels similar to the Lasso, maybe?
 
@@ -332,6 +337,12 @@ class: center, middle
 
 ---
 
+class: middle, center
+
+## Classification trees
+
+---
+
 ## Classification trees
 
 - Very similar to regression tree, but now we are predicting a qualitative response
@@ -375,6 +386,33 @@ class: center, middle
  
 
 ---
+## Gini index
+
+`$$G_{l} = \sum_{k=1}^{K} \hat{p}_{lk} (1 - \hat{p}_{lk})$$`
+
+- Example: 3 classes and 9 observations in three regions
+
+
+```
+##   Region1 Region2 Region3
+## 1       A       A       A
+## 2       A       A       A
+## 3       A       B       A
+## 4       A       B       B
+## 5       A       C       B
+## 6       A       C       B
+## 7       A       C       C
+## 8       A       C       C
+## 9       A       C       C
+```
+
+- In these three regions, what are the Gini indices `\(G_{1}, G_{2}, G_{3}\)`?
+--
+  - `\(G_{1} = 1(1-1) + 0(1-0) + 0(1-0) = 0\)`
+  - `\(G_{2} = \frac{2}{9}(1-\frac{2}{9}) +\frac{2}{9}(1-\frac{2}{9}) + \frac{5}{9}(1-\frac{5}{9}) \approx 0.60\)`
+  - `\(G_{3} = \frac{1}{3}(1-\frac{1}{3}) + \frac{1}{3}(1-\frac{1}{3})+\frac{1}{3}(1-\frac{1}{3}) = \frac{2}{3} \approx 0.67\)`
+
+---
 
 ## Entropy
 
@@ -384,21 +422,44 @@ class: center, middle
 
 - Very similar to Gini index, so cross-entropy is also a measure of node purity
 
+---
+
+## Entropy
+
+`$$D_{l} = -\sum_{k=1}^{K} \hat{p}_{lk} \log\hat{p}_{lk}$$`
+
+- Same example: 3 classes and 9 observations in three regions
+
+
+```
+##   Region1 Region2 Region3
+## 1       A       A       A
+## 2       A       A       A
+## 3       A       B       A
+## 4       A       B       B
+## 5       A       C       B
+## 6       A       C       B
+## 7       A       C       C
+## 8       A       C       C
+## 9       A       C       C
+```
+
+- In these three regions, what are the cross-entropies `\(D_{1}, D_{2}, D_{3}\)`?
+
 --
 
+  - `\(D_{1} = -(1\log(1) + 0\log(0) + 0\log(0)) = 0\)`
+  - `\(D_{2} = -(\frac{2}{9}\log(\frac{2}{9}) +\frac{2}{9}\log(\frac{2}{9}) + \frac{5}{9}\log(\frac{5}{9})) \approx 1\)`
+  - `\(D_{3} = \frac{1}{3}(1-\frac{1}{3}) + \frac{1}{3}(1-\frac{1}{3})+\frac{1}{3}(1-\frac{1}{3}) = \frac{2}{3} \approx 1.1\)`
 
-
-- If `\(K = 4\)` and `\((\hat{p}_{l1}, \hat{p}_{l2},\hat{p}_{l3},\hat{p}_{l4})\)` = (0.25, 0.25, 0.25, 0.25), then `\(G_{l} = 0.75\)` and `\(D_{l} = 1.386\)`
-
-- If `\((\hat{p}_{l1}, \hat{p}_{l2},\hat{p}_{l3},\hat{p}_{l4})\)` = (0.1, 0.1, 0.2, 0.6), then `\(G_{l} = 0.58\)` and `\(D_{l} = 1.089\)`
- 
-- If `\((\hat{p}_{l1}, \hat{p}_{l2},\hat{p}_{l3},\hat{p}_{l4})\)` = (0, 0, 0.05, 0.95), then `\(G_{l} = 0.095\)` and `\(D_{l} = 0.199\)`
 
 ---
 
-## Seeds data: full tree
+### Seeds data: full tree
 
 - Recall the seeds data, where we have seven characteristics of three different grains: Kama, Rosa, and Canadian
+
+--
 
 &lt;img src="08-trees-slides_files/figure-html/seeds-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -417,7 +478,9 @@ class: center, middle
 
   - Why? The split increases node purity even if it may not reduce classification error
   
---
+---
+
+## Remarks
 
 - We can also split on qualitative predictors. Consider again the abalone data, and we want to create a regression tree for `\(\color{blue}{\text{age}}\)` using the predictor `\(\color{blue}{\text{age}} \in \{I, F, M\}\)`
 
@@ -429,7 +492,7 @@ class: center, middle
 - Trees vs. linear models: which is better? Depends on the true relationships between the response and the predictors
 
 
-&lt;img src="figs/08-trees/tree_linear.png" width="66%" style="display: block; margin: auto;" /&gt;
+&lt;img src="figs/08-trees/tree_linear.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 .footnote[Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani (2013). An introduction to statistical learning : with applications in R. New York :Springer]
 ---
@@ -438,9 +501,7 @@ class: center, middle
 
 - Advantages: 
 
- - Easy to explain 
- 
- - May more closely mirror human decision-making than other approaches we've seen
+ - Easy to explain, and may more closely mirror human decision-making than other approaches we've seen
  
  - Can be displayed graphically and interpreted by non-expert
  
@@ -460,27 +521,33 @@ However, we will see that aggregating many trees can improve predictie performan
 
 ---
 
-## Bagging
+class: middle, center
 
-- An **ensemble** method combines many simple "building block" models in order to obtain a single final model
+## Aggregating trees 
+
+---
+## Bagging
 
 - The decision trees described previously suffer from *high variance*, whereas linear regression tends to have low variance (when `\(n &gt;&gt; p\)`)
 
 --
 
+
+- An **ensemble method** is a method that combines many simple "building block" models in order to obtain a single final model
+
 - **Bootstrap aggregation** or **bagging** is a general-purpose procedure for reducing the variance of a statistical-learning method
 
-- Recall that given a set of `\(n\)` independent observations `\(Z_{1}, \ldots, Z_{n}\)`, each with variance `\(\sigma^2\)`, then `\(\text{Var}(\bar{Z}) = \sigma^2/n\)`
-
 --
 
- - i.e. averaging a set of observations reduces variance. However, we typically don't have access to multiple training sets
+  - Given a set of `\(n\)` independent observations `\(Z_{1}, \ldots, Z_{n}\)`, each with variance `\(\sigma^2\)`, then `\(\text{Var}(\bar{Z}) = \sigma^2/n\)` (i.e. averaging a set of observations reduces variance)
 
---
+ -  However, we typically don't have access to multiple training sets
 
-## Bagging
+---
 
-- Instead, we can bootstrap! Take repeated samples from the single training set we have
+## Bagging (in general)
+
+- Instead, we can bootstrap by taking repeated samples from the single training set
 
 - **Bagging**:
 
@@ -498,15 +565,21 @@ However, we will see that aggregating many trees can improve predictie performan
 
 - To apply bagging to regression trees: 
 
- - Construct `\(B\)` regression trees using `\(B\)` bootstrapped training sets and average the resulting predictions
+ - Construct `\(B\)` regression trees using `\(B\)` bootstrapped training sets. For each tree, obtain predictions
  
- - Trees are grown deep but not pruned
+ - Average the resulting predictions
+ 
+ - Typically, trees are grown deep but not pruned
  
 --
 
 - For classification trees:
 
- - For each test observation, record the class `\(k\)` predicted by each of the `\(B\)` trees, and take a *majority vote*; the overall prediction is the most commonly occurring class among the B predictions
+  - Construct `\(B\)` classification trees using `\(B\)` bootstrapped training sets
+
+  - For each tree and each test observation, record the class `\(k\)` predicted
+  
+  - Take a *majority vote*; the overall prediction for the test point is the most commonly occurring class among the B predictions
  
 ---
 
@@ -533,7 +606,9 @@ However, we will see that aggregating many trees can improve predictie performan
 
 ---
 
-&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+## Seeds data
+
+&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 
 - Dashed line is test error rate for a single decision tree
 
@@ -551,7 +626,7 @@ However, we will see that aggregating many trees can improve predictie performan
 
   - Bagging regression trees: record total amount that RSS is decreased due to splits over a given predictor, averaged over B
   
-  - Bagging classification trees: add up total amount that Gini indesx is decreased by splits over a given predictor, averaged over B
+  - Bagging classification trees: add up total amount that Gini index is decreased by splits over a given predictor, averaged over B
 
 
 ---
@@ -564,7 +639,7 @@ However, we will see that aggregating many trees can improve predictie performan
 
 ## Random forests
 
-- **Random forests** provide improvement over bagged trees by providing small tweak that *decorrelates* the trees
+- **Random forests** provide improvement over bagged trees by providing a small tweak that *decorrelates* the trees
 
 - Like bagging, we build a number of decision trees on bootstrapped training samples
 
@@ -584,7 +659,7 @@ However, we will see that aggregating many trees can improve predictie performan
 
 - At each split, algorithm is *not allowed* to consider a majority of the available predictors
 
-- Intuition for why?
+  - Intuition for why?
 
 --
 
@@ -600,9 +675,9 @@ However, we will see that aggregating many trees can improve predictie performan
 
 ---
 
-## Seeds example
+## Seeds data
 
-&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 
 - Here, `\(m \approx \sqrt{7} \approx 3\)`
 
@@ -694,9 +769,6 @@ However, we will see that aggregating many trees can improve predictie performan
 - plot with better data
 
 
----
-
-## BART?
 
 ---
 

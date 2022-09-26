@@ -607,9 +607,9 @@ observations were correctly or incorrectly classified. It takes the
 predictions as the first argument, and the true values as the second
 argument.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>glm_pred <span class="ot">&lt;-</span> <span class="fu">factor</span>(glm_pred, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;no fracture&quot;</span>, <span class="st">&quot;fracture&quot;</span>) )</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(glm_pred, <span class="at">truth =</span> bmd_dat<span class="sc">$</span>status)</span></code></pre></div>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">pred =</span> glm_pred, <span class="at">truth =</span> bmd_dat<span class="sc">$</span>status)</span></code></pre></div>
 <pre><code>##              truth
-## glm_pred      no fracture fracture
+## pred          no fracture fracture
 ##   no fracture         110       16
 ##   fracture              9       34</code></pre>
 <p>The diagonal elements of the confusion matrix indicate correct
@@ -619,34 +619,23 @@ a fracture. We can compute the fraction of days for which the prediction
 was correct:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(glm_pred <span class="sc">==</span> bmd_dat<span class="sc">$</span>status)</span></code></pre></div>
 <pre><code>## [1] 0.852071</code></pre>
-<p>We can add other predictors into the logistic regression model:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>glm_mod2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(status <span class="sc">~</span> age <span class="sc">+</span> sex <span class="sc">+</span> bmd, <span class="at">data =</span> bmd_dat, <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(glm_mod2)</span></code></pre></div>
-<pre><code>## 
-## Call:
-## glm(formula = status ~ age + sex + bmd, family = &quot;binomial&quot;, 
-##     data = bmd_dat)
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -2.2652  -0.5272  -0.2015   0.3700   2.6311  
-## 
-## Coefficients:
-##              Estimate Std. Error z value Pr(&gt;|z|)    
-## (Intercept)   9.28905    2.60448   3.567 0.000362 ***
-## age           0.01510    0.02046   0.738 0.460498    
-## sexM          0.94318    0.50160   1.880 0.060061 .  
-## bmd         -15.89958    2.70526  -5.877 4.17e-09 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 205.27  on 168  degrees of freedom
-## Residual deviance: 111.58  on 165  degrees of freedom
-## AIC: 119.58
-## 
-## Number of Fisher Scoring iterations: 6</code></pre>
+<p>The false negative rate is the proportion of responses with true
+fracture that were predicted to be no fracture. Here is one way to get
+the false negative rate:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">pred =</span> glm_pred , <span class="at">true =</span> bmd_dat<span class="sc">$</span>status) <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(true <span class="sc">==</span> <span class="st">&quot;fracture&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">fnr =</span> <span class="fu">mean</span>(pred <span class="sc">!=</span> true)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(fnr)</span></code></pre></div>
+<pre><code>## [1] 0.32</code></pre>
+<p>Similarly, the false positive rate is the proportion of responses
+with true no fracture that were predicted to be fracture:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">pred =</span> glm_pred , <span class="at">true =</span> bmd_dat<span class="sc">$</span>status) <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(true <span class="sc">==</span> <span class="st">&quot;no fracture&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">fnr =</span> <span class="fu">mean</span>(pred <span class="sc">!=</span> true)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(fnr)</span></code></pre></div>
+<pre><code>## [1] 0.07563025</code></pre>
+<p>Note: we can add other predictors into the logistic regression model
+just as we did in <code>lm()</code>.</p>
 </div>
 <div id="naive-bayes" class="section level1">
 <h1>Naive Bayes</h1>
@@ -654,8 +643,8 @@ was correct:</p>
 <code>naiveBayes()</code> function, which is part of the
 <code>e1071</code> library. The syntax is identical to that of
 <code>glm()</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>nb_mod <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(fracture <span class="sc">~</span> bmd, <span class="at">data =</span> bmd_dat)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>nb_mod</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>nb_mod <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(fracture <span class="sc">~</span> bmd, <span class="at">data =</span> bmd_dat)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>nb_mod</span></code></pre></div>
 <pre><code>## 
 ## Naive Bayes Classifier for Discrete Predictors
 ## 
@@ -682,7 +671,7 @@ the predicted class. If we wanted estimates of the probabilities, we
 would need to pass in the argument <code>type = “raw”</code> into the
 function as well.</span></span></p>
 <p>The <code>predict()</code> function is straightforward.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>nb_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(nb_mod, bmd_dat)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>nb_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(nb_mod, bmd_dat)</span></code></pre></div>
 </div>
 <div id="k-nearest-neighbors-classification" class="section level1">
 <h1>K-Nearest Neighbors Classification</h1>
@@ -708,8 +697,8 @@ nearest neighbors to be used by the classifier.</li>
 predictors</strong> so that all variables are given a mean of zero and a
 standard deviation of one. Then all predictors will be on a comparable
 scale. The <code>scale()</code> function does just this.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>bmd_dat_scale <span class="ot">&lt;-</span> bmd_dat <span class="sc">%&gt;%</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.numeric,scale)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>bmd_dat_scale <span class="ot">&lt;-</span> bmd_dat <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.numeric,scale)</span></code></pre></div>
 <p>Here, I will illustrate the <code>knn()</code> function to obtain
 predictions for the full set of data (i.e. we do not have a test set). I
 will predict <code>status</code> using the predictors <code>bmd</code>
@@ -719,14 +708,14 @@ and <code>age</code> with <span class="math inline">\(k =
 several observations are tied as nearest neighbors, then <code>R</code>
 will randomly break the tie. Therefore, a seed must be set in order to
 ensure reproducibility of results.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>knn_preds <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train =</span> bmd_dat_scale <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(bmd,age),</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">test =</span> bmd_dat_scale <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(bmd,age),</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">cl =</span> bmd_dat_scale<span class="sc">$</span>status, </span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">k =</span> <span class="dv">3</span>)</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(knn_preds, <span class="at">truth =</span> bmd_dat_scale<span class="sc">$</span>status)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>knn_preds <span class="ot">&lt;-</span> <span class="fu">knn</span>(<span class="at">train =</span> bmd_dat_scale <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(bmd,age),</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">test =</span> bmd_dat_scale <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(bmd,age),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">cl =</span> bmd_dat_scale<span class="sc">$</span>status, </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">k =</span> <span class="dv">3</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">pred =</span> knn_preds, <span class="at">truth =</span> bmd_dat_scale<span class="sc">$</span>status)</span></code></pre></div>
 <pre><code>##              truth
-## knn_preds     no fracture fracture
+## pred          no fracture fracture
 ##   no fracture         110       11
 ##   fracture              9       39</code></pre>
 </div>
@@ -755,7 +744,7 @@ contour)</li>
 <li><code>symmetry</code></li>
 <li><code>fractal dimension</code> (“coastline approximation” - 1)</li>
 </ul>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>bdiag_dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/bdiag.csv&quot;</span>, <span class="at">stringsAsFactors =</span> T, <span class="at">header =</span> T)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>bdiag_dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/bdiag.csv&quot;</span>, <span class="at">stringsAsFactors =</span> T, <span class="at">header =</span> T)</span></code></pre></div>
 <p><label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote"><span style="display: block;">This
 <code>pivot_longer()</code> function is extremely
 useful!</span></span></p>
@@ -763,14 +752,14 @@ useful!</span></span></p>
 <li>Plot the distribution of the predictors (the code below will help
 you get started). Describe what you see.</li>
 </ol>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span>bdiag_dat <span class="sc">%&gt;%</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>id) <span class="sc">%&gt;%</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>diagnosis, <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>) </span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>plot_df <span class="sc">%&gt;%</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> _____ )) <span class="sc">+</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> _____ , <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span>bdiag_dat <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>id) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>diagnosis, <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>) </span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>plot_df <span class="sc">%&gt;%</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> _____ )) <span class="sc">+</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> _____ , <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li><p>What proportion of patients in the dataset had a malignant
 biopsy?</p></li>
@@ -784,12 +773,13 @@ overall fraction of correct predictions. Explain what the confusion
 matrix is telling you about the types of mistakes made by logistic
 regression.</p></li>
 </ol>
-<p>Now split the data into a train set and a test set using the
+<p>Now split the data into a 50% train set and a 50% test set using the
 following code. Remember to set <code>eval = T</code> before you
 knit.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>train_ids <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(bdiag_dat), <span class="fl">0.5</span> <span class="sc">*</span> <span class="fu">nrow</span>(bdiag_dat))</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>test_ids <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(bdiag_dat))[<span class="sc">-</span>train_ids]</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(bdiag_dat)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>train_ids <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="fl">0.5</span> <span class="sc">*</span> n) <span class="co"># randomly take 50% of indices as training</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>test_ids <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)[<span class="sc">-</span>train_ids] <span class="co"># the non-training ids are left for the test set</span></span></code></pre></div>
 <ol start="5" style="list-style-type: lower-alpha">
 <li><p>Fit a logistic regression model <em>on the training data</em>
 using the same predictors. Then obtain the confusion matrix and compute
