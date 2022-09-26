@@ -382,33 +382,6 @@ $$
 
 ---
 
-## Alternative: softmax
-
-- Alternative encoding: **softmax**
-
-  - Easily extends to `\(K &gt; 2\)` classes (*multinomial* regression)
-
---
-
-- In softmax, we do not choose a baseline but rather, treat all classes symmetrically. Each class gets its own set of coefficients.
-
-- For each `\(k = 1,\ldots, K\)`:
-
-`$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{0,k} + \beta_{1,k}x_{1} + \ldots + \beta_{p,k}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{0,l} + \beta_{1,l}x_{1} + \ldots + \beta_{p,l}x_{p}}}$$`
----
-
-## Softmax
-
-- In binary case with one predictor (for simplicity):
-
-`$$Pr(Y= 0 | X =x ) =  \frac{e^{\beta_{0,0} + \beta_{1,0}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$`
-`$$Pr(Y= 1 | X =x ) =  \frac{e^{\beta_{0,1} + \beta_{1,1}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$`
-
-- Notice that these probabilities sum to one
-
-- Your homework will compare logistic encoding and softmax encoding 
-
----
 
 class: middle, center
 
@@ -423,6 +396,65 @@ class: middle, center
 - With binary response, it is common to create a **confusion matrix**
 
 &lt;img src="figs/04-classification/confusion_matrix.png" style="display: block; margin: auto;" /&gt;
+---
+
+## Example:
+
+- 10 observations, with true class and predicted class
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; pred &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; true &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Make a confusion matrix!
+
 ---
 
 ## Heart disease data
@@ -503,7 +535,7 @@ class: middle, center
 
 - The **ROC curve** plots both simultaneously
 
-&lt;img src="04-logistic-slides_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="04-logistic-slides_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 - **AUC** (area under the curve) summarizes overall performance
 
@@ -519,8 +551,35 @@ class: middle, center
 
 class: middle, center
 
-## Optional 
+## Optional material
 
+---
+
+## Alternative: softmax
+
+- Alternative encoding: **softmax**
+
+  - Easily extends to `\(K &gt; 2\)` classes (*multinomial* regression)
+
+--
+
+- In softmax, we do not choose a baseline but rather, treat all classes symmetrically. Each class gets its own set of coefficients.
+
+- For each `\(k = 1,\ldots, K\)`:
+
+`$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{0,k} + \beta_{1,k}x_{1} + \ldots + \beta_{p,k}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{0,l} + \beta_{1,l}x_{1} + \ldots + \beta_{p,l}x_{p}}}$$`
+---
+
+## Softmax
+
+- In binary case with one predictor (for simplicity):
+
+`$$Pr(Y= 0 | X =x ) =  \frac{e^{\beta_{0,0} + \beta_{1,0}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$`
+`$$Pr(Y= 1 | X =x ) =  \frac{e^{\beta_{0,1} + \beta_{1,1}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$`
+
+- Notice that these probabilities sum to one
+
+- Your homework has a bonus question that compares logistic encoding and softmax encoding 
 ---
 
 ## Multinomial regression

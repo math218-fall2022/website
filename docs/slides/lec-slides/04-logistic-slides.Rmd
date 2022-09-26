@@ -439,33 +439,6 @@ tidy(heart_log)
 
 ---
 
-## Alternative: softmax
-
-- Alternative encoding: **softmax**
-
-  - Easily extends to $K > 2$ classes (*multinomial* regression)
-
---
-
-- In softmax, we do not choose a baseline but rather, treat all classes symmetrically. Each class gets its own set of coefficients.
-
-- For each $k = 1,\ldots, K$:
-
-$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{0,k} + \beta_{1,k}x_{1} + \ldots + \beta_{p,k}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{0,l} + \beta_{1,l}x_{1} + \ldots + \beta_{p,l}x_{p}}}$$
----
-
-## Softmax
-
-- In binary case with one predictor (for simplicity):
-
-$$Pr(Y= 0 | X =x ) =  \frac{e^{\beta_{0,0} + \beta_{1,0}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$
-$$Pr(Y= 1 | X =x ) =  \frac{e^{\beta_{0,1} + \beta_{1,1}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$
-
-- Notice that these probabilities sum to one
-
-- Your homework will compare logistic encoding and softmax encoding 
-
----
 
 class: middle, center
 
@@ -482,6 +455,21 @@ class: middle, center
 ```{r fig.align = "center", fig.width=6, fig.height=6}
 knitr::include_graphics("figs/04-classification/confusion_matrix.png")
 ```
+---
+
+## Example:
+
+- 10 observations, with true class and predicted class
+
+```{r}
+true <- c(0, 1, 1, 0, 1, 1, 0, 0, 1, 1)
+pred <- c(0, 1, 0, 1, 1, 1, 0, 0, 1, 0)
+data.frame( pred = pred, true = true) %>%
+  knitr::kable()
+```
+
+- Make a confusion matrix!
+
 ---
 
 ## Heart disease data
@@ -605,8 +593,35 @@ ggroc(heart_roc)+
 
 class: middle, center
 
-## Optional 
+## Optional material
 
+---
+
+## Alternative: softmax
+
+- Alternative encoding: **softmax**
+
+  - Easily extends to $K > 2$ classes (*multinomial* regression)
+
+--
+
+- In softmax, we do not choose a baseline but rather, treat all classes symmetrically. Each class gets its own set of coefficients.
+
+- For each $k = 1,\ldots, K$:
+
+$$Pr(Y= k | X =x ) =  \frac{e^{\beta_{0,k} + \beta_{1,k}x_{1} + \ldots + \beta_{p,k}x_{p}}}{ \sum_{l=1}^{K} e^{\beta_{0,l} + \beta_{1,l}x_{1} + \ldots + \beta_{p,l}x_{p}}}$$
+---
+
+## Softmax
+
+- In binary case with one predictor (for simplicity):
+
+$$Pr(Y= 0 | X =x ) =  \frac{e^{\beta_{0,0} + \beta_{1,0}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$
+$$Pr(Y= 1 | X =x ) =  \frac{e^{\beta_{0,1} + \beta_{1,1}x_{1}}}{ e^{\beta_{0,0} + \beta_{1,0}x_{1}} + e^{\beta_{0,1} + \beta_{1,1}x_{1}}}$$
+
+- Notice that these probabilities sum to one
+
+- Your homework has a bonus question that compares logistic encoding and softmax encoding 
 ---
 
 ## Multinomial regression
