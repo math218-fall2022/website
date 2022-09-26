@@ -1040,13 +1040,14 @@ $$\delta_{k}(x) = -\frac{1}{2}\sum_{j=1}^{p}\left(\frac{(x_{j}-\mu_{kj})^2}{\sig
 --
 
 - In LDA, 
+$$
 \begin{align*}
 \log\left(\frac{Pr(Y= 1 | X=x)}{Pr(Y= 2 | X=x)}\right) &= \log \left(\frac{\pi_{1} f_{1}(x)}{\pi_{2}f_{2}(x)}\right) \\
 &= \log\left(\frac{\pi_{1} \exp\left(-\frac{1}{2}(x - \mathbf{\mu}_{1})^{T} \Sigma^{-1}(x - \mathbf{\mu}_{1})\right)}{\pi_{2} \exp\left(-\frac{1}{2}(x - \mathbf{\mu}_{2})^{T} \Sigma^{-1}(x - \mathbf{\mu}_{2})\right))}\right) \\
 &= \ldots \\
 &= c_{0} + c_{1}x_{1}+ c_{2}x_{2} + \ldots + c_{p}x_{p}
 \end{align*}
-
+$$
 ---
 
 ## Logistic Regression vs LDA
