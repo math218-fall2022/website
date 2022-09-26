@@ -396,7 +396,12 @@ class: middle, center
 - With binary response, it is common to create a **confusion matrix**
 
 &lt;img src="figs/04-classification/confusion_matrix.png" style="display: block; margin: auto;" /&gt;
+
+- Can calculate the overall **error/misclassification rate**: the proportion of observations that we misclassified
+
+  - Misclassification rate = `\(\frac{\text{FP} + \text{FN}}{\text{TP} + \text{FP} + \text{FN} + \text{TN}} = \frac{\text{FP} + \text{FN}}{n}\)`
 ---
+
 
 ## Example:
 
@@ -489,27 +494,82 @@ class: middle, center
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Misclassification rate: (38 + 32)/303 = 0.231
 
-- Of the observations with true `\(\color{blue}{\text{heart disease}}\)`, we make 38/139 = 0.195 errors
+- What is the misclassification rate?
 
-- Of the observation with true `\(\color{blue}{\text{no heart disease}}\)`, we make 32/164 = 0.273 errors
+--
+
+  - Misclassification rate: (38 + 32)/303 = 0.231
+
 
 ---
 
 ## Types of errors
 
-- **False positive rate** (FPR): fraction of negative observations incorrectly classified as positive -- 0.195 in our example
+- **False positive rate** (FPR): fraction of negative observations incorrectly classified as positive
+  
+  - `\(n_{0}\)` = number of failures/negatives in data = `\(\text{FP} + \text{TN}\)`
 
-- **False negative rate** (FNR): fraction of positive observations incorrectly classified as negative example -- 0.273 in our example
+  - `\(\text{FPR} = \frac{\text{FP}}{n_{0}}\)`
+
+- **False negative rate** (FNR): fraction of positive observations incorrectly classified as negative example 
+
+  - `\(n_{1}\)` = number of success/positives in data = `\(\text{FN} + \text{TP}\)`
+
+  -  `\(\text{FNR} = \frac{\text{FN}}{n_{1}}\)`
+
+
+---
+
+## Heart disease data
+
+&lt;table&gt;
+ &lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="1"&gt;&lt;div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; "&gt;Pred&lt;/div&gt;&lt;/th&gt;
+&lt;th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2"&gt;&lt;div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; "&gt;True&lt;/div&gt;&lt;/th&gt;
+&lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt;   &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 0 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; 1 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 132 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 32 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 101 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- What is the FNR? What is the FPR?
 
 --
 
-- Is a false positive or a false negative worse? In the heart data, maybe a false negative?
+  - FNR: 38/139 = 0.195
 
 --
 
-- This table was produced by classifying an observation at `\(\color{blue}{\text{heart disease}}\)` if `\(\hat{Pr}(\color{blue}{\text{heart disease}} | \color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}) \geq 0.5\)`
+  - FPR: 32/164 = 0.273 
+
+---
+
+## Threshold
+
+- Is a false positive or a false negative worse? Depends on the context!
+
+  - In the heart data, maybe a false negative?
+
+--
+
+- The confusion matrix was produced by classifying an observation at `\(\color{blue}{\text{heart disease}}\)` if `\(\hat{Pr}(\color{blue}{\text{heart disease}} | \color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}) \geq 0.5\)`
 
   - Here, 0.5 is the threshold for assigning an observation to `\(\color{blue}{\text{heart disease}}\)` class
   
@@ -535,9 +595,31 @@ class: middle, center
 
 - The **ROC curve** plots both simultaneously
 
-&lt;img src="04-logistic-slides_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="04-logistic-slides_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
 
 - **AUC** (area under the curve) summarizes overall performance
+
+---
+
+## Note
+
+- Within the umbrella of classification, logistic regression is a **discriminative** model
+
+  - Given my predictors `\(X\)`, what is my predicted probability for `\(Y\)`?
+  
+  - Estimates the parameters of `\(p(X) = \text{Pr}(Y = 1|X)\)` directly from the data
+  
+  - Learns the boundary between classes
+
+--
+
+- This is contrast to a **generative model** (as we'll see next)
+
+  - Does not learn `\(\text{Pr}(Y = 1|X)\)` directly
+  
+  - Helps you understand how the data were generated 
+  
+  - Learns the distribution of each of the classes
 
 ---
 
@@ -546,6 +628,8 @@ class: middle, center
 - Logistic regression is very commonly used when `\(K=2\)`
 
 - Does poorly in certain scenarios
+
+  - Remember: the model is linear in the log-odds of success. If this linear assumption is not actually true, model will perform poorly
 
 ---
 
@@ -557,7 +641,7 @@ class: middle, center
 
 ## Alternative: softmax
 
-- Alternative encoding: **softmax**
+- Alternative encoding to logistic regression is known as **softmax**
 
   - Easily extends to `\(K &gt; 2\)` classes (*multinomial* regression)
 

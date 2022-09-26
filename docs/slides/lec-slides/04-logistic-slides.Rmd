@@ -455,7 +455,12 @@ class: middle, center
 ```{r fig.align = "center", fig.width=6, fig.height=6}
 knitr::include_graphics("figs/04-classification/confusion_matrix.png")
 ```
+
+- Can calculate the overall **error/misclassification rate**: the proportion of observations that we misclassified
+
+  - Misclassification rate = $\frac{\text{FP} + \text{FN}}{\text{TP} + \text{FP} + \text{FN} + \text{TN}} = \frac{\text{FP} + \text{FN}}{n}$
 ---
+
 
 ## Example:
 
@@ -496,27 +501,64 @@ fnr <- round(heart_df %>% filter(true == 1, pred==0) %>% nrow() / n1 , 3)
 
 ```
 
-- Misclassification rate: (`r heart_df %>% filter(true == 1, pred==0) %>% nrow()` + `r heart_df %>% filter(true == 0, pred==1) %>% nrow()`)/`r n` = `r round((heart_df %>% filter(true == 1, pred==0) %>% nrow() + heart_df %>% filter(true == 0, pred==1) %>% nrow())/ n,3)`
 
-- Of the observations with true $\color{blue}{\text{heart disease}}$, we make `r heart_df %>% filter(true == 1, pred==0) %>% nrow()`/`r n1` = `r fpr` errors
+- What is the misclassification rate?
 
-- Of the observation with true $\color{blue}{\text{no heart disease}}$, we make `r heart_df %>% filter(true == 0, pred==1) %>% nrow()`/`r n0` = `r fnr` errors
+--
+
+  - Misclassification rate: (`r heart_df %>% filter(true == 1, pred==0) %>% nrow()` + `r heart_df %>% filter(true == 0, pred==1) %>% nrow()`)/`r n` = `r round((heart_df %>% filter(true == 1, pred==0) %>% nrow() + heart_df %>% filter(true == 0, pred==1) %>% nrow())/ n,3)`
+
 
 ---
 
 ## Types of errors
 
-- **False positive rate** (FPR): fraction of negative observations incorrectly classified as positive -- `r fpr` in our example
+- **False positive rate** (FPR): fraction of negative observations incorrectly classified as positive
+  
+  - $n_{0}$ = number of failures/negatives in data = $\text{FP} + \text{TN}$
 
-- **False negative rate** (FNR): fraction of positive observations incorrectly classified as negative example -- `r fnr` in our example
+  - $\text{FPR} = \frac{\text{FP}}{n_{0}}$
+
+- **False negative rate** (FNR): fraction of positive observations incorrectly classified as negative example 
+
+  - $n_{1}$ = number of success/positives in data = $\text{FN} + \text{TP}$
+
+  -  $\text{FNR} = \frac{\text{FN}}{n_{1}}$
+
+
+---
+
+## Heart disease data
+
+```{r}
+heart_df%>%
+  dplyr::select(pred, true) %>%
+  table() %>%
+  knitr::kable() %>%
+  add_header_above(header = c("Pred" =1, "True" = 2)) 
+```
+
+- What is the FNR? What is the FPR?
 
 --
 
-- Is a false positive or a false negative worse? In the heart data, maybe a false negative?
+  - FNR: `r heart_df %>% filter(true == 1, pred==0) %>% nrow()`/`r n1` = `r fpr`
 
 --
 
-- This table was produced by classifying an observation at $\color{blue}{\text{heart disease}}$ if $\hat{Pr}(\color{blue}{\text{heart disease}} | \color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}) \geq 0.5$
+  - FPR: `r heart_df %>% filter(true == 0, pred==1) %>% nrow()`/`r n0` = `r fnr` 
+
+---
+
+## Threshold
+
+- Is a false positive or a false negative worse? Depends on the context!
+
+  - In the heart data, maybe a false negative?
+
+--
+
+- The confusion matrix was produced by classifying an observation at $\color{blue}{\text{heart disease}}$ if $\hat{Pr}(\color{blue}{\text{heart disease}} | \color{blue}{\text{age}}, \color{blue}{\text{sex}}, \color{blue}{\text{chest pain}}) \geq 0.5$
 
   - Here, 0.5 is the threshold for assigning an observation to $\color{blue}{\text{heart disease}}$ class
   
@@ -583,11 +625,35 @@ ggroc(heart_roc)+
 
 ---
 
+## Note
+
+- Within the umbrella of classification, logistic regression is a **discriminative** model
+
+  - Given my predictors $X$, what is my predicted probability for $Y$?
+  
+  - Estimates the parameters of $p(X) = \text{Pr}(Y = 1|X)$ directly from the data
+  
+  - Learns the boundary between classes
+
+--
+
+- This is contrast to a **generative model** (as we'll see next)
+
+  - Does not learn $\text{Pr}(Y = 1|X)$ directly
+  
+  - Helps you understand how the data were generated 
+  
+  - Learns the distribution of each of the classes
+
+---
+
 ## Summary
 
 - Logistic regression is very commonly used when $K=2$
 
 - Does poorly in certain scenarios
+
+  - Remember: the model is linear in the log-odds of success. If this linear assumption is not actually true, model will perform poorly
 
 ---
 
@@ -599,7 +665,7 @@ class: middle, center
 
 ## Alternative: softmax
 
-- Alternative encoding: **softmax**
+- Alternative encoding to logistic regression is known as **softmax**
 
   - Easily extends to $K > 2$ classes (*multinomial* regression)
 
