@@ -31,9 +31,9 @@ summary(mod)
 
 a) Write down the fitted logistic regression model based on this summary output from R.
 
-b) Interpret the coefficients $\hat{\beta}_{0}$, $\hat{\beta}_{1}$, and $\hat{\beta}_{2}$.
+b) Interpret all the coefficients.
 
-c) Given that someone has an ulcer and the melanoma tumour has a thickness of 10mm, what is their probability of dying from melanoma?
+c) Given that someone has an ulcer and the melanoma tumour has a thickness of 10mm, what is their estimated probability of dying from melanoma?
 
 d) The following displays the contingency table for predictions on the training data using the model. Obtain the following three rates: overall error rate, false positive rate, and false negative rate.
 
@@ -43,6 +43,8 @@ preds <- rep(0, nrow(melanoma))
 preds[which(pred_probs >= 0.5)] <- 1
 table(pred = preds, truth = melanoma$status) 
 ```
+
+e) From your answer in (d), interpret the kinds of errors our model makes, in the context of this problem. If you were a patient, would this worry you? Why or why not?
 
 ### Exercise 2
 
@@ -72,7 +74,7 @@ data.frame(probs = probs, age = rep(age_seq, 3),  class = rep(1:3, each = 71)) %
   mutate(class = factor(class)) %>%
   # mutate(probs = odds/(1+odds)) %>%
   ggplot(., aes(x = age , y = probs, col = class))+
-  geom_line()+
+  geom_line(size = 1.2)+
   guides(col = "none")+
   labs(x = "Age (years)", y = "Probability of surviving") +
   theme(text =element_text(size = 14)) +
@@ -87,7 +89,7 @@ b) Based on your decision in (a), approximately how old would someone in third c
 ### Exercise 3
 
 Recall that the Naive Bayes classifier assumes that the $p$ features are independent, i.e.
-$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p})$. For categorical predictors, an estimate for each of the $f_{kj}$ is simply the proportion of training observations for the $j$-th predictor corresponding to each class $k$.
+$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p})$. For categorical predictors, an estimate for each of the $f_{kj}$ is simply the proportion of training observations for the $j$-th predictor corresponding to each class $k$. So for a given predictor $j$, the $\sum_{k=1}^{K} f_{kj} = 1$.
 
 Assume in this problem that we have $n = 200$ training observations with $p=2$ features ($X_{1}$ and $X_{2}$), and the response has $K=3$ possible classes. Further, assume that $X_{1}$ and $X_{2}$ are both qualitative, where $X_{1}$ has three levels and $X_{2}$ has two levels. 
 
@@ -109,13 +111,14 @@ table(X2,Y)
 
 a) What are the number of observations within each class of $Y$? Call them $n_{1}, n_{2}, n_{3}$. 
 
-b) Using your answer from (a), what are $f_{kj}(x_{j})$ for $k = 1, 2, 3$ and $j = 1,2$?
+b) Using your answer from (a), what are your estimates for the marginal class probabilities? Call them $\hat{\pi}_{1}, \hat{\pi}_{2}, \hat{\pi}_{3}$. 
+
+c) What are $f_{kj}(x_{j})$ for $k = 1, 2, 3$ and $j = 1,2$? For clarity, write these as $f_{Y =1, X1=brown}$, $f_{Y =2,X1 = brown}$, $f_{Y =3,X1 = brown}$, etc. You should have 15 quantities in total.
 
 
-c) Assume that $\hat{\pi}_{1} = 0.3$,  $\hat{\pi}_{2} = 0.3$, and $\hat{\pi}_{3} = 0.4$.
-Suppose that we wish to classify a new observation $x^{∗} = (\text{red},\text{ground})'$. Under the Naive Bayes classifier, calculate $\text{Pr}(Y = k | X = x^{*})$ for each $k$. Based on your answer, what would you classify this new observation as?
+d) Suppose that we wish to classify a new observation $x^{∗} = (x_{1}^{*},x_{2}^{*}) = (\text{red},\text{ground})$. Under the Naive Bayes classifier with your estimates from (b) and (c), calculate $\text{Pr}(Y = k | X = x^{*})$ for each $k$. Based on your answer, what would you classify this new observation as and why?
 
-d) Now let's say that our new observation is  $x^{∗} = (\text{green},\text{ground})'$. For this new observation, what would $\text{Pr}(Y = k | X = x^{*})$ be for each $k = 1,2,3$, and why? This is known as the *zero-frequency* problem. 
+e) Now let's say that our new observation is  $x^{∗} =  (x_{1}^{*},x_{2}^{*})= (\text{green},\text{ground})$. For this new observation, what would $\text{Pr}(Y = k | X = x^{*})$ be for each $k = 1,2,3$, and why? This is known as the *zero-frequency* problem. 
 
 
 ### Exercise 4
@@ -155,6 +158,12 @@ e)  Now suppose that we wish to make a prediction for a test observation by crea
 <!-- \log\left(\frac{\pi_{k}f_{k}(x)}{\pi_{K}f_{K}(x)}\right) \\ -->
 <!-- &= \log\left(\frac{\pi_{k}\exp\{-\frac{1}{2\sigma^2}(x - \mu_{k})^2\}}{\pi_{K}\exp\{-\frac{1}{2\sigma^2}(x - \mu_{K})^2\}}\right)  -->
 <!-- \end{align*} -->
+
+### Exercise 5
+
+a) Based on your group discussion, write your version of pseudo-code for implementing KNN *regression*. If you'd like, you may assume there are no ties in distances and that we will only consider quantitative predictors. 
+
+b) Based on your group discussion, write your version of pseudo-code for implementing KNN *classification*. If you'd like, you may assume there are no ties in distances nor in classes, and that we will only consider quantitative predictors.
 
 
 ### BONUS (each part is worth extra points)

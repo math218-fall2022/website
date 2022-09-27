@@ -67,7 +67,7 @@ seeds %>%
 
 - The *multiplication rule of independent events* in probability: if two events $A$ and $B$ are independent, then the probability of them both occurring at the same time is equal to the product of the individual probabilities
 
-  - $\text{Pr}(A \text{ and } B) = \text{Pr}(A, B) =  \text{Pr}(A) \times \text{Pr}(B)$
+  - $\text{Pr}(A \text{ and } B) = \text{Pr}(A, B) =  \text{Pr}(A) \times \text{Pr}(B)$ (assuming independence)
 
 - The *conditional probability* is the probability of an event occurring, given that another event has already occurred
 
@@ -79,7 +79,7 @@ seeds %>%
 - Assume that we have two independent, fair, six-sided dice. What are:
   
   - $\text{Pr}(X_{1} = 1, X_{2} = 4)$?
-  - $\text{Pr}(X_{1} \text{ and } X_{2} \text{ are even})$?
+  - $\text{Pr}(X_{1} \text{ even}, X_{2} \text{ even})$?
 
 - Focusing on just the first die, what are:
 
@@ -104,10 +104,11 @@ class: center, middle
 
 - I pull out a coin from random and flip it a bunch of times. Then repeat for a total of 7 iterations.  At each iteration, I record the following information:
 
-  - Which coin?
+  - The coin ($C_{1}$ or $C_{2}$)
   
   - Order of heads and tails (Heads = 0, Tails = 1)
   
+--
 
 $$
 \begin{align*}
@@ -126,21 +127,23 @@ $$
 
 - Now you tell me that the next coin flip resulted in $\text{0 0 1}$. Did it come from $C_{1}$ or $C_{2}$?
 
+  - Classification problem
+
 --
 
-- Let each coin flip be a covariate (specifically, an indicator)
+- Let each coin flip be a predictor (specifically, an indicator)
 
   - e.g. $X_{1} = 1$ if the first coin flip is a 1, and $X_{1} = 0$ otherwise
 
-- Writing $X = (X_{1}, X_{2}, X_{3})$, we want to know $\text{Pr}(C_{1} | X = (\text{0 0 1}))$
+- Writing $X = (X_{1} \ X_{2} \ X_{3})$, we want to know $\text{Pr}(C_{1} | X = (\text{0 0 1}))$
 
 --
 
 - This classification problem is challenging because
 
-  - Different number of covariates for each observation
+  - Different number of predictors (flips) for each observation
   
-  - Number of covariates can be large
+  - Number of predictors can be large
   
 --
 
@@ -158,7 +161,7 @@ $$
 
 --
 
-- Now let's consider the values of the flips. Given that we are using coin $C_{1}$, what did you observe
+- Now let's consider the values of the flips. Given that we are using coin $C_{1}$, what did you observe for:
 
   - $\text{Pr}(X_{1} = 1 |C_{1})$?
 
@@ -168,9 +171,9 @@ $$
 
 ## Motivating example cont.
 
-- Assume that given a coin, the results from the flips are independent
+- Assume that given a coin, the results from the flips are independent:
 
-- $\text{Pr}(X = (\text{0 0 1}) | C_{1}) = \text{Pr}(X_{1} = 0 | C_{1}) \text{Pr}(X_{2} = 0 | C_{1})\text{Pr}(X_{3} = 1 | C_{1})$
+$$\text{Pr}(X = (\text{0 0 1}) | C_{1}) = \text{Pr}(X_{1} = 0 | C_{1}) \text{Pr}(X_{2} = 0 | C_{1})\text{Pr}(X_{3} = 1 | C_{1})$$
 
 --
 
@@ -178,9 +181,9 @@ $$
 
   - $\text{Pr}(C_{1})$, $\text{Pr}(C_{2})$
   
-  - $\text{Pr}(\text{flips} | C_{1})$, $\text{Pr}(\text{flips} | C_{2})$
+  - $\text{Pr}(X| C_{1})$, $\text{Pr}(X | C_{2})$
 
-- But we want $\text{Pr}(C_{1} | \text{flips})$. How can we use these quantities to estimate this probability?
+- But we want $\text{Pr}(C_{1} | X)$. How can we use these quantities to estimate this probability?
 
 ---
 
@@ -193,18 +196,23 @@ $$
 $$\text{Pr}(A|B) = \frac{\text{Pr}(B|A)\text{Pr}(A)}{\text{Pr}(B)}$$
 --
 
-- Letting $A$ be the event of coin $C_{1}$ and $B$ the $\text{flips}$:
+- Letting $A$ be the event of coin $C_{1}$ and $B$ the $X$:
 
 
 $$
 \begin{align*}
-\text{Pr}(C_{1}| \text{flips}) &= \frac{\text{Pr}(\text{flips} | C_{1}) \text{Pr}(C_{1})}{\text{Pr}(\text{flips})} \\
-&= \frac{\text{Pr}(\text{flips} | C_{1}) \text{Pr}(C_{1})}{\sum_{j=1}^{2} \text{Pr}(\text{flips} | C_{j})\text{Pr}(C_{j})} \\
-&= \frac{\text{Pr}(\text{flips} | C_{1}) \text{Pr}(C_{1})}{\text{Pr}(\text{flips} | C_{1}) \text{Pr}(C_{1}) + \text{Pr}(\text{flips} | C_{2}) \text{Pr}(C_{2})} 
+\text{Pr}(C_{1}| X) &= \frac{\text{Pr}(X | C_{1}) \text{Pr}(C_{1})}{\text{Pr}(X)} \\
+&= \frac{\text{Pr}(X | C_{1}) \text{Pr}(C_{1})}{\sum_{k=1}^{K} \text{Pr}(X | C_{k})\text{Pr}(C_{k})} \\
+&= \frac{\text{Pr}(X | C_{1}) \text{Pr}(C_{1})}{\text{Pr}(X | C_{1}) \text{Pr}(C_{1}) + \text{Pr}(X | C_{2}) \text{Pr}(C_{2})} 
 \end{align*}
 $$
 
+--
+
+- Returning to our question: given coin flips of $X = \text{ 0 0 1}$, did it come from coin $C_{1}$ or $C_{2}$?
+
 ---
+
 ## Bayes theorem
 
 - Return to general setting with $K$ possible class labels for $Y$
@@ -243,15 +251,23 @@ $$
 
 - With $p$ predictors, $f_{k}(x)$ is $p$-dimensional distribution
 
-- **Naive Bayes** is a non-parametric method for classification tasks
+- **Naive Bayes** is a non-parametric method for classification tasks 
 
-- Under naive Bayes, we do not assume a specific family of distribution. Instead, assume that within class $k$, the $p$ predictors are independent:
+  - Uses the previous formula to classify
+  
+  - Does not assume a specific distribution for $f_{k}(x)$. Instead, assumes that within class $k$, the $p$ predictors are independent:
 
 $$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p}) = \prod_{j=1}^{p}f_{kj}(x_{j})$$
 
 --
 
-- Useful when $p$ is large
+  - Like in the coin flip example, flips (covariates) $X_{1}, X_{2}, \ldots$ were independent given the coin
+  
+  - Useful when $p$ is large
+  
+  --
+  
+  - We get to decide each $f_{kj}(x)$
 
 
 ---
@@ -281,7 +297,7 @@ $$Pr(Y=k| X =x) = \frac{\pi_{k}(x) f_{k}(x)}{\sum_{l=1}^{K} \pi_{l}(x) f_{l}(x)}
   
 --
 
-$$ \hat{\pi}_{k}(x) = \frac{n_{k}}{n}$$
+$$\hat{\pi}_{k}(x) = \frac{n_{k}}{n}$$
 
 
 
@@ -298,17 +314,13 @@ $$(X_{j} | Y = k ) \sim N(\mu_{jk}, \sigma^2_{jk})$$
   
 --
 
-- If $X_{j}$ is quantitative, then another option is to use a non-parametric estimate for $f_{kj}$
-
---
-
 - If $X_{j}$ is qualitative,  then we can simply count the proportion of training observations for the $j$-th predictor corresponding to each class $k$
 
 ---
 
 ## Normal distribution
 
-- Recall that normal distribution is symmetric, bell-shaped curve 
+- Recall that normal distribution is symmetric, bell-shaped curve. Also called the **Gaussian** distribution
 
 - Two parameters:
 
