@@ -1,0 +1,553 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Naive Bayes"
+date: "9/28/2022"
+output: 
+   xaringan::moon_reader:
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F,
+                      fig.align = "center", fig.width = 5, fig.height = 5)
+
+library(tidyverse)
+library(broom)
+library(ISLR)
+library(nnet)
+library(MASS)
+library(mvtnorm)
+library(mnormt)
+library(pROC)
+library(kableExtra)
+set.seed(1)
+heart<- read.table("data/heart_cleveland.txt", header = T, sep = ",") %>% 
+  mutate(cp = as.factor(cp),
+         sex = ifelse(sex == 1, "M", "F"),
+         target = ifelse(target == 0,0, 1))
+seeds <- read.table("data/seeds_dataset.txt", header = T) %>%
+  mutate(variety= case_when(variety == 1~ "Kama",
+                          variety == 2 ~ "Rosa",
+                          T ~ "Canadian"))
+```
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+
+## Seeds data
+
+- Data come from UCI Machine Learning Repository 
+
+- Measurements of geometrical properties of kernels belonging to three different varieties of wheat
+
+```{r fig.align ="center", fig.height=5, fig.width=8}
+seeds %>%
+  ggplot(., aes(x = variety, y = area))+
+  geom_boxplot() +
+  theme(text =element_text(size = 20)) 
+
+```
+
+* Ask me about seed banks
+---
+
+## Probability crash-course!
+
+- The *multiplication rule of independent events* in probability: if two events $A$ and $B$ are independent, then the probability of them both occurring at the same time is equal to the product of the individual probabilities
+
+  - $\text{Pr}(A \text{ and } B) = \text{Pr}(A, B) =  \text{Pr}(A) \times \text{Pr}(B)$ (assuming independence)
+
+- The *conditional probability* is the probability of an event occurring, given that another event has already occurred
+
+  - $\text{Pr}(A | B)$, read as "probability of $A$ given $B$"
+---
+
+## Discuss!
+
+- Assume that we have two independent, fair, six-sided dice. What are:
+  
+  - $\text{Pr}(X_{1} = 1, X_{2} = 4)$?
+  - $\text{Pr}(X_{1} \text{ even}, X_{2} \text{ even})$?
+
+- Focusing on just the first die, what are:
+
+  - $\text{Pr}(X_{1} = 1 | X_{1} \text{ is even})$?
+  
+  - $\text{Pr}(X_{1} = 1 | X_{1} \text{ is odd})$?
+  
+  - $\text{Pr}(X_{1} = \text{ is odd} | X_{1}  = 1)$?
+
+---
+
+
+class: center, middle
+
+# Naive Bayes
+
+---
+
+## Motivating example
+
+- Suppose I have two coins in my pocket, $C_{1}$ and $C_{2}$
+
+- I pull out a coin from random and flip it a bunch of times. Then repeat for a total of 7 iterations.  At each iteration, I record the following information:
+
+  - The coin ($C_{1}$ or $C_{2}$)
+  
+  - Order of heads and tails (Heads = 0, Tails = 1)
+  
+--
+
+$$
+\begin{align*}
+&C_{1}: \text{0 1 1 1 1} \\
+&C_{1}: \text{1 1 0} \\
+&C_{2}: \text{1 0 0 0 0 0 0 1} \\
+&C_{1}: \text{0 1} \\
+&C_{1}: \text{1 1 0 1 1 1} \\
+&C_{2}: \text{0 0 1 1 0 1} \\
+&C_{2}: \text{1 0 0 0 0} \\
+\end{align*}
+$$
+---
+
+## Motivating example
+
+- Now you tell me that the next coin flip resulted in $\text{0 0 1}$. Did it come from $C_{1}$ or $C_{2}$?
+
+  - Classification problem
+
+--
+
+- Let each coin flip be a predictor (specifically, an indicator)
+
+  - e.g. $X_{1} = 1$ if the first coin flip is a 1, and $X_{1} = 0$ otherwise
+
+- Writing $X = (X_{1} \ X_{2} \ X_{3})$, we want to know $\text{Pr}(C_{1} | X = (\text{0 0 1}))$
+
+--
+
+- This classification problem is challenging because
+
+  - Different number of predictors (flips) for each observation
+  
+  - Number of predictors can be large
+  
+--
+
+- Is there any structure at all? 
+
+---
+
+### Motivating example: discuss!
+
+- Based on our data, regardless of the sequence of flips, what did you observe for:
+
+  - $\text{Pr}(C_{1})$ 
+  
+  - $\text{Pr}(C_{2})$
+
+--
+
+- Now let's consider the values of the flips. Given that we are using coin $C_{1}$, what did you observe for:
+
+  - $\text{Pr}(X_{1} = 1 |C_{1})$?
+
+  - $\text{Pr}(X_{1} = 1 |C_{2})$?
+
+---
+
+## Motivating example cont.
+
+- Assume that given a coin, the results from the flips are independent:
+
+$$\text{Pr}(X = (\text{0 0 1}) | C_{1}) = \text{Pr}(X_{1} = 0 | C_{1}) \text{Pr}(X_{2} = 0 | C_{1})\text{Pr}(X_{3} = 1 | C_{1})$$
+
+--
+
+- In summary, we have the following info:
+
+  - $\text{Pr}(C_{1})$, $\text{Pr}(C_{2})$
+  
+  - $\text{Pr}(X| C_{1})$, $\text{Pr}(X | C_{2})$
+
+- But we want $\text{Pr}(C_{1} | X)$. How can we use these quantities to estimate this probability?
+
+---
+
+
+## Bayes theorem
+
+
+- For events $A$ and $B$: 
+
+$$\text{Pr}(A|B) = \frac{\text{Pr}(B|A)\text{Pr}(A)}{\text{Pr}(B)}$$
+--
+
+- Letting $A$ be the event of coin $C_{1}$ and $B$ the $X$:
+
+
+$$
+\begin{align*}
+\text{Pr}(C_{1}| X) &= \frac{\text{Pr}(X | C_{1}) \text{Pr}(C_{1})}{\text{Pr}(X)} \\
+&= \frac{\text{Pr}(X | C_{1}) \text{Pr}(C_{1})}{\sum_{k=1}^{K} \text{Pr}(X | C_{k})\text{Pr}(C_{k})} \\
+&= \frac{\text{Pr}(X | C_{1}) \text{Pr}(C_{1})}{\text{Pr}(X | C_{1}) \text{Pr}(C_{1}) + \text{Pr}(X | C_{2}) \text{Pr}(C_{2})} 
+\end{align*}
+$$
+
+--
+
+- Returning to our question: given coin flips of $X = \text{ 0 0 1}$, did it come from coin $C_{1}$ or $C_{2}$?
+
+---
+
+## Bayes theorem
+
+- Return to general setting with $K$ possible class labels for $Y$
+
+- We observe some data $X$
+
+- Want to obtain $\text{Pr}(Y = k | X)$. How? Using Bayes theorem
+
+$$
+\begin{align*}
+\text{Pr}(Y = k | X) &= \frac{\text{Pr}(X | Y = k) \text{Pr}(Y = k)}{\text{Pr(X)}} \\
+&= \frac{\text{Pr}(X | Y = k) \text{Pr}(Y = k)}{\text{Pr(X | Y = 1)}\text{Pr}(Y = 1) + \ldots + \text{Pr(X | Y = K)}\text{Pr}(Y = K)} 
+\end{align*}
+$$
+---
+
+## Notation
+
+- For remaining slides, let
+
+  - $\pi_{k}(x) = Pr(Y = k)$ is marginal or **prior** probability for class $k$
+  - $f_{k}(x) = Pr(X = x | Y =k)$ is the **density** for $X$ in class $k$
+  
+  $$Pr(Y=k| X =x) = \frac{\pi_{k}(x) f_{k}(x)}{\sum_{l=1}^{K} \pi_{l}(x) f_{l}(x)}$$
+
+--
+
+- Recall Bayes classifier: classifies an observation $x$ to the class for which $p_{k}(x) = Pr(Y = k |X=x)$ is largest
+  
+  - Will need to estimate the $f_{k}(x)$ to approximate Bayes classifier
+
+
+---
+
+## Naive Bayes
+
+- With $p$ predictors, $f_{k}(x)$ is $p$-dimensional distribution
+
+- **Naive Bayes** is a non-parametric method for classification tasks 
+
+  - Uses the previous formula to classify
+  
+  - Does not assume a specific distribution for $f_{k}(x)$. Instead, assumes that within class $k$, the $p$ predictors are independent:
+
+$$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p}) = \prod_{j=1}^{p}f_{kj}(x_{j})$$
+
+--
+
+  - Like in the coin flip example, flips (covariates) $X_{1}, X_{2}, \ldots$ were independent given the coin
+  
+  - Useful when $p$ is large
+  
+  --
+  
+  - We get to decide each $f_{kj}(x)$
+
+
+---
+
+## Naive Bayes
+
+- Once we have made the naive Bayes assumption, we just plug into the equation
+
+$$Pr(Y=k| X =x) = \frac{\pi_{k}(x) f_{k}(x)}{\sum_{l=1}^{K} \pi_{l}(x) f_{l}(x)}$$
+- Will need to estimate the marginal probabilities $\pi_{k}(x)$ and the one-dimensional density function $f_{kj}(x)$ using training data
+
+- How do we estimate the one-dimensional density function $f_{kj}(x)$ using training data? 
+
+- First, note that we will only use the $j$-th predictor $x_{1j}, x_{2j}, \ldots, x_{nj}$ to estimate $f_{kj}(x)$
+
+---
+
+## Estimating marginal probs
+
+- We can estimate the $\pi_{k}(x)$ as follows. Let:
+
+  - $n$ be the total number of observations
+  
+  - $n_{k}$ be the number of observations where $Y = k$
+  
+    - Then $\sum_{k=1}^{K} n_{k} = n$
+  
+--
+
+$$\hat{\pi}_{k}(x) = \frac{n_{k}}{n}$$
+
+
+
+---
+
+## Estimating density function
+
+
+- If $X_{j}$ is quantitative, we often assume that 
+
+$$(X_{j} | Y = k ) \sim N(\mu_{jk}, \sigma^2_{jk})$$
+
+  $\quad$ - i.e. within each class $k$, the $j$-th predictor is drawn from a normal distribution with mean and variance $\mu_{jk},  \sigma^2_{jk}$ specific to the class and predictor
+  
+--
+
+- If $X_{j}$ is qualitative,  then we can simply count the proportion of training observations for the $j$-th predictor corresponding to each class $k$
+
+---
+
+## Normal distribution
+
+- Recall that normal distribution is symmetric, bell-shaped curve. Also called the **Gaussian** distribution
+
+- Two parameters:
+
+  - Mean $\mu$ denotes center of the distribution
+  
+  - Variance $\sigma^2$ explains the spread of the distribution
+  
+--
+
+- We say $X \sim N(\mu, \sigma^2)$ if $f(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x- \mu)^2\right\}$
+
+  - In `R`, the function `dnorm()` automatically evaluates this function for us!
+---
+
+## Gaussian naive Bayes
+
+If we assume that the quantitative $X_{j}$ have a normal distribution $f_{kj} = N(\mu_{kj}, \sigma^{2}_{kj})$, then we use the following estimates:
+
+$$  
+\begin{align*}
+\hat{\mu}_{jk} &= \frac{1}{n_{k}} \sum_{i:y_{i}= k} x_{ij} \\
+\hat{\sigma}^{2}_{jk} &= \frac{1}{n_{k} - 1} \sum_{i:y_{i} = k}(x_{ij} - \hat{\mu}_{jk})^2
+\end{align*}
+$$
+
+
+---
+
+### Example 1: easy
+
+```{r}
+n <- 30
+mu1 <- -1; mu2 <- 3
+sd1 <- 0.5; sd2 <- 1
+pi1 <- 0.7; pi2 <- 1 - pi1
+```
+
+- Simulated $n= `r n`$ data points belonging to one of $K = 2$ classes with a single quantitative predictor $x$ according to the following:
+
+  - $f_{1}(x) = N(`r mu1`, `r sd1^2`)$
+
+  - $f_{2}(x) = N(`r mu2`, `r sd2^2`)$
+  
+  - $\pi_{1} = `r pi1`$
+  
+  - $\pi_{2} = `r 1- pi1`$
+
+--
+
+- In the following slide, red is class 1 and blue is class 2
+---
+
+### Example 1
+
+```{r fig.width=8, fig.height=5}
+set.seed(4)
+n1 <- rbinom(1,n,pi1); n2 <-n-n1
+x1 <- rnorm(n1,mu1,sd1); x2 <-  rnorm(n2,mu2,sd2)
+nb_dat <- data.frame(x = c(x1,x2),
+           class = c(rep("1",n1), rep("2",n2)))
+nb_dat %>%
+  ggplot(.,aes(x = x, fill = class))+
+  geom_histogram(bins = 10, alpha = 0.5, position = "identity")+
+  theme(text = element_text(size = 20))
+
+```
+
+---
+
+### Example 1
+
+True and estimated posterior probabilities of Class 1, along with predictor $x$ and true class label
+
+```{r}
+mu1_hat <- mean(x1); mu2_hat <- mean(x2)
+sd1_hat <- sd(x1); sd2_hat <- sd(x2)
+pi1_hat <- n1/n; pi2_hat <- n2/n
+
+nb_prob <- function(x, mu_vec, sd_vec, pi_vec){
+  probs <- pi_vec*dnorm(x, mu_vec,sd_vec)
+  post_probs <- probs/sum(probs)
+  pred_class <- which(probs == max(probs))
+  return(list(class = pred_class, post_probs = post_probs))
+}
+
+probs_mat <- matrix(NA, nrow = n, ncol = 2)
+x_all <- c(x1,x2)
+for(i in 1:n){
+  # probabilities of class 1
+  probs_mat[i,1] <- (nb_prob(x_all[i], c(mu1,mu2), c(sd1, sd2), c(pi1,pi2))$post_probs)[1]
+  probs_mat[i,2] <- (nb_prob(x_all[i], c(mu1_hat, mu2_hat), c(sd1_hat, sd2_hat), c(pi1_hat,pi2_hat))$post_probs)[1]
+}
+
+DT::datatable(data.frame(probs_mat) %>%
+  rename("true_prob" = 1, "pred_prob" = 2) %>%
+  add_column(x = x_all) %>%
+  add_column(true_class = c(rep(1, n1), rep(2,n2))) %>%
+    mutate(true_class = factor(true_class)) %>%
+  mutate_if(is.double, round, 3) %>%
+  arrange(x), 
+  options = list(pageLength = 5))
+```
+
+---
+
+### Example 2: more challenging
+
+```{r}
+n <- 30
+mu1 <- -1; mu2 <- 2; mu3 <- 0
+sd1 <- 0.5; sd2 <- 1; sd3 <- 0.75
+pi1 <- pi2 <- pi3 <- 1/3
+```
+
+- Simulated $n= `r n`$ data points belonging to one of $K = 3$ classes with a single quantitative predictor $x$ according to the following:
+
+  - $f_{1}(x) = N(`r mu1`, `r sd1^2`)$
+
+  - $f_{2}(x) = N(`r mu2`, `r sd2^2`)$
+  
+  - $f_{3}(x) = N(`r mu3`, `r sd3^2`)$
+  
+  - $\pi_{1} = `r pi1`$
+  
+  - $\pi_{2} = `r pi2`$
+  
+  - $\pi_{3} = `r pi3`$
+  
+---
+
+## Example 2
+
+```{r fig.width=8, fig.height=5}
+set.seed(5)
+K <- 3
+classes <- rmultinom(n, 1, prob = c(pi1,pi2,pi3))
+n1 <- rowSums(classes)[1]
+n2 <- rowSums(classes)[2]
+n3 <- rowSums(classes)[3]
+x1 <- rnorm(n1,mu1,sd1); x2 <-  rnorm(n2,mu2,sd2); x3 <- rnorm(n3, mu3, sd3)
+nb_dat <- data.frame(x = c(x1,x2, x3),
+           class = c(rep("1",n1), rep("2",n2), rep("3", n3)))
+nb_dat %>%
+  ggplot(.,aes(x = x, fill = class))+
+  geom_histogram(bins = 10, alpha = 0.5, position = "identity")+
+  theme(text = element_text(size = 20))
+
+```
+
+---
+
+### Example 2
+
+True and estimated posterior probabilities of Classes A and B, along with predictor $x$ and true class label
+
+```{r}
+mu1_hat <- mean(x1); mu2_hat <- mean(x2); mu3_hat <- mean(x3)
+sd1_hat <- sd(x1); sd2_hat <- sd(x2); sd3_hat <- sd(x3)
+pi1_hat <- n1/n; pi2_hat <- n2/n; pi3_hat <- n3/n
+
+probs_mat <- matrix(NA, nrow = n, ncol = 4)
+x_all <- c(x1,x2,x3)
+for(i in 1:n){
+  # probabilities of class 1
+  probs_mat[i,1:2] <- (nb_prob(x_all[i], c(mu1,mu2, mu3), c(sd1, sd2, sd3), c(pi1,pi2, pi3))$post_probs)[1:2]
+  probs_mat[i,3:4] <- (nb_prob(x_all[i], c(mu1_hat, mu2_hat, mu3_hat), c(sd1_hat, sd2_hat, sd3_hat), c(pi1_hat,pi2_hat, pi3_hat))$post_probs)[1:2]
+}
+
+DT::datatable(data.frame(probs_mat) %>%
+  rename("true_probA" = 1, "true_probB" = 2, "pred_probA" = 3, "pred_probB" = 4) %>%
+  dplyr::select(true_probA, pred_probA, true_probB, pred_probB ) %>%
+  add_column(x = x_all) %>%
+  add_column(true_class = c(rep("A", n1), rep("B",n2), rep("C", n3))) %>%
+    mutate(true_class = factor(true_class)) %>%
+  mutate_if(is.double, round, 3) %>%
+  arrange(x), 
+  options = list(pageLength = 5))
+```
+
+---
+
+## Seeds data
+
+*Contingency table* of predicted (rows) vs true (columns) seed variety using naive Bayes with $\color{blue}{\text{area}}$ and $\color{blue}{\text{perimeter}}$ as predictors:
+
+```{r}
+library(e1071)
+nb_mod <- naiveBayes(variety ~ area + perimeter, data = seeds)
+table(predict(nb_mod, seeds), seeds$variety)
+```
+
+---
+
+class: middle, center
+
+## Your turn!
+
+---
+
+
+## Discriminative vs Generative
+
+- Discriminative models draw boundaries in the data space
+  
+  - Focuses on predicting the labels of the data
+
+- Generative models try to model how data is placed throughout the space
+
+  - Focuses on explaining how the data was generated, while a discriminative model 
+---
+
+## Summary
+
+- Both logistic regression and Naive Bayes are linear classifiers
+
+- Logistic regression (discriminative)
+
+  - Very commonly used when $K=2$
+  
+  - Makes prediction for probability using a direct functional form that relates $X$ to $Y$
+
+- Naive Bayes ("generative")
+
+  - Assumption of conditional independence in features usually not true, but still works great
+  
+  - Figures out how data were generated given the results 
+  
+  - Doesn't tell you how the predictors relate to the response
+
+  - Useful when $p$ very large
