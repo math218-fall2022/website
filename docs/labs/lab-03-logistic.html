@@ -465,7 +465,7 @@ font-size: 10pt;
 
 <h1 class="title toc-ignore">Lab 03 - Logistic Regression, Naive Bayes,
 and KNN</h1>
-<h3 class="subtitle">due ? at 11:59pm</h3>
+<h3 class="subtitle">due Sunday, 10/03 at 11:59pm</h3>
 
 
 <div id="TOC">
@@ -602,10 +602,13 @@ each command is doing?</span></span></p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>glm_pred <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">&quot;no fracture&quot;</span>, <span class="fu">nrow</span>(bmd_dat))</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>glm_pred[glm_probs <span class="sc">&gt;=</span> <span class="fl">0.5</span>] <span class="ot">&lt;-</span> <span class="st">&quot;fracture&quot;</span></span></code></pre></div>
 <p>Given these predictions, the <code>table()</code> function can be
-used to produce a confusion matrix in order to determine how many
-observations were correctly or incorrectly classified. It takes the
-predictions as the first argument, and the true values as the second
-argument.</p>
+used to produce a <strong>confusion matrix</strong> in order to
+determine how many observations were correctly or incorrectly
+classified. It takes two arguments: the variable for the rows, and the
+variable for the columns. In this example, the rows will be our
+predictions <code>glm_pred</code>, so we name them <code>pred</code>.
+The columns will be the true status, which we name
+<code>truth</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>glm_pred <span class="ot">&lt;-</span> <span class="fu">factor</span>(glm_pred, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;no fracture&quot;</span>, <span class="st">&quot;fracture&quot;</span>) )</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="at">pred =</span> glm_pred, <span class="at">truth =</span> bmd_dat<span class="sc">$</span>status)</span></code></pre></div>
 <pre><code>##              truth
@@ -615,13 +618,16 @@ argument.</p>
 <p>The diagonal elements of the confusion matrix indicate correct
 predictions, while the off-diagonals represent incorrect predictions.
 Our model correctly predicted 110 patients with no fractures and 34 with
-a fracture. We can compute the fraction of days for which the prediction
-was correct:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(glm_pred <span class="sc">==</span> bmd_dat<span class="sc">$</span>status)</span></code></pre></div>
-<pre><code>## [1] 0.852071</code></pre>
+a fracture. We can easily compute the misclassification rate:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(glm_pred <span class="sc">!=</span> bmd_dat<span class="sc">$</span>status)</span></code></pre></div>
+<pre><code>## [1] 0.147929</code></pre>
 <p>The false negative rate is the proportion of responses with true
 fracture that were predicted to be no fracture. Here is one way to get
 the false negative rate:</p>
+<p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;">The <code>pull()</code>
+function is pretty useful! Instead of returning a data frame after the
+pipline, it returns to you a vector (or number) version of the specified
+variable</span></span></p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">pred =</span> glm_pred , <span class="at">true =</span> bmd_dat<span class="sc">$</span>status) <span class="sc">%&gt;%</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(true <span class="sc">==</span> <span class="st">&quot;fracture&quot;</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">fnr =</span> <span class="fu">mean</span>(pred <span class="sc">!=</span> true)) <span class="sc">%&gt;%</span></span>
@@ -662,16 +668,18 @@ just as we did in <code>lm()</code>.</p>
 ##   fracture    0.6233080 0.1022189
 ##   no fracture 0.8502454 0.1406336</code></pre>
 <p>The output contains the estimated mean and standard deviation for
-<code>bmd</code> in each class. For example, the mean <code>bmd</code>
-for those with <code>fracture</code> is 0.623, and the standard
-deviation of <code>bmd</code> for this group is 0.102.</p>
-<p><label for="tufte-mn-3" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-3" class="margin-toggle"><span class="marginnote"><span style="display: block;">Note that
+<code>bmd</code> in each class, as <code>bmd</code> is a
+continuous/quantitative predictor. For example, the mean
+<code>bmd</code> for those with <code>fracture</code> is 0.623, and the
+standard deviation of <code>bmd</code> for this group is 0.102.</p>
+<p><label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote"><span style="display: block;">Note that
 <code>predict()</code> for a Naive Bayes model defaults to outputting
 the predicted class. If we wanted estimates of the probabilities, we
 would need to pass in the argument <code>type = “raw”</code> into the
 function as well.</span></span></p>
-<p>The <code>predict()</code> function is straightforward.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>nb_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(nb_mod, bmd_dat)</span></code></pre></div>
+<p>The <code>predict()</code> function is straightforward:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>nb_preds <span class="ot">&lt;-</span> <span class="fu">predict</span>(nb_mod, bmd_dat)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>nbs_probs <span class="ot">&lt;-</span> <span class="fu">predict</span>(nb_mod, bmd_dat, <span class="at">type =</span> <span class="st">&quot;raw&quot;</span>)</span></code></pre></div>
 </div>
 <div id="k-nearest-neighbors-classification" class="section level1">
 <h1>K-Nearest Neighbors Classification</h1>
@@ -683,27 +691,34 @@ fit the model and then we use the model to make predictions,
 <code>knn()</code> forms predictions using a single command. The
 function requires four inputs:</p>
 <ul>
-<li>A matrix or data frame containing the predictors associated with the
-training data, labeled <code>X_train</code> below.</li>
-<li>A matrix or data frame containing the predictors associated with the
-data for which we wish to make predictions, labeled <code>X_test</code>
+<li><code>train</code>: A matrix or data frame containing the predictors
+associated with the training data, labeled <code>X_train</code>
 below.</li>
-<li>A vector containing the class labels for the training observations,
-labeled <code>class_train</code> below.</li>
-<li>A value for <span class="math inline">\(k\)</span>, the number of
-nearest neighbors to be used by the classifier.</li>
+<li><code>test</code>: A matrix or data frame containing the predictors
+associated with the data for which we wish to make predictions, labeled
+<code>X_test</code> below.</li>
+<li><code>cl</code>: A vector containing the class labels for the
+<em>training</em> observations, labeled <code>class_train</code>
+below.</li>
+<li><code>k</code>: A value for <span class="math inline">\(k\)</span>,
+the number of nearest neighbors to be used by the classifier.</li>
 </ul>
 <p>In KNN, it is often good practice to <strong>standardize the
 predictors</strong> so that all variables are given a mean of zero and a
 standard deviation of one. Then all predictors will be on a comparable
 scale. The <code>scale()</code> function does just this.</p>
+<p><label for="tufte-mn-5" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-5" class="margin-toggle"><span class="marginnote"><span style="display: block;">This
+<code>mutate_if()</code> functions says: for every numeric variable in
+<code>bmd_dat</code>, scale it and save over the original
+values.</span></span></p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>bmd_dat_scale <span class="ot">&lt;-</span> bmd_dat <span class="sc">%&gt;%</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.numeric,scale)</span></code></pre></div>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_if</span>(is.numeric, scale)</span></code></pre></div>
 <p>Here, I will illustrate the <code>knn()</code> function to obtain
 predictions for the full set of data (i.e. we do not have a test set). I
 will predict <code>status</code> using the predictors <code>bmd</code>
-and <code>age</code> with <span class="math inline">\(k =
-3\)</span>.</p>
+and <code>age</code> with <span class="math inline">\(k = 3\)</span>.
+Then I create a confusion matrix for the predictions obtained under
+KNN.</p>
 <p>We set a random seed before we apply <code>knn()</code> because if
 several observations are tied as nearest neighbors, then <code>R</code>
 will randomly break the tie. Therefore, a seed must be set in order to
@@ -727,8 +742,8 @@ ensure reproducibility of results.</p>
 includes several imaging details from patients that had a biopsy to test
 for breast cancer. The variable <code>diagnosis</code> classifies the
 biopsied tissue as <code>M</code> = malignant or <code>B</code> =
-benign. In addition, ten real-valued features are computed for each cell
-nucleus:</p>
+benign. In addition, ten real-valued features are computed for each
+cell:</p>
 <ul>
 <li><code>radius</code> (mean of distances from center to points on the
 perimeter)</li>
@@ -745,21 +760,23 @@ contour)</li>
 <li><code>fractal dimension</code> (“coastline approximation” - 1)</li>
 </ul>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>bdiag_dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/bdiag.csv&quot;</span>, <span class="at">stringsAsFactors =</span> T, <span class="at">header =</span> T)</span></code></pre></div>
-<p><label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote"><span style="display: block;">This
+<p><label for="tufte-mn-6" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-6" class="margin-toggle"><span class="marginnote"><span style="display: block;">This
 <code>pivot_longer()</code> function is extremely
 useful!</span></span></p>
 <ol style="list-style-type: lower-alpha">
 <li>Plot the distribution of the predictors (the code below will help
 you get started). Describe what you see.</li>
 </ol>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span>bdiag_dat <span class="sc">%&gt;%</span></span>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> bdiag_dat <span class="sc">%&gt;%</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>id) <span class="sc">%&gt;%</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>diagnosis, <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;value&quot;</span>) </span>
 <span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>plot_df <span class="sc">%&gt;%</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> _____ )) <span class="sc">+</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> _____ , <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="do">## take a look at the plot_df data frame by clicking on its name in the Environment</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>plot_df <span class="sc">%&gt;%</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(., <span class="fu">aes</span>(<span class="at">x =</span> _____ )) <span class="sc">+</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> _____ , <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
 <li><p>What proportion of patients in the dataset had a malignant
 biopsy?</p></li>
@@ -768,29 +785,31 @@ biopsy?</p></li>
 <code>symmetry</code>. Use the summary function to print the results. Do
 any of the predictors appear to be statistically significant? If so,
 which ones?</p></li>
-<li><p>From your fitted model in (c), compute the confusion matrix and
-overall fraction of correct predictions. Explain what the confusion
-matrix is telling you about the types of mistakes made by logistic
-regression.</p></li>
 </ol>
 <p>Now split the data into a 50% train set and a 50% test set using the
 following code. Remember to set <code>eval = T</code> before you
 knit.</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>)</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(bdiag_dat)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>train_ids <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="fl">0.5</span> <span class="sc">*</span> n) <span class="co"># randomly take 50% of indices as training</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>test_ids <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)[<span class="sc">-</span>train_ids] <span class="co"># the non-training ids are left for the test set</span></span></code></pre></div>
-<ol start="5" style="list-style-type: lower-alpha">
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>train_ids <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="fl">0.5</span> <span class="sc">*</span> n) <span class="co"># randomly take 50% of indices as training set</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>test_ids <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)[<span class="sc">-</span>train_ids] <span class="co"># the non-training ids are left for the test set</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>bdiag_train <span class="ot">&lt;-</span> bdiag_dat[train_ids,] <span class="co"># create the train set</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>bdiag_test <span class="ot">&lt;-</span> bdiag_test[test_ids,] <span class="co"># create the test set</span></span></code></pre></div>
+<ol start="4" style="list-style-type: lower-alpha">
 <li><p>Fit a logistic regression model <em>on the training data</em>
-using the same predictors. Then obtain the confusion matrix and compute
-the fraction of correct predictions <em>for the test data</em>.</p></li>
-<li><p>Repeat (e) using naive Bayes.</p></li>
-<li><p>Repeat (e) using KNN with <span class="math inline">\(K =
-1\)</span>. First, make another dataset called
-<code>bdiag_dat_scale</code> which centers and scales the
-predictors.</p></li>
-<li><p>Repeat (e) using KNN with <span class="math inline">\(K =
-15\)</span></p></li>
+<code>bdiag_train</code> using the same predictors. Then obtain the
+confusion matrix and compute the misclassification rate <em>for the test
+data</em> <code>bdiag_test</code>.</p></li>
+<li><p>Repeat (d) using naive Bayes.</p></li>
+<li><p>Repeat (d) using KNN with <span class="math inline">\(K =
+1\)</span>. First, make another dataset called <code>bdiag_scale</code>
+which centers and scales the predictors. Then use the same train and
+test IDs as before to create a <code>bdiag_scale_train</code> and
+<code>bdiag_scale_test</code> dataframe. Fit KNN to these scaled
+data.</p></li>
+<li><p>Repeat (d) using KNN with <span class="math inline">\(K =
+15\)</span> and your data from (f).</p></li>
 <li><p>Which of these methods appears to provide the best results on
 this data?</p></li>
 </ol>

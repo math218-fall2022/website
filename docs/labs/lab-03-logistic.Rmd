@@ -1,6 +1,6 @@
 ---
 title: "Lab 03 - Logistic Regression, Naive Bayes, and KNN"
-subtitle: "due ? at 11:59pm"
+subtitle: "due Sunday, 10/03 at 11:59pm"
 output: 
   tufte::tufte_html:
     css: "./math218-labs.css"
@@ -100,21 +100,24 @@ glm_pred <- rep("no fracture", nrow(bmd_dat))
 glm_pred[glm_probs >= 0.5] <- "fracture"
 ```
 
-Given these predictions, the `table()` function can be used to produce a confusion matrix in order to determine how many observations were correctly or incorrectly classified. It takes the predictions as the first argument, and the true values as the second argument.
+Given these predictions, the `table()` function can be used to produce a **confusion matrix** in order to determine how many observations were correctly or incorrectly classified. It takes two arguments: the variable for the rows, and the variable for the columns. In this example, the rows will be our predictions `glm_pred`, so we name them `pred`. The columns will be the true status, which we name `truth`:
 
 ```{r}
 glm_pred <- factor(glm_pred, levels = c("no fracture", "fracture") )
 table(pred = glm_pred, truth = bmd_dat$status)
 ```
 
-The diagonal elements of the confusion matrix indicate correct predictions, while the off-diagonals represent incorrect predictions. Our model correctly predicted 110 patients with no fractures and 34 with a fracture. We can compute the fraction of days for which the prediction was correct:
-
+The diagonal elements of the confusion matrix indicate correct predictions, while the off-diagonals represent incorrect predictions. Our model correctly predicted 110 patients with no fractures and 34 with a fracture. We can easily compute the misclassification rate:
 
 ```{r}
-mean(glm_pred == bmd_dat$status)
+mean(glm_pred != bmd_dat$status)
 ```
 
 The false negative rate is the proportion of responses with true fracture that were predicted to be no fracture. Here is one way to get the false negative rate:
+
+```{marginfigure}
+The `pull()` function is pretty useful! Instead of returning a data frame after the pipline, it returns to you a vector (or number) version of the specified variable
+```
 
 ```{r}
 data.frame(pred = glm_pred , true = bmd_dat$status) %>%
@@ -132,9 +135,7 @@ data.frame(pred = glm_pred , true = bmd_dat$status) %>%
   pull(fnr)
 ```
 
-
 Note: we can add other predictors into the logistic regression model just as we did in `lm()`.
-
 
 
 # Naive Bayes
@@ -146,38 +147,43 @@ nb_mod <- naiveBayes(fracture ~ bmd, data = bmd_dat)
 nb_mod
 ```
 
-The output contains the estimated mean and standard deviation for `bmd` in each class. For example, the mean `bmd` for those with `fracture` is `r round(nb_mod$tables$bmd[1,1], 3)`, and the standard deviation of `bmd` for this group is `r round(nb_mod$tables$bmd[1,2], 3)`.
+The output contains the estimated mean and standard deviation for `bmd` in each class, as `bmd` is a continuous/quantitative predictor. For example, the mean `bmd` for those with `fracture` is `r round(nb_mod$tables$bmd[1,1], 3)`, and the standard deviation of `bmd` for this group is `r round(nb_mod$tables$bmd[1,2], 3)`.
 
 ```{marginfigure}
 Note that `predict()` for a Naive Bayes model defaults to outputting the predicted class. If we wanted estimates of the probabilities, we would need to pass in the argument `type = "raw"` into the function as well.
 ```
 
-The `predict()` function is straightforward.
+The `predict()` function is straightforward:
 
 ```{r}
 nb_preds <- predict(nb_mod, bmd_dat)
+nbs_probs <- predict(nb_mod, bmd_dat, type = "raw")
 ```
 
 # K-Nearest Neighbors Classification
 
 We will now perform KNN using the `knn()` function, which is part of the `class` library. This function works rather differently from the other model-fitting functions that we have encountered thus far. Rather than a two-step approach in which we first fit the model and then we use the model to make predictions, `knn()` forms predictions using a single command. The function requires four inputs:
 
-- A matrix or data frame containing the predictors associated with the training data, labeled `X_train` below.
-- A matrix or data frame containing the predictors associated with the data for which we wish to make predictions, labeled `X_test` below.
-- A vector containing the class labels for the training observations, labeled `class_train` below.
-- A value for $k$, the number of nearest neighbors to be used by the classifier.
+- `train`: A matrix or data frame containing the predictors associated with the training data, labeled `X_train` below.
+- `test`: A matrix or data frame containing the predictors associated with the data for which we wish to make predictions, labeled `X_test` below.
+- `cl`: A vector containing the class labels for the *training* observations, labeled `class_train` below.
+- `k`: A value for $k$, the number of nearest neighbors to be used by the classifier.
 
 In KNN, it is often good practice to **standardize the predictors** so that all variables are given a mean of zero and a standard deviation of one. Then all predictors will be on a comparable scale. The `scale()` function does just this. 
 
+```{marginfigure}
+This `mutate_if()` functions says: for every numeric variable in `bmd_dat`, scale it and save over the original values.
+```
+
 ```{r}
 bmd_dat_scale <- bmd_dat %>%
-  mutate_if(is.numeric,scale)
+  mutate_if(is.numeric, scale)
 ```
 
 
-Here, I will illustrate the `knn()` function to obtain predictions for the full set of data (i.e. we do not have a test set). I will predict `status` using the predictors `bmd` and `age` with $k = 3$.
+Here, I will illustrate the `knn()` function to obtain predictions for the full set of data (i.e. we do not have a test set). I will predict `status` using the predictors `bmd` and `age` with $k = 3$. Then I create a confusion matrix for the predictions obtained under KNN.
 
-We set a random seed before we apply `knn()` because if several observations are tied as nearest neighbors, then `R` will randomly break the tie. Therefore, a seed must be set in order to ensure reproducibility of results.
+We set a random seed before we apply `knn()` because if several observations are tied as nearest neighbors, then `R` will randomly break the tie. Therefore, a seed must be set in order to ensure reproducibility of results. 
 
 
 ```{r}
@@ -193,7 +199,8 @@ table(pred = knn_preds, truth = bmd_dat_scale$status)
 
 
 ## Exercise 1
-Here, we will work with the dataset `bdiag.csv`, which includes several imaging details from patients that had a biopsy to test for breast cancer. The variable `diagnosis` classifies the biopsied tissue as `M` = malignant or `B` = benign. In addition, ten real-valued features are computed for each cell nucleus:
+
+Here, we will work with the dataset `bdiag.csv`, which includes several imaging details from patients that had a biopsy to test for breast cancer. The variable `diagnosis` classifies the biopsied tissue as `M` = malignant or `B` = benign. In addition, ten real-valued features are computed for each cell:
 
 - `radius` (mean of distances from center to points on the perimeter)
 - `texture` (standard deviation of gray-scale values)
@@ -217,9 +224,11 @@ This `pivot_longer()` function is extremely useful!
 a) Plot the distribution of the predictors (the code below will help you get started). Describe what you see.
 
 ```{r eval = F}
-plot_df <-bdiag_dat %>%
+plot_df <- bdiag_dat %>%
   select(-id) %>%
   pivot_longer(cols = -diagnosis, names_to = "variable", values_to = "value") 
+
+## take a look at the plot_df data frame by clicking on its name in the Environment
 
 plot_df %>%
   ggplot(., aes(x = _____ )) +
@@ -231,29 +240,29 @@ b) What proportion of patients in the dataset had a malignant biopsy?
 
 c) Perform a logistic regression on the full data using `texture`, `smoothness`,  and `symmetry`. Use the summary function to print the results. Do any of the predictors appear to be statistically significant? If so, which ones?
 
-d) From your fitted model in (c), compute the confusion matrix and overall fraction of correct predictions. Explain what the confusion matrix is telling you about the types of mistakes made by logistic regression.
-
-
 Now split the data into a 50% train set and a 50% test set using the following code. Remember to set `eval = T` before you knit.
 
 ```{r eval = F}
 set.seed(5)
 n <- nrow(bdiag_dat)
-train_ids <- sample(1:n, 0.5 * n) # randomly take 50% of indices as training
+train_ids <- sample(1:n, 0.5 * n) # randomly take 50% of indices as training set
 test_ids <- (1:n)[-train_ids] # the non-training ids are left for the test set
+
+bdiag_train <- bdiag_dat[train_ids,] # create the train set
+bdiag_test <- bdiag_test[test_ids,] # create the test set
 ```
 
-e) Fit a logistic regression model *on the training data* using the same predictors. Then obtain the confusion matrix and compute the fraction of correct predictions *for the test data*. 
+d) Fit a logistic regression model *on the training data* `bdiag_train` using the same predictors. Then obtain the confusion matrix and compute the misclassification rate *for the test data* `bdiag_test`.  
 
-f) Repeat (e) using naive Bayes. 
+e) Repeat (d) using naive Bayes. 
 
-g) Repeat (e) using KNN with $K = 1$. First, make another dataset called `bdiag_dat_scale` which centers and scales the predictors.
-
-
-h) Repeat (e) using KNN with $K = 15$
+f) Repeat (d) using KNN with $K = 1$.  First, make another dataset called `bdiag_scale` which centers and scales the predictors. Then use the same train and test IDs as before to create a `bdiag_scale_train` and `bdiag_scale_test` dataframe. Fit KNN to these scaled data.
 
 
-i) Which of these methods appears to provide the best results on this data?
+g) Repeat (d) using KNN with $K = 15$ and your data from (f).
+
+
+h) Which of these methods appears to provide the best results on this data?
 
 
 
