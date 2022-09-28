@@ -515,15 +515,15 @@ class: middle, center
 
 - **False positive rate** (FPR): fraction of negative observations incorrectly classified as positive
   
-  - `\(n_{0}\)` = number of failures/negatives in data = `\(\text{FP} + \text{TN}\)`
+  - number of failures/negatives in data = `\(\text{FP} + \text{TN}\)`
 
-  - `\(\text{FPR} = \frac{\text{FP}}{n_{0}}\)`
+  - `\(\text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}}\)`
 
 - **False negative rate** (FNR): fraction of positive observations incorrectly classified as negative example 
 
-  - `\(n_{1}\)` = number of success/positives in data = `\(\text{FN} + \text{TP}\)`
+  - number of success/positives in data = `\(\text{FN} + \text{TP}\)`
 
-  -  `\(\text{FNR} = \frac{\text{FN}}{n_{1}}\)`
+  -  `\(\text{FNR} = \frac{\text{FN}}{\text{FN} + \text{TP}}\)`
 
 
 ---

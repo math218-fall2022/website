@@ -4,15 +4,23 @@
     <title>Math 218: Statistical Learning</title>
     <meta charset="utf-8" />
     <meta name="author" content="Resampling" />
+    <meta name="date" content="2022-10-05" />
+    <script src="05-resampling_files/header-attrs-2.16/header-attrs.js"></script>
     <link rel="stylesheet" href="math218-slides.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Math 218: Statistical Learning
+]
+.author[
 ### Resampling
-### 9/12/2022
+]
+.date[
+### 10/05/2022
+]
 
 ---
 
@@ -124,7 +132,21 @@ the case of a qualitative (discrete) response
   
 
   
+---
+
+## Discuss
+
+- Suppose I am fitting a simple linear regression model `\(Y = \beta_{0} + \beta_{1}X + \epsilon\)`. 
+
+- I want to obtain an estimate of the test error using LOOCV
+
+- Discuss exactly how you would implement this in code. Specific things to mention:
+
+  - What "actions"/functions you would use, and in what order
   
+  - What values you would compute
+  
+  - What values you would store
 ---
 
 ## LOOCV: Auto data
@@ -132,21 +154,19 @@ the case of a qualitative (discrete) response
 - Predict `\(\color{blue}{\text{mpg}}\)` using a linear model with polynomial functions of `\(\color{blue}{\text{horsepower}}\)`
 
 &lt;img src="05-resampling_files/figure-html/loocv_auto-1.png" style="display: block; margin: auto;" /&gt;
-
-
 ---
 
 ## LOOCV
 
 - LOOCV can be *expensive* to implement -- must fit the model `\(n\)` times
 
-- If using least square linear or polynomial regression, we have a nice shortcut!
+- Although if using least square linear or polynomial regression, we have a nice shortcut!
 
 --
 
 `$$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \left(\frac{y_{i} - \hat{y}_{i}}{1-h_{i}}\right)^2$$` where `\(\hat{y}_{i}\)` is the fitted value from the least squares model fit to all `\(n\)` observations, and `\(h_{i}\)` is leverage
 
-- Thus, only need to fit the model once!
+  - Thus, only need to fit the model once!
 
 --
 
@@ -158,11 +178,15 @@ the case of a qualitative (discrete) response
 ## k-fold Cross-Validation
 
 
-- In **k-fold cross-validation**, the observations are randomly divided into `\(k\)` groups (or folds) of approximately equal size. For each `\(k\)` in `\(1, 2, \ldots, K\)`:
+- In **k-fold CV**, the observations are randomly divided into `\(k\)` groups (or folds) of approximately equal size. 
+
+- For each `\(k\)` in `\(1, 2, \ldots, K\)`:
   - Leave out `\(k\)`-th group as validation set, and fit model on remaining `\(K-1\)` parts (combined)
   - Obtain predictions for `\(k\)`-th part, and a corresponding `\(\text{MSE}_{k}\)`
   
---
+---
+
+## k-fold Cross-Validation
 
 - Letting the `\(k\)`-th fold have `\(n_{k}\)` observations:
 
@@ -179,18 +203,19 @@ the case of a qualitative (discrete) response
 
 ## k-fold CV
 
-- - LOOCV is a special case of `\(k\)`-fold CV. Which value of `\(K\)` yields LOOCV?
+- LOOCV is a special case of `\(k\)`-fold CV. 
+
+  - Which value of `\(K\)` yields LOOCV?
 
 --
 
 - `\(k\)`-fold CV estimate is still biased upward; bias minimized when `\(K = n\)`
 
-
   - `\(K = 5\)` or `\(K=10\)` often used as a compromise for bias-variance tradeoff
 
 --
 
-- LOOCV and `\(k\)`-fold CV are useful and commonly used because of generality
+- LOOCV and `\(k\)`-fold CV are useful and commonly used because of their generality
 
 ---
 
@@ -223,7 +248,7 @@ Run `\(k\)`-fold CV with `\(K =\)` 5 run 8 separate times, each with different r
 
 - We may need to think critically about when to apply cross-validation
 
-- Consider a scenario with binary data ($n = 50$), and we have `\(p = 100\)` possible predictors at hand
+- Consider a scenario with binary data `\((n = 50)\)`, and we have `\(p = 100\)` possible predictors at hand
 
 --
 
@@ -276,6 +301,12 @@ Run `\(k\)`-fold CV with `\(K =\)` 5 run 8 separate times, each with different r
   
 ---
 
+class: middle, center
+
+## The Bootstrap
+
+---
+
 ## The Bootstrap
 
 - The **bootstrap** is a flexible and powerful statistical tool that can be used to quantify the uncertainty associated with a given estimator or statistical learning method
@@ -321,12 +352,12 @@ samp1
 ```
 
 ```
-## [1] 200 130 200 130
+## [1] 200 150 200 200
 ```
 
 --
 
-- Obtain our first estimate for `\(\mu\)`, the population mean daily caffeine consumption in adults: `\(\hat{\mu}_{1} = 165\)`
+- Obtain our first estimate for `\(\mu\)`, the population mean daily caffeine consumption in adults: `\(\hat{\mu}_{1} = 187.5\)`
 
 ---
 
@@ -341,10 +372,10 @@ samp2
 ```
 
 ```
-## [1] 150 130 150 200
+## [1] 110 200 150 130
 ```
   
-- `\(\hat{\mu}_{2} = 157.5\)`
+- `\(\hat{\mu}_{2} = 147.5\)`
 
 --
 
@@ -363,9 +394,9 @@ samp2
 
 --
 
-- Mean over all estimates is `\(\hat{\mu} = 146.6275\)`
+- Mean over all estimates is `\(\hat{\mu} = 147.4725\)`
 
-- Approximate 95% confidence interval for the mean are the 5% and 95% quantiles of the 1000 mean estimates: (115, 182.5) 
+- Approximate 95% confidence interval for the mean are the 5% and 95% quantiles of the 1000 mean estimates: (120, 187.5) 
 
   - Called a *bootstrap percentile* confidence interval
 ---
@@ -382,6 +413,7 @@ samp2
   - Very general method that allows estimating sampling distribution of almost any statistic!
   - Cost-effective
 --
+
 - Cons:
 
   - In more complex scenarios, figuring out appropriate way to bootstrap may require thought
@@ -410,6 +442,8 @@ samp2
 - Solution? Only use prediction for the observations that did not (by chance) occur in current bootstrap sample
 
 - Gets complicated `\(\rightarrow\)` CV is a more attractive approach for estimating prediction error
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -458,6 +492,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

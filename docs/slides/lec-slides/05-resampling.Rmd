@@ -1,10 +1,9 @@
 ---
 title: "Math 218: Statistical Learning"
 author: "Resampling"
-date: "9/12/2022"
+date: "10/05/2022"
 output: 
    xaringan::moon_reader:
-    
     css: "math218-slides.css"
     nature: 
       highlightLines: true
@@ -128,7 +127,21 @@ $$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \text{MSE}_{i}$$
   
 
   
+---
+
+## Discuss
+
+- Suppose I am fitting a simple linear regression model $Y = \beta_{0} + \beta_{1}X + \epsilon$. 
+
+- I want to obtain an estimate of the test error using LOOCV
+
+- Discuss exactly how you would implement this in code. Specific things to mention:
+
+  - What "actions"/functions you would use, and in what order
   
+  - What values you would compute
+  
+  - What values you would store
 ---
 
 ## LOOCV: Auto data
@@ -155,21 +168,19 @@ data.frame(MSE = loocv_mse_df, degree = 1:pp) %>%
   ggtitle("LOOCV")+
   theme(text =element_text(size = 15))
 ```
-
-
 ---
 
 ## LOOCV
 
 - LOOCV can be *expensive* to implement -- must fit the model $n$ times
 
-- If using least square linear or polynomial regression, we have a nice shortcut!
+- Although if using least square linear or polynomial regression, we have a nice shortcut!
 
 --
 
 $$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \left(\frac{y_{i} - \hat{y}_{i}}{1-h_{i}}\right)^2$$ where $\hat{y}_{i}$ is the fitted value from the least squares model fit to all $n$ observations, and $h_{i}$ is leverage
 
-- Thus, only need to fit the model once!
+  - Thus, only need to fit the model once!
 
 --
 
@@ -181,11 +192,15 @@ $$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \left(\frac{y_{i} - \hat{y}_{i}}{1
 ## k-fold Cross-Validation
 
 
-- In **k-fold cross-validation**, the observations are randomly divided into $k$ groups (or folds) of approximately equal size. For each $k$ in $1, 2, \ldots, K$:
+- In **k-fold CV**, the observations are randomly divided into $k$ groups (or folds) of approximately equal size. 
+
+- For each $k$ in $1, 2, \ldots, K$:
   - Leave out $k$-th group as validation set, and fit model on remaining $K-1$ parts (combined)
   - Obtain predictions for $k$-th part, and a corresponding $\text{MSE}_{k}$
   
---
+---
+
+## k-fold Cross-Validation
 
 - Letting the $k$-th fold have $n_{k}$ observations:
 
@@ -202,18 +217,19 @@ $$\text{CV}_{(K)} = \frac{1}{K} \sum_{k=1}^{K} \text{MSE}_{k}$$
 
 ## k-fold CV
 
-- - LOOCV is a special case of $k$-fold CV. Which value of $K$ yields LOOCV?
+- LOOCV is a special case of $k$-fold CV. 
+
+  - Which value of $K$ yields LOOCV?
 
 --
 
 - $k$-fold CV estimate is still biased upward; bias minimized when $K = n$
 
-
   - $K = 5$ or $K=10$ often used as a compromise for bias-variance tradeoff
 
 --
 
-- LOOCV and $k$-fold CV are useful and commonly used because of generality
+- LOOCV and $k$-fold CV are useful and commonly used because of their generality
 
 ---
 
@@ -279,7 +295,7 @@ $$\text{CV}_{(n)} = \frac{1}{n} \sum_{i=1}^{n} \text{Err}_{i} = \frac{1}{n} \sum
 
 - We may need to think critically about when to apply cross-validation
 
-- Consider a scenario with binary data ($n = 50$), and we have $p = 100$ possible predictors at hand
+- Consider a scenario with binary data $(n = 50)$, and we have $p = 100$ possible predictors at hand
 
 --
 
@@ -380,6 +396,12 @@ mean(mse_df)
 
   - Not useful for comparing training error rates
   
+---
+
+class: middle, center
+
+## The Bootstrap
+
 ---
 
 ## The Bootstrap
@@ -486,6 +508,7 @@ ggplot(data.frame(mu = mu_ests), aes(x = mu)) +
   - Very general method that allows estimating sampling distribution of almost any statistic!
   - Cost-effective
 --
+
 - Cons:
 
   - In more complex scenarios, figuring out appropriate way to bootstrap may require thought

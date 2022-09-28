@@ -175,7 +175,14 @@ $$
 
 $$\text{Pr}(X = (\text{0 0 1}) | C_{1}) = \text{Pr}(X_{1} = 0 | C_{1}) \text{Pr}(X_{2} = 0 | C_{1})\text{Pr}(X_{3} = 1 | C_{1})$$
 
---
+
+- What are:
+
+  - $\text{Pr}(X |C_{1})$?
+  - $\text{Pr}(X |C_{2})$?
+---
+
+## Motivating example cont.
 
 - In summary, we have the following info:
 
