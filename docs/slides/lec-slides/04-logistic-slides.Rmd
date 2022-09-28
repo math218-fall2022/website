@@ -438,7 +438,7 @@ tidy(heart_log)
 
 ## Housekeeping
 
-- Homework 02 due tomorrow, Thursday 9/28 at 11:59pm
+- Homework 02 due tomorrow, Thursday 9/29 at 11:59pm
 
 - I will now have office hours permanently on Tuesdays 11am-12pm, in addition to my Wednesday 3-5pm 
 
