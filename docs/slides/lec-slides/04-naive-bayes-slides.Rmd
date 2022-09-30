@@ -262,7 +262,7 @@ $$
 
   - Uses the previous formula to classify
   
-  - Does not assume a specific distribution for $f_{k}(x)$. Instead, assumes that within class $k$, the $p$ predictors are independent:
+  - Assumes that within class $k$, the $p$ predictors are independent:
 
 $$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p}) = \prod_{j=1}^{p}f_{kj}(x_{j})$$
 
@@ -270,9 +270,11 @@ $$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p
 
   - Like in the coin flip example, flips (covariates) $X_{1}, X_{2}, \ldots$ were independent given the coin
   
+  - What does this mean?
+  
   - Useful when $p$ is large
   
-  --
+--
   
   - We get to decide each $f_{kj}(x)$
 
@@ -284,44 +286,22 @@ $$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p
 - Once we have made the naive Bayes assumption, we just plug into the equation
 
 $$Pr(Y=k| X =x) = \frac{\pi_{k}(x) f_{k}(x)}{\sum_{l=1}^{K} \pi_{l}(x) f_{l}(x)}$$
-- Will need to estimate the marginal probabilities $\pi_{k}(x)$ and the one-dimensional density function $f_{kj}(x)$ using training data
-
-- How do we estimate the one-dimensional density function $f_{kj}(x)$ using training data? 
-
-- First, note that we will only use the $j$-th predictor $x_{1j}, x_{2j}, \ldots, x_{nj}$ to estimate $f_{kj}(x)$
+- Will need to estimate the marginal probabilities $\pi_{k}(x)$ and the one-dimensional density functions $f_{kj}(x)$ using training data
 
 ---
 
 ## Estimating marginal probs
 
-- We can estimate the $\pi_{k}(x)$ as follows. Let:
+- We can estimate the $\pi_{k}(x)$ as the proportion of the observed data falling into each class. Let:
 
   - $n$ be the total number of observations
   
   - $n_{k}$ be the number of observations where $Y = k$
   
-    - Then $\sum_{k=1}^{K} n_{k} = n$
-  
 --
 
 $$\hat{\pi}_{k}(x) = \frac{n_{k}}{n}$$
 
-
-
----
-
-## Estimating density function
-
-
-- If $X_{j}$ is quantitative, we often assume that 
-
-$$(X_{j} | Y = k ) \sim N(\mu_{jk}, \sigma^2_{jk})$$
-
-  $\quad$ - i.e. within each class $k$, the $j$-th predictor is drawn from a normal distribution with mean and variance $\mu_{jk},  \sigma^2_{jk}$ specific to the class and predictor
-  
---
-
-- If $X_{j}$ is qualitative,  then we can simply count the proportion of training observations for the $j$-th predictor corresponding to each class $k$
 
 ---
 
@@ -337,19 +317,58 @@ $$(X_{j} | Y = k ) \sim N(\mu_{jk}, \sigma^2_{jk})$$
   
 --
 
-- We say $X \sim N(\mu, \sigma^2)$ if $f(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x- \mu)^2\right\}$
+- We say $X \sim N(\mu, \sigma^2)$ if its density is $f(x) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left\{-\frac{1}{2\sigma^2}(x- \mu)^2\right\}$
 
   - In `R`, the function `dnorm()` automatically evaluates this function for us!
 ---
 
+## Normal distribution
+
+```{r fig.width=9, fig.height=6}
+xseq1 <- seq(-3,3, 0.05); mu1 = 0 ; sd1 = 1
+xseq2 <- seq(0,10, 0.05); mu2 = 5; sd2 = 2
+xseq3 <- seq(-2,0, 0.05); mu3 = -1 ; sd3 = 0.25
+
+data.frame(x = xseq1, mu = mu1, sd = sd1) %>%
+  rbind(data.frame(x = xseq2, mu = mu2, sd = sd2)) %>%
+  rbind(data.frame(x = xseq3, mu = mu3, sd = sd3)) %>%
+  mutate(density = dnorm(x, mu, sd)) %>%
+  mutate(params = paste0("mu: ", mu, ", sd: ", sd)) %>%
+  ggplot(.,aes(x = x, y = density))+
+  geom_line()+
+  facet_wrap(~params, scales = "free_x") +
+  theme(text = element_text(size = 20))
+```
+
+---
+
+## Estimating density functions
+
+- First, note that we will only use the $j$-th predictor $x_{1j}, x_{2j}, \ldots, x_{nj}$ to estimate $f_{kj}(x)$
+
+--
+
+- If $X_{j}$ is *quantitative*, we often assume that 
+
+$$f_{kj}(x) = N(\mu_{kj}, \sigma^2_{kj})$$
+  - i.e. within each class $k$, the $j$-th predictor is drawn from a normal distribution with mean and variance $\mu_{kj},  \sigma^2_{kj}$ 
+  
+  - These parameters are specific to the class $k$ and predictor $j$
+  
+--
+
+- If $X_{j}$ is *categorical*,  then we can simply count the proportion of training observations for the $j$-th predictor corresponding to each class $k$
+
+---
+
 ## Gaussian naive Bayes
 
-If we assume that the quantitative $X_{j}$ have a normal distribution $f_{kj} = N(\mu_{kj}, \sigma^{2}_{kj})$, then we use the following estimates:
+If we assume that the quantitative $X_{j}$ have a normal distribution $f_{kj}(x) = N(\mu_{kj}, \sigma^{2}_{kj})$, then we use the following estimates:
 
 $$  
 \begin{align*}
-\hat{\mu}_{jk} &= \frac{1}{n_{k}} \sum_{i:y_{i}= k} x_{ij} \\
-\hat{\sigma}^{2}_{jk} &= \frac{1}{n_{k} - 1} \sum_{i:y_{i} = k}(x_{ij} - \hat{\mu}_{jk})^2
+\hat{\mu}_{kj} &= \frac{1}{n_{k}} \sum_{i:y_{i}= k} x_{ij} \\
+\hat{\sigma}^{2}_{kj} &= \frac{1}{n_{k} - 1} \sum_{i:y_{i} = k}(x_{ij} - \hat{\mu}_{jk})^2
 \end{align*}
 $$
 
@@ -360,8 +379,8 @@ $$
 
 ```{r}
 n <- 30
-mu1 <- -1; mu2 <- 3
-sd1 <- 0.5; sd2 <- 1
+mu1 <- -1; mu2 <- 5
+sd1 <- 0.5; sd2 <- 2
 pi1 <- 0.7; pi2 <- 1 - pi1
 ```
 
@@ -399,13 +418,31 @@ nb_dat %>%
 
 ### Example 1
 
-True and estimated posterior probabilities of Class 1, along with predictor $x$ and true class label
-
 ```{r}
 mu1_hat <- mean(x1); mu2_hat <- mean(x2)
 sd1_hat <- sd(x1); sd2_hat <- sd(x2)
 pi1_hat <- n1/n; pi2_hat <- n2/n
+```
 
+- Assuming Gaussian Naive Bayes, my estimates are:
+
+  - $\hat{\pi}_{1} =$ `r n1`/30 = `r round(pi1_hat, 3)` and  $\hat{\pi}_{2} =$ `r n2`/30 = `r round(pi2_hat, 3)`
+
+  - $\hat{\mu}_{11} =$ `r round(mu1_hat, 3)`
+  
+  - $\hat{\mu}_{21} =$ `r round(mu2_hat, 3)`
+  
+  - $\hat{\sigma}^{2}_{11}=$  `r round(sd1_hat^2, 3)`
+  
+  - $\hat{\sigma}^{2}_{21}=$  `r round(sd2_hat^2, 3)`
+
+---
+
+### Example 1
+
+True and estimated posterior probabilities of Class 1, along with predictor $x$ and true class label
+
+```{r}
 nb_prob <- function(x, mu_vec, sd_vec, pi_vec){
   probs <- pi_vec*dnorm(x, mu_vec,sd_vec)
   post_probs <- probs/sum(probs)
@@ -422,13 +459,13 @@ for(i in 1:n){
 }
 
 DT::datatable(data.frame(probs_mat) %>%
-  rename("true_prob" = 1, "pred_prob" = 2) %>%
+  rename("prob1" = 1, "prob1_hat" = 2) %>%
   add_column(x = x_all) %>%
-  add_column(true_class = c(rep(1, n1), rep(2,n2))) %>%
-    mutate(true_class = factor(true_class)) %>%
+  add_column(class = c(rep(1, n1), rep(2,n2))) %>%
+    mutate(class = factor(class)) %>%
   mutate_if(is.double, round, 3) %>%
-  arrange(x), 
-  options = list(pageLength = 5))
+    dplyr::select(class, x, prob1, prob1_hat), 
+  options = list(pageLength = 5, columnDefs = list(list(className = 'dt-center', targets = 0:4))))
 ```
 
 ---
@@ -437,12 +474,12 @@ DT::datatable(data.frame(probs_mat) %>%
 
 ```{r}
 n <- 30
-mu1 <- -1; mu2 <- 2; mu3 <- 0
+mu1 <- -1; mu2 <- 0; mu3 <- 1
 sd1 <- 0.5; sd2 <- 1; sd3 <- 0.75
 pi1 <- pi2 <- pi3 <- 1/3
 ```
 
-- Simulated $n= `r n`$ data points belonging to one of $K = 3$ classes with a single quantitative predictor $x$ according to the following:
+- Simulated $n= `r n`$ data points belonging to one of $K = 3$ classes (`A`, `B`, `C`) with a single quantitative predictor $x$ according to the following:
 
   - $f_{1}(x) = N(`r mu1`, `r sd1^2`)$
 
@@ -460,7 +497,7 @@ pi1 <- pi2 <- pi3 <- 1/3
 
 ## Example 2
 
-```{r fig.width=8, fig.height=5}
+```{r fig.width=9, fig.height=6}
 set.seed(5)
 K <- 3
 classes <- rmultinom(n, 1, prob = c(pi1,pi2,pi3))
@@ -469,7 +506,7 @@ n2 <- rowSums(classes)[2]
 n3 <- rowSums(classes)[3]
 x1 <- rnorm(n1,mu1,sd1); x2 <-  rnorm(n2,mu2,sd2); x3 <- rnorm(n3, mu3, sd3)
 nb_dat <- data.frame(x = c(x1,x2, x3),
-           class = c(rep("1",n1), rep("2",n2), rep("3", n3)))
+           class = c(rep("A",n1), rep("B",n2), rep("C", n3)))
 nb_dat %>%
   ggplot(.,aes(x = x, fill = class))+
   geom_histogram(bins = 10, alpha = 0.5, position = "identity")+
@@ -477,6 +514,34 @@ nb_dat %>%
 
 ```
 
+--
+
+- Why is this scenario more challenging?
+
+---
+### Example 2
+
+```{r}
+mu1_hat <- mean(x1); mu2_hat <- mean(x2); mu3_hat <- mean(x3)
+sd1_hat <- sd(x1); sd2_hat <- sd(x2); sd3_hat <- sd(x3)
+pi1_hat <- n1/n; pi2_hat <- n2/n; pi3_hat <- n3/n
+```
+
+- Assuming Gaussian Naive Bayes, my estimates are:
+
+  - $\hat{\pi}_{A} =$ `r n1`/30 = `r round(pi1_hat, 3)`, $\hat{\pi}_{B} =$ `r n2`/30 = `r round(pi2_hat, 3)`, and $\hat{\pi}_{C} =$ `r n3`/30 = `r round(pi3_hat, 3)`
+
+  - $\hat{\mu}_{A1} =$ `r round(mu1_hat, 3)`
+  
+  - $\hat{\mu}_{B1} =$ `r round(mu2_hat, 3)`
+  
+  - $\hat{\mu}_{C1} =$ `r round(mu3_hat, 3)`
+  
+  - $\hat{\sigma}^{2}_{A1}=$  `r round(sd1_hat^2, 3)`
+  
+  - $\hat{\sigma}^{2}_{B1}=$  `r round(sd2_hat^2, 3)`
+  
+  - $\hat{\sigma}^{2}_{C1}=$  `r round(sd3_hat^2, 3)`
 ---
 
 ### Example 2
@@ -484,10 +549,6 @@ nb_dat %>%
 True and estimated posterior probabilities of Classes A and B, along with predictor $x$ and true class label
 
 ```{r}
-mu1_hat <- mean(x1); mu2_hat <- mean(x2); mu3_hat <- mean(x3)
-sd1_hat <- sd(x1); sd2_hat <- sd(x2); sd3_hat <- sd(x3)
-pi1_hat <- n1/n; pi2_hat <- n2/n; pi3_hat <- n3/n
-
 probs_mat <- matrix(NA, nrow = n, ncol = 4)
 x_all <- c(x1,x2,x3)
 for(i in 1:n){
@@ -497,33 +558,35 @@ for(i in 1:n){
 }
 
 DT::datatable(data.frame(probs_mat) %>%
-  rename("true_probA" = 1, "true_probB" = 2, "pred_probA" = 3, "pred_probB" = 4) %>%
-  dplyr::select(true_probA, pred_probA, true_probB, pred_probB ) %>%
+  rename("probA" = 1, "probB" = 2, "probA_hat" = 3, "probB_hat" = 4) %>%
   add_column(x = x_all) %>%
-  add_column(true_class = c(rep("A", n1), rep("B",n2), rep("C", n3))) %>%
-    mutate(true_class = factor(true_class)) %>%
-  mutate_if(is.double, round, 3) %>%
-  arrange(x), 
-  options = list(pageLength = 5))
+  add_column(class = c(rep("A", n1), rep("B",n2), rep("C", n3))) %>%
+    mutate(class = factor(class)) %>%
+  dplyr::select(class, x, probA, probA_hat, probB, probB_hat ) %>%
+  mutate_if(is.double, round, 3), 
+  options = list(pageLength = 5,columnDefs = list(list(className = 'dt-center', targets = 0:6)))) 
 ```
 
 ---
 
 ## Seeds data
 
-*Contingency table* of predicted (rows) vs true (columns) seed variety using naive Bayes with $\color{blue}{\text{area}}$ and $\color{blue}{\text{perimeter}}$ as predictors:
+**Contingency table** of predicted vs true seed variety on training set using naive Bayes with $\color{blue}{\text{area}}$ and $\color{blue}{\text{perimeter}}$ as predictors:
 
-```{r}
+```{r echo = T}
 library(e1071)
 nb_mod <- naiveBayes(variety ~ area + perimeter, data = seeds)
-table(predict(nb_mod, seeds), seeds$variety)
+table(preds = predict(nb_mod, seeds), true = seeds$variety)
 ```
 
 ---
 
-class: middle, center
+## Seeds data
 
-## Your turn!
+```{r echo = T}
+nb_mod$apriori
+nb_mod$tables
+```
 
 ---
 
@@ -549,12 +612,11 @@ class: middle, center
   
   - Makes prediction for probability using a direct functional form that relates $X$ to $Y$
 
-- Naive Bayes ("generative")
+- Naive Bayes (generative)
 
-  - Assumption of conditional independence in features usually not true, but still works great
+  - Assumption of conditional independence in features usually not true, but still works very well
   
   - Figures out how data were generated given the results 
   
   - Doesn't tell you how the predictors relate to the response
 
-  - Useful when $p$ very large
