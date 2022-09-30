@@ -6,7 +6,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-```{r echo = F, warning = F, message = F}
+```{r include = F}
 library(tidyverse)
 ```
 
@@ -20,9 +20,11 @@ b) What is the probability that the second bootstrap observation is not the $j$-
 
 c) Argue that the probability that the $j$-th observation is not in the bootstrap sample is $(1-1/n)^{n}$.
 
-d) When $n = 100$, what is the probability that the $j$-th observation is in the bootstrap sample?
+d) When $n = 5$, what is the probability that the $j$-th observation is in the bootstrap sample?
 
-e) The follow plot displays, for each integer value of $n$ from 1 to 5000, the probability that the $j$-th observation is in the bootstrap sample. Comment on what you observe.
+e) When $n = 100$, what is the probability that the $j$-th observation is in the bootstrap sample? Comment on how this relates to the probability you found when $n = 5$.
+
+f) The following plot displays, for each integer value of $n$ from 1 to 1000, the probability that the $j$-th observation is in the bootstrap sample. Comment on what you observe.
 
 ```{r echo = F, fig.align='center', fig.width=4, fig.height=3}
 n_vec <- 1:1000
@@ -35,17 +37,18 @@ data.frame(n = n_vec) %>%
   ggtitle("Pr(observation j included)")
 ```
 
-f) We will now investigate numerically the probability that a bootstrap sample of size $n = 100$ contains the $j$-th observation. Here $j = 4$. We repeatedly create bootstrap samples for a total of 10000 samples, and each time we record whether or not the fourth observation is contained in the bootstrap sample. 
+g) We will now investigate numerically the probability that a bootstrap sample of size $n = 100$ contains the $j$-th observation. Here $j = 4$. We repeatedly create bootstrap samples for a total of 10000 samples, and each time we record whether or not the fourth observation is contained in the bootstrap sample. 
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i) Explain what the commented code in lines 1 and 2 are doing.
   
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ii) Comment on the results obtained.
   
 ```{r}
+set.seed(1)
 store <- rep(NA, 10000)
 for(i in 1:10000){
-  samp <- sample(1:100, rep=TRUE) # line 1 
-  store[i] <- sum(samp == 4) > 0 # line 2
+  samp <- sample(1:100, rep=TRUE)  # line 1 
+  store[i] <- (sum(samp == 4) > 0) # line 2
 }
 mean(store)
 ```
