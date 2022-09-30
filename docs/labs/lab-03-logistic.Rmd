@@ -200,7 +200,7 @@ table(pred = knn_preds, truth = bmd_dat_scale$status)
 
 ## Exercise 1
 
-Here, we will work with the dataset `bdiag.csv`, which includes several imaging details from patients that had a biopsy to test for breast cancer. The variable `diagnosis` classifies the biopsied tissue as `M` = malignant or `B` = benign. In addition, ten real-valued features are computed for each cell:
+Here, we will work with the dataset `bdiag.csv`, which includes several imaging details from patients that had a biopsy to test for breast cancer. The variable `diagnosis` classifies the biopsied tissue as `M` = malignant or `B` = benign. **In this exercise, a malignant tumor (`diagnosis = M`) is considered our "success" (1), and a benign tumor `B` is considered our failure (0).** In addition, ten real-valued features are computed for each cell:
 
 - `radius` (mean of distances from center to points on the perimeter)
 - `texture` (standard deviation of gray-scale values)
@@ -236,9 +236,11 @@ plot_df %>%
   facet_wrap(~ _____ , scales = "free")
 ```
 
-b) What proportion of patients in the dataset had a malignant biopsy?
+b) Next, use the same `plot_df` data frame to create faceted side-by-side boxplots to view the distribution of each predictor's variable by the `diagnosis` Comment on which predictor(s) might be the most useful, and why.
 
-c) Perform a logistic regression on the full data using `texture`, `smoothness`,  and `symmetry`. Use the summary function to print the results. Do any of the predictors appear to be statistically significant? If so, which ones?
+c) What proportion of patients in our data resulted in a success?
+
+d) Perform a logistic regression on the full data using `texture`, `smoothness`,  and `symmetry`. Use the summary function to print the results. Do any of the predictors appear to be statistically significant? If so, which ones?
 
 Now split the data into a 50% train set and a 50% test set using the following code. Remember to set `eval = T` before you knit.
 
@@ -249,21 +251,24 @@ train_ids <- sample(1:n, 0.5 * n) # randomly take 50% of indices as training set
 test_ids <- (1:n)[-train_ids] # the non-training ids are left for the test set
 
 bdiag_train <- bdiag_dat[train_ids,] # create the train set
-bdiag_test <- bdiag_test[test_ids,] # create the test set
+bdiag_test <- bdiag_dat[test_ids,] # create the test set
 ```
 
-d) Fit a logistic regression model *on the training data* `bdiag_train` using the same predictors. Then obtain the confusion matrix and compute the misclassification rate *for the test data* `bdiag_test`.  
+e) Fit a logistic regression model *on the training data* `bdiag_train` using the same predictors. Then *for the test data* `bdiag_test`, obtain the confusion matrix and compute the misclassification rate using 0.50 as the threshold.  
 
-e) Repeat (d) using naive Bayes. 
+f) Repeat (e) using naive Bayes. 
 
-f) Repeat (d) using KNN with $K = 1$.  First, make another dataset called `bdiag_scale` which centers and scales the predictors. Then use the same train and test IDs as before to create a `bdiag_scale_train` and `bdiag_scale_test` dataframe. Fit KNN to these scaled data.
-
-
-g) Repeat (d) using KNN with $K = 15$ and your data from (f).
+g) Repeat (e) using KNN with $K = 1$.  First, make another dataset called `bdiag_scale` which centers and scales the predictors. Then use the same train and test IDs as before to create a `bdiag_scale_train` and `bdiag_scale_test` dataframe. Fit KNN to these scaled data using a `set.seed(1)`.
 
 
-h) Which of these methods appears to provide the best results on this data?
+h) Repeat (e) using KNN with $K = 15$ and your data from (g), once again using `set.seed(1)`.
 
+
+i) Which of these methods appears to provide the best results on this data? Which method seems like the worst fit to this data? 
+
+j) If we set different a seed to split the data into train/test sets, would you expect the method you identified as the "best" in (i) to still be the best? Explain.
+
+k) If we set different a seed to split the data into train/test sets, would you expect the method you identified as the "worst" in (i) to still be the worst? Explain.
 
 
 # Submission

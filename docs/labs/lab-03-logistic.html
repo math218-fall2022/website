@@ -742,8 +742,10 @@ ensure reproducibility of results.</p>
 includes several imaging details from patients that had a biopsy to test
 for breast cancer. The variable <code>diagnosis</code> classifies the
 biopsied tissue as <code>M</code> = malignant or <code>B</code> =
-benign. In addition, ten real-valued features are computed for each
-cell:</p>
+benign. <strong>In this exercise, a malignant tumor
+(<code>diagnosis = M</code>) is considered our “success” (1), and a
+benign tumor <code>B</code> is considered our failure (0).</strong> In
+addition, ten real-valued features are computed for each cell:</p>
 <ul>
 <li><code>radius</code> (mean of distances from center to points on the
 perimeter)</li>
@@ -778,8 +780,12 @@ you get started). Describe what you see.</li>
 <span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
 <span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> _____ , <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
 <ol start="2" style="list-style-type: lower-alpha">
-<li><p>What proportion of patients in the dataset had a malignant
-biopsy?</p></li>
+<li><p>Next, use the same <code>plot_df</code> data frame to create
+faceted side-by-side boxplots to view the distribution of each
+predictor’s variable by the <code>diagnosis</code> Comment on which
+predictor(s) might be the most useful, and why.</p></li>
+<li><p>What proportion of patients in our data resulted in a
+success?</p></li>
 <li><p>Perform a logistic regression on the full data using
 <code>texture</code>, <code>smoothness</code>, and
 <code>symmetry</code>. Use the summary function to print the results. Do
@@ -795,23 +801,30 @@ knit.</p>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>test_ids <span class="ot">&lt;-</span> (<span class="dv">1</span><span class="sc">:</span>n)[<span class="sc">-</span>train_ids] <span class="co"># the non-training ids are left for the test set</span></span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>bdiag_train <span class="ot">&lt;-</span> bdiag_dat[train_ids,] <span class="co"># create the train set</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>bdiag_test <span class="ot">&lt;-</span> bdiag_test[test_ids,] <span class="co"># create the test set</span></span></code></pre></div>
-<ol start="4" style="list-style-type: lower-alpha">
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>bdiag_test <span class="ot">&lt;-</span> bdiag_dat[test_ids,] <span class="co"># create the test set</span></span></code></pre></div>
+<ol start="5" style="list-style-type: lower-alpha">
 <li><p>Fit a logistic regression model <em>on the training data</em>
-<code>bdiag_train</code> using the same predictors. Then obtain the
-confusion matrix and compute the misclassification rate <em>for the test
-data</em> <code>bdiag_test</code>.</p></li>
-<li><p>Repeat (d) using naive Bayes.</p></li>
-<li><p>Repeat (d) using KNN with <span class="math inline">\(K =
+<code>bdiag_train</code> using the same predictors. Then <em>for the
+test data</em> <code>bdiag_test</code>, obtain the confusion matrix and
+compute the misclassification rate using 0.50 as the threshold.</p></li>
+<li><p>Repeat (e) using naive Bayes.</p></li>
+<li><p>Repeat (e) using KNN with <span class="math inline">\(K =
 1\)</span>. First, make another dataset called <code>bdiag_scale</code>
 which centers and scales the predictors. Then use the same train and
 test IDs as before to create a <code>bdiag_scale_train</code> and
-<code>bdiag_scale_test</code> dataframe. Fit KNN to these scaled
-data.</p></li>
-<li><p>Repeat (d) using KNN with <span class="math inline">\(K =
-15\)</span> and your data from (f).</p></li>
+<code>bdiag_scale_test</code> dataframe. Fit KNN to these scaled data
+using a <code>set.seed(1)</code>.</p></li>
+<li><p>Repeat (e) using KNN with <span class="math inline">\(K =
+15\)</span> and your data from (g), once again using
+<code>set.seed(1)</code>.</p></li>
 <li><p>Which of these methods appears to provide the best results on
-this data?</p></li>
+this data? Which method seems like the worst fit to this data?</p></li>
+<li><p>If we set different a seed to split the data into train/test
+sets, would you expect the method you identified as the “best” in (i) to
+still be the best? Explain.</p></li>
+<li><p>If we set different a seed to split the data into train/test
+sets, would you expect the method you identified as the “worst” in (i)
+to still be the worst? Explain.</p></li>
 </ol>
 </div>
 </div>
