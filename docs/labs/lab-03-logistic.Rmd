@@ -49,7 +49,7 @@ We being by fitting a logistic regression model to predict `fracture` using the 
 
 
 ```{r eval = F}
-glm_mod <- glm(fracture ~ bmd, data = bmd, family = "binomial")
+glm_mod <- glm(fracture ~ bmd, data = bmd_dat, family = "binomial")
 ```
 
 However, if we were to run the above code, we would get the following error message:
