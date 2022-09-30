@@ -43,6 +43,7 @@ lessons:
    title: "Lab: Classification"
    lab: "lab-03-logistic.html"
  - title: "HW 03 assigned"
+   hw: "hw-03.pdf"
  - date: "Week 04"
  - date: "Monday, Oct. 3"
    title: "Implement Naive Bayes"
