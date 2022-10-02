@@ -402,9 +402,9 @@ pi1 <- 0.7; pi2 <- 1 - pi1
 
 - Simulated $n= `r n`$ data points belonging to one of $K = 2$ classes with a single quantitative predictor $x$ according to the following:
 
-  - $f_{1}(x) = N(`r mu1`, `r sd1^2`)$
+  - $f_{11}(x) = N(`r mu1`, `r sd1^2`)$
 
-  - $f_{2}(x) = N(`r mu2`, `r sd2^2`)$
+  - $f_{21}(x) = N(`r mu2`, `r sd2^2`)$
   
   - $\pi_{1} = `r pi1`$
   
@@ -497,17 +497,17 @@ pi1 <- pi2 <- pi3 <- 1/3
 
 - Simulated $n= `r n`$ data points belonging to one of $K = 3$ classes (`A`, `B`, `C`) with a single quantitative predictor $x$ according to the following:
 
-  - $f_{1}(x) = N(`r mu1`, `r sd1^2`)$
+  - $f_{A1}(x) = N(`r mu1`, `r sd1^2`)$
 
-  - $f_{2}(x) = N(`r mu2`, `r sd2^2`)$
+  - $f_{B1}(x) = N(`r mu2`, `r sd2^2`)$
   
-  - $f_{3}(x) = N(`r mu3`, `r sd3^2`)$
+  - $f_{C1}(x) = N(`r mu3`, `r sd3^2`)$
   
-  - $\pi_{1} = `r pi1`$
+  - $\pi_{A} = `r pi1`$
   
-  - $\pi_{2} = `r pi2`$
+  - $\pi_{B} = `r pi2`$
   
-  - $\pi_{3} = `r pi3`$
+  - $\pi_{C} = `r pi3`$
   
 ---
 
