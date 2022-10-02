@@ -1,66 +1,76 @@
 ---
-title: "Be a data scientist!"
+title: "Be a statistical learner!"
 output: 
     html_document: 
-     css: "./sta199-hw.css"
      toc: true
      toc_float: true
      fig_caption: false
 ---
 
-Proposals due **Friday, July 9 at 11:59pm**
+Project proposals due **Sunday, November 13 at 11:59pm**
 
-Report, slides, and repository due **Tuesday, July 20 at 11:59pm**
+Project plans due **Sunday, November 20 at 11:59pm**
 
-Presentations will occur on **Wednesday, July 21 and Thursday, July 22 during class**
+Report, slides, and repository due **Thursday, December 8 at 11:59pm**
+
+Presentations will occur on **Friday, December 9 and Monday, December 12 during class**
 
 # Introduction
 
-**TLDR**: Pick (or create) a dataset and do something with it. That is your 
+**In essence**: Pick a dataset and do statistical learning things with it. That is your 
 final project.
 
 The final project for this class will consist of analysis on a dataset of your 
-own choosing or creation. The dataset may already exist, or you may collect your 
-own data using a survey, by conducting an experiment, or by scraping the web. 
-You can choose the data based on your interests or based on work in other
+own choosing. You can choose the data based on your interests or based on work in other
 courses or research projects. The goal of this project is for you to demonstrate 
 proficiency in the techniques we have covered in this class (and beyond, if you 
 like) and apply them to a dataset in a meaningful way.
 
+This project is *partner-optional*. The partners will be self-selected. If you choose 
+to complete the project with a partner, one of you should e-mail me and CC your partner on the e-mail by **Sunday, November 6 at 11:59pm**. 
+
+Your project may be a supervised and/or unsupervised analysis. Whichever you choose, your project must consist of one of the following:
+
+  - An analysis that uses at least three different statistical learning methods you learned this semester. This may be a comparison of three methods, or perhaps a comparison of two with a deeper dive into one. This is quite open-ended! *If you are working with a partner, you must use at least four different methods.*
+  
+  - An analysis that uses a method that you taught yourself or learned in a different class/setting. If you'd like, you may compare this method to another we learned in class, but that is not necessary. *If you are working with a partner, you must use compare this new method to another method.*
+  
+
 # Brief project logistics
 
+The five deliverables for the final project are:
 
-The four deliverables for the final project are
-
-- A written proposal detailing the data you chose, along with some EDA and at least
-two questions you are interested in answering
+- A written proposal detailing the data you chose, along with some EDA and at least one question you are interested in answering, and the methods you plan to use to answer these questions
+- A written plan of analysis that briefly describes exactly how you will implement the methods to answer the question(s) of interest
 - A written, reproducible report detailing your analysis
 - A GitHub repository corresponding to your report
-- A brief set of slides that correspond to your intended oral presentation 
-(ten minutes). 
+- A brief set of slides that correspond to your intended oral presentation
+
 **No late projects are accepted.**
 
 The grade breakdown is as follows:
 
-Total                                                   | 125 pts
+Total                                                   | 135 pts
 --------------------------------------------------------|--------
 **Proposal**                                            | 15 pts
+**Plan of analysis**                                    | 15 pts
 **Written report**                                      | 60 pts
 **Slides**                                              | 15 pts
 **Repository**                                          | 5 pts
 **Presentation**                                        | 15 pts
 **Participation**                                       | 10 pts
-**Overall neatness and presentation style**             | 5 pts
+
 
 # Data sources
 
 In order for you to have the greatest chance of success with this project it is 
 important that you choose a manageable dataset. This means that the data should 
 be readily accessible and large enough that multiple relationships can be 
-explored. As such, your dataset must have at least 50 observations and at  
-least 10 variables (exceptions can be made but you must speak with me first). 
+explored. As such, your dataset must have at least 100 observations and at  
+least 10 variables. Generally,
+more observations or more variable will lead to a more interesting analysis.
 The dataset’s variables should include categorical variables, discrete numerical 
-variables, and continuous numerical variables.
+variables, and continuous numerical variables  (exceptions can be made but you must speak with me first). If you'd like, you may joint multiple datasets together.
 
 All analyses must be done in RStudio, and your final written report and 
 analysis **must be reproducible**. This means that you must create an R Markdown
@@ -72,7 +82,7 @@ format that we haven't encountered in class (for instance, a `.DAT` file), make
 sure that you are able to load it into RStudio as this can be tricky depending 
 on the source. If you are having trouble, ask for help before it is too late.
 
-**Reusing datasets from class:** Do not reuse datasets used in examples / homework 
+**Reusing datasets from class:** Do not reuse datasets used in examples / lab
 in the class. 
 
 Some resources that may be helpful:
@@ -111,8 +121,20 @@ you would like to use, and define the variables in the dataset that you intend t
 explore. You must include some EDA (ex. univariate or bivariate plots,
 tables of summary statistics, etc), and you must also list at least two questions that you are interested in answering using the data.
 
+You should clearly indicate if you intend to pursue a method that you teach yourself. 
+
+You should clearly indicate if your questions supervised or unsupervised learning tasks.
+
 There is no page limit or requirement. For submission, submit the .pdf document
-to Gradescope by Friday, July 9 at 11:59pm. The main purpose of this component of the project is to help you get started, and so Becky can give feedback/suggestions about the data and questions of interest.
+to Canvas by Sunday, November 13 at 11:59pm. The main purpose of this component of the project is to help you get started, and so Professor Tang can give feedback/suggestions about the data and questions of interest.
+
+## Plan of analysis
+
+Your plan of analysis must be done using R Markdown. Based on the feedback from your proposal, the written plan of analysis should describe how exactly you plan to implement the methods you selected to answer your research question(s). This may include discussion of necessary data cleaning and preparation, which `R` packages you intend to use, how you plan on validating/comparing models, etc. 
+
+If you chose to pursue a method that we did not cover in class, you must clearly describe the method in your plan.
+
+The main purpose of this component is so Professor Tang can make sure that you are well-prepare dto complete the project. 
 
 ## Written report
 
@@ -126,29 +148,36 @@ components of the report are as follows, but feel free to expand with additional
 sections as necessary. There is no page limit or requirement -- however, you
 must comprehensively address all aspects below. Please be judicious in what you
 decide to include in your final write-up. For submission, submit the .pdf document
-to Gradescope.
+to Canvas.
 
 The written report is worth 60 points, broken down as
 
 Total                                                   | 60 pts
 --------------------------------------------------------|--------
 **Introduction/data**                                   | 10 pts
-**Methodology**                                         | 20 pts
+**EDA**                                                 | 5 pts
+**Methodology**                                         | 15 pts
 **Results**                                             | 20 pts
 **Discussion**                                          | 10 pts
 
 #### Introduction and data
 
-The introduction should introduce your general research question and your data 
+The introduction should introduce your general research question(s) and your data 
 (where it came from, how it was collected, what are the cases, what are the 
-variables, etc.). 
+variables, etc.). It should be clear from the Introduction if you are planning on 
+pursuing a supervised and/or unsupervised analysis.
+If you are planning on using supervised methods, you should 
+clearly indicate what variable is your response variable of interest.
+
+#### EDA
+
+The methodology section should include the variables used to address your 
+research question, as well as any useful visualizations or summary statistics. *Please be judicious in this section. Usually one strong visualization is better than five that are not useful.*
 
 #### Methodology 
 
-The methodology section should include the variables used to address your 
-research question, as well as any useful visualizations or summary statistics.
-As well, you should introduce and justify the statistical method(s) that you 
-believe will be useful in answering your research question. 
+In this section, you should introduce, briefly describe, and justify the 
+statistical learning methods that you used to answer your research question(s). 
 
 #### Results 
 
@@ -160,7 +189,8 @@ data analysis (i.e., do not calculate every statistic and procedure you have
 learned for every variable), but rather let me know that you are proficient at 
 asking meaningful questions and answering them with results of data analysis, 
 that you are proficient in using R, and that you are proficient at interpreting 
-and presenting the results. Focus on methods that help you begin to answer your 
+and presenting the results. Focus on they key results that are related
+to answering your 
 research questions. 
 
 #### Discussion
@@ -177,17 +207,16 @@ included.
 
 ## Repository
 
-In addition to your Gradescope submissions, we will be checking your GitHub 
+In addition to your Gradescope submissions, I will be checking your GitHub 
 repository. This repository should include:
 
 - RMarkdown files (formatted to clearly present all of your code and results)
-that will output the proposal and final write-up in two separate documents
+that will output the proposal, plan of analysis, and final write-up in two separate documents
 - Meaningful README file on the GitHub repository that contains a *codebook*
 for relevant variables
 - Dataset(s) (in csv or RData format, in a `/data` folder)
-- Presentation (if using Keynote/PowerPoint/Google Slides, export to PDF and put 
-in repo, in a `/presentation` folder). To do this, create a folder in your file environment in
-Rstudio called `presentation` and upload the slides there.
+- Presentation (if using Keynote/PowerPoint/Google Slides, export to PDF and add
+it to your GitHub repo.)
 
 Style and format does count for this assignment, so please take the time to make 
 sure everything looks good and your data and code are properly formatted.
@@ -196,15 +225,14 @@ sure everything looks good and your data and code are properly formatted.
 
 In addition to the write-up, you must also create presentation
 slides that summarize and showcase your project. Introduce your research question 
-and dataset, showcase visualizations, and provide some conclusions. These slides
+and dataset, showcase your EDA visualizations, and provide some conclusions. These slides
 should serve as a brief visual accompaniment to your write-up and will be graded 
-for content and quality. They can also be used for your Presentation. For submission, convert these slides to a .pdf document
-to be submitted to Gradescope.
+for content and quality. They can also be used for your Presentation. For submission, convert these slides to a .pdf document to be uploaded to Canvas.
 
 
 ## Presentation
 
-On the last two days of class, **Wednesday, July 21 and Thursday, July 22 during class**, everyone will present their projects. There will be a seven-minute time limit for each presentation followed by three minutes for questions, for a total of ten-minutes per presentation. You may, and should, use the slides as detailed in the previous section during your presentation.
+On the last two days of class everyone will present their projects. There will be a seven-minute time limit for each presentation followed by three minutes for questions, for a total of ten-minutes per presentation. You may, and should, use the slides as detailed in the previous section during your presentation.
 
 ## Participation
 
@@ -212,62 +240,6 @@ You are expected to attend both days of presentations, and be actively engaged b
 asking questions and providing feedback.
 
 
-# Asynchronous options
-
-If you cannot attend or give presentations due to taking the course asynchronously, you must let Becky know by **Monday, July 12 at 11:59pm**. Note that only 
-students who enrolled in the asynchornous section of the course may take this option.
-
-You will still be required to complete the final project. The details of the proposal, written report, slides, repository, and overall neatness/presentation style are the same as for the synchronous students. The presentation and participation will be slightly modified as follows:
-
-## Presentation
-
-You will be required to upload a 7-minute video presentation by **Wednesday, July 21 at 10:15am EST**. You will receive questions and feedback from Becky, and you must respond to the questions by e-mail within 24 hours of receiving them. You will post the presentation video in Warpwire, which is accessible from the 
-the course Sakai site (bottom of the left-hand tool bar).
-
-### To post your video on Warpwire:
-
-- Click the Warpwire tab in the course Sakai site.
-- Click the “+” and select “Upload files”.
-- Locate the video on your computer and click to upload.
-- Once you’ve uploaded the video to Warpwire, click to share the video and make
-a copy of the video’s URL. You will need this when you submit the video.
-
-### To post the video for assignment:
-
-- Click the Assignments tab in the course Sakai site.
-- Click the Project assignment.
-- Click the Warpwire icon (between the flag and shopping cart icons). Select your video, then click “Insert 1 item.” This will embed your video in the conversation.
-Under the video, paste the URL to your video.
-- You’re done!
-
-
-For the presentation, you can speak over your slide deck, similar to the lecture 
-content videos. I recommend using Zoom to record your presentation; however, you 
-can use whatever platform works best for your group. Below are a few resources 
-to help you record video presentations:
-
-- [Recording presentations in Zoom](https://kb.siue.edu/61721)
-- [Apple Quicktime for screen recording]( https://support.apple.com/en-gb/guide/quicktime-player/qtp97b08e666/mac)
-- [Windows 10 built-in screen recording functionality](https://www.youtube.com/watch?v=OfPbr1mRDuo)
-## Participation
-
-You are expected to watch each day's recorded lecture/presentations. For each day
-of live presentations, you are required to submit feedback/questions via a provided form by 11:59pm of that night. For example, for presentations that take place on Wednesday, July 21, you should submit the feedback by 11:59pm Wednesday, July 21.
-
-
-# Overall notes
-
-The project is very open ended. For instance, in creating a compelling 
-visualization(s) of your data in R, there is no limit on what tools or 
-packages you may use. You do not need to visualize all of the data at once. A 
-single high quality visualization will receive a much higher grade than a large 
-number of poor quality visualizations.
-
-Before you finalize your write up, make sure the printing of code chunks is 
-turned off with the option `echo = FALSE`. 
-
-Finally, pay attention to details in your write-up and presentation. Neatness, 
-coherency, and clarity will count.
 
 
 # Tips
@@ -288,7 +260,7 @@ Grading of the project will take into account the following:
 
 - Content - What is the quality of research and/or policy question and relevancy 
 of data to those questions?
-- Correctness - Are statistical procedures carried out and explained correctly?
+- Correctness - Are the statistical plearning rocedures carried out and explained correctly?
 - Writing and Presentation - What is the quality of the statistical presentation, 
 writing, and explanations?
 - Creativity and Critical Thought - Is the project carefully thought out? Are the 
