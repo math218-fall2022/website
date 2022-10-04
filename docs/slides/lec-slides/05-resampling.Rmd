@@ -69,6 +69,8 @@ class: center, middle
   - Model is fit on training set
   - Fitted model predicts responses for the observations in the validation set
   
+--
+
 - The resulting validation-set error provides an estimate of the test error. This is typically assessed using MSE in the
 case of a quantitative response and misclassification rate in
 the case of a qualitative (discrete) response
@@ -91,7 +93,9 @@ the case of a qualitative (discrete) response
 
 ## Leave-One-Out Cross-Validation
 
-- **Leave-one-out cross-validaiton** (LOOCV) attempts to address the drawbacks from validation set approach
+- **Leave-one-out cross-validation** (LOOCV) attempts to address the drawbacks from validation set approach
+
+--
 
 - Still splits all observations into two sets: training and validation
 
@@ -170,21 +174,19 @@ data.frame(MSE = loocv_mse_df, degree = 1:pp) %>%
 ```
 ---
 
-## LOOCV
+## LOOCV: drawbacks
 
 - LOOCV can be *expensive* to implement -- must fit the model $n$ times
 
-- Although if using least square linear or polynomial regression, we have a nice shortcut!
+  - Although if using least squares linear or polynomial regression, we have a nice shortcut!
 
 --
 
 $$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \left(\frac{y_{i} - \hat{y}_{i}}{1-h_{i}}\right)^2$$ where $\hat{y}_{i}$ is the fitted value from the least squares model fit to all $n$ observations, and $h_{i}$ is leverage
 
-  - Thus, only need to fit the model once!
-
 --
 
-- Drawbacks: estimates for each validation set $i$  are highly correlated, so the average can have high variance
+- Estimates for each validation set $i$  are highly correlated, so the average can have high variance
 
 
 ---
@@ -192,7 +194,7 @@ $$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \left(\frac{y_{i} - \hat{y}_{i}}{1
 ## k-fold Cross-Validation
 
 
-- In **k-fold CV**, the observations are randomly divided into $k$ groups (or folds) of approximately equal size. 
+- In **k-fold CV**, the observations are randomly divided into $K$ groups (or folds) of approximately equal size. 
 
 - For each $k$ in $1, 2, \ldots, K$:
   - Leave out $k$-th group as validation set, and fit model on remaining $K-1$ parts (combined)
@@ -204,7 +206,7 @@ $$\text{CV}_{(n)} = \frac{1}{n}\sum_{i=1}^{n} \left(\frac{y_{i} - \hat{y}_{i}}{1
 
 - Letting the $k$-th fold have $n_{k}$ observations:
 
-  - $\text{MSE}_{k} = \frac{1}{n_{k}}\sum_{i \in \mathcal{C}_{k}} (y_{i} - \hat{y}_{i})^2$, where $\mathcal{C}_{k}$ is set of observations in $k$-th fold and $\hat{y}_{i}$ is fit for observation $i$ obtained from data with part $k$ removed
+  - $\text{MSE}_{k} = \frac{1}{n_{k}}\sum_{i \in \mathcal{C}_{k}} (y_{i} - \hat{y}^{(k)}_{i})^2$, where $\mathcal{C}_{k}$ is set of observations in $k$-th fold and $\hat{y}^{(k)}_{i}$ is fit for observation $i$ obtained from data with part $k$ removed
   
   - If $n$ is a multiple of $K$, then $n_{k} = n/K$
   
@@ -240,7 +242,11 @@ K <- 5
 J <- 8
 ```
 
-Run $k$-fold CV with $K =$ `r K` run `r J` separate times, each with different random split of data:
+- Still fitting linear regression of $\color{blue}{\text{mpg}}$ on $\color{blue}{\text{horsepower}}$
+
+- Run `r K`-fold CV `r J` separate times on same set of data, each with different partition into folds
+
+- LOOCV plot from before
 
 ```{r cv_5, fig.align="center", fig.width=8, fig.height=5}
 cv_ls <- list()
@@ -279,7 +285,7 @@ do.call(rbind,cv_ls) %>%
 
 ## Cross-Validation for Classification
 
-- CV can be useful for qualitative $Y$. Same procedure as for quantiative, but uses number of misclassified observations instead of MSE
+- CV can be useful for qualitative $Y$. Same procedure as for quantiative, but uses classification error rate instead of MSE
 
 - LOOCV error rate:
 
@@ -335,42 +341,41 @@ $$\text{CV}_{(n)} = \frac{1}{n} \sum_{i=1}^{n} \text{Err}_{i} = \frac{1}{n} \sum
 
 - However, 10-fold CV estimate of test error when ignoring Step 1 is 0!
 
-```{r eval= F}
+---
+
+## Simulated data
+
+```{r eval= T, echo = T}
+set.seed(28)
 n <- 50
-p <- 100
+p <- 1000
 p_cv <- 20
 y <- rbinom(n,1,0.5)
 K <- 10
+x <- matrix(rnorm(n*p, runif(p, -10, 10), 1),
+            nrow = n, ncol = p, byrow = T)
+```
 
-x <- matrix(rnorm(n*p, 0, 1),nrow=n, ncol = p,byrow = T)
-col_samps <- sample(1:p, p_cv)
-ids0 <- which(y == 0)
-ids1 <- which(y == 1)
-x[ids0,] <- x[ids0, col_samps] + 1
-x[ids1,] <- x[ids1, col_samps] -1
-
-
+```{r echo = F}
 df<-data.frame(x)%>%
   mutate(y=y)
 cv_ls <- list()
 ids <- split(sample(1:n), ceiling(seq_along(1:n)/(n/K))) 
-mse_df <- rep(NA,K)
+err_df <- rep(NA,K)
 rhos <- apply(df, 2, function(x){cor.test(df$y, x)$estimate})[1:p]
 cols <- which(abs(rhos) %in% (sort(abs(rhos), decreasing = T)[1:p_cv]))
 
 for(k in 1:K){
   val_set_ids <- ids[[k]]
-  mod <- glm(y ~-1 + ., data=df[-val_set_ids,c(cols, p+1)],family = "binomial")
+  mod <- glm(y ~ 1 + ., data=df[-val_set_ids,c(cols, p+1)],family = "binomial")
   preds <-(predict(mod, df[val_set_ids,], type="response")> 0.5)*1
-  mse_df[k] <- mean(y[val_set_ids]!=preds)
+  err_df[k] <- mean(y[val_set_ids]!=preds)
   
 }
-  
-(wrong_cv <- mean(mse_df))
+err_vec_wrong <- err_df
 
-### 
 cv_ls <- list()
-mse_df <- rep(NA,K)
+err_df <- rep(NA,K)
 
 for(k in 1:K){
   val_set_ids <- ids[[k]]
@@ -380,22 +385,18 @@ for(k in 1:K){
   cols <- sample(1:p, p_cv)
   mod <- glm(y ~ -1 + ., data=temp_df[,c(cols, p+1)],family = "binomial")
   preds <-(predict(mod, temp_df, type="response")> 0.5)*1
-  mse_df[k] <- mean(y[val_set_ids]!=preds)
+  err_df[k] <- mean(y[val_set_ids]!=preds)
   
 }
-  
-mean(mse_df)
+err_vec_correct <-   err_df
 ```
 
----
+--
 
-## Cross-validation
-
-
-- Estimated CV error rates from different models on same set of *validation* data
-
-  - Not useful for comparing training error rates
-  
+```{r echo = T}
+mean(err_vec_wrong)
+mean(err_vec_correct)
+```
 ---
 
 class: middle, center
