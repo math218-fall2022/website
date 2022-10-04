@@ -265,7 +265,7 @@ Run `\(k\)`-fold CV with `\(K =\)` 5 run 8 separate times, each with different r
 
 ## Caution!
 
-- No! CV at Step 2 ignores the fact that in Stpe 1, the procedure **already saw the labels of the training** and made use of them. Forgetting this would result in **leakage**.
+- No! CV at Step 2 ignores the fact that in Step 1, the procedure **already saw the labels of the training** and made use of them. Forgetting this would result in **leakage**.
 
   - Instead, we should include Step 1 as part of the validation process. 
   
@@ -352,12 +352,12 @@ samp1
 ```
 
 ```
-## [1] 200 150 150 150
+## [1] 200 200 200 130
 ```
 
 --
 
-- Obtain our first estimate for `\(\mu\)`, the population mean daily caffeine consumption in adults: `\(\hat{\mu}_{1} = 162.5\)`
+- Obtain our first estimate for `\(\mu\)`, the population mean daily caffeine consumption in adults: `\(\hat{\mu}_{1} = 182.5\)`
 
 ---
 
@@ -372,10 +372,10 @@ samp2
 ```
 
 ```
-## [1] 110 110 150 130
+## [1] 110 110 110 110
 ```
   
-- `\(\hat{\mu}_{2} = 125\)`
+- `\(\hat{\mu}_{2} = 110\)`
 
 --
 
@@ -394,7 +394,7 @@ samp2
 
 --
 
-- Mean over all estimates is `\(\hat{\mu} = 146.5\)`
+- Mean over all estimates is `\(\hat{\mu} = 147.295\)`
 
 - Approximate 95% confidence interval for the mean are the 5% and 95% quantiles of the 1000 mean estimates: (120, 182.5) 
 
@@ -422,7 +422,7 @@ samp2
 
 ---
 
-### Can boostrap estimate prediction error?
+### Can bootstrap estimate prediction error?
 
 
 - Idea: take a bootstrap sample as training set, and the original sample as validation set. Repeat `\(B\)` times.
@@ -437,7 +437,7 @@ samp2
   
 ---
 
-### Can boostrap estimate prediction error?
+### Can bootstrap estimate prediction error?
 
 - Solution? Only use prediction for the observations that did not (by chance) occur in current bootstrap sample
 

@@ -885,7 +885,7 @@ seeds_bag_rf_df %>%
 
 ---
 
-## Boosting for regression treeds
+## Boosting for regression trees
 
 1. Set $\hat{f}(x) = 0$ and $r_{i} = y_{i}$ for all $i$ in the dataset
 

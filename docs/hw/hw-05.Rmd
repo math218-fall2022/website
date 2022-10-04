@@ -35,3 +35,14 @@ Suppose we decide to perform bagging for classification. We have data on about m
 $$0.1,0.15,0.2,0.2,0.55,0.6,0.6,0.65,0.7, 0.75$$
 
 There are two common ways to combine these results together into a single class prediction. One is the majority vote approach discussed in class. The second approach is to classify based on the average probability. In this example, what is the final classification under each of these two approaches?
+
+### Exercise 5
+
+Random forests
+
+a) How do you expect the random forest model to perform on data with correlated features relative to data without correlated features? Why?
+
+b) Where does the "random" in random forests come from? That is, during which part(s) of the algorithm are we including randomization?
+
+
+

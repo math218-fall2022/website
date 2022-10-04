@@ -312,7 +312,7 @@ $$\text{CV}_{(n)} = \frac{1}{n} \sum_{i=1}^{n} \text{Err}_{i} = \frac{1}{n} \sum
 
 ## Caution!
 
-- No! CV at Step 2 ignores the fact that in Stpe 1, the procedure **already saw the labels of the training** and made use of them. Forgetting this would result in **leakage**.
+- No! CV at Step 2 ignores the fact that in Step 1, the procedure **already saw the labels of the training** and made use of them. Forgetting this would result in **leakage**.
 
   - Instead, we should include Step 1 as part of the validation process. 
   
@@ -517,7 +517,7 @@ ggplot(data.frame(mu = mu_ests), aes(x = mu)) +
 
 ---
 
-### Can boostrap estimate prediction error?
+### Can bootstrap estimate prediction error?
 
 
 - Idea: take a bootstrap sample as training set, and the original sample as validation set. Repeat $B$ times.
@@ -532,7 +532,7 @@ ggplot(data.frame(mu = mu_ests), aes(x = mu)) +
   
 ---
 
-### Can boostrap estimate prediction error?
+### Can bootstrap estimate prediction error?
 
 - Solution? Only use prediction for the observations that did not (by chance) occur in current bootstrap sample
 
