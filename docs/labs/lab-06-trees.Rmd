@@ -1,0 +1,360 @@
+---
+title: "Untitled"
+subtitle: "Due Sunday, 10/23 at 11:59pm"
+output: 
+  tufte::tufte_html:
+    css: "./math218-labs.css"
+    tufte_variant: "envisioned"
+    highlight: tango
+    toc: true
+    toc_depth: 1
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, message=FALSE, warnings = F}
+library(tidyverse)
+```
+
+## Classification Trees
+
+```{marginfigure}
+The `tree()` function requires all your categorical predictors and response to be coded as factor variables!
+```
+```{r}
+library(tree)
+bmd_dat <- read.csv("data/bmd.csv") %>%
+  mutate_if(is.character, factor)
+```
+
+
+We fit a classification decision tree using the `tree()` function from the `tree` package. The syntax is just as `glm()` where we have `response ~ predictor(s)`, and we specify the data.
+
+
+
+```{r}
+tree_bmd <- tree(fracture ~ medication + sex + bmd, data = bmd_dat)
+```
+
+Passing the fitted tree into the `summary()` function, we see the predictors that were ultimately select, as well as the number of terminal nodes $|T_{0}|$, and the training error rate. Note: if you don't see any predictors listed, that means the function used all of the predictors at least once in the decision tree!
+
+```{r}
+summary(tree_bmd)
+```
+
+What is that  "residual mean deviance" from the `summary()` output? "Deviance" is often used to describe the fit of a model; a smaller deviance correspodned to a better fit to the observed data. Here, deviance is defined as
+
+$$-2 \sum_{m} \sum_{k} n_{mk} \log \hat{p}_{mk}$$
+
+where $n_{mk}$ is the number of observations in the $m$th terminal node that belong to the $k$th class. Then the residual mean deviance is this quantity divided by $n - |T_{0}| = 169-11$.
+
+Time to visualize the decision tree! The `plot()` function will easily display the fitted tree for us, and then `text()` displays the node labels. The argument `pretty = 0` instructs R to include the category names for any qualitative predictors, rather than simply displaying a generic a, b, c... letter for each category.
+
+```{r}
+plot(tree_bmd)
+text(tree_bmd, pretty = 0)
+```
+
+Based on this tree, it seems like the predictor `bmd` really helps discriminate between those with and without a fracture.
+
+While not always the most useful, you can type the variable name of your fitted tree to see the decision/split criteria at each branch of the tree:
+
+```{r}
+tree_bmd
+```
+
+Of course, we want to evaluate our model on some test data. We will split the data into test/train sets, then obtain predictions using `predict()` for the test data. For classification trees, we will usually want the actual class prediction, so we need to specify that in `predict()`:
+
+```{marginfigure}
+Note: we set a seed for two reasons! First, to generate the random test/train splits. Second, in the event of ties in classification, `predict()` will randomly choose one of the classes to output.
+```
+
+```{r}
+set.seed(12)
+train_ids <- sample(1:nrow(bmd_dat), 0.5*nrow(bmd_dat))
+test_ids <- (1:nrow(bmd_dat))[-train_ids]
+bmd_dat_test <- bmd_dat[test_ids,]
+```
+
+```{r}
+tree_bmd <- tree(fracture ~ medication+ sex+ bmd , data = bmd_dat[train_ids,])
+tree_preds <- predict(tree_bmd, bmd_dat_test, type = "class")
+table(preds = tree_preds, true = bmd_dat_test$fracture)
+```
+
+In the contingency table above, we see that we do a great job of predicting the classes! We make correct predictions for `r sum(diag(table(preds = tree_preds, true = bmd_dat_test$fracture)))/nrow(bmd_dat_test)` of the observations in the test data set.
+
+Maybe we think this tree is too complex and might want to prune it to improve results. We can use `cv.tree()` to perform cross-validation in order to determine the optimal level of tree complexity. This function uses cost-complexity pruning. 
+We use the argument `FUN = prune.misclass` in order to indicate that we want the classification error rate to guide the cross-validation and pruning process, rather than the default for the `cv.tree()` function, which is deviance. The `cv.tree()` function will report the number of terminal nodes of each tree considered (`size`) as well as the corresponding error rate and the value of the cost-complexity parameter used (`k`, which corresponds to $\alpha$).
+
+```{r}
+set.seed(21)
+cv_bmd <- cv.tree(tree_bmd, FUN = prune.misclass)
+cv_bmd
+```
+
+`dev` corresponds to the number of cross-validation errors. So the tree with 4 terminal nodes has 1 cross-validation errors. In the following, I plot the error rate as a function of both `size` and `k`:
+
+```{r}
+data.frame(error_rate = cv_bmd$dev, size = cv_bmd$size, k = cv_bmd$k) %>%
+  pivot_longer(cols = 2:3, names_to = "var", values_to = "value") %>%
+  ggplot(., aes(x = value, y = error_rate)) +
+  geom_point()+
+  geom_line()+
+  facet_wrap(~var, scales = "free")
+```
+
+Based on the output, the tree with only 2 terminal nodes seems to be the best. This results in a pretty boring tree, but oh well. I will prune the original tree to obtain the two-node tree instead using `prune.misclass()`:
+
+```{r}
+prune_bmd <- prune.misclass(tree_bmd, best = 2)
+plot(prune_bmd)
+text(prune_bmd, pretty = 0)
+```
+
+How well does this pruned tree perform on the test data set? Once again, we apply the `predict()` function:
+
+```{marginfigure}
+Notice that we are using the *pruned* tree now to make predictions!
+```
+
+```{r}
+tree_pred <- predict(prune_bmd, bmd_dat_test,
+                     type = "class")
+table(preds = tree_pred, bmd_dat_test$fracture)
+```
+
+Pruning really helped! Not only does it make our tree more interpretable, but also increased our correct classification rate to `r sum(diag(table(preds = tree_pred, true = bmd_dat_test$fracture)))/nrow(bmd_dat_test)`!
+
+## Regression Trees
+
+Regression trees are coded very similarly to classification trees using the `tree()` function.
+
+```{r}
+fish <- read.csv("data/fish.csv") %>%
+  mutate(Species = factor(Species))
+set.seed(2)
+n <- nrow(fish)
+train_ids <- sample(1:n, n/2)
+
+tree_fish <- tree(Weight ~ ., data = fish[train_ids,])
+summary(tree_fish)
+```
+
+
+You'll notice that `tree()` only used three of the possible variables in the construction of the tree: `TotalLength`, `BodyLength`, and `Width`. For regression trees, deviance is the the sum of squared errors for the tree. Plotting the tree:
+
+```{r}
+plot(tree_fish)
+text(tree_fish, pretty = 0)
+```
+
+Not surprisingly, the tree shows us that bigger fish tend to correspond to heavier fish.
+
+Does pruning improve performance?
+
+```{r}
+cv_tree <- cv.tree(tree_fish)
+cv_tree
+```
+
+Based on the function, pruning actually increases the error! That is, cross-validation selects the most complex tree. So we will not prune. To make predictions:
+
+```{r}
+ypred <- predict(tree_fish, newdata = fish[-train_ids,])
+mse <- mean( (ypred - fish$Weight[-train_ids])^2)
+```
+
+Our test set MSE associated with the regression tree is `r round(mse)`. You might encounter **root mean squared error*, which is just the square root of MSE. People like to use RMSE because its interpretation is on the units of the response of interest. For example, the RMSE associated with the regression tree is `r round(sqrt(mse), 2)`. This means that this regression tree model leads to test predictions that are within `r round(sqrt(mse), 2)` grams of the true weight of the fish, on average.
+
+## Bagging and Random forests
+
+Bagging and random forests are implemented using the `randomForest` package in R. 
+Recall that bagging is simply a special case of a random forest with $m = p$. Therefore, the `randomForest()` function can be used to perform both random forests and bagging. We perform bagging as follows:
+
+```{r message = F, warning = F}
+library(randomForest)
+set.seed(1)
+p <- ncol(fish) - 1
+bag_fish <- randomForest(Weight ~. , data = fish[train_ids,],
+                         mtry = p, importance = T)
+```
+
+In the code above, the `mtry` argument tells the function to consider all $p$ predictors for each split of the tree (i.e. we want to perform bagging).
+
+To see how the bagged model performs on the test data:
+
+```{r}
+ypred_bag <- predict(bag_fish, newdata = fish[-train_ids,])
+mse_bag <- mean((ypred_bag - fish$Weight[-train_ids])^2)
+```
+
+The test set MSE associated with the bagged regression tree is `r round(mse_bag, 3)`, which is about two-thirds of that obtained by the optimal single tree!!!
+
+We could also change the number of trees grown by the function `randomForest()` by specifying the `ntree` argument:
+
+```{r}
+bag_fish <- randomForest(Weight ~. , data = fish[train_ids,],
+                         mtry = p, ntree = 20)
+```
+
+Now to build a random forest!  **By default**, `randomForest()` uses $p/3$ variables when building a random forest of regression trees, and $\sqrt{p}$ when building random forest of classification trees. However, here we will specify `mtry = 2`. 
+
+```{r}
+set.seed(1)
+rf_fish <- randomForest(Weight ~. , data = fish[train_ids,],
+                        mtry = 2, importance = T)
+ypred_rf <- predict(rf_fish, newdata = fish[-train_ids,])
+mse_rf <- mean((ypred_rf - fish$Weight[-train_ids])^2)
+```
+
+Here, our test set MSE under this random forest is `r round(mse_rf, 2)`, which is an improvement over bagging in this case! 
+
+You may have notice we kept on passing in the argument `importance = T`. That's so we can view the importance of the each variable in the tree using the `importance()` function:
+
+```{r}
+importance(rf_fish)
+```
+
+You see there are two variable importance measures reported from the function. The first is based upon the mean decrease of accuracy in predictions on the out-of-bag samples when a given variable is permuted. The second is a measure of the total decrease in *node impurity* that results from splits over that variable, averaged over all trees. In the case of regression trees, the node impurity is measured by the training RSS, and for classification trees by the Gini index. Plots of these importance measures can be produced using the `varImpPlot()` function.
+
+```{r}
+varImpPlot(rf_fish)
+```
+
+The plot shows that `Width`, `TotalLength`, and `BodyLength` appears to be the most important variables of the five considered. 
+
+## YOUR TURN!
+
+```{marginfigure}
+I'm pretty positive you will need to install this package! Once installed, type ?palmerpenguins to get a desciprtion of this very fun data!! I highly recommend you click on the first link under "Useful links".
+```
+
+```{r}
+library(tree)
+library(palmerpenguins)
+data("penguins")
+penguins <- penguins %>%
+  na.omit()
+```
+
+```{marginfigure}
+Cape Town, South Africa has penguins that are nicknamed "jackass" penguins because they bray like a donkey!
+```
+
+We will build some classification trees for the three penguin `species`: Adelie, Chinstrap, and Gentoo. 
+
+## Exercise 1: Decision Trees
+
+a) Create a training set containing 200 random samples of observations, and a test set containing the remaining observations. I suggest setting your own seed!
+
+```{r}
+set.seed(10)
+n <- nrow(penguins)
+train_ids <- sample(1:n, 200)
+penguins_train <- penguins[train_ids,]
+penguins_test <- penguins[-train_ids,]
+```
+
+
+b) Fit a regular decision classification tree to the training data, using `species` as the response variable. For predictors, use everything except `year` and `island`. Then use the `summary()` function to produce summary statistics about the tree. Describe the results obtained: What is the training error rate? How many terminal nodes does the tree have? Which predictors did the tree end up using?
+
+```{r}
+tree_penguins <- tree(species ~ . - year - island, data= penguins_train)
+summary(tree_penguins)
+```
+
+Under my seed, the decision tree ended up using the predictors: flipper length, bill length, bill depth, and body mass. There are 6 terminal nodes, the the training error rate is 0.04.
+
+c) Type in the name of the tree object in order to get a detailed text output. Pick one of the terminal nodes and interpret the information displayed.
+
+```{r}
+tree_penguins
+```
+
+Example: at (7), we see that an observation with a bill depth greater than 17.65 mm will be classified as a Chinstrap species.
+
+d) Create a plot of the tree and (generally) interpret the results.
+
+```{r}
+plot(tree_penguins)
+text(tree_penguins, pretty = 0)
+```
+
+Example: It appears that penguins with smaller flipper and beak physical characteristics are more likely to be classified as the Adelie species. 
+
+e) Predict the response on the test data and produce a contingency table comparing the true test labels to the predictions. What is the misclassification error rate?
+
+```{r}
+tree_preds <- predict(tree_penguins, newdata = penguins_test, type = "class")
+table(preds = tree_preds, true = penguins_test$species)
+```
+
+(5+1) / 133 = `r round((nrow(penguins_test) -sum(diag(table(preds = tree_preds, true = penguins_test$species))))/nrow(penguins_test), 3)`.
+
+f) Time to determine the optimal tree size. Use the `cv.tree()` function on the training penguin data. Don't forget to set a seed!
+
+```{r}
+set.seed(21)
+cv_penguins <- cv.tree(tree_penguins, FUN = prune.misclass)
+```
+
+g) Create a plot with the tree size on the $x$-axis and the cross-validated classification error rate on the $y$-axis.
+
+```{r}
+data.frame(size = cv_penguins$size, error = cv_penguins$dev) %>%
+  ggplot(., aes(x = size, y = error))+
+  geom_point() + 
+  geom_line()
+```
+
+h) Which tree size corresponds to the lowest cross-validated classification error rate? 
+ 
+Based on the plot, a tree with 4 terminal nodes results in the lowest cross-validated classification error rate.
+
+i) Produce a pruned tree corresponding to the optimal tree size obtained using cross-validation. If cross-validation does not lead to selection of a pruned tree, then create a pruned tree with five terminal nodes. Plot it!
+
+```{r}
+prune_penguins <- prune.misclass(tree_penguins, best = 4)
+plot(prune_penguins)
+text(prune_penguins, pretty = 0)
+```
+
+j) Compare the misclassification rates on the TEST data between the prune and unpruned trees. Which tree appears to be better?
+
+```{r}
+prune_preds <- predict(prune_penguins, newdata = penguins_test, type = "class")
+table(preds = prune_preds, true = penguins_test$species)
+```
+
+(3 + 1) / 133 = `r round((nrow(penguins_test) -sum(diag(table(preds = prune_preds, true = penguins_test$species))))/nrow(penguins_test), 3)`. The pruned tree performs just slightly better on the test data compared to the original tree.
+
+## Exercise 2: Random Forests
+
+a) Continuing with your same test and train sets of the penguin data, fit a random forest to the train data. Use the same predictors as before, and only let the model consider 3 predictors at every split. Also keep track of the importance. Don't forget to set a seed!
+
+```{r message = F, warning = F}
+library(randomForest)
+set.seed(1)
+rf_penguins <- randomForest(species ~ . - year - island, data = penguins_train,
+                         mtry = 3, importance = T)
+```
+
+b) What test error rate do you obtain from this random forest? How does the random forest model compare to your best tree in Exercise 1?
+
+```{r}
+ypred_rf <- predict(rf_penguins, newdata = penguins_test)
+err_rate <- mean(ypred_rf != penguins_test$species)
+```
+
+The error rate from this random forest on the test data is `r round(err_rate, 3)`, which is lower than the best tree in Exercise 1.
+
+c) Using the `varImpPlot()` function, determine which variable is the most important in this random forest. 
+
+```{r}
+varImpPlot(rf_penguins)
+```
+
+Based on my random forest, it appears that bill length is the most important variable.
+
+

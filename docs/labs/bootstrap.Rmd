@@ -1,0 +1,60 @@
+---
+title: "Bootstrap Implementation"
+author: ""
+output: html_document
+date: "10/7/2022"
+---
+
+```{r include = F}
+library(tidyverse)
+```
+
+## The Bootstrap
+
+The Bootstrap can be using in almost any scenario, which makes it extremely appealing. One area where this is especially useful is learning about the distribution of a statistic. Suppose we have observed some data `z` and we don't know the underlying distribution. We want to learn about the distribution of the *median*. 
+
+
+Here is some data:
+
+```{r generate_data}
+set.seed(2)
+n <- 20
+z <- rgamma(n, 5, 2)
+```
+
+```{r echo = F, fig.align="center", fig.height=4, fig.width=4}
+ggplot(data.frame(z = z), aes(x=z)) +
+  geom_histogram(bins = 15) +
+  geom_vline(xintercept = median(z), col = "blue", linetype = "dashed") +
+  ggtitle(paste0("Observed median: ", round(median(z),2)))
+```
+
+Our best guess at the median $m$ is probably the median of the observed data. But how confident are we? We can bootstrap to get a range of reasonable/plausible values for the median of this data.
+
+### Part 1
+
+Write code that generate bootstrap samples for the median $m$. Don't forget to set a seed for reproducibility!
+
+```{r bootstrap}
+## your code here
+
+```
+
+
+### Part 2
+
+Now you can calculate the standard error of your estimate for median of `z` using the `sd()` function on your vector!
+
+**What is the standard error of your estimate?**
+
+```{r bootstrap_se}
+## your code here
+```
+
+
+### Part 3
+
+Now plot the distribution of your bootstrap medians using a histogram. Add vertical lines for the 95% bootstrap intervals (i.e. one at the 2.5-th percentile, and one at the 97.5-th percentile). The quantiles can be accessed using the `quantile()` function.
+
+
+**You should clearly understand how this plot differs from the one above.**

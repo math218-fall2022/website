@@ -55,9 +55,10 @@ lessons:
    slides: "lec-slides/05-resampling.html"
    #reading: "reading-07.html"
  - date: "Friday, Oct. 7"
-   title: "Resampling (cont.) & Implementation"
-   #lab: resampling
-   #hw: resampling
+   title: "Resampling (cont.) & CV Implementation"
+   lab: "cross_validation.html"
+ - title: "Bootstrap Implementation"
+   lab: "bootstrap.html"
  - date: "Week 05"
  - date: "Monday, Oct. 10"
    title: "Implement KNN"

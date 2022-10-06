@@ -1,0 +1,63 @@
+---
+title: "Cross-Validation Implementation"
+author: ""
+output: html_document
+date: "10/07/2022"
+---
+
+```{r include = F}
+library(tidyverse)
+```
+
+## Cross-validation
+
+The following code generates linear data as follows: $Y = -1 + 2X + 0.5X^2 + \epsilon$. The predictor `x` and response `y` are stored in a data frame called `df`. In this section, we will obtain the LOOCV and $k$-fold CV error estimates from fitting the incorrect linear model  $Y = \beta_{0} + \beta_{1}X + \epsilon$.
+
+```{r generate_data}
+set.seed(1)
+x <- rnorm(150)
+eps <- rnorm(150)
+y <- -1 + 2*x + 0.5*x^2 + eps
+df <- data.frame(x,y)
+```
+
+### LOOCV
+
+*Note*: if you've never coded a `for` loop in R (or elsewhere), this could be helpful: https://intro2r.com/loops.html
+
+Using a `for` loop, write code to obtain the LOOCV error estimate when fitting the following model to this data: $Y = \beta_{0} + \beta_{1}X + \epsilon$. I have given you a bit of starter code (be sure to remove the `eval = FALSE` before knitting).
+
+```{r loocv, eval  = F}
+n <- ___
+
+# you need to create a vector here to store some values
+
+for(i in 1:n){ # looping through n times
+  
+  ## fill this in!
+  
+}
+
+
+```
+
+**Question 1: What is your LOOCV error estimate?**
+
+### $k$-fold CV
+
+For $k$-fold CV, we must first randomly split the data into $K$ groups or folds of roughly equal size. We will choose $K = 10$. In the following code chunk, I set you a seed. Add code that randomly assigns each of the observations to one of $K=10$ folds. **Try working on this for two minutes on your own, then share your thoughts/process with your partner(s).** 
+
+```{r kfold_ids}
+set.seed(1)
+
+```
+
+Now you have everything in hand to implement k-fold CV. You can and should re-purpose the code from LOOCV. We will still fit the following model to this data: $Y = \beta_{0} + \beta_{1}X + \epsilon$. 
+
+```{r kfold-CV}
+# YOUR CODE HERE
+
+```
+
+**Question 2: What is your k-fold error estimate when k = 10?**
+
