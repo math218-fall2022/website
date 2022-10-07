@@ -306,7 +306,8 @@ p &lt;- 1000
 p_cv &lt;- 20
 y &lt;- rbinom(n,1,0.5)
 K &lt;- 10
-x &lt;- matrix(rnorm(n*p, runif(p, -10, 10), 1),nrow=n, ncol = p,byrow = T)
+x &lt;- matrix(rnorm(n*p, runif(p, -10, 10), 1),
+            nrow = n, ncol = p, byrow = T)
 ```
 
 
@@ -329,6 +330,16 @@ mean(err_vec_correct)
 ```
 ## [1] 0.5088889
 ```
+---
+
+## Housekeeping
+
+- No lab this week!
+
+- Homework 4 due Thursday, October 13 at 11:59pm
+
+- We are implementing methods in R; please come to my office hours if you have any questions about coding any method. It might be important...
+
 ---
 
 class: middle, center

@@ -399,6 +399,16 @@ mean(err_vec_correct)
 ```
 ---
 
+## Housekeeping
+
+- No lab this week!
+
+- Homework 4 due Thursday, October 13 at 11:59pm
+
+- We are implementing methods in R; please come to my office hours if you have any questions about coding any method. It might be important...
+
+---
+
 class: middle, center
 
 ## The Bootstrap

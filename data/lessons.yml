@@ -59,6 +59,8 @@ lessons:
    lab: "cross_validation.html"
  - title: "Bootstrap Implementation"
    lab: "bootstrap.html"
+ - title: "HW 04 released"
+   hw: "hw-04.pdf"
  - date: "Week 05"
  - date: "Monday, Oct. 10"
    title: "Implement KNN"
