@@ -89,7 +89,7 @@ b) Based on your decision in (a), approximately how old would someone in third c
 ### Exercise 3
 
 Recall that the Naive Bayes classifier assumes that the $p$ features are independent, i.e.
-$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p})$. For categorical predictors, an estimate for each of the $f_{kj}$ is simply the proportion of training observations for the $j$-th predictor corresponding to each class $k$. So for a given predictor $j$, the $\sum_{k=1}^{K} f_{kj} = 1$.
+$f_{k}(x) = f_{k1}(x_{1}) \times f_{k2}(x_{2}) \times \cdots \times f_{kp}(x_{p})$. For categorical predictors, an estimate for each of the $f_{kj}$ is simply the proportion of training observations for class $k$ that fall into each level of the $j$-th predictor. 
 
 Assume in this problem that we have $n = 200$ training observations with $p=2$ features ($X_{1}$ and $X_{2}$), and the response has $K=3$ possible classes. Further, assume that $X_{1}$ and $X_{2}$ are both qualitative, where $X_{1}$ has three levels and $X_{2}$ has two levels. 
 
