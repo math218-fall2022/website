@@ -33,7 +33,7 @@ Your project may be a supervised and/or unsupervised analysis. Whichever you cho
 
   - An analysis that uses at least three different statistical learning methods you learned this semester. This may be a comparison of three methods, or perhaps a comparison of two with a deeper dive into one. This is quite open-ended! *If you are working with a partner, you must use at least four different methods.*
   
-  - An analysis that uses a method that you taught yourself or learned in a different class/setting. If you'd like, you may compare this method to another we learned in class, but that is not necessary. *If you are working with a partner, you must use compare this new method to another method.*
+  - An analysis that uses a method that you taught yourself or learned in a different class/setting. If you'd like, you may compare this method to another we learned in class, but that is not necessary. *If you are working with a partner, you must also use one additional method learned in class method. There may be exceptions, depending on the difficulty of the new method.*
   
 
 # Brief project logistics
@@ -64,13 +64,12 @@ Total                                                   | 135 pts
 # Data sources
 
 In order for you to have the greatest chance of success with this project it is 
-important that you choose a manageable dataset. This means that the data should 
+important that you choose a reasonable dataset. This means that the data should 
 be readily accessible and large enough that multiple relationships can be 
-explored. As such, your dataset must have at least 100 observations and at  
-least 10 variables. Generally,
-more observations or more variable will lead to a more interesting analysis.
+explored. As such, your dataset must have at least 100 observations and at least 10 variables. Generally,
+more observations and/or more variables will lead to a more interesting analysis.
 The dataset’s variables should include categorical variables, discrete numerical 
-variables, and continuous numerical variables  (exceptions can be made but you must speak with me first). If you'd like, you may joint multiple datasets together.
+variables, and continuous numerical variables  (exceptions can be made but you must speak with me first). If you'd like, you may join multiple datasets together.
 
 All analyses must be done in RStudio, and your final written report and 
 analysis **must be reproducible**. This means that you must create an R Markdown
@@ -204,6 +203,8 @@ statistical analysis should also be discussed here. A paragraph on what you
 would do differently if you were able to start over with the project or what you 
 would do next if you were going to continue work on the project should also be 
 included.
+
+*Revision opportunity*: after your presentation, you have the opportunity to take feedback from Professor Tang and your peers to revise the written report. If you would like to revise the report, you have within five days of receiving the initial feedback to re-submit the report. This is not a guarantee of an improved grade. I will speak more about the revision process later in the semester.
 
 ## Repository
 
