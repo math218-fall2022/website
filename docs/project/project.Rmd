@@ -7,6 +7,8 @@ output:
      fig_caption: false
 ---
 
+Partner choices (selected or random) emailed by **Saturday, November 5 at 11:59pm**
+
 Project proposals due **Sunday, November 13 at 11:59pm**
 
 Project plans due **Sunday, November 20 at 11:59pm**
@@ -26,14 +28,14 @@ courses or research projects. The goal of this project is for you to demonstrate
 proficiency in the techniques we have covered in this class (and beyond, if you 
 like) and apply them to a dataset in a meaningful way.
 
-This project is *partner-optional*. The partners will be self-selected. If you choose 
-to complete the project with a partner, one of you should e-mail me and CC your partner on the e-mail by **Sunday, November 6 at 11:59pm**. 
+This project is *partnered*. The partners may be self-selected or randomly assigned. If you choose 
+to complete the project with a partner, one of you should e-mail me and CC your partner on the e-mail by **Saturday, November 5 at 11:59pm**. If you want a randomly assigned partner, you must e-mail me by  **Saturday, November 5 at 11:59pm**. I will let you know by midnight the next day who your random partner is. 
 
 Your project may be a supervised and/or unsupervised analysis. Whichever you choose, your project must consist of one of the following:
 
-  - An analysis that uses at least three different statistical learning methods you learned this semester. This may be a comparison of three methods, or perhaps a comparison of two with a deeper dive into one. This is quite open-ended! *If you are working with a partner, you must use at least four different methods.*
+  - An analysis that uses at least three different statistical learning methods you learned this semester. This may be a comparison of three methods, or perhaps a comparison of two with a deeper dive into one. This is quite open-ended! 
   
-  - An analysis that uses a method that you taught yourself or learned in a different class/setting. If you'd like, you may compare this method to another we learned in class, but that is not necessary. *If you are working with a partner, you must also use one additional method learned in class method. There may be exceptions, depending on the difficulty of the new method.*
+  - An analysis that uses a method that you taught yourself or learned in a different class/setting. If you'd like, you may compare this method to another we learned in class, but that is not necessary. 
   
 
 # Brief project logistics
@@ -233,12 +235,14 @@ for content and quality. They can also be used for your Presentation. For submis
 
 ## Presentation
 
-On the last two days of class everyone will present their projects. There will be a seven-minute time limit for each presentation followed by three minutes for questions, for a total of ten-minutes per presentation. You may, and should, use the slides as detailed in the previous section during your presentation.
+On the last two days of class everyone will present their projects. There will be a six-minute time limit for each presentation followed by two minutes for questions, for a total of eight-minutes per presentation. You may, and should, use the slides as detailed in the previous section during your presentation.
 
 ## Participation
 
 You are expected to attend both days of presentations, and be actively engaged by
 asking questions and providing feedback.
+
+Everyone will also provide feedback and assess their partner's contributions. 
 
 
 

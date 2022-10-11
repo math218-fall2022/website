@@ -1,0 +1,207 @@
+---
+title: "KNN Implementation"
+output: html_document
+date: "10/11/2022"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message = F, warning = F}
+library(tidyverse)
+```
+
+## Set-up
+
+We will code KNN regression (or classification). You can assume:
+
+  - We have $n$ training observations, each with $p$ predictors. 
+  - The training features are stored in an $n \times p$ matrix or data frame `X`. 
+  - The training responses are stored in a vector `Y` of length $n$. 
+  
+You will write code to predict the response for a new vector of observations `x0` using KNN, for a given positive integer `K`.  Our code is broken down into three main steps/functions:
+
+  1. Writing a function to calculate distance (I did this for you)
+  2. Writing a function to obtain the nearest neighbors
+  3. Writing a function to obtain the prediction
+
+## Create distance function
+
+Here I create a distance function called  `my_dist()`.
+
+  - The inputs are two vectors `v1`, `v2`
+  - The function returns the Euclidean distance between `v1`, `v2`
+  
+```{r euc_dist}
+my_dist <- function(v1, v2){
+  dist <- sqrt(sum((v1-v2)^2))
+  return(dist)
+}
+```
+
+
+## Create neighbor set
+
+Write a function `get_nn()` that allows you to obtain the neighbor set of size $K$. It should call the `my_dist()` function. 
+
+  - Your inputs should be: `X`, `x0`, and `K`
+  - Your function should return a vector of indices of the $K$ nearest neighbors in the training set to the test observations
+  
+I have some pseudocode to get you started, but you will need to fill it in!
+  
+```{r nn_fn, eval = F}
+get_nn <- function(_______){
+  # create n, the total number of observations in the train set
+  
+  # create a vector to hold the distances between x0 and each observation in X
+  
+  # calculate distances
+  
+  # Find closest neighbours, and store them somewhere
+  
+  # Return closest neighbours
+}
+
+```
+
+
+## Predict!
+
+Create a function `knn()` that performs KNN regression or classification. Your code should be able to handle both regression or classification based on what input the user specifies. It should call the `get_nn()` function you created above. 
+
+  - The function should take as inputs: `X`, `Y`, `x0`, `K`, and a logical/boolean argument called `classification`. If `classification = T`, then perform KNN classification. Else, perform KNN regression.
+  - The function should return your prediction for the given `x0`
+
+```{r knn_fn}
+# your code here!
+```
+
+## TEST OUT YOUR CODE
+
+We will use the famous `iris` data.
+
+```{r}
+data(iris)
+head(iris)
+```
+
+### KNN Classification
+
+Here, we use the first 149 observations as our train set, and the last observation as the test observation. We will use all four quantitative variables as our predictors. Our response is the `Species`. Set a `K`, and predict for this `x0`. Compare it to the `y0`!
+
+```{r test_classification}
+train_df <- iris %>%
+  slice(1:149)
+X <- train_df %>%
+  select(-Species)
+Y <- train_df %>% 
+  pull(Species)
+test_df <- iris %>%
+  slice(150)
+x0 <- test_df %>%
+  select(-Species)
+y0 <- test_df %>%
+  pull(Species)
+
+# set a K!
+
+# call your function!
+```
+
+### KNN Regression
+
+To test your KNN regression, create a new `X`, `Y`, `x0`, and `y0`. Now our predictors will be the first three quantitative variables, and our response will be the fourth, `Peta.Width`. Use the code above to create the new `X`, `Y`, `x0`, and `y0`, then call your function!
+
+```{r test_regression}
+# your code here
+```
+
+```{r include=F}
+train_df <- iris %>%
+  slice(1:149)
+X <- train_df %>%
+  select(1:3)
+Y <- train_df %>% 
+  pull(4)
+test_df <- iris %>%
+  slice(150)
+x0 <- test_df %>%
+  select(1:3)
+y0 <- test_df %>%
+  pull(4)
+
+# set a K!
+
+# call your function!
+```
+
+
+```{r dist_fn, include = F}
+## INPUTS ##
+# x1, x2: vectors of same length to calculate the Euclidean distance between
+
+## OUTPUT: the Euclidean distance ##
+
+my_dist <- function(x1, x2){
+  dist <- sqrt(sum((x1-x2)^2))
+  return(dist)
+}
+```
+
+
+```{r nb_set_fn, include = F}
+## INPUTS ##
+# X: data frame or matrix of FEATURES. Dimension n x p  
+# x0: p-vector of features for new observation
+# K: number of neighbors to consider
+
+## OUTPUT: a vector of length K for the indices of the K nearest neighbors to x0 ##
+get_nn <- function(X, x0, K){
+  n <- nrow(X)
+  dists <- rep(NA, n)
+  # Calculate distance for each observation in X, and store them
+  for(i in 1:n){
+    dists[i] <- my_dist(X[i,], x0)
+  }
+
+  ### TIDYVERSE WAY
+  dists_df <- data.frame(dists = dists) %>%
+    mutate(index = row_number())
+  ## Find closest neighbours
+  neighbor_ids <- dists_df %>%
+    arrange(dists) %>%
+    slice(1:K) %>%
+    pull(index)
+  return(neighbor_ids)
+}
+```
+
+```{r pred_fn, include = F}
+## INPUTS ##
+
+# X: data frame or matrix of FEATURES for train data. Dimension n x p
+# Y: n-vector of RESPONSES for train data
+# x0: p-vector of features for new/test observation
+# K: number of neighbors to consider
+# classification: boolean. If TRUE, perform classification. Otherwise, regression
+
+## OUTPUT: prediction correspond to x0 ##
+
+knn<- function(X, Y, x0, K, classification = T){
+  ret <- NA
+  neighbor_ids <- get_nn(X, x0, K)
+  # y = n-vector of responses for train data
+  if(classification){
+    groups <- table(Y[neighbor_ids])
+    ret <- names(which(groups == max(groups)))
+  } else{
+    ret <- mean(Y[neighbor_ids])
+  }
+  return(ret)
+}
+
+```
+
+
+
