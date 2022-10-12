@@ -1,49 +1,66 @@
 ---
-title: "Exam 1"
-author: "Your name here"
-output:
-  pdf_document: default
-  html_document: default
+title: "Exam 01"
+author: "?"
+output: pdf_document
+date: "10/17/2022"
 ---
+ 
+**TYPE YOUR HONOR CODE PLEDGE BELOW**
 
-```{r load-packages, message = F, warning = F}
+
+```{r setup, warning = FALSE, message = F}
 library(tidyverse)
+bmd_dat <- read.csv("~/Desktop/Math218/data/bmd.csv") %>%
+  mutate(status = if_else(fracture == "no fracture", 0, 1)) %>%
+  select(-fracture)
 ```
 
-```{r load-data, echo = F}
-student_diversity <- read.csv("data/student_diversity.csv")
-tuition_cost <- read.csv("data/tuition_cost.csv")
-rankings <- read.csv("data/rankings.csv")
+## Coding Question
+
+### Part a
+
+```{r}
+# code here
 ```
 
-#### Task 1
-
-#### Task 2
-
-```{r task1-given, eval = F}
-# set eval = T once you have performed the first part of this task
-diversity  <- diversity %>%
- pivot_longer(cols = c("Asian", "White", "Black", "Hispanic","Other"), names_to = "race",
-              values_to = "n")
-
-```
+### Part b
 
 
-#### Task 3
+### Part c
 
-#### Task 4
 
-#### Task 5
+### Part d
 
-#### Task 6
+\clearpage
 
-#### Task 7
+## Conceptual Questions
 
-#### Task 8
+### Question 1
 
-#### Task 9
 
-#### Task 10
+### Question 2
 
-#### Task 11
+
+### Question 3
+
+a)
+
+b) 
+
+c)
+
+d)
+
+### Question 4
+
+*Please read the description about distance-weighted KNN regression to answer this question. This is found in the file `distance-weighted-knn.pdf`*
+
+a)
+
+b) 
+
+c)
+
+d)
+
 
