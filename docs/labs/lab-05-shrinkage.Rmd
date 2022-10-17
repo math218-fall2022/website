@@ -1,0 +1,226 @@
+---
+title: "Lab 05 - Linear Model Regularization"
+subtitle: "Due Thursday, 11/03 at 11:59pm"
+output: 
+  tufte::tufte_html:
+    css: "./math218-labs.css"
+    tufte_variant: "envisioned"
+    highlight: tango
+    toc: true
+    toc_depth: 1
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message = F, warning = F}
+library(tidyverse)
+library(ISLR2)
+library(leaps)
+library(glmnet)
+```
+
+# Introduction
+
+We will examine shrinkage methods for linear models using the `Hitters` data from the `ISLR2` package. This data contains 322 observations of major league baseball players from the 1986 and 1987 seasons. 
+
+Continuing from last week, we still wish to predict a baseball player's `Salary` in 1987 using several other variables/statistics that were measured in the previous year. We will only work with the rows (players) that have complete data:
+
+```{r}
+Hitters <- na.omit(Hitters)
+n <- nrow(Hitters)
+```
+
+
+# Ridge regression
+
+The `glmnet` package helps us perform ridge regression. The main function is, unsurprisingly, `glmnet()`. The syntax is slightly different from `lm()` in that we have to pass in an `x` matrix of predictors as well as a `y` vector of responses. This is opposed to the familiar `y ~ x` syntax. We will once again use the `model.matrix()` function to create an `x` matrix.
+
+```{r}
+library(glmnet)
+x <- model.matrix(Salary ~ ., Hitters)[,-1]
+y <- Hitters$Salary
+```
+
+Note that we create a design matrix `x` excluding an intercept. This is because `glmnet()` will automatically include one for us.
+
+The `glmnet()` function has an argument called `alpha`. Setting `alpha = 0` runs ridge regression. The following code also specifies a grid of values for the tuning parameter $\lambda$, ranging from $\lambda = 10^{10}$ to $\lambda = 10^{-2}$. If we didn't specify `lambda`, the function would automatically select a range of values.
+
+```{marginfigure}
+glmnet()` standardizes the variables by default. If we wanted to turn this off, we would set `standardize = FALSE`.
+```
+
+```{r}
+grid <- 10^seq(10,-2,length = 100)
+ridge_mod <- glmnet(x, y, alpha = 0, lambda = grid)
+```
+
+Associated with each value of $\lambda$ is a vector of ridge regression coefficients, stored in a matrix that can be accessed by `coef()`. In this case, it is a $20 \times 100$ matrix, with 20 rows (one for each predictor, plus an intercept) and 100 columns (one for each value of $\lambda$).
+
+```{r}
+dim(coef(ridge_mod))
+```
+
+We expect that the coefficients estimates will be much smaller when a large value of $\lambda$ is used, compared to when a smaller value is used. 
+
+```{r}
+grid[50]
+coef(ridge_mod)[,50]
+
+# l2 norm
+sqrt(sum((coef(ridge_mod)[-1,50])^2))
+
+# versus
+grid[70]
+coef(ridge_mod)[,70]
+
+# l2 norm
+sqrt(sum((coef(ridge_mod)[-1,70])^2))
+
+```
+
+We now split the samples into a training set and a test set in order to estimate the test error of ridge regression. Above, we randomly chose a subset of of numbers between 1 and $n$ to create a vector of training set indices. Another approach to create training/test sets is to produce a random vector of `TRUE`, `FALSE` elements and select the observations corresponding to `TRUE` for the training data:
+
+```{r}
+set.seed(2)
+train_set <- sample(c(TRUE, FALSE), n, replace = T)
+y_test <- y[!train_set]
+```
+
+Next we fit a ridge regression model on the training set, and evaluate its MSE on a the test set using predictions obtained from `predict()`. We will arbitrarily use $\lambda = 5$ for the test set.
+
+```{marginfigure}
+In `predict()`, the `s` argument denotes the penalty parameter $\lambda$.   Default is the entire sequence used to create the model.
+```
+
+```{r}
+ridge_mod <- glmnet(x[train_set,], y[train_set], alpha = 0, lambda = grid)
+ridge_preds <- predict(ridge_mod, s = 5, newx = x[!train_set,])
+mean((ridge_preds - y_test)^2)
+```
+
+We now check whether there is any benefit to performing ridge regression with $\lambda = 5$ instead of just performing least squares regression. Recall that least squares is simply ridge regression with $\lambda = 0$. 
+
+```{r}
+lm_mod <- lm(Salary ~., Hitters[train_set,])
+lm_preds <- predict(lm_mod, newdata = Hitters[!train_set,])
+mean((lm_preds - y_test)^2)
+```
+
+Already, it seems like ridge regression yields better predictions than least squares regression.
+
+It would be better to use cross-validation to choose the tuning parameter, rather than arbitrarily choosing a value for $\lambda$. We can do this using the built-in cross-validation function, `cv.glmnet()`. 
+
+```{r}
+set.seed(2)
+cv_out <- cv.glmnet(x[train_set,], y[train_set], alpha = 0, nfolds = 5)
+(best_lam <- cv_out$lambda.min)
+```
+
+The test MSE associated with the "best" $\lambda$ is:
+
+```{r}
+ridge_preds <- predict(ridge_mod, s= best_lam, newx = x[!train_set,])
+mean((ridge_preds - y_test)^2)
+```
+
+which is quite a bit better than the test MSE when we had arbitrarily chosen $\lambda = 5$. 
+
+Finally, we refit our ridge regression model on the full data set, using the value of $\lambda$ chosen by cross-validation, and examine the coefficient estimates.
+
+```{r}
+ridge_final <- glmnet(x, y, alpha = 0, lambda = best_lam)
+round(coef(ridge_final), 3)
+```
+
+As expected, none of the coefficients are zero—ridge regression does not perform variable selection!
+
+# The Lasso
+
+The lasso model can be fit using `glmnet()`, but this time setting `alpha = 1`.
+
+```{r}
+lasso_mod <- glmnet(x[train_set,], y[train_set], alpha = 1, lambda = grid)
+plot(lasso_mod)
+```
+
+We can see from the coefficient plot that depending on the choice of tuning parameter, some of the coefficients will be exactly equal to zero.
+
+Now we perform cross-validation to select an optimal lambda and compute the associated test error:
+
+```{r}
+set.seed(4)
+cv_out <- cv.glmnet(x[train_set,], y[train_set], alpha = 1, nfolds = 5)
+(best_lam <- cv_out$lambda.min)
+lasso_preds <- predict(lasso_mod, s = best_lam, newx = x[!train_set,])
+mean((lasso_preds - y_test)^2)
+```
+
+This is lower than the test set MSE of the least squares model, but larger than the test MSE of ridge regression with $\lambda$ chosen by cross-validation. That being said, the lasso results in sparse coefficients estimates. 
+
+```{r}
+lasso_full <- glmnet(x,y,alpha = 1, lambda = grid)
+lasso_coef <- predict(lasso_full, type = "coefficients", s = best_lam)[1:20,]
+lasso_coef
+```
+
+The lasso model with $\lambda$ chosen by cross-validation only contains eight of the nineteen variables:
+
+```{r}
+lasso_coef[lasso_coef != 0]
+```
+
+
+
+# YOUR TURN!
+
+
+## Exercise 1: more on practicing various methods
+
+```{r}
+data("College")
+```
+
+In this exercise, we will use the `College` data set, which contains statistics for a large number of US Colleges from the 1995 issue of US News and World Report. Type `?College` into the Console to learn about this data. We will predict the number of applications received using all the other variables in the data set.
+
+You will be asked to calculate the **root mean squared error** (RMSE) for test data. This is simple the square-root of the usual MSE. The RMSE has a nicer interpretation, as it is on the scale of the observations (whereas MSE is on the scale of the squared observations). It tells you the average distance between the predicted values from the model and the true values in the (test) data. 
+
+For example, suppose we are building a model with the response as time spent on homework, in hours. After fitting the model and predicting for test data, we obtain an RMSE of 1.33. This means that the average distance between the observed and predicted hours spent on homework is 1.33. Whether or not that distance is reasonable totally depends on the context! A model with test RMSE of 10 would be horrible in this context. If instead, our response was time spent on homework in *minutes*, an RMSE of 10 would be quite reasonable!
+
+a)  Split the data set into a 60% training set and a 40% test set, setting a seed for reproducibility. Use a seed of 10.
+
+
+b) Fit a linear model using least squares on the training set, and report the RMSE test error  obtained. Interpret the RMSE in the context of the problem.
+
+c) Fit a ridge regression model on the training set, with $\lambda$ chosen by cross-validation. Report the $\lambda$ and test error obtained. Use a seed of 10.
+
+d) Fit a lasso model on the training set, with $\lambda$ chosen by cross-validation. Report the lambda and test error obtained, along with the number of zero coefficient estimates (if any) and the variables they correspond to. Use a seed of 10.
+
+
+e) Comment on the results obtained. How accurately can we predict the number of college applications received? (You may want to consider the range/spread of the observed response). Is there much difference among the test errors resulting from these three approaches?
+
+
+## Exercise 2: more lasso and ridge practice 
+
+Recall that in Exercise 1 in last week's lab, we generated data according to the model
+$$y = 1 + 2x + 0.5x^2 - x^3 + \epsilon,$$
+for some predictor `x`. We then performed best subset selection to obtain the best model containing the predictors $X, X^2, X^{3}, \ldots, X^{10}$.
+
+We will now fit a lasso model to that same simulated data. The following codes re-generates the `x` and `y` data for us:
+
+```{r ex2_dat, include = F}
+set.seed(2)
+n <- 100
+x <- rnorm(n); eps <- rnorm(n)
+y <- 1 + 2*x + 0.5*x^2 - 1*x^3 + eps
+```
+
+
+a) Fit a lasso model to the simulated data, again using $X,X^2, . . . , X^{10}$ as predictors as we did last week. Use cross-validation (don't forget to set a seed) to select the optimal value of $\lambda$. What is the optimal $\lambda$?
+
+
+b) Create a plot of the cross-validation training error as a function of $\lambda$. 
+
+
+c) Using your identified best $\lambda$, report the resulting coefficient estimates and discuss the results obtained (i.e. how they relate to the true $\beta_{j}$).
+
+d) Now run a ridge regression again using $X,X^2, . . . , X^{10}$. Rather than performing CV, simply choose your own $\lambda$ value. Report the estimated coefficients, and comment on them.
