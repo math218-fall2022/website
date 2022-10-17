@@ -1,0 +1,535 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Dimension Reduction"
+date: "10/31/2022"
+output: 
+   xaringan::moon_reader:
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, messLC50 = F)
+
+library(tidyverse)
+library(NHANES)
+library(ISLR)
+library(leaps)
+library(glmnet)
+library(Rcpp)
+library(pls)
+set.seed(1)
+library(lars)
+```
+
+```{r data, include = F}
+data(diabetes)
+z <- cbind(diabetes$x, y = diabetes$y)
+z[,1:10] <- apply(z[,1:10], 2, scale)
+diabetes <- as.data.frame(z) %>%
+ rename("bp" = "map") 
+
+mod_ls <- list(lm(y ~ bmi , diabetes),
+               lm(y ~ bmi + ltg, diabetes),
+               lm(y ~ bmi + bp + ltg , diabetes),
+               lm(y ~ bmi + bp + tc + ltg, diabetes),
+               lm(y ~ sex + bmi + bp+ hdl + ltg, diabetes),
+               lm(y ~ sex + bmi + bp+ tc + ldl + ltg, diabetes),
+               lm(y ~ sex + bmi + bp+ tc+ ldl + tch + ltg, diabetes),
+               lm(y ~ sex + bmi + bp+ tc+ ldl + tch + ltg + glu, diabetes),
+               lm(y ~ sex + bmi + bp+ tc+ ldl + hdl + tch + ltg + glu, diabetes),
+               lm(y ~ ., diabetes  ))
+```
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+
+## Three popular classes of methods
+
+1. **Subset selection**: identify a subset of the $p$ possible predictors that we believe to be related to $Y$, then fit least-squares model (previous lecture)
+
+--
+
+2. **Shrinkage** or **regularization**: fit a model involving all $p$ predictors, but the estimated coefficients are shrunken towards 0 relative to least-squares estimates (this lecture)
+
+  - Can reduce variance and perform variable selection
+  
+--
+
+3. **Dimension reduction**: project the $p$ predictors into a $q$-dimensional space where $q < p$ (this lecture)
+
+  - Achieved using $q$ linear combinations or projections of the $p$ predictors, then fit least squares on the $q$ projections
+  
+
+---
+
+# Dimension Reduction Methods
+
+---
+
+## Dimension reduction
+
+- Subset selection and shrinkage have involved fitting linear regression models using original predictors $X_{1}, X_{2}, \ldots, X_{p}$
+
+--
+
+- Now, consider *transforming* the predictors and then fitting a least-squares model using the transformed variables
+
+ - We will refer to these techniques as **dimension reduction** methods
+ 
+---
+
+## Dimension reduction
+
+- Let $Z_{1}, Z_{2}, \ldots, Z_{M}$ represent $M < p$ linear combinations of the original predictors. That is,
+
+$$Z_{m} = \sum_{j=1}^{p} \phi_{jm} X_{j}$$
+
+ for some constants $\phi_{1m}, \phi_{2m}, \ldots, \phi_{pm}$, $m = 1,\ldots, M$
+ 
+--
+
+- Can then fit a linear regression model
+
+$$y_{i} = \theta_{0} + \sum_{m=1}^{M} \theta_{m}z_{im} + \epsilon_{i}, \quad i = 1,\ldots,n$$ 
+
+ using least squares
+ 
+--
+
+- Here, the regression coefficients are the $\theta$'s
+
+- If the $\phi_{mj}$ are chosen well, dimension reductions can often outperform OLS
+
+---
+
+## Dimension reduction
+
+- We are reducing the problem of estimating $p+1$ coefficients $(\beta_{0}, \beta_{1}, \ldots, \beta_{p})$ to instead estimating $M+1$ $(\theta_{0}, \theta_{1}, \ldots, \theta_{M})$
+
+--
+
+$$\sum_{m=1}^{M} \theta_{m} z_{im} = \sum_{m=1}^{M} \theta_{m} \sum_{j=1}^{p} \phi_{jm}x_{ij} = \sum_{j=1}^{p} \sum_{m=1}^{M} \theta_{m} \phi_{jm}x_{ij} = \sum_{j=1}^{p} \beta_{j} x_{ij}$$
+
+ where $\beta_{j} = \sum_{m=1}^{M} \theta_{m}\phi_{jm}$
+
+- So the linear regression model from the previous slide can be thought of as special case of original linear regression model
+
+--
+
+- Notice that the $\beta_{j}$ are constrained
+ 
+ - Has potential for bias
+ 
+ - When $p$ is large relative to $n$, dimension reduction to reduce variance of the estimated coefficients
+ 
+---
+
+## Dimension reduction
+
+- Generally two steps:
+
+ 1. Obtain transformed predictors $Z_{1}, \ldots, Z_{M}$
+ 
+ 2. Fit the model to the $Z$'s
+
+--
+
+- How we select the $\phi_{jm}$'s will affect the model
+
+---
+
+## Principal Components Regression
+
+- Principal components regression relies on the technique of principal components analysis (PCA)
+
+- The first principal component is the (normalized) linear combination of the variables with the largest variance
+
+- The second principal component has largest variance, subject to being uncorrelated with the first
+
+- Etc.
+
+
+
+---
+
+## PCA pictures
+
+```{r pca_fig1, fig.align = "center", fig.width=4, fig.height=4}
+diabetes_jit <- diabetes
+diabetes_jit$ltg <- rnorm(nrow(diabetes),0.1,0.5) + diabetes$ltg 
+pc  <- princomp(~ glu + ltg,diabetes_jit)
+loads <- pc$loading
+
+start <- c(-2,-2); end <- c(2,2)
+ggplot(diabetes_jit, aes(x = glu, y = ltg))+
+ geom_point() +
+ geom_segment(x = c(start %*% loads[,1]), xend = c(end %*% loads[,1]),
+              y = c(start %*% loads[,1]), yend = c(end %*% loads[,1]), col = "purple") +
+  geom_segment(x =0 + 2*loads[1,2], xend =  0 - 2*loads[1,2],
+              y = 0+ 2*loads[2,2], yend= 0 - 2*loads[2,2], col = "orange", linetype = "dashed")+
+ labs(x = "glucose", y = "log triglycerides")
+
+```
+
+- Purple line is the first principal component direction of the data
+
+- Orange line is the second principal component
+
+---
+
+## PCA
+
+- Recall: $Z_{m} = \sum_{j=1}^{p} \phi_{jm} X_{j}$
+
+--
+
+- In this example,
+
+$$Z_{1} = `r round(loads[1,1],3)`\times (\color{blue}{\text{glu}} - \bar{\color{blue}{\text{glu}}}) + `r round(loads[1,2],3)`\times (\color{blue}{\text{ltg}} - \bar{\color{blue}{\text{ltg}}})$$
+
+ - $\phi_{11} = `r round(loads[1,1],3)`$ and $\phi_{21} = `r round(loads[1,2],3)`$ are the principal component loadings
+ 
+ 
+---
+
+## PCA pictures
+
+
+```{r pca_fig2, fig.align = "center", fig.width=8, fig.height=4}
+p1 <- ggplot(diabetes_jit %>% slice(1:20), aes(x = glu, y = ltg))+
+ geom_point() +
+ geom_segment(x = c(start %*% loads[,1]), xend = c(end %*% loads[,1]),
+              y = c(start %*% loads[,1]), yend = c(end %*% loads[,1]), col = "purple") +
+ labs(x = "glucose", y = "log triglycerides") +
+ geom_segment(aes(x = glu, y = ltg, xend = 0.5*(glu + ltg), yend = 0.5*(glu + ltg)),
+              linetype = "dashed") 
+
+p2 <- ggplot(data.frame(pc$scores[1:20,]) %>% rename("comp1" = 1, "comp2" = 2), 
+       aes(x = comp1, y = comp2) )+
+        geom_point() +
+ geom_hline(yintercept = 0, col = "purple")+
+ geom_segment(aes(x = comp1, y = comp2, xend = comp1, yend = 0), linetype = "dashed") +
+ labs(x = "First principal component", y = "Second prinicpal component")
+
+ggpubr::ggarrange(p1, p2, ncol = 2)
+```
+
+- Subset of the diabetes data
+
+- Left: first principal component minimizes sum of squared perpendicular distances to each point, with dashed line segemnts representing distances
+
+- Right: rotated plot on left so first principal compoent coincides with x-axis
+
+
+---
+
+
+## PCA pictures
+
+```{r pca_scores1, fig.align = "center", fig.width=8, fig.height=4}
+data.frame(comp1 = pc$scores[,1]) %>%
+ mutate(glucose = diabetes_jit$glu,
+        triglycerides = diabetes_jit$ltg) %>%
+ pivot_longer(cols = -1, names_to = "variable") %>%
+ ggplot(.,aes(x = comp1, y = value))+
+ geom_point(col = "pink") +
+ facet_wrap(~variable, scales = "free") +
+ labs(x = "First principal component score", y = "Observed value")
+```
+
+- Plots of the first principal component scores $z_{i1}$ versus $\color{blue}{\text{glucose}}$ and $\color{blue}{\text{tryglycerides}}$
+
+--
+
+- Think of the $z_{i1}$ values as single-number summaries of the joint $\color{blue}{\text{glucose}}$ and $\color{blue}{\text{tryglycerides}}$ for each individual
+
+ - If $z_{i1} < 0$, indicates an individual with below-average glucose and triglycerides level
+
+---
+
+## PCA pictures cont.
+
+```{r pca_scores2, fig.align = "center", fig.width=8, fig.height=4}
+data.frame(comp = pc$scores[,2]) %>%
+ mutate(glucose = diabetes_jit$glu,
+        triglycerides = diabetes_jit$ltg) %>%
+ pivot_longer(cols = -1, names_to = "variable") %>%
+ ggplot(.,aes(x = comp, y = value))+
+ geom_point(col = "pink") +
+ facet_wrap(~variable, scales = "free") +
+ labs(x = "Second principal component score", y = "Observed value")
+```
+
+- Plots of the second principal component scores $z_{i2}$ versus $\color{blue}{\text{glucose}}$ and $\color{blue}{\text{tryglycerides}}$
+
+$$Z_{2} = `r round(loads[1,2],3)`\times (\color{blue}{\text{glu}} - \bar{\color{blue}{\text{glu}}}) + `r round(loads[2,2],3)`\times (\color{blue}{\text{ltg}} - \bar{\color{blue}{\text{ltg}}})$$
+
+---
+
+## Principal components cont.
+
+- In general, can have up to $p$ distinct principal components
+
+ - In this example, $p=2$ so we can only have two components
+ 
+--
+ 
+- By construction, $Z_{1}$ explains more variance than $Z_{2}$
+
+ - Examine variability on plot of $z_{i1}$ vs $z_{i2}$, and strength of relationships between $z_{i2}$ and the two original variables
+ 
+---
+
+## Principal Components Regression
+
+- **PCR** (not to be confused with polymerase chain reaction) approach:
+
+ 1. Construct the first $M$ principle components, $Z_{1}, \ldots, Z_{M}$
+ 
+ 2. Use the components as the predictors in a linear regression model fit using least squares
+ 
+--
+
+- Intuition: often only a small number of principal components are needed to explain most of variability in data, as well as relationship with $Y$
+
+ - Assume that the directions in which $X_{1},\ldots,X_{p}$ exhibit the most variation are the directions that are associated with $Y$
+ 
+---
+
+```{r pcr_sim_dat, cache = T, fig.align="center", fig.width = 8, fig.height = 5}
+#436 for lasso
+set.seed(223)
+n <- 50
+p <- 45
+beta <- runif(p, -1,1)#rnorm(p)
+# beta <- c(3*rnorm(2), rep(0, p-2))
+s <- 2
+x0 <- rnorm(p)
+nsim <- 500
+preds <- matrix(NA , nrow = nsim, ncol = p)
+for(j in 1:nsim){
+ X <- matrix(rnorm(n*p), ncol = p, nrow = n)
+ y <-  X %*% c(beta) + rnorm(n,0,s)
+ x <- apply(X,2,scale, center = F)
+ pcr_fit <- pcr(y ~ x - 1)
+ preds[j,] <- predict(pcr_fit,  matrix(x0, ncol = p))[1:p]
+}
+
+
+bias <- apply(preds,2,get_bias, truth = c(x0 %*% beta))
+variance <- apply(preds,2,var)
+mse <- apply(preds, 2, get_mse, truth = c(x0 %*% beta))
+
+p1 <- data.frame(bias2 = bias^2, variance = variance, mse = mse, M = 1:p) %>%
+ pivot_longer(cols = 1:3, names_to = "stat") %>%
+ # filter(lambda >1) %>%
+ ggplot(., aes(x = M, y = value))+
+ # geom_point()+
+ geom_hline(yintercept = s^2, linetype = "dashed")+
+ geom_line(aes(col = stat)) +
+ labs(x ="Number of components")
+
+# set.seed(27)
+set.seed(29)
+n <- 50
+p <- 45
+beta <- c(3*rnorm(2), rep(0, p-2))
+s <- 2
+x0 <- rnorm(p)
+nsim <- 500
+preds <- matrix(NA , nrow = nsim, ncol = p)
+for(j in 1:nsim){
+ X <- matrix(rnorm(n*p), ncol = p, nrow = n)
+ y <-  X %*% c(beta) + rnorm(n,0,s)
+ x <- apply(X,2,scale, center = F)
+ pcr_fit <- pcr(y ~ x - 1)
+ preds[j,] <- predict(pcr_fit,  matrix(x0, ncol = p))[1:p]
+}
+
+
+bias <- apply(preds,2,get_bias, truth = c(x0 %*% beta))
+variance <- apply(preds,2,var)
+mse <- apply(preds, 2, get_mse, truth = c(x0 %*% beta))
+
+p2 <- data.frame(bias2 = bias^2, variance = variance, mse = mse, M = 1:p) %>%
+ pivot_longer(cols = 1:3, names_to = "stat") %>%
+ # filter(lambda >1) %>%
+ ggplot(., aes(x = M, y = value))+
+ # geom_point()+
+ geom_hline(yintercept = s^2, linetype = "dashed")+
+ geom_line(aes(col = stat)) +
+ labs(x ="Number of components")
+ggpubr::ggarrange(p1,p2,ncol = 2, common.legend = T)
+```
+ 
+- Left: simulated data similar to ridge 
+- Right: simulated data similar to lasso
+
+---
+
+## PCR remarks
+
+- Note that PCR is not a feature selection method
+
+ - Each of the $M$ components uses all $p$ original predictors
+ 
+ - In a sense, PCR is similar to ridge regression
+ 
+--
+
+- The number of components $M$ is typically chosen by CV
+
+--
+
+- Generally recommend standardizing each predictor prior to generating the principal components
+
+--
+
+  - Otherwise, high-variance predictors will tend to play a larger role in the $Z_{m}$ 
+
+---
+
+## PCR: diabetes data
+
+```{r diabetes_pcr, fig.align="center", fig.width=8, fig.height=5}
+pcr_diabetes <- pcr(y ~. , data = diabetes, scale = T, validation = "CV")
+p <- (ncol(diabetes)-1)
+p1 <- data.frame(t(pcr_diabetes$coefficients[,,])) %>%
+ mutate(M = 1:p) %>%
+ pivot_longer(1:p, names_to = "variable") %>%
+ ggplot(., aes(x = M, y = value, col = variable))+
+ geom_line()+
+ scale_x_continuous(breaks = seq(2,p,2))+
+ labs(x = "Number of components", y = "Standardized coefficients")+
+ theme(text = element_text(size = 14))
+
+p2 <- data.frame(cv_mse = (RMSEP(pcr_diabetes)$val[1,,][-1])^2, M = 1:p) %>%
+ ggplot(.,aes(x = M, y = cv_mse)) +
+ geom_point()+
+ geom_line()+
+ scale_x_continuous(breaks = seq(2,p,2))+
+ labs(x = "Number of components", y = "Cross-Validation MSE")+
+ theme(text = element_text(size = 14))
+ggpubr::ggarrange(p1,p2,ncol = 2, common.legend = T)
+
+```
+
+- Left: PCR standardized coefficient estimates for different values of $M$
+
+- Right: The 10-fold CV MSE obtained using PCR as a function of $M$
+
+---
+
+## PCR: remarks cont.
+
+- PCR identifies linear combinations (directions) that best represent the predictors $X_{1}, \ldots, X_{p}$
+
+- The directions are obtained in an *unsupervised* fashion; the response $Y$ is not used
+
+--
+
+- As a result, in PCR there is no guarantee that the direction that best explain $X$ will also be best directions for $Y$
+
+--
+
+## Partial least squares
+
+- **Partial least squares ** (PCL) is another dimnesion reduction method, and is a *supervised* alternative to PCR
+
+- The new features $Z_{1}, \ldots, Z_{M}$ will approximate the original $X$'s well, and will also be related to the response!
+
+--
+
+- Roughly speaking, PLS attempts to find directions that help explain both $X$ adnd $Y$
+
+--
+
+## Partial least squares
+
+- Recall: $Z_{m} = \sum_{j=1}^{p}\phi_{jm} X_{j}$
+
+--
+
+- First, standardize the $p$ predictors $X_{1},\ldots, X_{p}$ (and often the response $Y$ as well)
+
+- Compute first direction $Z_{1}$ by setting each $\phi_{1j}$ equal to the coefficient from the simle linear regression of $Y$ on $X_{j}$
+
+--
+
+ - This coefficient is proportional to the correlation between $X_{j}$ and $Y$
+ 
+--
+
+ - So in PLS, $Z_{1} = \sum_{j=1}^{p} \phi_{1j}X_{j}$ places highest weight on variables that are most strongly related to the response
+
+---
+
+## Partial least squares
+
+- Subsequent directions found by taking *residuals* and repeating this process
+
+ - The residuals are interepreted as the remaining information not expalined by the previous PLS directions
+ 
+--
+
+
+- Finally, after obtaing $Z_{1}, \ldots, Z_{M}$, fit a linear model for $Y$ as before
+
+
+--
+
+- $M$ is typically determined using CV
+
+- In practice, PLS performs no better than ridge regression or PCR
+
+
+---
+
+
+```{r diabetes_pls, fig.align="center", fig.width=8, fig.height=5}
+
+pls_diabetes <- plsr(y ~., data = diabetes, scale = T, validation = "CV")
+
+
+
+p1 <- data.frame(t(pls_diabetes$coefficients[,,])) %>%
+ mutate(M = 1:p) %>%
+ pivot_longer(1:p, names_to = "variable") %>%
+ ggplot(., aes(x = M, y = value, col = variable))+
+ geom_line()+
+ scale_x_continuous(breaks = seq(2,p,2))+
+ labs(x = "Number of directions", y = "Standardized coefficients")+
+ theme(text = element_text(size = 14))
+
+p2 <- data.frame(cv_mse = (RMSEP(pls_diabetes)$val[1,,][-1])^2, M = 1:p) %>%
+ ggplot(.,aes(x = M, y = cv_mse)) +
+ geom_point()+
+ geom_line()+
+ scale_x_continuous(breaks = seq(2,p,2))+
+ labs(x = "Number of directions", y = "Cross-Validation MSE")+
+ theme(text = element_text(size = 14))
+ggpubr::ggarrange(p1,p2,ncol = 2, common.legend = T)
+
+
+```
+
+---
+
+## Summary
+
+- Model selection methods are essential tools for data analysis
+
+- High-dimensional data (small $n$, large $p$) are becoming more available
+
+- Research into methods that give *sparsity* (such as the Lasso) are thriving research areas
