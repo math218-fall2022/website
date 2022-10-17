@@ -38,6 +38,10 @@ class: center, middle
 
 # Housekeeping
 
+- Midterm 01: will grade within one week!! I'm sure you all did wonderfully!
+
+- Midterm feedback results
+
 ---
 
 ### Linear Model Selection
