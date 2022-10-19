@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Math 218: Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Linear Model Selection" />
+    <meta name="date" content="2022-10-19" />
+    <script src="06-selection_files/header-attrs-2.16/header-attrs.js"></script>
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Math 218: Statistical Learning
+]
+.author[
+### Linear Model Selection
+]
+.date[
+### 10/19/2022
+]
+
+---
+
+
+
+
+class: center, middle
+
+# Housekeeping
+
+- Midterm 01: will grade within one week!! I'm sure you all did wonderfully!
+
+- Please fill out midterm feedback by end of day today, so I can begin to make changes! https://forms.gle/K35EkUzVsuBwX1XY7
+
+- Project partners
+
+---
+
+### Linear Model Selection
+
+- Recall our familiar linear model:
+
+`$$Y = \beta_{0} + \beta_{1} X_{1} + \ldots + \beta_{p} X_{p} + \epsilon$$`
+
+- We will discuss extending the linear model framework
+
+--
+
+- Alternative fitting procedures can
+
+  - Improve prediction accuracy
+  
+  - Improve model interpretability
+  
+---
+
+## Why alternatives?
+
+- Prediction accuracy: if `\(n\)` only slightly larger than `\(p\)`, least-squares fit will have high variability
+
+  - If `\(p &gt; n\)`, cannot use least-squares
+  
+--
+
+- Interpretability: removing some irrelevant features/predictors can reduce complexity
+
+  - How? Set corresponding coefficients to 0. This is known as **feature selection**
+  
+---
+
+## Three popular classes of methods
+
+1. **Subset selection**: identify a subset of the `\(p\)` possible predictors that we believe to be related to `\(Y\)`, then fit least-squares model (focus of today)
+
+--
+
+2. **Shrinkage** or **regularization**: fit a model involving all `\(p\)` predictors, but the estimated coefficients are shrunken towards 0 relative to least-squares estimates (focus of next week)
+
+  - Can reduce variance and perform variable selection
+  
+--
+
+3. **Dimension reduction**: project the `\(p\)` predictors into a `\(q\)`-dimensional space where `\(q &lt; p\)` (maybe next week)
+
+  - Achieved using `\(q\)` linear combinations or projections of the `\(p\)` predictors, then fit least squares on the `\(q\)` projections
+  
+---
+
+## Subset Selection
+
+- Different methods to perform subset selection: best subset and stepwise
+
+- **Best subset** selection fits a separate least-squares regression for each possible combination of the `\(p\)` predictors
+  - Look at all models with goal of identifying the *best*
+  
+--
+
+- Fit one model with zero predictors, `\(p\)` models with exactly one predictor, `\(\binom{p}{2} = p(p-1)/2\)` models with exactly two, etc.
+
+---
+
+## Best subset selection
+
+Algorithm:
+
+1. Let `\(\mathcal{M}_{0}\)` denote the *null model* with no predictors `\((Y = \beta_{0}) + \epsilon\)`.
+
+--
+  
+2. For `\(k = 1,2, \ldots, p\)`:
+
+  a) Fit all `\(\binom{p}{k}\)` models that contain exactly `\(k\)` predictors
+  
+--
+
+  b) Pick the best among these `\(\binom{p}{k}\)` models (best according to `\(R^2\)`). Call it `\(\mathcal{M}_{k}\)` 
+  
+--
+
+3. Select a single best (**) model from the `\(\mathcal{M}_{0}, \ldots, \mathcal{M}_{p}\)` models 
+
+---
+
+## Example: diabetes data
+
+
+
+- Researchers collected data on 442 diabetes patients examining the disease progression one year after baseline
+
+- Predictors: age, sex, BMI, blood pressure, total serum cholesterol, low-density lipoproteins, high-density lipoproteins, total cholestrol/HDL, log of serum triglycerides, glucose
+
+- Response: disease progression `\(\color{blue}{\text{LC50}}\)`
+
+--
+
+- Goal: Find best subset model for `\(\color{blue}{\text{LC50}}\)` from the ten possible predictors:
+
+
+```r
+p &lt;- ncol(diabetes) - 1
+# automatically includes intercept
+sub_mods &lt;- regsubsets(y ~ ., data = diabetes, nvmax = p) 
+```
+
+---
+
+## Example: diabetes data
+
+
+```
+## Subset selection object
+## Call: regsubsets.formula(y ~ ., data = diabetes, nvmax = p)
+## 10 Variables  (and intercept)
+##     Forced in Forced out
+## age     FALSE      FALSE
+## sex     FALSE      FALSE
+## bmi     FALSE      FALSE
+## bp      FALSE      FALSE
+## tc      FALSE      FALSE
+## ldl     FALSE      FALSE
+## hdl     FALSE      FALSE
+## tch     FALSE      FALSE
+## ltg     FALSE      FALSE
+## glu     FALSE      FALSE
+## 1 subsets of each size up to 10
+## Selection Algorithm: exhaustive
+##           age sex bmi bp  tc  ldl hdl tch ltg glu
+## 1  ( 1 )  " " " " "*" " " " " " " " " " " " " " "
+## 2  ( 1 )  " " " " "*" " " " " " " " " " " "*" " "
+## 3  ( 1 )  " " " " "*" "*" " " " " " " " " "*" " "
+## 4  ( 1 )  " " " " "*" "*" "*" " " " " " " "*" " "
+## 5  ( 1 )  " " "*" "*" "*" " " " " "*" " " "*" " "
+## 6  ( 1 )  " " "*" "*" "*" "*" "*" " " " " "*" " "
+## 7  ( 1 )  " " "*" "*" "*" "*" "*" " " "*" "*" " "
+## 8  ( 1 )  " " "*" "*" "*" "*" "*" " " "*" "*" "*"
+## 9  ( 1 )  " " "*" "*" "*" "*" "*" "*" "*" "*" "*"
+## 10  ( 1 ) "*" "*" "*" "*" "*" "*" "*" "*" "*" "*"
+```
+
+---
+
+## Best subset selection
+
+- Presented for least squares, but same ideas apply to other models 
+  
+  - E.g.: logistic regression uses *deviance* in place of `\(R^2\)` (smaller deviance preferred)
+  
+--
+
+Issues:
+
+  - For computational reasons, best subset selection cannot be applied for large `\(p\)`
+
+  - When `\(p\)` large, higher chance of finding models that fit training data well but might not have predictive power (overfitting)
+  
+---
+
+## Stepwise methods
+
+- Stepwise methods explore a more restricted set of models
+
+- **Forward stepwise** selection: begins with null model with no predictors, then adds predictors to the model one at a time
+
+  - At each step, the variable that gives the greatest *additional* improvement to the fit is added
+
+---
+
+## Forward stepwise selection
+
+Algorithm:
+
+1. Let `\(\mathcal{M}_{0}\)` denote the null model with no predictors
+
+--
+
+2. For `\(k = 0, 1, \ldots, p-1\)`:
+
+  a) Consider all `\(p-k\)` models that augment the predictors in `\(\mathcal{M}_{k}\)` with one additional predictor
+  
+--
+  
+  b) Choose the best (according to `\(R^2\)`) among these `\(p-k\)` models, and call it `\(\mathcal{M}_{k+1}\)`
+  
+--
+  
+3. Select a single best (**) model from the models `\(\mathcal{M}_{0}, \ldots, \mathcal{M}_{p}\)`
+
+---
+
+## Forward stepwise selection
+
+- For example, pretend we have `\(p = 3\)` possible predictors: `\(X_{1}, X_{2}, X_{3}\)`
+
+--
+
+- `\(\mathcal{M}_{0}\)`: `\(Y \approx \beta_{0}\)`
+
+--
+
+- At `\(k= 0\)`, we fit all `\(p-k = 3\)` models that add an additional predictor to our current working model:
+
+
+  - `\(Y \approx \beta_{0} + \beta_{1}X_{1} \Rightarrow R^2 = 0.2\)`
+  
+  - `\(Y \approx \beta_{0} + \beta_{1}X_{2}  \Rightarrow R^2 = 0.3\)`
+  
+  - `\(Y \approx \beta_{0} + \beta_{1}X_{3} \Rightarrow R^2 = 0.1\)`
+  
+--
+
+- Set `\(\mathcal{M}_{1}\)`: `\(Y \approx \beta_{0} + \beta_{1}X_{2}\)`
+
+--
+
+- Now `\(k=1\)`, and consider all `\(p - k = 2\)` models that add an additional predictor:
+
+  - `\(Y \approx \beta_{0} + \beta_{1}X_{2} + \beta_{2} X_{1}\)`
+  
+  - `\(Y \approx \beta_{0} + \beta_{1}X_{2} + \beta_{2} X_{3}\)`
+  
+---
+
+## Forward stepwise selection
+
+
+```
+## Subset selection object
+## Call: regsubsets.formula(y ~ ., data = diabetes, nvmax = p)
+## 10 Variables  (and intercept)
+##     Forced in Forced out
+## age     FALSE      FALSE
+## sex     FALSE      FALSE
+## bmi     FALSE      FALSE
+## bp      FALSE      FALSE
+## tc      FALSE      FALSE
+## ldl     FALSE      FALSE
+## hdl     FALSE      FALSE
+## tch     FALSE      FALSE
+## ltg     FALSE      FALSE
+## glu     FALSE      FALSE
+## 1 subsets of each size up to 10
+## Selection Algorithm: exhaustive
+##           age sex bmi bp  tc  ldl hdl tch ltg glu
+## 1  ( 1 )  " " " " "*" " " " " " " " " " " " " " "
+## 2  ( 1 )  " " " " "*" " " " " " " " " " " "*" " "
+## 3  ( 1 )  " " " " "*" "*" " " " " " " " " "*" " "
+## 4  ( 1 )  " " " " "*" "*" "*" " " " " " " "*" " "
+## 5  ( 1 )  " " "*" "*" "*" " " " " "*" " " "*" " "
+## 6  ( 1 )  " " "*" "*" "*" "*" "*" " " " " "*" " "
+## 7  ( 1 )  " " "*" "*" "*" "*" "*" " " "*" "*" " "
+## 8  ( 1 )  " " "*" "*" "*" "*" "*" " " "*" "*" "*"
+## 9  ( 1 )  " " "*" "*" "*" "*" "*" "*" "*" "*" "*"
+## 10  ( 1 ) "*" "*" "*" "*" "*" "*" "*" "*" "*" "*"
+```
+  
+---
+
+## Forward stepwise selection
+
+- Computationally advantageous to best subset selection
+
+- Works when `\(p &gt; n\)`, but can only construct submodels `\(\mathcal{M}_{0}, \ldots, \mathcal{M}_{n-1}\)`
+
+- Not guaranteed to find the best possible model out of all `\(2^{p}\)` models -- why?
+
+
+
+---
+
+## Backward stepwise selection
+
+- **Backward stepwise selection** is another alternative to best subset selection
+
+- Begins with full least squares model containing all `\(p\)` predictors, and iteratively removes the least useful predictor one at a time
+
+---
+
+## Backward stepwise selection
+
+Algorithm:
+
+1. Let `\(\mathcal{M}_{p}\)` denote the full model with all `\(p\)` predictors
+
+--
+
+2. For `\(k = p, p-1, \ldots, 1\)`:
+
+  a) Consider all `\(k\)` models that contain all but one of the predictors in `\(\mathcal{M}_{k}\)`, for a total of `\(k-1\)` predictors
+  
+--
+  
+  b) Choose the best (according to RSS or `\(R^2\)`) among these `\(k\)` models, and call it `\(\mathcal{M}_{k-1}\)`
+  
+--
+  
+3. Select a single best model (**) from the models `\(\mathcal{M}_{0}, \ldots, \mathcal{M}_{p}\)`
+
+---
+
+## Backward stepwise selection
+
+- Like forward selection, is not guaranteed to yield the *best* model containing a subset of the `\(p\)` predictors
+
+- Does not work when `\(p &gt; n\)`
+
+---
+
+class: center, middle
+
+### Choosing a final model
+
+---
+
+## Choosing optimal model
+
+- Step 3 of all three methods require us to compare many models to choose the "best" model
+
+--
+
+- Recall, model containing all `\(p\)` predictors will always yield lowest RSS/highest `\(R^2\)`
+
+  - Related to training error
+  
+- We want a model with low test error `\(\rightarrow\)` requires comparison across models with different number of predictors
+
+---
+
+## Estimating test error
+
+- Approach 1: *indirectly* estimate test error by making an adjustment to the training error to account for the bias due to overfitting 
+
+--
+
+- Approach 2: *directly* estimate the test error (validation set or CV approach)
+
+---
+
+## Approach 1
+
+- Techniques of Mallow's `\(C_{p}\)`, AIC, BIC, and adjusted `\(R^2\)` 
+
+- **Adjust** the training error for the model size (number of predictors)
+
+  - Useful for comparing models of different sizes
+  
+--
+
+- In the following slide, I display the adjusted `\(R^2\)`, BIC, and  `\(C_{p}\)` for each model of size `\(j = 1, \ldots, p\)` from best subset selection
+
+---
+
+## Diabetes example
+
+&lt;img src="06-selection_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+### Mallow's `\(C_{p}\)`
+
+
+- Mallow's `\(C_{p}\)` compares the full model with subsets of models to determine amount of error left unexplained by partial model
+
+- Small `\(C_{p}\)` is preferred 
+
+--
+
+- For least squares model with `\(d\)` predictors, 
+
+`$$C_{p} = \frac{1}{n}(\text{RSS} + 2d\hat{\sigma}^{2})$$`
+
+`\(\qquad\)` and `\(\hat{\sigma}^{2}\)` is estimate of the error variance of `\(\epsilon\)` 
+
+  - Throughout these slides, `\(\hat{\sigma}^{2}\)` is estimated using full model containing all predictors
+
+
+--
+
+- Term `\(2d\hat{\sigma}^{2}\)` is a **penalty**; increasing the number of predictors `\(d\)` will increase `\(C_{p}\)`, holding everything else constant
+
+
+
+---
+
+## AIC
+
+- The **AIC** (Akaike Information criterion) is defined for a large class of models fit by maximum likelihood
+
+- Lower AIC preferred
+
+--
+
+`$$\text{AIC} = -2\log (L) + 2d$$` 
+
+`\(\qquad\)` where `\(L\)` is the maximimized value of the liklihood function for the given model
+
+--
+
+- For linear model with Normal errors, maximum likelihood and least squares are the same, so `\(C_{p}\)` and AIC will lead to same conclusions
+
+---
+
+## BIC
+
+- The **BIC** (Bayesian Information criterion) is derived from Bayesian point of view, but looks similar:
+
+`$$\text{BIC} = -2\log(L) + \log(n)d  = \frac{1}{n}(\text{RSS} + \log(n) d\hat{\sigma}^2)\quad^{**}$$`
+
+--
+
+- Like `\(C_{p}\)`, BIC will tend to be small for a model with low test error, so lower BIC preferred
+
+- What is the penalty for number of predictors in BIC?
+
+
+---
+
+## Mallow's `\(C_p\)` vs BIC
+
+- For least squares model with `\(d\)` predictors,
+
+$$
+`\begin{align*}
+C_{p} &amp;= \frac{1}{n}(\text{RSS} + \color{orange}{2}d\hat{\sigma}^{2})\\
+\text{BIC} &amp;= \frac{1}{n}(\text{RSS} + \color{orange}{\log(n)} d\hat{\sigma}^2)
+\end{align*}`
+$$
+--
+
+- Note that `\(\log(n) &gt; 2\)` when `\(n &gt; 7\)`
+
+- Because most models have more than 7 observations, heavier penalty for BIC compared to `\(C_{p}\)` when the model has many variables
+
+--
+
+- BIC tends to result in selection of smaller models than `\(C_{p}\)` 
+  
+
+---
+
+## Adjusted `\(R^2\)`
+
+- Recall that usual `\(R^2 = 1- \frac{\text{RSS}}{\text{TSS}}\)` where `\(\text{TSS} = \sum(y_{i} - \bar{y})^2\)`
+
+  - `\(\text{RSS}\)` always decreases as more variables are added to model `\(\rightarrow\)` `\(R^2\)` increases `\(\rightarrow\)` `\(R^2\)` not useful for comparing different-sized models
+  
+--
+
+- For least squares model with `\(d\)` variables: `$$R^{2}_{adj} = 1 - \frac{\text{RSS}/(n-d-1)}{\text{TSS}/(n-1)}$$`
+
+--
+
+- Why is `\(R^{2}_{adj}\)` better for comparing models of different size?
+
+--
+
+  - Maximizing `\(R^{2}_{adj}\)` is equivalent to minimizing `\(\text{RSS}/(n-d-1)\)`
+  
+  
+---
+
+## Approach 2
+
+- An alternative to adjusting for model size is to directly estimate the test error using validation set/CV
+  
+--
+
+- We have candidate models `\(\mathcal{M}_{0}, \mathcal{M}_{1}, \ldots, \mathcal{M}_{L}\)`
+
+  - For each model `\(\mathcal{M}_{l}\)`, perform same validation set/CV procedure 
+  - Select a model `\(\mathcal{M}_{\hat{l}}\)` that has lowest estimated test error
+  
+--
+
+- Does not require an estimate of `\(\sigma^{2}\)`
+
+---
+
+## Diabetes example
+
+- For each model obtained by best subset selection, I am displaying the respective BIC, 10-fold CV test error estimate, and 50/50 validation test error estimate
+
+&lt;img src="06-selection_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+  
+---
+
+## Summary
+
+- Model selection methods are essential tools for data analysis
+
+- High-dimensional data (small `\(n\)`, large `\(p\)`) are becoming more available
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
