@@ -247,7 +247,8 @@ Algorithm:
 ## Forward stepwise selection
 
 ```{r}
-mod_fwd <- regsubsets(y ~. ,data = diabetes, nvmax = p)
+mod_fwd <- regsubsets(y ~. ,data = diabetes, nvmax = p, 
+                      method = "forward")
 summary(mod_fwd)
 ```
   

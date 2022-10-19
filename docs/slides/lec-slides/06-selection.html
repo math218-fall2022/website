@@ -268,7 +268,7 @@ Algorithm:
 
 ```
 ## Subset selection object
-## Call: regsubsets.formula(y ~ ., data = diabetes, nvmax = p)
+## Call: regsubsets.formula(y ~ ., data = diabetes, nvmax = p, method = "forward")
 ## 10 Variables  (and intercept)
 ##     Forced in Forced out
 ## age     FALSE      FALSE
@@ -282,13 +282,13 @@ Algorithm:
 ## ltg     FALSE      FALSE
 ## glu     FALSE      FALSE
 ## 1 subsets of each size up to 10
-## Selection Algorithm: exhaustive
+## Selection Algorithm: forward
 ##           age sex bmi bp  tc  ldl hdl tch ltg glu
 ## 1  ( 1 )  " " " " "*" " " " " " " " " " " " " " "
 ## 2  ( 1 )  " " " " "*" " " " " " " " " " " "*" " "
 ## 3  ( 1 )  " " " " "*" "*" " " " " " " " " "*" " "
 ## 4  ( 1 )  " " " " "*" "*" "*" " " " " " " "*" " "
-## 5  ( 1 )  " " "*" "*" "*" " " " " "*" " " "*" " "
+## 5  ( 1 )  " " "*" "*" "*" "*" " " " " " " "*" " "
 ## 6  ( 1 )  " " "*" "*" "*" "*" "*" " " " " "*" " "
 ## 7  ( 1 )  " " "*" "*" "*" "*" "*" " " "*" "*" " "
 ## 8  ( 1 )  " " "*" "*" "*" "*" "*" " " "*" "*" "*"

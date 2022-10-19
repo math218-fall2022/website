@@ -98,6 +98,11 @@ Recall that we prefer large adjusted $R^2$, but small values for the the other t
 
 ```{r}
 which.max(metric_df$R2_adj)
+```
+
+We then want to find the minimum values for the other three metrics. Rather than run `which.min()` three times, I will use the incredibly useful `apply()` function! It allows you to apply a function `f` to each row (`MARGIN = 1`)  column (`MARGIN = 2`) of a matrix `X`. It takes three arguments: `apply(X, MARGIN = , f)`. The following code obtains the minimum value in each column of columns 1, 3, and 4 of `metric_df`.
+
+```{r}
 apply(metric_df[,c(1,3,4)], 2, which.min)
 ```
 
