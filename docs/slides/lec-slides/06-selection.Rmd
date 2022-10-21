@@ -34,15 +34,20 @@ diabetes <- as.data.frame(z) %>%
  rename("bp" = "map") 
 ```
 
-class: center, middle
 
 # Housekeeping
 
-- Midterm 01: will grade within one week!! I'm sure you all did wonderfully!
+- Midterm 01: mostly graded! Grades will be released soon!
 
-- Please fill out midterm feedback by end of day today, so I can begin to make changes! https://forms.gle/K35EkUzVsuBwX1XY7
+- Lab 04: due Thursday, 10/27 at 11:59pm
 
-- Project partners
+- Statistics/data science talks:
+
+  - Tuesday, 10/25 4:30-6:00pm: https://www.middlebury.edu/events/event/improving-government-services-data
+  
+  - Thursday, 10/27 12:30-1:30pm: statistics candidate job talk
+  
+  - Interested in lunch with candidate on Friday 10/28 12:00-1:00pm?
 
 ---
 
