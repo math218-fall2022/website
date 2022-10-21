@@ -90,6 +90,7 @@ lessons:
    slides: "lec-slides/06-selection.html"
  - date: "Friday, Oct. 21"
    title: "Lab: Linear model selection"
+   lab: "lab-04-selection.html"
  - date: "Week 07"
  - date: "Monday, Oct. 24"
    title: "Shrinkage"

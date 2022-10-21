@@ -68,7 +68,7 @@ The `summary()` function also returns $R^2$, RSS, adjusted $R^2$, $C_{p}$ and BI
 names(best_summary)
 ```
 
-## Plotting
+# Plotting
 
 We can look at all these statistics (except $R^2$) at once to help decide which model to select:
 
@@ -130,7 +130,7 @@ If we wanted to examine the coefficients for a given model, we can use the `coef
 coef(best_sub_fit, 6)
 ```
 
-## Forward and Backward Stepwise Selection
+# Forward and Backward Stepwise Selection
 
 We can use the same `regsubsets()` function to perform forward or backward stepwise selection. This is specified using the `method` argument:
 
@@ -145,7 +145,7 @@ Does the forward selection method pick the same models as the best subset select
 
 For example, using forward selection, the best one-predictor model contains `CRBI` and the best two-predictor model also contains `Hits`. 
 
-## Choosing Among Models Using the Validation-Set Approach 
+# Choosing Among Models Using the Validation-Set Approach 
 
 Rather than rely on a statistic/metric such as adjusted $R^2$, we might wantt to select a model using some sort of validation hold-out method. In order for these approaches to yield accurate estimates of the test error, we must use *only the training observations* to perform all aspects of model-fitting—including variable selection.
 
