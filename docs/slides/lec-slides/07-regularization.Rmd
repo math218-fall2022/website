@@ -47,9 +47,27 @@ mod_ls <- list(lm(y ~ bmi , diabetes),
                lm(y ~ ., diabetes  ))
 ```
 
-class: center, middle
+## Housekeeping
 
-# Housekeeping
+- Midterm grades were released. Really well done!
+  
+- Stats candidate job talk: Thursday 12:30-1:30pm in Warner 101
+
+---
+
+## Revision opportunity 
+
+- You may re-do one CONCEPTUAL question for *at most* half of the points back (e.g. if you originally lost 5 pts, then you would be eligible to gain back 2.5 pts)
+
+  - This applies to questions with multiple parts
+  
+--
+
+- How: 
+
+  - E-mail me a PDF file with your revision. Make sure it is clearly noted which question (and which parts) you are revising
+  
+  - Must e-mail revision by 11:59pm tomorrow, Tuesday 10/25
 
 ---
 

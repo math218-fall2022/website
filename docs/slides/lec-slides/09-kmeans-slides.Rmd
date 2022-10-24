@@ -1,0 +1,385 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Unupervised learning: k-means"
+date: "11/7/2022"
+output: 
+   xaringan::moon_reader:
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, fig.align = "center", fig.width = 5, fig.height = 5)
+
+library(tidyverse)
+library(ISLR)
+library(cluster)    # clustering algorithms
+library(factoextra) # clustering algorithms & visualization
+library(ggdendro)
+```
+
+## Houskeeping
+
+---
+
+## Unsupervised learning
+
+- Shifting gears: instead of *supervised* learning (e.g. regression and classification), we will now t turn to *unsupervised* learning
+
+- We only observe the features $X_{1}, X_{2},\ldots, X_{p}$
+
+  - We do not care about prediction because we have no response $Y$!
+  
+--
+
+- Example: a search engine might choose which search results to display to a particular individual based on the click histories of other individuals with similar search patterns
+
+---
+
+## Unsupervised learning goals
+
+- Discover interesting things about the predictors/features
+  
+  - Can we discover subgroups among the variables or among the observations?
+  
+  - Is there an informative way to visualize the data?
+
+  
+--
+
+- Two common methods: 
+
+  - **Clustering**: broad class of methods to discover unknown subgroups in your data
+  
+  - **Principal components analysis (PCA)**:  , a tool used for data
+visualization or data pre-processing, often before supervised
+techniques are applied
+
+--
+
+- PCA is beyond the scope of this course (but you can try using it for your final project if you understand eigenvectors!)
+
+---
+
+## Challenges
+
+- Subjective; no clearly defined goal for analysis
+
+- How to assess results obtained? No way to validate!
+
+--
+
+- Despite challenges, unsupervised learning methods are of growing importance
+
+---
+
+class: center, middle
+
+# Clustering methods
+
+---
+
+## Clustering
+
+- We want to find *subgroups* or *clusters* in a data set
+
+- This means separating observations into distinct groups such that:
+
+  - observations with each group are similar
+  
+  - observation across groups are different
+  
+
+--
+
+- How to define "similar" and "different"?
+
+--
+
+- Two main methods: **K-means clustering** and **hierarchical clustering**
+
+  - Apologies for another K!
+  
+---
+
+## K-Means clustering
+
+- We seek to partition/divide the observations into a pre-specified number of clusters $K$
+
+- These clusters are distinct and non-overlapping
+
+--
+
+- Just like in $k$-fold CV or $KNN$, we first specify $K$. Then the algorithm will assign each observation to exactly one of the $K$ clusters
+
+---
+
+## Example data: US Arrests
+
+- We consider a subset of the `USArrests` data. Contains  statistics, in arrests per 100,000 residents for $\color{blue}{\text{Murder}}$ in each of the 50 US states in 1973. Also given is the percent of the population living in urban areas $(\color{blue}{\text{UrbanPop}})$.
+
+- Apply $K$-means clustering with different values of $K$ to group the observations (states)
+
+- Color of each observation indicates the cluster to which each state was assigned (coloring is arbitrary)
+
+---
+## Example data: US Arrests
+
+```{r fig.width=9, fig.height=6, cache = T}
+set.seed(1)
+data("USArrests")
+df <- na.omit(USArrests)
+df <- scale(df)
+k2 <- kmeans(df[,c(1,3)], centers = 2, nstart = 25)
+k3 <-  kmeans(df[,c(1,3)], centers = 3, nstart = 25)
+k5 <-  kmeans(df[,c(1,3)], centers = 5, nstart = 25)
+df %>%
+  as_tibble() %>%
+  mutate(K2 = k2$cluster,
+         K3 = k3$cluster,
+         K5 = k5$cluster,
+         state = row.names(USArrests)) %>%
+  pivot_longer(cols = c("K2", "K3", "K5"), names_to = "K", values_to = "cluster") %>%
+  mutate(K = case_when(K == "K2" ~ "K = 2",
+                       K == "K3" ~ "K = 3",
+                       T ~ "K = 5")) %>%
+  ggplot(.,aes(UrbanPop, Murder, color = factor(cluster), label = state)) +
+  geom_text()+
+  facet_wrap(~K) +
+  theme(text = element_text(size = 20)) +
+  guides(col = "none")
+```
+
+---
+
+## Simulated data
+
+- Simulated data with $n = 60$ observations in 3-dimensional space
+
+- The following plots show the results of applying $K$-means clustering with different $K$ 
+
+  - Color corresponds to cluster 
+  
+---
+
+## Simulated data: 2-means
+
+```{r fig.align="center", warning = F}
+set.seed(3)
+K_true <- 3
+n <- 60
+X <- matrix(rnorm(n*3), ncol = 3) 
+X[1:20, 1] <- X[1:20, 1] + 3
+X[21:40, 2] <- X[21:40, 2] - 2
+X[41:60, 3] <- X[41:60, 3] + 2
+km.out2 <- kmeans(X, 2, nstart = 20)
+
+plot_df <- data.frame(X) %>%
+  mutate(cluster = km.out2$cluster,
+         cluster = factor(cluster))
+
+plotly::plot_ly( data = plot_df, x = ~X1, y = ~X2, z = ~X3,
+                 mode = "markers",
+                 type = "scatter3d", color = ~cluster)
+```
+
+
+---
+## Simulated data: 3-means
+
+```{r fig.align="center"}
+km.out3 <- kmeans(X, 3, nstart = 20)
+plot_df <- data.frame(X) %>%
+  mutate(cluster = km.out3$cluster,
+         cluster = factor(cluster))
+
+plotly::plot_ly( data = plot_df, x = ~X1, y = ~X2, z = ~X3,
+                 mode = "markers",
+                 type = "scatter3d", color = ~cluster)
+```
+---
+
+## Simulated data: 5-means
+
+```{r fig.align="center"}
+km.out5 <- kmeans(X, 5, nstart = 20)
+plot_df <- data.frame(X) %>%
+  mutate(cluster = km.out5$cluster,
+         cluster = factor(cluster))
+
+plotly::plot_ly( data = plot_df, x = ~X1, y = ~X2, z = ~X3,
+                 mode = "markers",
+                 type = "scatter3d", color = ~cluster)
+```
+
+---
+
+## Details of $K$-means clustering
+
+- Procedure results from simple and intuitive mathematical problem. Start with notation
+
+- Let $C_{1}, \ldots, C_{K}$ be the sets containing the indices of the observation in each cluster. These sets satisfy two properties:
+
+  1. $C_{1} \cup C_{2} \cup \ldots \cup C_{K} = \{1, \ldots, n\}$, i.e. each observation belong to at least one of the $K$ clusters
+  
+  2. $C_{k} \cap C_{k'} = \emptyset$ for all $k \neq k'$, i.e. the clusters are non-overlapping
+  
+--
+
+- For example, if the 10-th observation is in the second cluster, then $10 \in C_{2}$
+
+  - More generally: if observation $i$ is in $k$-th cluster, then $i \in C_{k}$
+  
+---
+
+## Details of $K$-means clustering
+
+- **Good** clustering is at the heart of $K$-means clustering procedure: we want the *within-cluster variation* to be as small as possible
+
+- Let $\text{WCV}(C_{k})$ denote the within-cluster variation for cluster $C_{k}$. Tells us the amount by which observations within a cluster are different from each other
+
+- $K$-means clustering solves the problem:
+
+$$\min_{C_{1}, \ldots, C_{K}}\left\{\sum_{k=1}^{K}\text{WCV}(C_{k})  \right\}$$
+
+  - What does this mean in words?
+  
+  - This is called the "objective"
+  
+---
+
+### How to define within-cluster variation?
+
+- Once again, need to define 
+
+- Most common choice is *Euclidean distance*:
+
+$$\text{WCV}(C_{k}) = \frac{1}{|C_{k}|} \sum_{i, i' \in C_{k}} \sum_{j=1}^{p} (x_{ij} - x_{i'j})^2$$
+
+where $|C_{k}|$ is the number of observations in the $k$-th cluster
+
+--
+
+- Let's do an example!
+
+---
+
+## K-means clustering: Algorithm
+
+1. Randomly assign a number from 1 to $K$ to each of the observations. This is how we *initialize* the cluster assignments.
+
+--
+
+2. Iterate the following until the cluster assignments stop changing:
+
+  i) For each cluster $k = 1,\ldots, K$, compute the cluster *centroid*. The $k$-th cluster centroid is the vector of the $p$-feature means for observation in $C_{k}$
+  
+  ii) Assign each observation to the cluster who centroid is *closest*, defined using Euclidean distance here
+  
+---
+
+## Example
+
+---
+
+## Details on algorithm
+
+- This algorithm is not guaranteed to solve the minimization problem exactly
+
+- There are almost $K^n$ ways to partition all $n$ observations into $K$ clusters
+
+- The algorithm on previous slide provides a *local* optimum, i.e. a pretty good solution to the optimization problem!
+
+
+---
+
+### Important impelementation concerns!
+
+- Because the algorithm finds a local optimum, our results will depend on the initial cluster assignments in Step 1
+  
+  - Therefore, it is important to run the algorithm multiple times using different random initializations 
+  
+  - Then select the *best* solution (i.e. the one with smallest $\sum_{k=1}^{K}\text{WCV}(C_{k})$)
+
+---
+
+## Example 2: Simulated data
+
+- Generated `n=50` observations with two features, evenly split between two true clusters
+
+- Perform K-means clustering performed four times on the same data with $K = 3$, each time with different random initialization.
+
+- Above each plot is the value of the objective 
+
+---
+
+```{r fig.align="center", fig.width=9, fig.height=9, cache = T}
+set.seed(22)
+n <- 50
+X <- matrix(rnorm(n*2), ncol = 2) 
+X[1:25, 1] <- X[1:25, 1] + 1
+X[1:25, 2] <- X[1:25, 2] - 2
+
+
+plot_ls <- list()
+for(i in 1:4){
+  set.seed(i)
+  km.out <- kmeans(X, 3, nstart = i)
+  plot_ls[[i]] <- data.frame(X) %>%
+    mutate(cluster = km.out$cluster, 
+           cluster= factor(cluster)) %>%
+    ggplot(., aes(x = X1, y = X2, col = cluster)) +
+    geom_point(size = 2) +
+    ggtitle(round(km.out$tot.withinss, 3)) +
+    guides(col = "none") +
+    theme(text = element_text(size = 20))
+
+}
+gridExtra::grid.arrange(grobs = plot_ls, ncol = 2)
+```
+
+---
+
+## Example 2: Simulated data
+
+- Three different local optima were obtained (three unique objective values)
+
+- One of the local optima resulted in a smaller value of the objective, and therefore provides better separation between the clusters
+
+  - Two of the initializations results in ties for best solution, with object value of 58.145
+
+
+
+## Summary: considerations 
+
+- Should the features be standardized?
+
+- What should $K$ be?
+  
+
+- How do we validate the clusters we obtained?
+
+  - Are we truly discovering subgroups, or are we simply clustering the noise?
+
+- Do all observations belong in a cluster? Or are some actually "outliers"
+
+
+- Clustering methods generally not robust to small changes in data
+
+---
+
+## Summary: recommendations
+
+- Small decisions can lead to large changes!
+
+- Recommend performing clustering with different choices of $K$, and looking to see if/which patterns consistently appear
+
+- Because clustering not robust, maybe we consider clustering subsets of the data 
+
+- Caution: be careful about how the results of a clustering analysis are reported. These results should not be taken as the absolute truth about a data set!!!

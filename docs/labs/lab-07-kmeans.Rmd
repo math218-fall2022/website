@@ -1,0 +1,191 @@
+---
+title: "Lab 07 - K-means clustering"
+subtitle: "Due Sunday, 10/9 at 11:59pm"
+output: 
+  tufte::tufte_html:
+    css: "./math218-labs.css"
+    tufte_variant: "envisioned"
+    highlight: tango
+    toc: true
+    toc_depth: 1
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r message = F, warning = F}
+library(tidyverse)
+```
+
+# Introduction
+
+This lab explores the $K$-means clustering technique for unsupervised learning. 
+
+# $K$-means Clustering
+
+The function `kmeans()` performs $K$-means clustering in `R`. I will generate some simple  data in which there truly are two clusters. The first 25 observations have a mean shift relative to the next 25 observations
+
+```{r}
+set.seed(2)
+x <- matrix(rnorm(50 * 2), ncol = 2)
+x[1:25, 1] <- x[1:25, 1] + 3
+x[1:25, 2] <- x[1:25, 2] - 4
+```
+
+
+
+The `kmeans()` function requires three inputs: the matrix of features, the number of clusters $K$, and and `nstart` argument. Because the algorithm initializes with random assignment of observations to clusters, it is good practice to try many different initializations. Thus, `nstart` tells `kmeans()` how many to try, and the function will output the results from best one. Here, "best" is in terms of minimizing the objective.
+
+Due to the random initial cluster assignments, we should always set a seed for reproducibility! Also, while unlikely, it is possible that observations might tie when we calculate the distances between an observations and each centroid. In these instances, `kmeans()` will randomly choose one of the centroid clusters. Another good reason to set a seed!
+
+```{marginfigure}
+The default for `nstart` is 1, but that is not good practice!
+```
+
+```{r}
+set.seed(2)
+km_out <- kmeans(x, 2, nstart = 20)
+km_out
+```
+
+The final cluster centroids and assignments can be accessed as follows:
+
+```{r}
+km_out$centers
+km_out$cluster
+```
+
+We see that the algorithm separated the observations into two clusters even though we did not supply any group information! We can plot the data because our features are in 2D space. We will color each point by the cluster it was assigned to:
+
+```{r}
+data.frame(x) %>%
+  mutate(cluster = km_out$cluster,
+         cluster = factor(cluster),
+         obs = 1:nrow(x)) %>%
+  ggplot(., aes(x = X1, y = X2, col = cluster, label = obs)) +
+  geom_text() 
+```
+
+Why should we use `nstart` $> 1$? The code below runs the $K$-means clustering algorithm twice: once with just 1 random assignment, and a second time with 20 different assignments. We then obtain the value of the best (smallest) objective value from each of runs by using the code `km_out$tot.withinss`. 
+
+```{r}
+set.seed(4)
+km_out <- kmeans(x, 3, nstart = 1)
+km_out$tot.withinss
+km_out <- kmeans(x, 3, nstart = 20)
+km_out$tot.withinss
+
+```
+
+`tot.withinss` is the total within-cluster sum of squares, which we seek to minimize by performing K-means clustering. Thus, we can clearly see that by running the algorithm with many different initial assignments and reporting the best one, we can do a much better job at making sure the observations within a cluster are similar. 
+
+# Real example
+
+Unsupervised techniques are often used in the analysis of genomic data.
+While hierarchical clustering (which we will see next week) is more popular, we can still use $K$-means clustering here.
+
+We use the `NCI60` data from the `ISLR2` package. These are cancer cell line microarray data, which consists of 6,830 gene expression measurements on 64 cancer cell lines.
+
+```{r}
+library(ISLR2)
+nci_labs <- NCI60$labs
+nci_data <- NCI60$data
+```
+
+The data are technically labeled with a cancer type, given in `nci_labs`. However, we will not use them in our clustering because we are performing unsupervised analysis! 
+
+In total, there are 14 true clusters or cancer types across in the data:
+
+```{r}
+table(nci_labs)
+```
+
+We will choose to standardize the variables to have mean zero and standard deviation of one using the `scale()` function. Then we will run $K$-means with $K=4$:
+
+```{r}
+std_data <- scale(nci_data)
+set.seed(1)
+km_out <- kmeans(std_data, 4, nstart = 20)
+km_out$cluster
+```
+
+Here, it seems like one cluster contains many more observations then there others.
+
+We can examine if there are patterns by utilizing the true labels:
+
+```{r}
+table(km_out$cluster, nci_labs)
+
+```
+
+What if we run the algorithm using the true number of clusters?
+
+```{r}
+set.seed(1)
+km_out <- kmeans(std_data, 14, nstart = 20)
+```
+
+Ideally, we would want each type of cancer to land into a unique cluster. By creating a table of true labels and cluster assignments, this does not appear to be the case:
+
+```{r}
+table(km_out$cluster, nci_labs)
+```
+
+# Your turn!
+
+## Exercise 1
+
+You will generate simulated data and then perform $K$-means clustering on the data.
+
+a) Generated a simulated data set with 20 observations in each of three classes (i.e. 60 observations total), and 50 variables. 
+
+*Hint: you may use the `rnorm()` or `runif()` functions to generate data. To generate distinct classes, add a mean shift to the observations in each class.*
+
+b) Perform $K$-means clustering with $K= 3$. Don't forget to set a seed! How well do the clusters that you obtained in K-means cluster- ing compare to the true class labels?
+
+*Hint: you may use the `table()` function to compare the true class labels to the class labels obtained by clustering. Be careful how you interpret the results: K-means clustering will arbitrarily number the clusters, so you cannot simply check whether the true class labels and clustering labels are the same.*
+
+c) Perform $K$-means clustering with $K = 2$. Describe your results.
+
+d) Perform $K$-means clustering with $K = 4$. Describe your results.
+
+
+## Exercise 2
+
+We will return to the famous `iris` dataset. Even though this data is labelled with species, we will ignore them when running the algorithm.
+
+```{r}
+data("iris")
+```
+
+a) Run $K$-means clustering using all the quantitative features with $K=3$. 
+
+
+b) Compare the predicted clusters with the original data.
+
+c) Create a visualization of the cluster assignments plotted in predictor space. Choose two features of your choice for the axes.
+
+d) We will not always know the true number of clusters. Therefore, it is good practice to run the algorithm several times with different choices of $K$. Using a `for()` loop, fit the $K$-means algorithm to this `iris` data for $K = 1, 2, \ldots, 10$. For each $K$, obtain and store the value of the objective.
+
+```{r}
+set.seed(1)
+tot.withinss <- rep(NA, 10)
+for (i in 1:10){
+  irisCluster <- kmeans(iris[,1:4], center=i, nstart=20)
+  tot.withinss[i] <- irisCluster$tot.withinss
+}
+```
+
+
+e) Plot the objectives values against the number of clusters $K$, using both points and lines. Make it so that the x-axis displays whole numbers. Comment on what you notice.
+
+```{r}
+data.frame(K = 1:10, objective = tot.withinss) %>%
+  ggplot(., aes(x = K, y = objective)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(breaks = 1:10)
+```
+
+f) The shape of your plot in (e) should resemble an elbow. The **Elbow Method** is one of the most popular methods to determine the optimal value of $K$. When we analyze the graph, the graph will rapidly change at a point and thus create the elbow shape. From this point on, the graph starts to move almost parallel to the x-axis. The $K$ value corresponding to this point is taken to be the optimal $K$ value.
+
+**Based on your plot in (e)**, what is the optimal $K$? How does this compare to the true data?

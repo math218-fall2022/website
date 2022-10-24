@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Math 218: Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Unupervised learning: k-means" />
+    <script src="09-kmeans-slides_files/header-attrs-2.16/header-attrs.js"></script>
+    <script src="09-kmeans-slides_files/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+    <script src="09-kmeans-slides_files/plotly-binding-4.10.0/plotly.js"></script>
+    <script src="09-kmeans-slides_files/typedarray-0.1/typedarray.min.js"></script>
+    <script src="09-kmeans-slides_files/jquery-3.5.1/jquery.min.js"></script>
+    <link href="09-kmeans-slides_files/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+    <script src="09-kmeans-slides_files/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+    <link href="09-kmeans-slides_files/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+    <script src="09-kmeans-slides_files/plotly-main-2.5.1/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Math 218: Statistical Learning
+]
+.author[
+### Unupervised learning: k-means
+]
+.date[
+### 11/7/2022
+]
+
+---
+
+
+
+
+## Houskeeping
+
+---
+
+## Unsupervised learning
+
+- Shifting gears: instead of *supervised* learning (e.g. regression and classification), we will now t turn to *unsupervised* learning
+
+- We only observe the features `\(X_{1}, X_{2},\ldots, X_{p}\)`
+
+  - We do not care about prediction because we have no response `\(Y\)`!
+  
+--
+
+- Example: a search engine might choose which search results to display to a particular individual based on the click histories of other individuals with similar search patterns
+
+---
+
+## Unsupervised learning goals
+
+- Discover interesting things about the predictors/features
+  
+  - Can we discover subgroups among the variables or among the observations?
+  
+  - Is there an informative way to visualize the data?
+
+  
+--
+
+- Two common methods: 
+
+  - **Clustering**: broad class of methods to discover unknown subgroups in your data
+  
+  - **Principal components analysis (PCA)**:  , a tool used for data
+visualization or data pre-processing, often before supervised
+techniques are applied
+
+--
+
+- PCA is beyond the scope of this course (but you can try using it for your final project if you understand eigenvectors!)
+
+---
+
+## Challenges
+
+- Subjective; no clearly defined goal for analysis
+
+- How to assess results obtained? No way to validate!
+
+--
+
+- Despite challenges, unsupervised learning methods are of growing importance
+
+---
+
+class: center, middle
+
+# Clustering methods
+
+---
+
+## Clustering
+
+- We want to find *subgroups* or *clusters* in a data set
+
+- This means separating observations into distinct groups such that:
+
+  - observations with each group are similar
+  
+  - observation across groups are different
+  
+
+--
+
+- How to define "similar" and "different"?
+
+--
+
+- Two main methods: **K-means clustering** and **hierarchical clustering**
+
+  - Apologies for another K!
+  
+---
+
+## K-Means clustering
+
+- We seek to partition/divide the observations into a pre-specified number of clusters `\(K\)`
+
+- These clusters are distinct and non-overlapping
+
+--
+
+- Just like in `\(k\)`-fold CV or `\(KNN\)`, we first specify `\(K\)`. Then the algorithm will assign each observation to exactly one of the `\(K\)` clusters
+
+---
+
+## Example data: US Arrests
+
+- We consider a subset of the `USArrests` data. Contains  statistics, in arrests per 100,000 residents for `\(\color{blue}{\text{Murder}}\)` in each of the 50 US states in 1973. Also given is the percent of the population living in urban areas `\((\color{blue}{\text{UrbanPop}})\)`.
+
+- Apply `\(K\)`-means clustering with different values of `\(K\)` to group the observations (states)
+
+- Color of each observation indicates the cluster to which each state was assigned (coloring is arbitrary)
+
+---
+## Example data: US Arrests
+
+&lt;img src="09-kmeans-slides_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Simulated data
+
+- Simulated data with `\(n = 60\)` observations in 3-dimensional space
+
+- The following plots show the results of applying `\(K\)`-means clustering with different `\(K\)` 
+
+  - Color corresponds to cluster 
+  
+---
+
+## Simulated data: 2-means
+
+<div id="htmlwidget-7406db5fe25f92c2156b" style="width:360px;height:360px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-7406db5fe25f92c2156b">{"x":{"visdat":{"1832b1579be06":["function () ","plotlyVisDat"]},"cur_data":"1832b1579be06","attrs":{"1832b1579be06":{"x":{},"y":{},"z":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"X1"},"yaxis":{"title":"X2"},"zaxis":{"title":"X3"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[-0.578483721859972,-0.942300733477539,-0.203728179661995,-1.66647484003016,-0.484455109150991,-0.741072660721595,1.01206712493423,-0.0720784740865598,-1.13678229809932,0.90062472898267,0.851770447092221,0.72771517415448,0.73650214568861,-0.352129616945692,0.705515513485513,1.30035798873208,0.0382520141442711,-0.979283769996278,0.793761230872534,0.786506872009449,-0.3104631309593,1.6988848455591,-0.794593708549281,0.348437716180028,-2.26540107351778,-0.162205279028246,1.13086499145889,-0.455545976260457,-0.899166315538872,0.726838901731248,-0.809440901865235,0.267085115955233,-1.73726371053359,-1.41142513580887,-0.453551226778487,-1.03549127536806,0.917456736975022,-0.785142161076832],"y":[-0.264464783751913,-2.35229830550008,-1.31135995587427,-0.775593904197261,-1.20570369669651,-2.00640239842173,-2.88646375100538,-1.56023970862807,-2.88638975066554,-2.85381845435497,-2.9899943307485,-2.65087773692389,-0.946053339505992,-2.39087803343083,-2.07058639361008,-2.46205080949705,-1.45909173300974,-1.0683650290735,-2.20927434520839,0.61735004847214,-0.40507751269335,1.05310376278932,0.602284246232936,1.01746117679617,0.608167318012025,0.206735995446507,-1.89772729179401,-0.68258283167826,0.48133841544876,-0.46303103800246,-0.279741695780017,-0.413690144551152,1.61876652099431,-0.721055710863809,-0.453093157328089,0.014257160811718,0.188870195293106,-0.0501484943351056],"z":[-1.16438045948955,-1.98234768005538,-0.989944234863605,-0.151684601165901,0.912506790648764,0.407669808244511,-0.642694411890814,1.93024368882515,0.410199364014196,-1.29134932097171,2.63504537476528,0.487072288230247,0.853892317945874,1.08844270545127,0.226013957088833,0.0681988375620624,-0.984815532656021,-1.31085442184374,2.46405533523018,1.33457193013893,2.91286264802263,2.96466422628936,3.6080029371317,3.83539952490215,2.70246273324454,3.21785407875396,0.876346170853751,2.66833011553932,3.21641148833652,2.23457535394817,1.58130341249761,2.23822008996179,1.44941180792959,1.49939723147806,3.1638974920419,4.15553695442591,0.399177384876552,0.961446586537298],"mode":"markers","type":"scatter3d","name":"1","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"frame":null},{"x":[2.03806658408012,2.70747427712153,3.25878821624125,1.84786811408487,3.19578282628638,3.03012394460163,3.08541773161227,4.11661021271527,1.78114258442201,4.26736872208989,2.25521840386486,1.86878142916426,2.28364150996702,3.25265236964621,3.1520457066556,2.69234357032158,2.04698266909188,2.35175718855153,4.22431362428058,3.19981160798297,1.16061577924134,1.36214289325928],"y":[0.573518173147265,0.918196207737772,0.256287272985725,0.351966555937571,1.1743373570956,-0.480846375289203,-0.418829722135601,0.955112803220351,-1.28900661094787,0.186197433075043,-0.0313255019472277,0.46709730984657,1.02419767420456,0.267358452234395,0.2318261028602,0.747592464522409,1.21706851052422,0.383358345168268,-0.988052821592123,-0.156852910196835,-1.78084936483301,0.215764621195314],"z":[-1.49541963191881,0.367837752833598,0.517144022175576,-0.484335465051033,0.67485561592317,-0.762448605232066,0.386073790838167,-0.664003344642473,-1.72434419515427,1.15631907930311,0.693506589871361,0.143156356167511,1.4928135601807,-1.6321534789575,0.12784602334533,-2.40366372713006,1.44392825556698,-0.878893050307905,-1.30643832721565,-0.877198992586869,-1.24218437520505,0.290842990897498],"mode":"markers","type":"scatter3d","name":"2","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+
+---
+## Simulated data: 3-means
+
+<div id="htmlwidget-d4875298567956d10ff0" style="width:360px;height:360px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d4875298567956d10ff0">{"x":{"visdat":{"1832b88068d4":["function () ","plotlyVisDat"]},"cur_data":"1832b88068d4","attrs":{"1832b88068d4":{"x":{},"y":{},"z":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"X1"},"yaxis":{"title":"X2"},"zaxis":{"title":"X3"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[-0.0720784740865598,0.851770447092221,0.793761230872534,0.786506872009449,-0.3104631309593,1.6988848455591,-0.794593708549281,0.348437716180028,-2.26540107351778,-0.162205279028246,-0.455545976260457,-0.899166315538872,0.726838901731248,-0.809440901865235,0.267085115955233,-1.73726371053359,-1.41142513580887,-0.453551226778487,-1.03549127536806,-0.785142161076832],"y":[-1.56023970862807,-2.9899943307485,-2.20927434520839,0.61735004847214,-0.40507751269335,1.05310376278932,0.602284246232936,1.01746117679617,0.608167318012025,0.206735995446507,-0.68258283167826,0.48133841544876,-0.46303103800246,-0.279741695780017,-0.413690144551152,1.61876652099431,-0.721055710863809,-0.453093157328089,0.014257160811718,-0.0501484943351056],"z":[1.93024368882515,2.63504537476528,2.46405533523018,1.33457193013893,2.91286264802263,2.96466422628936,3.6080029371317,3.83539952490215,2.70246273324454,3.21785407875396,2.66833011553932,3.21641148833652,2.23457535394817,1.58130341249761,2.23822008996179,1.44941180792959,1.49939723147806,3.1638974920419,4.15553695442591,0.961446586537298],"mode":"markers","type":"scatter3d","name":"1","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"frame":null},{"x":[2.03806658408012,2.70747427712153,3.25878821624125,1.84786811408487,3.19578282628638,3.03012394460163,3.08541773161227,4.11661021271527,4.26736872208989,2.25521840386486,1.86878142916426,2.28364150996702,3.25265236964621,3.1520457066556,2.69234357032158,2.04698266909188,2.35175718855153,4.22431362428058,3.19981160798297,1.36214289325928,0.917456736975022],"y":[0.573518173147265,0.918196207737772,0.256287272985725,0.351966555937571,1.1743373570956,-0.480846375289203,-0.418829722135601,0.955112803220351,0.186197433075043,-0.0313255019472277,0.46709730984657,1.02419767420456,0.267358452234395,0.2318261028602,0.747592464522409,1.21706851052422,0.383358345168268,-0.988052821592123,-0.156852910196835,0.215764621195314,0.188870195293106],"z":[-1.49541963191881,0.367837752833598,0.517144022175576,-0.484335465051033,0.67485561592317,-0.762448605232066,0.386073790838167,-0.664003344642473,1.15631907930311,0.693506589871361,0.143156356167511,1.4928135601807,-1.6321534789575,0.12784602334533,-2.40366372713006,1.44392825556698,-0.878893050307905,-1.30643832721565,-0.877198992586869,0.290842990897498,0.399177384876552],"mode":"markers","type":"scatter3d","name":"2","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"frame":null},{"x":[1.78114258442201,-0.578483721859972,-0.942300733477539,-0.203728179661995,-1.66647484003016,-0.484455109150991,-0.741072660721595,1.16061577924134,1.01206712493423,-1.13678229809932,0.90062472898267,0.72771517415448,0.73650214568861,-0.352129616945692,0.705515513485513,1.30035798873208,0.0382520141442711,-0.979283769996278,1.13086499145889],"y":[-1.28900661094787,-0.264464783751913,-2.35229830550008,-1.31135995587427,-0.775593904197261,-1.20570369669651,-2.00640239842173,-1.78084936483301,-2.88646375100538,-2.88638975066554,-2.85381845435497,-2.65087773692389,-0.946053339505992,-2.39087803343083,-2.07058639361008,-2.46205080949705,-1.45909173300974,-1.0683650290735,-1.89772729179401],"z":[-1.72434419515427,-1.16438045948955,-1.98234768005538,-0.989944234863605,-0.151684601165901,0.912506790648764,0.407669808244511,-1.24218437520505,-0.642694411890814,0.410199364014196,-1.29134932097171,0.487072288230247,0.853892317945874,1.08844270545127,0.226013957088833,0.0681988375620624,-0.984815532656021,-1.31085442184374,0.876346170853751],"mode":"markers","type":"scatter3d","name":"3","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+---
+
+## Simulated data: 5-means
+
+<div id="htmlwidget-5c2becd7453792bf6da4" style="width:360px;height:360px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-5c2becd7453792bf6da4">{"x":{"visdat":{"1832b7af8ff47":["function () ","plotlyVisDat"]},"cur_data":"1832b7af8ff47","attrs":{"1832b7af8ff47":{"x":{},"y":{},"z":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter3d"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"X1"},"yaxis":{"title":"X2"},"zaxis":{"title":"X3"}},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[-0.578483721859972,-0.942300733477539,-0.203728179661995,-1.66647484003016,1.16061577924134,1.01206712493423,0.90062472898267,0.0382520141442711,-0.979283769996278],"y":[-0.264464783751913,-2.35229830550008,-1.31135995587427,-0.775593904197261,-1.78084936483301,-2.88646375100538,-2.85381845435497,-1.45909173300974,-1.0683650290735],"z":[-1.16438045948955,-1.98234768005538,-0.989944234863605,-0.151684601165901,-1.24218437520505,-0.642694411890814,-1.29134932097171,-0.984815532656021,-1.31085442184374],"mode":"markers","type":"scatter3d","name":"1","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"frame":null},{"x":[-0.484455109150991,-0.741072660721595,-0.0720784740865598,-1.13678229809932,0.851770447092221,0.72771517415448,0.73650214568861,-0.352129616945692,0.705515513485513,1.30035798873208,0.793761230872534,1.13086499145889],"y":[-1.20570369669651,-2.00640239842173,-1.56023970862807,-2.88638975066554,-2.9899943307485,-2.65087773692389,-0.946053339505992,-2.39087803343083,-2.07058639361008,-2.46205080949705,-2.20927434520839,-1.89772729179401],"z":[0.912506790648764,0.407669808244511,1.93024368882515,0.410199364014196,2.63504537476528,0.487072288230247,0.853892317945874,1.08844270545127,0.226013957088833,0.0681988375620624,2.46405533523018,0.876346170853751],"mode":"markers","type":"scatter3d","name":"2","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"frame":null},{"x":[2.70747427712153,3.25878821624125,3.19578282628638,3.08541773161227,4.26736872208989,2.25521840386486,1.86878142916426,2.28364150996702,3.1520457066556,2.04698266909188,0.786506872009449,1.6988848455591,1.36214289325928,0.917456736975022],"y":[0.918196207737772,0.256287272985725,1.1743373570956,-0.418829722135601,0.186197433075043,-0.0313255019472277,0.46709730984657,1.02419767420456,0.2318261028602,1.21706851052422,0.61735004847214,1.05310376278932,0.215764621195314,0.188870195293106],"z":[0.367837752833598,0.517144022175576,0.67485561592317,0.386073790838167,1.15631907930311,0.693506589871361,0.143156356167511,1.4928135601807,0.12784602334533,1.44392825556698,1.33457193013893,2.96466422628936,0.290842990897498,0.399177384876552],"mode":"markers","type":"scatter3d","name":"3","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"frame":null},{"x":[2.03806658408012,1.84786811408487,3.03012394460163,4.11661021271527,1.78114258442201,3.25265236964621,2.69234357032158,2.35175718855153,4.22431362428058,3.19981160798297],"y":[0.573518173147265,0.351966555937571,-0.480846375289203,0.955112803220351,-1.28900661094787,0.267358452234395,0.747592464522409,0.383358345168268,-0.988052821592123,-0.156852910196835],"z":[-1.49541963191881,-0.484335465051033,-0.762448605232066,-0.664003344642473,-1.72434419515427,-1.6321534789575,-2.40366372713006,-0.878893050307905,-1.30643832721565,-0.877198992586869],"mode":"markers","type":"scatter3d","name":"4","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"line":{"color":"rgba(231,138,195,1)"},"frame":null},{"x":[-0.3104631309593,-0.794593708549281,0.348437716180028,-2.26540107351778,-0.162205279028246,-0.455545976260457,-0.899166315538872,0.726838901731248,-0.809440901865235,0.267085115955233,-1.73726371053359,-1.41142513580887,-0.453551226778487,-1.03549127536806,-0.785142161076832],"y":[-0.40507751269335,0.602284246232936,1.01746117679617,0.608167318012025,0.206735995446507,-0.68258283167826,0.48133841544876,-0.46303103800246,-0.279741695780017,-0.413690144551152,1.61876652099431,-0.721055710863809,-0.453093157328089,0.014257160811718,-0.0501484943351056],"z":[2.91286264802263,3.6080029371317,3.83539952490215,2.70246273324454,3.21785407875396,2.66833011553932,3.21641148833652,2.23457535394817,1.58130341249761,2.23822008996179,1.44941180792959,1.49939723147806,3.1638974920419,4.15553695442591,0.961446586537298],"mode":"markers","type":"scatter3d","name":"5","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"line":{"color":"rgba(166,216,84,1)"},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+
+---
+
+## Details of `\(K\)`-means clustering
+
+- Procedure results from simple and intuitive mathematical problem. Start with notation
+
+- Let `\(C_{1}, \ldots, C_{K}\)` be the sets containing the indices of the observation in each cluster. These sets satisfy two properties:
+
+  1. `\(C_{1} \cup C_{2} \cup \ldots \cup C_{K} = \{1, \ldots, n\}\)`, i.e. each observation belong to at least one of the `\(K\)` clusters
+  
+  2. `\(C_{k} \cap C_{k'} = \emptyset\)` for all `\(k \neq k'\)`, i.e. the clusters are non-overlapping
+  
+--
+
+- For example, if the 10-th observation is in the second cluster, then `\(10 \in C_{2}\)`
+
+  - More generally: if observation `\(i\)` is in `\(k\)`-th cluster, then `\(i \in C_{k}\)`
+  
+---
+
+## Details of `\(K\)`-means clustering
+
+- **Good** clustering is at the heart of `\(K\)`-means clustering procedure: we want the *within-cluster variation* to be as small as possible
+
+- Let `\(\text{WCV}(C_{k})\)` denote the within-cluster variation for cluster `\(C_{k}\)`. Tells us the amount by which observations within a cluster are different from each other
+
+- `\(K\)`-means clustering solves the problem:
+
+`$$\min_{C_{1}, \ldots, C_{K}}\left\{\sum_{k=1}^{K}\text{WCV}(C_{k})  \right\}$$`
+
+  - What does this mean in words?
+  
+  - This is called the "objective"
+  
+---
+
+### How to define within-cluster variation?
+
+- Once again, need to define 
+
+- Most common choice is *Euclidean distance*:
+
+`$$\text{WCV}(C_{k}) = \frac{1}{|C_{k}|} \sum_{i, i' \in C_{k}} \sum_{j=1}^{p} (x_{ij} - x_{i'j})^2$$`
+
+where `\(|C_{k}|\)` is the number of observations in the `\(k\)`-th cluster
+
+--
+
+- Let's do an example!
+
+---
+
+## K-means clustering: Algorithm
+
+1. Randomly assign a number from 1 to `\(K\)` to each of the observations. This is how we *initialize* the cluster assignments.
+
+--
+
+2. Iterate the following until the cluster assignments stop changing:
+
+  i) For each cluster `\(k = 1,\ldots, K\)`, compute the cluster *centroid*. The `\(k\)`-th cluster centroid is the vector of the `\(p\)`-feature means for observation in `\(C_{k}\)`
+  
+  ii) Assign each observation to the cluster who centroid is *closest*, defined using Euclidean distance here
+  
+---
+
+## Example
+
+---
+
+## Details on algorithm
+
+- This algorithm is not guaranteed to solve the minimization problem exactly
+
+- There are almost `\(K^n\)` ways to partition all `\(n\)` observations into `\(K\)` clusters
+
+- The algorithm on previous slide provides a *local* optimum, i.e. a pretty good solution to the optimization problem!
+
+
+---
+
+### Important impelementation concerns!
+
+- Because the algorithm finds a local optimum, our results will depend on the initial cluster assignments in Step 1
+  
+  - Therefore, it is important to run the algorithm multiple times using different random initializations 
+  
+  - Then select the *best* solution (i.e. the one with smallest `\(\sum_{k=1}^{K}\text{WCV}(C_{k})\)`)
+
+---
+
+## Example 2: Simulated data
+
+- Generated `n=50` observations with two features, evenly split between two true clusters
+
+- Perform K-means clustering performed four times on the same data with `\(K = 3\)`, each time with different random initialization.
+
+- Above each plot is the value of the objective 
+
+---
+
+&lt;img src="09-kmeans-slides_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Example 2: Simulated data
+
+- Three different local optima were obtained (three unique objective values)
+
+- One of the local optima resulted in a smaller value of the objective, and therefore provides better separation between the clusters
+
+  - Two of the initializations results in ties for best solution, with object value of 58.145
+
+
+
+## Summary: considerations 
+
+- Should the features be standardized?
+
+- What should `\(K\)` be?
+  
+
+- How do we validate the clusters we obtained?
+
+  - Are we truly discovering subgroups, or are we simply clustering the noise?
+
+- Do all observations belong in a cluster? Or are some actually "outliers"
+
+
+- Clustering methods generally not robust to small changes in data
+
+---
+
+## Summary: recommendations
+
+- Small decisions can lead to large changes!
+
+- Recommend performing clustering with different choices of `\(K\)`, and looking to see if/which patterns consistently appear
+
+- Because clustering not robust, maybe we consider clustering subsets of the data 
+
+- Caution: be careful about how the results of a clustering analysis are reported. These results should not be taken as the absolute truth about a data set!!!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
