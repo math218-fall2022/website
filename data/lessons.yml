@@ -94,6 +94,7 @@ lessons:
  - date: "Week 07"
  - date: "Monday, Oct. 24"
    title: "Shrinkage"
+   slides: "lec-slides/07-regularization.html"
  - date: "Wednesday, Oct. 26"
    title: "Shrinkage (cont.)"
  - date: "Thursday, Oct. 27"

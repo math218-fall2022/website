@@ -274,9 +274,30 @@ par(mfrow= c(1,1))
 M2 <-  match_mat2/counts2
 M3 <- match_mat3/counts3
 M4 <- match_mat4/counts4
-plot(ecdf(M2[upper.tri(M2)]))
-lines(ecdf(M3[upper.tri(M3)]), col = "red")
-lines(ecdf(M4[upper.tri(M4)]), col = "blue")
+e2 <- ecdf(M2[upper.tri(M2)])
+e3 <- ecdf(M3[upper.tri(M3)])
+e4 <- ecdf(M4[upper.tri(M4)])
+plot(e3, col = "red", verticals = T)
+lines(e2, verticals = T)
+lines(e4, col = "blue", verticals = T)
+
+M2_sort <- sort(M2[upper.tri(M2)])
+M3_sort <- sort(M3[upper.tri(M3)])
+M4_sort <- sort(M4[upper.tri(M4)])
+
+auc_mat <- matrix(0, nrow = length(M2_sort), ncol = 3)
+for(i in 2:length(M2_sort)){
+  auc_mat[i,] <- c((M2_sort[i] - M2_sort[i-1])*e2(M2_sort[i]),
+                   (M3_sort[i] - M3_sort[i-1])*e3(M3_sort[i]),
+                   (M4_sort[i] - M4_sort[i-1])*e4(M4_sort[i]))
+}
+colSums(auc_mat)
+
+## proportion increase
+colSums(auc_mat)[1]
+
+(colSums(auc_mat)[2] - colSums(auc_mat)[1])/(colSums(auc_mat)[1])
+(colSums(auc_mat)[3] - colSums(auc_mat)[2])/(colSums(auc_mat)[2])
 
 
 ```
