@@ -31,9 +31,11 @@ class: center, middle, inverse, title-slide
 
 ## Housekeeping
 
-- Midterm grades were released. Really well done!
+- Midterm grades were released. Really well done! Optional revision due TONIGHT 11:59pm
   
-- Stats candidate (Peter Gao) job talk: Thursday 12:30-1:30pm in Warner 101
+- Stats candidate (Peter Gao) job talk: tomorrow 12:30-1:30pm in Warner 101
+
+- Lab 04 due tomorrow 11:59pm
 
 ---
 
@@ -371,7 +373,7 @@ Data simulated with `\(p = 45\)` predictors and `\(n = 50\)` observations, but o
 ---
 ## Lasso vs Ridge
 
-- Neither approach will universally dominant the other
+- Neither approach will universally dominate the other
 
 - In general, we expect the Lasso to perform better when the response is a function of only a relatively small number of prodictors
 
@@ -408,6 +410,8 @@ Data simulated with `\(p = 45\)` predictors and `\(n = 50\)` observations, but o
   - That is, the 5 folds are determined first and do not change
   
   - Then we implement the cross-validation method 51 times, once for every value in `\(\lambda = (0.001, 0.0126, ..., 3.98, 5.01, ..., 79.43, 100)\)`
+  
+--
   
 - The plots display the estimated 5-fold CV test error for each `\(\lambda\)`, as well as the estimated `\(\hat{\beta}_{j}^{R}\)`
 

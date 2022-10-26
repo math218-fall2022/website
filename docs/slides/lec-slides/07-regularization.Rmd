@@ -49,9 +49,11 @@ mod_ls <- list(lm(y ~ bmi , diabetes),
 
 ## Housekeeping
 
-- Midterm grades were released. Really well done!
+- Midterm grades were released. Really well done! Optional revision due TONIGHT 11:59pm
   
-- Stats candidate (Peter Gao) job talk: Thursday 12:30-1:30pm in Warner 101
+- Stats candidate (Peter Gao) job talk: tomorrow 12:30-1:30pm in Warner 101
+
+- Lab 04 due tomorrow 11:59pm
 
 ---
 
@@ -544,7 +546,7 @@ p1 <- lasso_df %>%
  geom_point(aes(x = lasso_lambdas[which(lasso_mse == min(lasso_mse))], y = min(lasso_mse)),
             shape = 4, size = 3) +
  labs(x = expression(lambda))+
- guides(color = "none")+
+ # guides(color = "none")+
   theme(text = element_text(size = 20))
 
 
@@ -606,14 +608,14 @@ p1
 ## Prediction: Lasso vs Ridge
 
 
-```{r fig.align = "center", fig.height=5, fig.width=8}
+```{r fig.align = "center", fig.height=6, fig.width=9}
 p2
 ```
 
 ---
 ## Lasso vs Ridge
 
-- Neither approach will universally dominant the other
+- Neither approach will universally dominate the other
 
 - In general, we expect the Lasso to perform better when the response is a function of only a relatively small number of prodictors
 
@@ -650,6 +652,8 @@ p2
   - That is, the 5 folds are determined first and do not change
   
   - Then we implement the cross-validation method 51 times, once for every value in $\lambda = (0.001, 0.0126, ..., 3.98, 5.01, ..., 79.43, 100)$
+  
+--
   
 - The plots display the estimated 5-fold CV test error for each $\lambda$, as well as the estimated $\hat{\beta}_{j}^{R}$
 
