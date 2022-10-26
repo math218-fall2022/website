@@ -444,7 +444,7 @@ $$\min_{\beta}\left\{ \sum_{i=1}^{n} \left(y_{i} - \beta_{0} - \sum_{j=1}^{p} \b
 
 --
 
--Let $\hat{\beta} = (\hat{\beta}_{1}, \hat{\beta}_{2})$ be the least-squares solution
+- Let $\hat{\beta} = (\hat{\beta}_{1}, \hat{\beta}_{2})$ be the least-squares solution
 
 - The teal diamond and circle are regions that satisfy the Lasso and ridge regression budget constraints for a given $s$
 

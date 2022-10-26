@@ -1,6 +1,6 @@
 ---
 title: "Math 218: Statistical Learning"
-author: "Unupervised learning: k-means"
+author: "Unupervised learning: Hierarchical clustering"
 date: "9/14/2022"
 output: 
    xaringan::moon_reader:
@@ -28,20 +28,6 @@ library(ggdendro)
 
 ---
 
-## Unsupervised learning
-
-- Shifting gears: instead of *supervised* learning (e.g. regression and classification), we will now t turn to *unsupervised* learning
-
-- We only observe the features $X_{1}, X_{2},\ldots, X_{p}$
-
-  - We do not care about prediction because we have no response $Y$!
-  
---
-
-- Example: a search engine might choose which search results to display to a particular individual based on the click histories of other individuals with similar search patterns
-
----
-
 ## Unsupervised learning goals
 
 - Discover interesting things about the predictors/features
@@ -57,31 +43,8 @@ library(ggdendro)
 
   - **Clustering**: broad class of methods to discover unknown subgroups in your data
   
-  - **Principal components analysis (PCA)**:  , a tool used for data
-visualization or data pre-processing, often before supervised
-techniques are applied
+  - **Principal components analysis (PCA)**:  
 
---
-
-- PCA is beyond the scope of this course (but you can try using it for your final project if you understand eigenvectors!)
-
----
-
-## Challenges
-
-- Subjective; no clearly defined goal for analysis
-
-- How to assess results obtained? No way to validate!
-
---
-
-- Despite challenges, unsupervised learning methods are of growing importance
-
----
-
-class: center, middle
-
-# Clustering methods
 
 ---
 
@@ -102,255 +65,8 @@ class: center, middle
 
 --
 
-- Two main methods: **K-means clustering** and **hierarchical clustering**
+- Two main methods: **K-means clustering** (last week) and **hierarchical clustering** (this week)
 
-  - Apologies for another K!
-  
----
-
-## K-Means clustering
-
-- We seek to partition/divide the observations into a pre-specified number of clusters $K$
-
-- These clusters are distinct and non-overlapping
-
---
-
-- Just like in $k$-fold CV or $KNN$, we first specify $K$. Then the algorithm will assign each observation to exactly one of the $K$ clusters
-
----
-
-## Example data: US Arrests
-
-- We consider a subset of the `USArrests` data. Contains  statistics, in arrests per 100,000 residents for $\color{blue}{\text{Murder}}$ in each of the 50 US states in 1973. Also given is the percent of the population living in urban areas ($\color{blue}{\text{UrbanPop}}$).
-
-- Apply $K$-means clustering with different values of $K$ to group the observations (states)
-
-- Color of each observation indicates the cluster to which each state was assigned (coloring is arbitrary)
-
----
-## Example data: US Arrests
-
-```{r fig.width=9, fig.height=6, cache = T}
-set.seed(1)
-data("USArrests")
-df <- na.omit(USArrests)
-df <- scale(df)
-k2 <- kmeans(df[,c(1,3)], centers = 2, nstart = 25)
-k3 <-  kmeans(df[,c(1,3)], centers = 3, nstart = 25)
-k5 <-  kmeans(df[,c(1,3)], centers = 5, nstart = 25)
-df %>%
-  as_tibble() %>%
-  mutate(K2 = k2$cluster,
-         K3 = k3$cluster,
-         K5 = k5$cluster,
-         state = row.names(USArrests)) %>%
-  pivot_longer(cols = c("K2", "K3", "K5"), names_to = "K", values_to = "cluster") %>%
-  mutate(K = case_when(K == "K2" ~ "K = 2",
-                       K == "K3" ~ "K = 3",
-                       T ~ "K = 5")) %>%
-  ggplot(.,aes(UrbanPop, Murder, color = factor(cluster), label = state)) +
-  geom_text()+
-  facet_wrap(~K) +
-  theme(text = element_text(size = 20)) +
-  guides(col = "none")
-```
-
----
-
-## Simulated data
-
-- Simulated data with $n = 60$ observations in 3-dimensional space
-
-- The following plots show the results of applying $K$-means clustering with different $K$ 
-
-  - Color corresponds to cluster 
-  
----
-
-## Simulated data: 2-means
-
-```{r fig.align="center", warning = F}
-set.seed(3)
-K_true <- 3
-n <- 60
-X <- matrix(rnorm(n*3), ncol = 3) 
-X[1:20, 1] <- X[1:20, 1] + 3
-X[21:40, 2] <- X[21:40, 2] - 2
-X[41:60, 3] <- X[41:60, 3] + 2
-km.out2 <- kmeans(X, 2, nstart = 20)
-
-plot_df <- data.frame(X) %>%
-  mutate(cluster = km.out2$cluster,
-         cluster = factor(cluster))
-
-plotly::plot_ly( data = plot_df, x = ~X1, y = ~X2, z = ~X3,
-                 mode = "markers",
-                 type = "scatter3d", color = ~cluster)
-```
-
-
----
-## Simulated data: 3-means
-
-```{r fig.align="center"}
-km.out3 <- kmeans(X, 3, nstart = 20)
-plot_df <- data.frame(X) %>%
-  mutate(cluster = km.out3$cluster,
-         cluster = factor(cluster))
-
-plotly::plot_ly( data = plot_df, x = ~X1, y = ~X2, z = ~X3,
-                 mode = "markers",
-                 type = "scatter3d", color = ~cluster)
-```
----
-
-## Simulated data: 5-means
-
-```{r fig.align="center"}
-km.out5 <- kmeans(X, 5, nstart = 20)
-plot_df <- data.frame(X) %>%
-  mutate(cluster = km.out5$cluster,
-         cluster = factor(cluster))
-
-plotly::plot_ly( data = plot_df, x = ~X1, y = ~X2, z = ~X3,
-                 mode = "markers",
-                 type = "scatter3d", color = ~cluster)
-```
-
----
-
-## Details of $K$-means clustering
-
-- Procedure results from simple and intuitive mathematical problem. Start with notation
-
-- Let $C_{1}, \ldots, C_{K}$ be the sets containing the indices of the observation in each cluster. These sets satisfy two properties:
-
-  1. $C_{1} \cup C_{2} \cup \ldots \cup C_{K} = \{1, \ldots, n\}$, i.e. each observation belong to at least one of the $K$ clusters
-  
-  2. $C_{k} \cap C_{k'} = \emptyset$ for all $k \neq k'$, i.e. the clusters are non-overlapping
-  
---
-
-- For example, if the 10-th observation is in the second cluster, then $10 \in C_{2}$
-
-  - More generally: if observation $i$ is in $k$-th cluster, then $i \in C_{k}$
-  
----
-
-## Details of $K$-means clustering
-
-- **Good** clustering is at the heart of $K$-means clustering procedure: we want the *within-cluster variation* to be as small as possible
-
-- Let $\text{WCV}(C_{k})$ denote the within-cluster variation for cluster $C_{k}$. Tells us the amount by which observations within a cluster are different from each other
-
-- $K$-means clustering solves the problem:
-
-$$\min_{C_{1}, \ldots, C_{K}}\left\{\sum_{k=1}^{K}\text{WCV}(C_{k})  \right\}$$
-
-  - What does this mean in words?
-  
-  - This is called the "objective"
-  
----
-
-### How to define within-cluster variation?
-
-- Once again, need to define 
-
-- Most common choice is *Euclidean distance*:
-
-$$\text{WCV}(C_{k}) = \frac{1}{|C_{k}|} \sum_{i, i' \in C_{k}} \sum_{j=1}^{p} (x_{ij} - x_{i'j})^2$$
-
-where $|C_{k}|$ is the number of observations in the $k$-th cluster
-
---
-
-- Let's do an example!
-
----
-
-## K-means clustering: Algorithm
-
-1. Randomly assign a number from 1 to $K$ to each of the observations. This is how we *initialize* the cluster assignments.
-
---
-
-2. Iterate the following until the cluster assignments stop changing:
-
-  i) For each cluster $k = 1,\ldots, K$, compute the cluster *centroid*. The $k$-th cluster centroid is the vector of the $p$-feature means for observation in $C_{k}$
-  
-  ii) Assign each observation to the cluster who centroid is *closest*, defined using Euclidean distance here
-  
----
-
-## Example
-
----
-
-## Details on algorithm
-
-- This algorithm is not guaranteed to solve the minimization problem exactly
-
-- There are almost $K^n$ ways to partition all $n$ observations into $K$ clusters
-
-- The algorithm on previous slide provides a *local* optimum, i.e. a pretty good solution to the optimization problem!
-
-
----
-
-### Important impelementation concerns!
-
-- Because the algorithm finds a local optimum, our results will depend on the initial cluster assignments in Step 1
-  
-  - Therefore, it is important to run the algorithm multiple times using different random initializations 
-  
-  - Then select the *best* solution (i.e. the one with smallest $\sum_{k=1}^{K}\text{WCV}(C_{k})$)
-
----
-
-## Example 2: Simulated data
-
-- K-means clustering performed four times on the same data with $K = 3$, each time with different random initialization.
-
-- Above each plot is the value of the objective 
-
----
-
-```{r fig.align="center", fig.width=9, fig.height=9, cache = T}
-set.seed(22)
-n <- 50
-X <- matrix(rnorm(n*2), ncol = 2) 
-X[1:25, 1] <- X[1:25, 1] + 1
-X[1:25, 2] <- X[1:25, 2] - 2
-
-
-plot_ls <- list()
-for(i in 1:4){
-  set.seed(i)
-  km.out <- kmeans(X, 3, nstart = i)
-  plot_ls[[i]] <- data.frame(X) %>%
-    mutate(cluster = km.out$cluster, 
-           cluster= factor(cluster)) %>%
-    ggplot(., aes(x = X1, y = X2, col = cluster)) +
-    geom_point(size = 2) +
-    ggtitle(round(km.out$tot.withinss, 3)) +
-    guides(col = "none") +
-    theme(text = element_text(size = 20))
-
-}
-gridExtra::grid.arrange(grobs = plot_ls, ncol = 2)
-```
-
----
-
-## Example 2: Simulated data
-
-- Three different local optima were obtained (three unique objective values)
-
-- One of the local optima resulted in a smaller value of the objective, and therefore provides better separation between the clusters
-
-  - Two of the initializations results in ties for best solution, with object value of 58.145
 
 ---
 class: center, middle
@@ -567,12 +283,285 @@ cutree(hc_avg, 4)
 cutree(hc_single, 4)
 ```
 
+
+
 ---
+
+## Consensus clustering
+
+- We cannot validate clusters, so how can we "feel good" about our cluster assignments?
+
+- Want to measure the *stability* of our clusterings; how robust are they to small perturbations?
+
+  - If the data represent a sample of items drawn from distinct sub-populations, and if we were to observe a different sample
+drawn from the same sub-populations, the induced cluster composition and number should
+not be radically different
+
+- One way might be to use **consensus clustering**, which combines/aggregates multiple clusterings together
+
+---
+
+## Consensus clustering
+
+- Unfortunately, we cannot obtain a different sample, BUT we can **resample**
+
+- We can perturb or resample datasets, apply the same clustering algorithm, and see if there is agreement among the clustering runs over the datasets
+
+  - Kind of like bagging for trees
+
+--
+
+- How? Perturb by adding a little bit of noise, or resample using the bootstrap!
+
+---
+
+
+## Consensus clustering
+
+- How would we use these ideas to compare models?
+
+- For repeated clusterings, record the proportion of times observation $i$ and $i'$ $(i \neq i')$ are in the same cluster 
+
+--
+
+- If our clusterings are stable, what values would these proportions take on?
+
+
+---
+
+## Consensus clustering: discuss!
+
+- Let's say we are performing hierarchical clustering and need to decide how many clusters to report. 
+
+- Discuss: how would we perturb the data to perform consensus clustering?
+
+- Discuss: how would we use the bootstrap to perform consensus clustering?
+
+---
+
+## Example: perturbing
+
+- Also known as semiparametric bootstrapping
+
+```{r cache = T}
+data("iris")
+
+B <- 3000
+n<- nrow(iris)
+match_mat2 <- match_mat3 <- match_mat4 <- matrix(0, nrow= n, ncol = n)
+
+# semiparametric bootstrap
+for(b in 1:B){
+  # dat_jitter <- scale(iris[,1:4]) + rnorm(50*4, 0, 0.05)
+    dat_jitter <- iris[,1:4] + rnorm(50*4, 0, 0.05)
+  hc_out <- hclust(dist(dat_jitter), method = "complete")
+  clusts2 <- cutree(hc_out, 2)
+  clusts3 <- cutree(hc_out, 3)
+  clusts4 <- cutree(hc_out, 4)
+  for(i in 1:(n-1)){
+      for(j in (i+1):n){
+        match_mat2[i,j] <- match_mat2[i,j] + 1*(clusts2[i] == clusts2[j])
+        match_mat3[i,j] <- match_mat3[i,j] + 1*(clusts3[i] == clusts3[j])
+        match_mat4[i,j] <- match_mat4[i,j] + 1*(clusts4[i] == clusts4[j])
+
+      }
+  }
+}
+
+M2<- match_mat2/B; M3 <- match_mat3/B; M4 <- match_mat4/B
+```
+
+```{r fig.align="center", fig.width=9, fig.height=6}
+df <- data.frame(K2 = c(M2[upper.tri(M2)]), K3 = c(M3[upper.tri(M3)]), K4 = c( M4[upper.tri(M4)])) %>%
+  pivot_longer(cols = 1:3, names_to = "K", values_to = "proportion")  %>%
+  mutate(K = case_when(K == "K2" ~ "2",
+                       K == "K3" ~ "3",
+                       K == "K4" ~ "4"))
+df %>%
+  ggplot(., aes(x = proportion)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~ K) +
+  ggtitle("Semiparametric bootstrap Consensus Clustering", subtitle = "Same cluster assignment") +
+  theme(text =element_text(size=20))
+```
+
+--
+
+- Is this plot "fair"?
+
+---
+
+```{r fig.align="center", fig.width=9, fig.height=6}
+M2_sort <- sort(M2[upper.tri(M2)])
+M3_sort <- sort(M3[upper.tri(M3)])
+M4_sort <- sort(M4[upper.tri(M4)])
+e2 <- ecdf(M2[upper.tri(M2)]); e3 <-  ecdf(M3[upper.tri(M3)]); e4 <- ecdf(M4[upper.tri(M4)])
+auc_mat <- matrix(0, nrow = length(M2_sort), ncol = 3)
+for(i in 2:length(M2_sort)){
+  auc_mat[i,] <- c((M2_sort[i] - M2_sort[i-1])*e2(M2_sort[i]),
+                   (M3_sort[i] - M3_sort[i-1])*e3(M3_sort[i]),
+                   (M4_sort[i] - M4_sort[i-1])*e4(M4_sort[i]))
+}
+aucs <- colSums(auc_mat)
+
+ggplot(df, aes(x = proportion, col = K)) +
+  stat_ecdf(geom = "step")  +
+  ggtitle("Semiparametric Bootstrap: Empirical CDFs", subtitle = "For proportion of cluster aggreement") +
+  labs(y = "Probability")+
+  annotate("text", x=0.7, y=0.3, label= round(aucs[3], 3), col = "#619CFF" ) +
+  annotate("text", x=0.7, y=0.2, label= round(aucs[2], 3), col = "#00BA38" ) +
+  annotate("text", x=0.7, y=0.1, label= round(aucs[1], 3), col = "#F8766D" ) +
+  annotate("text", x=0.75, y=0.4, label= "Area under curve:")+
+   theme(text =element_text(size=20))
+```
+
+
+```{r eval = F, echo = F}
+
+## proportion increase
+colSums(auc_mat)[1]
+
+(colSums(auc_mat)[2] - colSums(auc_mat)[1])/(colSums(auc_mat)[1])
+(colSums(auc_mat)[3] - colSums(auc_mat)[2])/(colSums(auc_mat)[2])
+
+```
+
+---
+
+## Example: 0.632 bootstrap
+
+```{r cache = T}
+set.seed(15)
+B <- 3000
+match_mat2 <- match_mat3 <- match_mat4 <- counts2 <- counts3 <- counts4 <-  matrix(0, nrow= n, ncol = n)
+# .632 bootstrap
+for(b in 1:B){
+  ids <- sample(1:n, round((1-1/exp(1))*n), replace = F)
+  dat<- iris[ids,1:4] 
+  hc_out <- hclust(dist(dat), method = "complete")
+  clusts2 <- cutree(hc_out, 2)
+  clusts3 <- cutree(hc_out, 3)
+  clusts4 <- cutree(hc_out, 4)
+  for(i in 1:(n-1)){
+    if(i %in% ids){
+      i_id <- which(ids == i); 
+      for(j in (i+1):n){
+        if(j %in% ids){
+          j_id <- which(ids == j)
+          match_mat2[i,j] <- match_mat2[i,j] + 1*(clusts2[j_id] == clusts2[i_id])
+          counts2[i,j] <- counts2[i,j] + 1
+          match_mat3[i,j] <- match_mat3[i,j] + 1*(clusts3[j_id] == clusts3[i_id])
+          counts3[i,j] <- counts3[i,j] + 1
+          match_mat4[i,j] <- match_mat4[i,j] + 1*(clusts4[j_id] == clusts4[i_id])
+          counts4[i,j] <- counts4[i,j] + 1          
+        }
+        
+      }
+    }
+
+  }
+}
+M2 <-  match_mat2/counts2; M3 <- match_mat3/counts3; M4 <- match_mat4/counts4
+
+```
+
+```{r fig.align="center", fig.width=9, fig.height=6}
+df <- data.frame(K2 = c(M2[upper.tri(M2)]), K3 = c(M3[upper.tri(M3)]), K4 = c( M4[upper.tri(M4)])) %>%
+  pivot_longer(cols = 1:3, names_to = "K", values_to = "proportion")  %>%
+  mutate(K = case_when(K == "K2" ~ "2",
+                       K == "K3" ~ "3",
+                       K == "K4" ~ "4"))
+df %>%
+  ggplot(., aes(x = proportion)) +
+  geom_histogram(bins = 20) +
+  facet_wrap(~ K) +
+  ggtitle("0.632 bootstrap Consensus Clustering", subtitle = "Same cluster assignment")+
+   theme(text =element_text(size=20))
+```
+
+
+---
+
+```{r fig.align="center", fig.width=9, fig.height=6}
+M2_sort <- sort(M2[upper.tri(M2)])
+M3_sort <- sort(M3[upper.tri(M3)])
+M4_sort <- sort(M4[upper.tri(M4)])
+e2 <- ecdf(M2[upper.tri(M2)]); e3 <-  ecdf(M3[upper.tri(M3)]); e4 <- ecdf(M4[upper.tri(M4)])
+
+auc_mat <- matrix(0, nrow = length(M2_sort), ncol = 3)
+for(i in 2:length(M2_sort)){
+  auc_mat[i,] <- c((M2_sort[i] - M2_sort[i-1])*e2(M2_sort[i]),
+                   (M3_sort[i] - M3_sort[i-1])*e3(M3_sort[i]),
+                   (M4_sort[i] - M4_sort[i-1])*e4(M4_sort[i]))
+}
+aucs <- colSums(auc_mat)
+
+ggplot(df, aes(x = proportion, col = K)) +
+  stat_ecdf(geom = "step")  +
+  ggtitle("0.632 Bootstrap: Empirical CDFs", subtitle = "For proportion of cluster aggreement") +
+  labs(y = "Probability")+
+  annotate("text", x=0.7, y=0.3, label= round(aucs[3], 3), col = "#619CFF" ) +
+  annotate("text", x=0.7, y=0.2, label= round(aucs[2], 3), col = "#00BA38" ) +
+  annotate("text", x=0.7, y=0.1, label= round(aucs[1], 3), col = "#F8766D" ) +
+  annotate("text", x=0.75, y=0.4, label= "Area under curve:")+
+   theme(text =element_text(size=20))
+```
+
+---
+
+## Example: circle data again
+
+```{r}
+set.seed(3)
+n <- 200
+r <- 3
+alpha <- 2 * pi * runif(n)
+x1 <- r * cos(alpha) + 0 + rnorm(n, 0, 0.2)
+y1 <- r * sin(alpha) + 0 + rnorm(n, 0, 0.2)
+r <- 0.5
+alpha <- 2 * pi * runif(n)
+x2 <- r * cos(alpha) + 0 + rnorm(n, 0, 0.2)
+y2 <- r * sin(alpha) + 0 + rnorm(n, 0, 0.2)
+df <- data.frame(x = c(x1,x2), y = c(y1,y2))
+df %>%
+  ggplot(., aes(x=x,y=y)) +
+  geom_point()
+```
+
+---
+
+```{r}
+hc_out <- hclust(dist(df[,1:2]), method = "complete")
+df %>%
+  mutate(cluster = factor(cutree(hc_out, 2))) %>%
+  ggplot(., aes(x =x, y=y)) +
+  geom_point(aes(col = cluster)) +
+  geom_point(data = data.frame(km_out$centers), mapping = aes(x = x, y = y),
+             pch = 4, size = 4) +
+  guides(col = "none") +
+  ggtitle("Complete Linkage")
+```
+---
+
+```{r}
+hc_out <- hclust(dist(df[,1:2]), method = "single")
+df %>%
+  mutate(cluster = factor(cutree(hc_out, 2))) %>%
+  ggplot(., aes(x =x, y=y)) +
+  geom_point(aes(col = cluster)) +
+  geom_point(data = data.frame(km_out$centers), mapping = aes(x = x, y = y),
+             pch = 4, size = 4) +
+  guides(col = "none") +
+  ggtitle("Single Linkage")
+```
+
+---
+
 ## Considerations
 
 - We have mostly seen Euclidean distance as the choice of dissimilarity measure
 
-- *Correlation-based distance* considers two observations to be similar if their features are highly correlated
+- *Correlation-based distance* considers two observations to be similar if their features are highly correlated (will see in lab)
 
   - Focuses on the shapes of observation profiles, rather than their magnitudes
   

@@ -284,7 +284,7 @@ where $|C_{k}|$ is the number of observations in the $k$-th cluster
   
 ---
 
-## Example
+## In-class example
 
 ---
 
@@ -299,7 +299,7 @@ where $|C_{k}|$ is the number of observations in the $k$-th cluster
 
 ---
 
-### Important impelementation concerns!
+### Important implementation concerns!
 
 - Because the algorithm finds a local optimum, our results will depend on the initial cluster assignments in Step 1
   
@@ -354,6 +354,214 @@ gridExtra::grid.arrange(grobs = plot_ls, ncol = 2)
 
   - Two of the initializations results in ties for best solution, with object value of 58.145
 
+---
+
+## Example 3: seeds data
+
+- Recall the `seeds` data with three varieties: Kama, Rosa, and Canadian
+
+- Run $K$-means with $K = 4$, using features `compactness`, and `area`
+
+```{r} 
+seeds <- read.table("data/seeds_dataset.txt", header = T) %>%
+  mutate(variety = factor(variety))
+seeds_df <- seeds %>%
+  dplyr::select(variety,compactness, area) 
+km_out <- kmeans(seeds_df[, -1], 4)
+seeds_df %>% 
+  mutate(cluster = factor(km_out$cluster)) %>%
+  ggplot(., aes(x = compactness, area, col = cluster)) +
+  geom_point() +
+  ggtitle("Cluster assignments with K = 4")
+```
+
+--
+
+- If I didn't know there were truly three classes, how would I choose $K$?
+
+---
+
+## Elbow method
+
+
+- Popular heuristic to determine the optimal value of $K$
+
+- Fit $k$-means several times with different $k$ values, and plot the objectives values against the number of clusters $K$
+
+```{r}
+set.seed(1)
+KK <- 7
+tot.withinss <- rep(NA, KK)
+for (i in 1:KK){
+  irisCluster <- kmeans(seeds_df[,-1], center=i, nstart=20)
+  tot.withinss[i] <- irisCluster$tot.withinss
+}
+data.frame(K = 1:KK, objective = tot.withinss) %>%
+  ggplot(., aes(x = K, y = objective)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(breaks = 1:KK) +
+  ggtitle("Elbow curve")
+```
+
+
+- Graph will (hopefully) rapidly change at a point and thus create the elbow shape. The $K$ value where elbow "bends" and begins to run parallel to x-axis is taken to be optimal
+
+  - Unfortunately, it is not always obvious where the curve bends
+
+---
+
+## Example 3: iris data
+
+- Standardize predictors
+
+- Run k-means with $k = 2$, and compare to true classes:
+
+```{r echo = T}
+set.seed(1)
+kmeans2 <- kmeans(scale(iris[,1:4]), 2, nstart = 20)
+table(kmeans2$cluster, iris$Species)
+```
+
+- Clearly identifies two clusters: one of species `setosa`, and the other of species `versicolor` and `virginica` combined
+
+--
+
+- Run k-means with $k = 3$, and compare to true classes:
+
+```{r}
+kmeans3 <- kmeans(scale(iris[,1:4]), 3, nstart = 20)
+table(kmeans3$cluster, iris$Species)
+```
+
+- Two of the three clusters contain both `versicolor` and `virginica`
+
+
+---
+
+## Example 4: spherical data
+
+- Generated the following data:
+
+```{r fig.align="center", fig.width=6, fig.height=6}
+set.seed(3)
+n <- 200
+r <- 3
+alpha <- 2 * pi * runif(n)
+x1 <- r * cos(alpha) + 0 + rnorm(n, 0, 0.2)
+y1 <- r * sin(alpha) + 0 + rnorm(n, 0, 0.2)
+r <- 0.5
+alpha <- 2 * pi * runif(n)
+x2 <- r * cos(alpha) + 0 + rnorm(n, 0, 0.2)
+y2 <- r * sin(alpha) + 0 + rnorm(n, 0, 0.2)
+df <- data.frame(x = c(x1,x2), y = c(y1,y2))
+df %>%
+  ggplot(., aes(x=x,y=y)) +
+  geom_point()
+```
+
+---
+
+## Example 4: spherical data
+
+- Running $K$-means with $K=2$
+
+```{r fig.width=6, fig.height=6}
+km_out <- kmeans(df, centers = 2,nstart = 20)
+df %>%
+  mutate(cluster = factor(km_out$cluster)) %>%
+  ggplot(., aes(x =x, y=y)) +
+  geom_point(aes(col = cluster)) +
+  geom_point(data = data.frame(km_out$centers), mapping = aes(x = x, y = y),
+             pch = 4, size = 4) +
+  guides(col = "none")
+```
+
+- X's denote centroids
+
+---
+
+## Example 5: differing densities
+
+- Generated three clusters with differing densities (number of observations), $n = 20, 100, 500$
+
+```{r}
+set.seed(22)
+library(mvtnorm)
+clust1 <- rmvnorm(20, c(1,5), diag(2))
+clust2 <-  rmvnorm(100, c(6,6), diag(2))
+clust3 <-  rmvnorm(500, c(3,0), diag(2))
+df <- data.frame(rbind(clust1,clust2,clust3))
+  
+df %>%
+  ggplot(.,aes(x = X1, y = X2)) +
+  geom_point()
+```
+
+---
+
+## Example 5: differing densities
+
+- Fit $K$-means with $K = 3$
+
+```{r}
+km_out <- kmeans(df, 3, nstart = 20)
+df %>%
+  mutate(cluster = factor(km_out$cluster))  %>%
+  ggplot(.,aes(x = X1, y = X2, col = cluster)) +
+  geom_point()
+```
+
+- What's happening?
+
+
+---
+
+
+## Similar model: k-medoids
+
+- $k$-medoids: very similar to $k$-means clustering
+
+  - $k$-means chooses centers of clusters as the average between the points in the cluster, thus the centroid usually is not one of the observed points
+  
+--
+
+  - $k$-medoids chooses one of the observation points to be the center
+  
+  - Like mean vs median
+  
+--
+
+- Allows for greater interpretability of the center clusters than $k$-means 
+
+---
+
+## k-medoids vs k-means
+
+- $k$-medoids can be used with arbitrary dissimilarity measures, whereas $k$-means generally requires Euclidean distance for efficient solutions
+
+- $k$-medoids minimizes the sum of pairwise dissimilarities, whereas $k$-means attempts minimizes sum of (squared) Euclidean distances
+
+  - Thus, $k$-medoids is more robust to noise and outliers
+
+
+
+---
+
+## Drawbacks
+
+- Does not take into account the different densities of each cluster
+
+- Number of clusters in the data $K$ is fixed and assumed known
+
+- Relies on minimizing within-cluster variance (i.e. sum of squared Euclidean distance), which is not always appropriate
+
+  - Does not handle categorical features well
+
+- Lack of interpretation of clusters 
+
+
+---
 
 
 ## Summary: considerations 
@@ -362,13 +570,13 @@ gridExtra::grid.arrange(grobs = plot_ls, ncol = 2)
 
 - What should $K$ be?
   
+--
 
-- How do we validate the clusters we obtained?
+- How do we validate the clusters we obtained? 
 
   - Are we truly discovering subgroups, or are we simply clustering the noise?
 
 - Do all observations belong in a cluster? Or are some actually "outliers"
-
 
 - Clustering methods generally not robust to small changes in data
 
@@ -376,9 +584,10 @@ gridExtra::grid.arrange(grobs = plot_ls, ncol = 2)
 
 ## Summary: recommendations
 
-- Small decisions can lead to large changes!
 
 - Recommend performing clustering with different choices of $K$, and looking to see if/which patterns consistently appear
+
+  - Elbow method
 
 - Because clustering not robust, maybe we consider clustering subsets of the data 
 

@@ -308,7 +308,7 @@ data("iris")
 
 B <- 5000
 n<- nrow(iris)
-match_mat2 <- match_mat3 <-match_mat4 <- matrix(0, nrow= n, ncol = n)
+match_mat2 <- match_mat3 <- match_mat4 <- matrix(0, nrow= n, ncol = n)
 
 # semiparametric bootstrap
 for(b in 1:B){
