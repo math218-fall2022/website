@@ -50,32 +50,28 @@ glmnet()` standardizes the variables by default. If we wanted to turn this off, 
 ```
 
 ```{r}
-grid <- 10^seq(10,-2,length = 100)
+grid <- 10^seq(5,-2,length = 100)
 ridge_mod <- glmnet(x, y, alpha = 0, lambda = grid)
 ```
 
 Associated with each value of $\lambda$ is a vector of ridge regression coefficients, stored in a matrix that can be accessed by `coef()`. In this case, it is a $20 \times 100$ matrix, with 20 rows (one for each predictor, plus an intercept) and 100 columns (one for each value of $\lambda$).
 
 ```{r}
-dim(coef(ridge_mod))
+dim(ridge_mod$beta)
 ```
 
-We expect that the coefficients estimates will be much smaller when a large value of $\lambda$ is used, compared to when a smaller value is used. 
+We expect that the coefficients estimates will be much smaller when a large value of $\lambda$ is used, compared to when a smaller value is used. We can confirm this with a plot as follows. In the following code, I turn the `beta` values into a matrix using `as.matrix()`, transpose it, and then wrangle to get into a format suitable for plotting:
 
 ```{r}
-grid[50]
-coef(ridge_mod)[,50]
-
-# l2 norm
-sqrt(sum((coef(ridge_mod)[-1,50])^2))
-
-# versus
-grid[70]
-coef(ridge_mod)[,70]
-
-# l2 norm
-sqrt(sum((coef(ridge_mod)[-1,70])^2))
-
+ridge_ests <- t(as.matrix(ridge_mod$beta))
+ridge_df <- data.frame(ridge_ests) %>%
+  mutate(lambda = grid) %>%
+  pivot_longer(cols = -lambda, names_to = "variable", values_to = "coefficient")
+ridge_df %>%
+  ggplot(., aes(x = lambda, y = coefficient, col = variable)) +
+  geom_line()+
+  scale_x_continuous(trans = "log10") +
+  ggtitle("Ridge coefficients by lambda")
 ```
 
 We now split the samples into a training set and a test set in order to estimate the test error of ridge regression. Above, we randomly chose a subset of of numbers between 1 and $n$ to create a vector of training set indices. Another approach to create training/test sets is to produce a random vector of `TRUE`, `FALSE` elements and select the observations corresponding to `TRUE` for the training data:
@@ -98,7 +94,7 @@ ridge_preds <- predict(ridge_mod, s = 5, newx = x[!train_set,])
 mean((ridge_preds - y_test)^2)
 ```
 
-We now check whether there is any benefit to performing ridge regression with $\lambda = 5$ instead of just performing least squares regression. Recall that least squares is simply ridge regression with $\lambda = 0$. 
+We now check whether there is any benefit to performing ridge regression with $\lambda = 5$ instead of just performing least squares regression. 
 
 ```{r}
 lm_mod <- lm(Salary ~., Hitters[train_set,])
@@ -136,11 +132,29 @@ As expected, none of the coefficients are zero—ridge regression does not perfo
 
 # The Lasso
 
-The lasso model can be fit using `glmnet()`, but this time setting `alpha = 1`.
+The lasso model can be fit using `glmnet()`, but this time setting `alpha = 1`. We can use the base `R` `plot()` function to get a quick look at the estimated Lasso coefficients (you will most likely get a warning, and that's okay!):
 
 ```{r}
+grid <- 10^seq(3,-2,length = 100)
 lasso_mod <- glmnet(x[train_set,], y[train_set], alpha = 1, lambda = grid)
-plot(lasso_mod)
+```
+
+
+
+We can visualize the estimated Lasso coefficients for each $\lambda$ just as we did for ridge regression:
+
+```{r}
+lasso_ests <- t(as.matrix(lasso_mod$beta))
+lasso_df <- data.frame(lasso_ests) %>%
+  mutate(lambda = grid) %>%
+  pivot_longer(cols = -lambda, names_to = "variable", values_to = "coefficient")
+
+
+lasso_df %>% 
+ ggplot(., aes(x = lambda, y = coefficient, col = variable))+
+ geom_line() +
+ scale_x_continuous(trans = "log10") +
+  ggtitle("Lasso coefficients by lambda")
 ```
 
 We can see from the coefficient plot that depending on the choice of tuning parameter, some of the coefficients will be exactly equal to zero.
@@ -217,10 +231,11 @@ y <- 1 + 2*x + 0.5*x^2 - 1*x^3 + eps
 
 a) Fit a lasso model to the simulated data, again using $X,X^2, . . . , X^{10}$ as predictors as we did last week. Use cross-validation (don't forget to set a seed) to select the optimal value of $\lambda$. What is the optimal $\lambda$?
 
+b) Create a plot of the estimated coefficients as a function of $\lambda$. Make sure the plot has appropriate labels/titles. Comment on what you see. *Note: you can access the estimated coefficients from a `cv.glmnet()` object as `<name>$glmnet.fit$beta`, where `<name>` is the name of the stored object.*
 
-b) Create a plot of the cross-validation training error as a function of $\lambda$. 
+c) Create a plot of the cross-validation error as a function of $\lambda$. 
 
 
-c) Using your identified best $\lambda$, report the resulting coefficient estimates and discuss the results obtained (i.e. how they relate to the true $\beta_{j}$).
+d) Using your identified best $\lambda$, report the resulting coefficient estimates and discuss the results obtained (i.e. how they relate to the true $\beta_{j}$).
 
-d) Now run a ridge regression again using $X,X^2, . . . , X^{10}$. Rather than performing CV, simply choose your own $\lambda$ value. Report the estimated coefficients, and comment on them.
+e) Now run a ridge regression again using $X,X^2, . . . , X^{10}$. Rather than performing CV, simply choose your own $\lambda$ value. Report the estimated coefficients, and comment on them.
