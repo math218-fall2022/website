@@ -729,6 +729,10 @@ X^{10}\)</span>.</p>
 <p>We will now fit a lasso model to that same simulated data. The
 following code re-generates the <code>x</code> and <code>y</code> data
 for us:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n); eps <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x <span class="sc">+</span> <span class="fl">0.5</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">3</span> <span class="sc">+</span> eps</span></code></pre></div>
 <ol style="list-style-type: lower-alpha">
 <li><p>Fit a lasso model to the simulated data, again using <span class="math inline">\(X,X^2, . . . , X^{10}\)</span> as predictors as we
 did last week. Use cross-validation (don’t forget to set a seed) to

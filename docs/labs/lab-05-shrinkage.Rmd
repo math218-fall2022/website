@@ -221,7 +221,7 @@ for some predictor `x`. We then performed best subset selection to obtain the be
 
 We will now fit a lasso model to that same simulated data. The following code re-generates the `x` and `y` data for us:
 
-```{r ex2_dat, include = F}
+```{r ex2_dat, include = T}
 set.seed(2)
 n <- 100
 x <- rnorm(n); eps <- rnorm(n)

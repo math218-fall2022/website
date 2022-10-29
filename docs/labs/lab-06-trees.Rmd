@@ -227,7 +227,7 @@ The plot shows that `Width`, `TotalLength`, and `BodyLength` appears to be the m
 ## YOUR TURN!
 
 ```{marginfigure}
-I'm pretty positive you will need to install this package! Once installed, type ?palmerpenguins to get a desciprtion of this very fun data!! I highly recommend you click on the first link under "Useful links".
+I'm pretty positive you will need to install this package! Once installed, type ?palmerpenguins to get a description of this very fun data!! I highly recommend you click on the first link under "Useful links".
 ```
 
 ```{r}
