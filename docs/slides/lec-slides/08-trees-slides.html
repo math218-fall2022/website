@@ -51,7 +51,7 @@ class: center, middle
 
 --
 
-- We will discuss **bagging**, **random forests**, and **boosting**
+- We will may later discuss **bagging** and **random forests**
 
 ---
 
@@ -75,9 +75,9 @@ class: center, middle
 ### Diabetes data: decision tree 
 
 
-- Top split: observations with `\(\color{blue}{\text{total cholesterol}} &gt; 0.126\)` are assigned to right branch
+- Top split: observations with `\(\color{blue}{\text{total cholesterol}} \geq 0.126\)` are assigned to right branch
 
- - Predicted progression is mean response value for observations with `\(\color{blue}{\text{total cholesterol}} &gt; 0.126\)`: `\(\hat{y} =\)` 174.6
+ - Predicted progression is mean response value for observations within this region: `\(\hat{y} =\)` 174.6
  
 - Observations with `\(\color{blue}{\text{total cholesterol}} &lt; 0.126\)` assigned to left branch, and further subdivided by `\(\color{blue}{\text{age}}\)`
 
@@ -85,7 +85,7 @@ class: center, middle
 
 - This tree has two *internal nodes* and three *terminal nodes*
 
- - The number in each terminal nodes is the mean of `\(Y\)` for the observations that fall there
+ - The value in each terminal node is the mean of training `\(Y\)` for the observations that fall there
  
 ---
 
@@ -102,6 +102,10 @@ class: center, middle
 --
 
 - What are the internal nodes and terminal nodes for these data?
+
+--
+
+- Any subnode of a given node is called a *child node*, and the given node, in turn, is the child's *parent node*.
 
 ---
 
@@ -135,31 +139,31 @@ class: center, middle
 
 ## Building a regression tree
 
-1. Divide predictor space (the set of possible values for `\(X_{1}, \ldots, X_{p}\)`) into `\(L\)` distinct and non-overlapping regions, `\(R_{1}, \ldots, R_{L}\)`
+1. Divide predictor space (the set of possible values for `\(X_{1}, \ldots, X_{p}\)`) into `\(M\)` distinct and non-overlapping regions, `\(R_{1}, \ldots, R_{M}\)`
 
 --
 
-2. For every observation that lands in `\(R_{l}\)`, we output the same prediction: the mean of the training responses in `\(R_{l}\)`, `\(\hat{y}_{R_{l}} = \frac{1}{n_{l}} \sum_{i \in R_{l}} y_{i}\)`
+2. For every observation that lands in `\(R_{m}\)`, we output the same prediction: the mean of the training responses in `\(R_{m}\)`, `\(\hat{y}_{R_{m}} = \frac{1}{n_{m}} \sum_{i \in R_{m}} y_{i}\)`
 
 --
 
-What do these `\(R_{l}\)` look like?
+What do these `\(R_{m}\)` look like?
 
 ---
 
 ## Building a regression tree
 
-- In theory, regions `\(R_{1},\ldots, R_{L}\)` could have any shape. For simplicity, we divde predictor space into high-dimensional rectangle or *boxes*
+- In theory, regions `\(R_{1},\ldots, R_{M}\)` could have any shape. For simplicity, we divde predictor space into high-dimensional rectangle or *boxes*
 
 --
 
-- Goal: find boxes `\(R_{1},\ldots, R_{L}\)` that minimize RSS, given by
+- Goal: find boxes `\(R_{1},\ldots, R_{M}\)` that minimize RSS, given by
 
-`$$\sum_{l=1}^{L} \sum_{i\in R_{l}} (y_{i} - \hat{y}_{R_{l}})^2$$`
+`$$\sum_{m=1}^{M} \sum_{i\in R_{m}} (y_{i} - \hat{y}_{R_{m}})^2$$`
 
 --
 
-- However, it is computationally infeasible to consider every possible partition of the feature space into `\(L\)` boxes
+- However, it is computationally infeasible to consider every possible partition of the feature space into `\(M\)` boxes!
 
 ---
 
@@ -180,11 +184,26 @@ What do these `\(R_{l}\)` look like?
 
 ## Details
 
-- First, select the predictor `\(X_{j}\)` and the cutpoint `\(s\)` such that splitting the predictor space into the regions `\(\{X | X_{j} &lt; s\}\)` and `\(\{X | X_{j} \geq s\}\)` leads to greatest possible reduction in RSS
+- First, select the predictor `\(X_{j}\)` and the cutpoint `\(s\)` such that splitting the predictor space into the regions `\(\{X | X_{j} &lt; s\}\)` and `\(\{X | X_{j} \geq s\}\)` leads to lowest RSS
 
- - In the diabetes example, the predictor was `\(\color{blue}{\text{total cholesterol}}\)` and `\(s = 0.126\)`
- 
+- That is, for any predictor `\(j\)` and cutpoint `\(s\)`, we define the pair
+
+`$$R_l(j,s) = \{X | X_{j} &lt; s\} \text{ and } R_{r}(j,s) = \{X | X_{j} \geq s\}$$`
 --
+
+- We seek the values of `\((j, s)\)` that minimize
+
+`$$\sum_{i:x_{i}\in R_l(j,s)} (y_{i} - \hat{y}_{R_{l}})^2 + \sum_{i:x_{i}\in R_r(j,s)} (y_{i} - \hat{y}_{R_{r}})^2$$`
+where `\(\hat{y}_{R_{l}}\)` is the average of the training responses in `\(R_l(j,s)\)`
+
+--
+
+- In the diabetes example, the regions after the first split were `\(R_{l} = \{X | \color{blue}{\text{total cholesterol}} &lt; 0.126\}\)` and `\(R_{r} = \{X | \color{blue}{\text{total cholesterol}} \geq 0.126\}\)`
+ 
+ 
+---
+
+## Details (cont.)
 
 - Then, repeat the process of looking for the best predictor and best cutpoint in order to split the data further so as to minimize RSS within each of the resulting regions
 
@@ -198,11 +217,35 @@ What do these `\(R_{l}\)` look like?
 
 ---
 
+## Details (cont.)
+
+- We can also split on qualitative predictors. Then the regions would be 
+
+$$
+`\begin{align*}
+R_l(j,s) &amp;= \{X | X_{j} = ``category \ A"\} \text{ and }\\
+R_{r}(j,s) &amp;= \{X | X_{j} \neq ``category \ A"\}
+\end{align*}`
+$$
+
+where `\(``category \ A"\)` is one of the possible categories of `\(X_{j}\)`
+
+--
+
+- If `\(X_{j}\)` has more than two levels, then we would need to choose the category that yields the best split
+
+- E.g. if `\(X_{j}\)` takes values in  `\(\{A, B, C\}\)`, would need to consider:
+
+  - `\(\{X | X_{j} = A\}\)` and `\(\{X | X_{j} \neq A\}\)`
+  
+  - `\(\{X | X_{j} = B\}\)` and `\(\{X | X_{j} \neq B\}\)`
+  
+  - `\(\{X | X_{j} = C\}\)` and `\(\{X | X_{j} \neq C\}\)`
+---
+
 ## Splitting example
 
-&lt;img src="figs/08-trees/tree_ex.png" width="66%" style="display: block; margin: auto;" /&gt;
-
-.footnote[Gareth James, Daniela Witten, Trevor Hastie, Robert Tibshirani (2013). An introduction to statistical learning : with applications in R. New York :Springer]
+`swiss` data
 
 ---
 
@@ -236,14 +279,14 @@ What do these `\(R_{l}\)` look like?
 
 - **Cost complexity pruning** or weakest link pruning: consider a sequence of trees indexed by a nonnegative tuning parameter `\(\alpha\)`. For each value of `\(\alpha\)`, there is a subtree `\(T \subset T_{0}\)` such that 
 
-`$$\sum_{l=1}^{|T|} \sum_{i: x_{i} \in R_{l}} (y_{i} - \hat{y}_{R_{l}})^2 + \alpha |T|$$`
+`$$\left(\sum_{m=1}^{|T|} \sum_{i: x_{i} \in R_{m}} (y_{i} - \hat{y}_{R_{m}})^2 \right)+ \alpha |T|$$`
  is as small as possible. 
  
 --
 
  - `\(|T|\)` = number of terminal nodes of tree `\(T\)`
  
- - `\(R_{l}\)` is the rectangle corresponding to the `\(l\)`-th terminal node
+ - `\(R_{m}\)` is the rectangle corresponding to the `\(m\)`-th terminal node
  
 ---
 
@@ -260,11 +303,13 @@ What do these `\(R_{l}\)` look like?
  
 --
 
-  - Feels similar to the Lasso, maybe?
+- Feels similar to the Lasso, maybe?
+
+  - Just like in Lasso and ridge, for every value of `\(\alpha\)`, we have a different fitted tree `\(\rightarrow\)` need to  choose a best `\(\alpha\)`
 
 --
 
-- Select an optimal `\(\hat{\alpha}\)` using cross-validation, then return to full data set and obtain the subtree corresponding to  `\(\hat{\alpha}\)`
+- Select an optimal `\(\alpha^{*}\)` using cross-validation, then return to full data set and obtain the subtree corresponding to  `\(\alpha^{*}\)`
 
 ---
 
@@ -286,23 +331,17 @@ What do these `\(R_{l}\)` look like?
 
  a) Repeat Steps 1 and 2 on all but the `\(k\)`-th fold
  
- b) Evaluate mean squared prediction error on the data in held-out `\(k\)`-th fold, as a function of `\(\alpha\)`
+ b) Evaluate mean squared prediction error on the data in held-out `\(k\)`-th fold, as a function of `\(\alpha\)`.  Average the result for each `\(\alpha\)`
  
 --
 
- Average the result for each `\(\alpha\)`, and pick `\(\hat{\alpha}\)` that minimizes the average error
- 
---
-
-4. Return the subtree from Step 2 that corresponds to `\(\hat{\alpha}\)`
+4. Choose `\(\alpha^{*}\)` that minimizes the average error. Return the subtree from Step 2 that corresponds to `\(\alpha^{*}\)` and use that for predictions
 
 ---
 
 ## Diabetes example
 
-- Split data into 50/50 train and validation set
-
-- Use all predictors to build the large tree
+- Split data into 50/50 train and validation set, using  all predictors to build the large tree on the train set
 
 
 ```
@@ -320,11 +359,19 @@ What do these `\(R_{l}\)` look like?
 ## -112.9000  -18.4300   -0.5556    0.0000   21.0000  116.2000
 ```
 
+- I perform minimal cost-complexity pruning, selecting `\(\alpha^*\)` using 5-fold CV on the training data
+
+  - For each `\(\alpha\)`, there is an associated CV-error estimate when fitting on the training data
+  
+  - For each `\(\alpha\)`, there is an associated test error on the held-out validation data
+
 ---
 
 ## Diabetes example cont.
 
-&lt;img src="08-trees-slides_files/figure-html/diabetes_cv-1.png" style="display: block; margin: auto;" /&gt;
+
+
+&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
 
 - `\(K\)`-fold CV with `\(K = 5\)`. Best CV MSE at 6 leaves
 
@@ -362,8 +409,8 @@ class: middle, center
 
 - Alternative: **classification error rate**, the fraction of training observations in the region that belong to the most common class:
 
-`$$E = 1 - \max_{k}(\hat{p}_{lk})$$`
- where `\(\hat{p}_{lk}\)` is the proportion of training observations in the region `\(R_{l}\)` that are from class `\(k\)`
+`$$E = 1 - \max_{k}(\hat{p}_{mk})$$`
+ where `\(\hat{p}_{mk}\)` is the proportion of training observations in the region `\(R_{m}\)` that are from class `\(k\)`
  
 --
 
@@ -375,9 +422,9 @@ class: middle, center
 
 - The **Gini index** is a measure of the total variance across the `\(K\)` classes
 
-`$$G_{l} = \sum_{k=1}^{K} \hat{p}_{lk} (1 - \hat{p}_{lk})$$`
+`$$G_{m} = \sum_{k=1}^{K} \hat{p}_{mk} (1 - \hat{p}_{mk})$$`
 
-- `\(G_{l}\)` is small if all the `\(\hat{p}_{lk}\)`'s are close zero or one
+- `\(G_{m}\)` is small if all the `\(\hat{p}_{mk}\)`'s are close zero or one
 
 --
 
@@ -389,7 +436,7 @@ class: middle, center
 ---
 ## Gini index
 
-`$$G_{l} = \sum_{k=1}^{K} \hat{p}_{lk} (1 - \hat{p}_{lk})$$`
+`$$G_{m} = \sum_{k=1}^{K} \hat{p}_{mk} (1 - \hat{p}_{mk})$$`
 
 - Example: 3 classes and 9 observations in three regions
 
@@ -408,7 +455,9 @@ class: middle, center
 ```
 
 - In these three regions, what are the Gini indices `\(G_{1}, G_{2}, G_{3}\)`?
+
 --
+
   - `\(G_{1} = 1(1-1) + 0(1-0) + 0(1-0) = 0\)`
   - `\(G_{2} = \frac{2}{9}(1-\frac{2}{9}) +\frac{2}{9}(1-\frac{2}{9}) + \frac{5}{9}(1-\frac{5}{9}) \approx 0.60\)`
   - `\(G_{3} = \frac{1}{3}(1-\frac{1}{3}) + \frac{1}{3}(1-\frac{1}{3})+\frac{1}{3}(1-\frac{1}{3}) = \frac{2}{3} \approx 0.67\)`
@@ -419,7 +468,7 @@ class: middle, center
 
 - Alternative to Gini index is **cross-entropy**:
 
-`$$D_{l} = -\sum_{k=1}^{K} \hat{p}_{lk} \log\hat{p}_{lk}$$`
+`$$D_{m} = -\sum_{k=1}^{K} \hat{p}_{mk} \log\hat{p}_{mk}$$`
 
 - Very similar to Gini index, so cross-entropy is also a measure of node purity
 
@@ -427,7 +476,7 @@ class: middle, center
 
 ## Entropy
 
-`$$D_{l} = -\sum_{k=1}^{K} \hat{p}_{lk} \log\hat{p}_{lk}$$`
+`$$D_{m} = -\sum_{k=1}^{K} \hat{p}_{mk} \log\hat{p}_{mk}$$`
 
 - Same example: 3 classes and 9 observations in three regions
 
@@ -518,272 +567,8 @@ class: middle, center
  
 --
 
-However, we will see that aggregating many trees can improve predictie performance!
+However, we may see that aggregating many trees can improve predictive performance!
 
----
-
-class: middle, center
-
-## Aggregating trees 
-
----
-## Bagging
-
-- The decision trees described previously suffer from *high variance*, whereas linear regression tends to have low variance (when `\(n &gt;&gt; p\)`)
-
---
-
-
-- An **ensemble method** is a method that combines many simple "building block" models in order to obtain a single final model
-
-- **Bootstrap aggregation** or **bagging** is a general-purpose procedure for reducing the variance of a statistical-learning method
-
---
-
-  - Given a set of `\(n\)` independent observations `\(Z_{1}, \ldots, Z_{n}\)`, each with variance `\(\sigma^2\)`, then `\(\text{Var}(\bar{Z}) = \sigma^2/n\)` (i.e. averaging a set of observations reduces variance)
-
- -  However, we typically don't have access to multiple training sets
-
----
-
-## Bagging (in general)
-
-- Instead, we can bootstrap by taking repeated samples from the single training set
-
-- **Bagging**:
-
- 1. Generate `\(B\)` different bootstrapped training datasets
- 
- 2. Train our model on the `\(b\)`-th bootstrapped training set in order to get `\(\hat{f}^{*b}(x)\)` for `\(b = 1,\ldots, B\)`
- 
- 3. Average all the predictions to obtain 
- 
- `$$\hat{f}_{\text{bag}}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat{f}^{*b}(x)$$`
-
----
-
-## Bagging for decision trees
-
-- To apply bagging to regression trees: 
-
- - Construct `\(B\)` regression trees using `\(B\)` bootstrapped training sets. For each tree, obtain predictions
- 
- - Average the resulting predictions
- 
- - Typically, trees are grown deep but not pruned
- 
---
-
-- For classification trees:
-
-  - Construct `\(B\)` classification trees using `\(B\)` bootstrapped training sets
-
-  - For each tree and each test observation, record the class `\(k\)` predicted
-  
-  - Take a *majority vote*; the overall prediction for the test point is the most commonly occurring class among the B predictions
- 
----
-
-## Out-of-bag error estimation
-
-- Estimating test error of bagged model is quite easy without performing CV
-
-- On average, each bagged tree is fit using about 2/3 of the observations. Remaining 1/3 are **out-of-bag** (OOB) observations
-
---
-
-- Can predict the response for `\(i\)`-th observation using each of the trees in which that observation was OOB
-
-  - Yields about `\(B/3\)` observations for observation `\(i\)`
-  
---
-
-  - Average or majority vote for OOB prediction for `\(i\)`
-  
---
-
-- When `\(B\)` sufficiently large, OOB error is virtually equivalent to LOOCV
-
-
----
-
-## Seeds data
-
-&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
-
-- Dashed line is test error rate for a single decision tree
-
----
-
-## Variable importance measures
-
-- Bagging can result in difficulty in interpretation
-
-  - No longer clear which predictors are most important to the procedure
-
---
-
-- Overall summary of important of each predictor using RSS or Gini index
-
-  - Bagging regression trees: record total amount that RSS is decreased due to splits over a given predictor, averaged over B
-  
-  - Bagging classification trees: add up total amount that Gini index is decreased by splits over a given predictor, averaged over B
-
-
----
-
-## Seeds data: importance 
-
-&lt;img src="08-trees-slides_files/figure-html/importance-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-## Random forests
-
-- **Random forests** provide improvement over bagged trees by providing a small tweak that *decorrelates* the trees
-
-- Like bagging, we build a number of decision trees on bootstrapped training samples
-
---
-
-- Each time a split is considered, a *random sample* of `\(m\)` predictors is chosen as splits candidates from the full set of `\(p\)` predictors. Split on one of these `\(m\)`
-
---
-
-  - At every split, we choose a new sample of `\(m\)` predictors
-  
-  - Typically choose `\(m \approx \sqrt{p}\)`
-  
----
-
-## Random forests
-
-- At each split, algorithm is *not allowed* to consider a majority of the available predictors
-
-  - Intuition for why?
-
---
-
-- Bagged trees may be highly correlated, and averaging correlated quantities does not reduce variance as much as average uncorrelated
-
---
-
-- What happens when `\(m = p\)`?
-
---
-
-- Small `\(m\)` typically helpful when we have a large number of correlated predictors
-
----
-
-## Seeds data
-
-&lt;img src="08-trees-slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
-
-- Here, `\(m \approx \sqrt{7} \approx 3\)`
-
----
-
-## Boosting
-
-- **Boosting**, like bagging, is a general approach that can be applied to many methods
-
-- In bagging, each tree is built on a bootstrap data set, independent of the other `\(B-1\)` trees
-
-  - Then we combine all trees
-
---
-
-
-- In boosting, the trees are grown *sequentially* -- each tree is grown using information from previously grown trees
-
---
-
-- We do *not* take bootstrap samples; each tree is fit on a modified version of original data
-
----
-
-## Boosting for regression trees
-
-1. Set `\(\hat{f}(x) = 0\)` and `\(r_{i} = y_{i}\)` for all `\(i\)` in the dataset
-
-2. For `\(b = 1, 2,\ldots, B\)`, repeat:
-
-  a) Fit a tree `\(\hat{f}^{b}(x)\)` with `\(d\)` splits ($d+1$ terminal nodes) to training data `\((X,r)\)`
-  
-  b) Update `\(\hat{f}\)` by adding a shrunken version of the new tree:
-  
-  `$$\hat{f}(x) \leftarrow \hat{f}(x) + \lambda\hat{f}^{b}(x)$$`
-  
-  c) Update residuals: 
-  
-  `$$r_{i} \leftarrow r_{i} -\lambda\hat{f}^{b}(x)$$`
-  
-3. Output boosted model
-
-`$$\hat{f}(x) = \sum_{b=1}^{B}\lambda\hat{f}^{b}(x)$$`
-
----
-
-## Boosting tuning parameters
-
-1. Number of trees `\(B\)`: can overfit if `\(B\)` too large (though occurs slowly)
-
-  - Can use CV to select `\(B\)`
-
---
-
-2. Shrinkage parameter `\(\lambda &gt; 0\)` control rate at which boosting learns
-
-  - Typically, `\(\lambda = 0.01\)` or `\(0.001\)`
-  
---
-
-3. Number `\(d\)` of splits in each trees control complexity
-
-  - Often `\(d=1\)` works well, resulting in each tree being a *stump*
-  
-  - More generally, `\(d\)` is interaction depth
-  
----
-
-## Boosting
-
-- Boosting approach *learns slowly*
-
-- Given current model, fit a decision tree to the residuals of that model. Add this new decision tree into fitted function to update residuals
-
---
-
-- Fitting small trees to residuals allows slowly improving `\(\hat{f}\)` in areas where it does not perform well
-
-  - `\(\lambda\)` slows the process down even further
-
---
-
-- Boosting for classification trees is not discussed here
-
----
-
-&lt;img src="08-trees-slides_files/figure-html/boost_rf_heart-1.png" style="display: block; margin: auto;" /&gt;
-
-- plot with better data
-
-
-
----
-
-## Summary
-
-- Decision trees are simple and interpretable methods of regression and classification
-
-- May not be as competitive with other methods w.r.t. predictive accuracy
-
-- Bagging, random forests, and boosting are methods for improving predictive accuracy
-
-  - Ensemble methods
-  
-  - Random forests and boosting are among state-of-the-art for supervised learning, but are less interpretable
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

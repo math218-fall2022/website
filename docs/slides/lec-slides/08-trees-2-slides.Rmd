@@ -1,0 +1,310 @@
+---
+title: "Math 218: Statistical Learning"
+author: "Tree-Based Methods: Part 2"
+date: "10/31/2022"
+output: 
+   xaringan::moon_reader:
+    css: "math218-slides.css"
+    nature: 
+      highlightLines: true
+      highlightStyle: github
+      countIncrementalSlides: false
+      slideNumberFormat: "%current%"  
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = F, warning = F, message = F, fig.align = "center", fig.width = 5, fig.height = 5)
+
+library(tidyverse)
+library(broom)
+library(ISLR)
+library(tree)
+library(lars)
+library(randomForest)
+library(gbm)
+set.seed(1)
+abalone <- read.table("data/abalone_data.txt", sep = ",",header = T)
+abalone <- abalone %>%
+  mutate_at(vars(-rings, - sex), function(x){x*200}) %>%
+  mutate(rings = rings + runif(nrow(abalone), -0.5,0.5),
+         age = rings + 1.5,
+         weight = whole_wt)
+
+heart<- read.table("data/heart_cleveland.txt", header = T, sep = ",") %>% 
+  mutate(cp = as.factor(cp),
+         sex = ifelse(sex == 1, "M", "F"),
+         target = ifelse(target == 0,0, 1))
+seeds <- read.table("data/seeds_dataset.txt", header = T) %>%
+  mutate(variety= case_when(variety == 1~ "Kama",
+                          variety == 2 ~ "Rosa",
+                          T ~ "Canadian"),
+         variety = as.factor(variety))
+data(diabetes)
+z <- cbind(diabetes$x, y = diabetes$y)
+z[,1:10] <- apply(z[,1:10], 2, scale)
+diabetes <- as.data.frame(z) %>%
+ rename("bp" = "map",
+        "total_chol" = "tc") 
+```
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Tree-based methods: part 2
+
+- Recall the disadvantages of decision trees
+
+ - Lower levels of predictive accuracy compared to some other approaches
+ 
+ - Can be non-robust 
+ 
+--
+
+- We will now see that *aggregating* many trees can improve predictive performance!
+
+---
+
+class: middle, center
+
+## Aggregating trees 
+
+---
+## Bagging
+
+- The decision trees described previously suffer from *high variance*, whereas linear regression tends to have low variance (when $n >> p$)
+
+--
+
+
+- An **ensemble method** is a method that combines many simple "building block" models in order to obtain a single final model
+
+- **Bootstrap aggregation** or **bagging** is a general-purpose procedure for reducing the variance of a statistical-learning method
+
+--
+
+  - Given a set of $n$ independent observations $Z_{1}, \ldots, Z_{n}$, each with variance $\sigma^2$, then $\text{Var}(\bar{Z}) = \sigma^2/n$ (i.e. averaging a set of observations reduces variance)
+
+ -  However, we typically don't have access to multiple training sets
+
+---
+
+## Bagging (in general)
+
+- Instead, we can bootstrap by taking repeated samples from the single training set
+
+- **Bagging**:
+
+ 1. Generate $B$ different bootstrapped training datasets
+ 
+ 2. Train our model on the $b$-th bootstrapped training set in order to get $\hat{f}^{*b}(x)$ for $b = 1,\ldots, B$
+ 
+ 3. Average all the predictions to obtain 
+ 
+ $$\hat{f}_{\text{bag}}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat{f}^{*b}(x)$$
+
+---
+
+## Bagging for decision trees
+
+- To apply bagging to regression trees: 
+
+ - Construct $B$ regression trees using $B$ bootstrapped training sets. For each tree, obtain predictions
+ 
+ - Average the resulting predictions
+ 
+ - Typically, trees are grown deep but not pruned
+ 
+--
+
+- For classification trees:
+
+  - Construct $B$ classification trees using $B$ bootstrapped training sets
+
+  - For each tree and each test observation, record the class $k$ predicted
+  
+  - Take a *majority vote*; the overall prediction for the test point is the most commonly occurring class among the B predictions
+ 
+---
+
+## Out-of-bag error estimation
+
+- Estimating test error of bagged model is quite easy without performing CV
+
+- On average, each bagged tree is fit using about 2/3 of the observations. Remaining 1/3 are **out-of-bag** (OOB) observations
+
+--
+
+- Can predict the response for $i$-th observation using each of the trees in which that observation was OOB
+
+  - Yields about $B/3$ observations for observation $i$
+  
+--
+
+  - Average or majority vote for OOB prediction for $i$
+  
+--
+
+- When $B$ sufficiently large, OOB error is virtually equivalent to LOOCV
+
+
+---
+
+## Seeds data
+
+```{r fig.width = 8, fig.height=5}
+set.seed(14)
+train <- sample(1: nrow(seeds), nrow(seeds)/2)
+n_trees <- seq(2,200,1)
+y_train <- seeds$variety[train]
+y_test <- seeds$variety[-train]
+oob_err_bag <- test_err_bag <- oob_err_rf <- test_err_rf <- rep(NA, length(n_trees))
+for(i in 1:length(n_trees)){
+  
+  # bag when m = p
+  bag_seeds <- randomForest(variety ~., data = seeds, subset = train,
+                             mtry = 7, ntree = n_trees[i], importance= T)
+  
+  # random forest when m \neq p
+  rf_seeds <- randomForest(variety ~., data = seeds, subset = train,
+                             mtry = 2, ntree = n_trees[i], importance= T)
+  oob_err_bag[i] <- mean(bag_seeds$err.rate[,1])
+  test_err_bag[i] <- mean((predict(bag_seeds, seeds[-train,]) ) != y_test)
+  
+  oob_err_rf[i] <- mean(rf_seeds$err.rate[,1])
+  test_err_rf[i] <- mean((predict(rf_seeds, seeds[-train,]) ) != y_test)
+}
+
+
+single_tree <- tree(variety ~. ,data = seeds, subset = train)
+dt_err <- mean(predict(single_tree, seeds[-train,], type = "class") != y_test)
+
+seeds_bag_rf_df <-  data.frame(B = n_trees, OOB_bag = oob_err_bag, Test_bag = test_err_bag,
+           OOB_rf = oob_err_rf, Test_rf = test_err_rf)
+seeds_bag_rf_df %>%
+  dplyr::select(1:3) %>%
+  pivot_longer(-B, names_to = "type", values_to = "Error")%>%
+  ggplot(.,aes(x = B, y = Error, col = type))+
+  # geom_point() + 
+  geom_step() +
+  labs(x = "Number of trees") +
+  theme(text =element_text(size = 20))+
+  geom_hline(yintercept = dt_err, linetype = "dashed") +
+  scale_color_manual(values = c("blue", "orange"))
+
+```
+
+- Dashed line is test error rate for a single decision tree
+
+---
+
+## Variable importance measures
+
+- Bagging can result in difficulty in interpretation
+
+  - No longer clear which predictors are most important to the procedure
+
+--
+
+- Overall summary of important of each predictor using RSS or Gini index
+
+  - Bagging regression trees: record total amount that RSS is decreased due to splits over a given predictor, averaged over B
+  
+  - Bagging classification trees: add up total amount that Gini index is decreased by splits over a given predictor, averaged over B
+
+
+---
+
+## Seeds data: importance 
+
+```{r importance, fig.width=8, fig.height=6}
+bag_seeds_all <- randomForest(variety ~., data = seeds, 
+                           mtry = 7, ntree =200, importance= T)
+importance_df <- data.frame(predictors = rownames(importance(bag_seeds_all)),
+           mean_decrease= importance(bag_seeds_all)[,5]) %>%
+  arrange(mean_decrease) %>%
+  mutate(order = row_number())
+importance_df %>%
+  mutate(order = as.factor(order)) %>%
+  ggplot(., aes(x  = order, y = mean_decrease))+
+  geom_point(size = 3) +
+  scale_x_discrete(labels = importance_df$predictors)+
+  labs(y = "Mean decrease in Gini", x = "")+
+  coord_flip()  +
+  theme(text = element_text(size = 25))
+
+```
+
+---
+
+## Random forests
+
+- **Random forests** provide improvement over bagged trees by providing a small tweak that *decorrelates* the trees
+
+- Like bagging, we build a number of decision trees on bootstrapped training samples
+
+--
+
+- Each time a split is considered, a *random sample* of $m$ predictors is chosen as splits candidates from the full set of $p$ predictors. Split on one of these $m$
+
+--
+
+  - At every split, we choose a new sample of $m$ predictors
+  
+  - Typically choose $m \approx \sqrt{p}$
+  
+---
+
+## Random forests
+
+- At each split, algorithm is *not allowed* to consider a majority of the available predictors
+
+  - Intuition for why?
+
+--
+
+- Bagged trees may be highly correlated, and averaging correlated quantities does not reduce variance as much as average uncorrelated
+
+--
+
+- What happens when $m = p$?
+
+--
+
+- Small $m$ typically helpful when we have a large number of correlated predictors
+
+---
+
+## Seeds data
+
+```{r fig.width = 8, fig.height=6}
+seeds_bag_rf_df %>%
+  pivot_longer(-B, names_to = "type", values_to = "Error")%>%
+  ggplot(.,aes(x = B, y = Error, col = type))+
+  # geom_point() + 
+  geom_step() +
+  labs(x = "Number of trees") +
+  theme(text =element_text(size = 14))+
+  geom_hline(yintercept = dt_err, linetype = "dashed") +
+    scale_color_manual(values = c("blue", "pink" , "orange", "purple"))
+
+```
+
+- Here, $m \approx \sqrt{7} \approx 3$
+
+
+
+---
+
+## Summary
+
+- Bagging and random forests are methods for improving predictive accuracy
+
+  - Ensemble methods
+  
+  - Random forests (and another method called boosting) are among state-of-the-art for supervised learning, but are less interpretable

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Math 218: Statistical Learning</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Tree-Based Methods: Part 2" />
+    <meta name="date" content="2022-10-31" />
+    <script src="08-trees-2-slides_files/header-attrs-2.16/header-attrs.js"></script>
+    <link rel="stylesheet" href="math218-slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+.title[
+# Math 218: Statistical Learning
+]
+.author[
+### Tree-Based Methods: Part 2
+]
+.date[
+### 10/31/2022
+]
+
+---
+
+
+
+
+
+class: center, middle
+
+# Housekeeping
+
+---
+
+## Tree-based methods: part 2
+
+- Recall the disadvantages of decision trees
+
+ - Lower levels of predictive accuracy compared to some other approaches
+ 
+ - Can be non-robust 
+ 
+--
+
+- We will now see that *aggregating* many trees can improve predictive performance!
+
+---
+
+class: middle, center
+
+## Aggregating trees 
+
+---
+## Bagging
+
+- The decision trees described previously suffer from *high variance*, whereas linear regression tends to have low variance (when `\(n &gt;&gt; p\)`)
+
+--
+
+
+- An **ensemble method** is a method that combines many simple "building block" models in order to obtain a single final model
+
+- **Bootstrap aggregation** or **bagging** is a general-purpose procedure for reducing the variance of a statistical-learning method
+
+--
+
+  - Given a set of `\(n\)` independent observations `\(Z_{1}, \ldots, Z_{n}\)`, each with variance `\(\sigma^2\)`, then `\(\text{Var}(\bar{Z}) = \sigma^2/n\)` (i.e. averaging a set of observations reduces variance)
+
+ -  However, we typically don't have access to multiple training sets
+
+---
+
+## Bagging (in general)
+
+- Instead, we can bootstrap by taking repeated samples from the single training set
+
+- **Bagging**:
+
+ 1. Generate `\(B\)` different bootstrapped training datasets
+ 
+ 2. Train our model on the `\(b\)`-th bootstrapped training set in order to get `\(\hat{f}^{*b}(x)\)` for `\(b = 1,\ldots, B\)`
+ 
+ 3. Average all the predictions to obtain 
+ 
+ `$$\hat{f}_{\text{bag}}(x) = \frac{1}{B} \sum_{b=1}^{B} \hat{f}^{*b}(x)$$`
+
+---
+
+## Bagging for decision trees
+
+- To apply bagging to regression trees: 
+
+ - Construct `\(B\)` regression trees using `\(B\)` bootstrapped training sets. For each tree, obtain predictions
+ 
+ - Average the resulting predictions
+ 
+ - Typically, trees are grown deep but not pruned
+ 
+--
+
+- For classification trees:
+
+  - Construct `\(B\)` classification trees using `\(B\)` bootstrapped training sets
+
+  - For each tree and each test observation, record the class `\(k\)` predicted
+  
+  - Take a *majority vote*; the overall prediction for the test point is the most commonly occurring class among the B predictions
+ 
+---
+
+## Out-of-bag error estimation
+
+- Estimating test error of bagged model is quite easy without performing CV
+
+- On average, each bagged tree is fit using about 2/3 of the observations. Remaining 1/3 are **out-of-bag** (OOB) observations
+
+--
+
+- Can predict the response for `\(i\)`-th observation using each of the trees in which that observation was OOB
+
+  - Yields about `\(B/3\)` observations for observation `\(i\)`
+  
+--
+
+  - Average or majority vote for OOB prediction for `\(i\)`
+  
+--
+
+- When `\(B\)` sufficiently large, OOB error is virtually equivalent to LOOCV
+
+
+---
+
+## Seeds data
+
+&lt;img src="08-trees-2-slides_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+- Dashed line is test error rate for a single decision tree
+
+---
+
+## Variable importance measures
+
+- Bagging can result in difficulty in interpretation
+
+  - No longer clear which predictors are most important to the procedure
+
+--
+
+- Overall summary of important of each predictor using RSS or Gini index
+
+  - Bagging regression trees: record total amount that RSS is decreased due to splits over a given predictor, averaged over B
+  
+  - Bagging classification trees: add up total amount that Gini index is decreased by splits over a given predictor, averaged over B
+
+
+---
+
+## Seeds data: importance 
+
+&lt;img src="08-trees-2-slides_files/figure-html/importance-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Random forests
+
+- **Random forests** provide improvement over bagged trees by providing a small tweak that *decorrelates* the trees
+
+- Like bagging, we build a number of decision trees on bootstrapped training samples
+
+--
+
+- Each time a split is considered, a *random sample* of `\(m\)` predictors is chosen as splits candidates from the full set of `\(p\)` predictors. Split on one of these `\(m\)`
+
+--
+
+  - At every split, we choose a new sample of `\(m\)` predictors
+  
+  - Typically choose `\(m \approx \sqrt{p}\)`
+  
+---
+
+## Random forests
+
+- At each split, algorithm is *not allowed* to consider a majority of the available predictors
+
+  - Intuition for why?
+
+--
+
+- Bagged trees may be highly correlated, and averaging correlated quantities does not reduce variance as much as average uncorrelated
+
+--
+
+- What happens when `\(m = p\)`?
+
+--
+
+- Small `\(m\)` typically helpful when we have a large number of correlated predictors
+
+---
+
+## Seeds data
+
+&lt;img src="08-trees-2-slides_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+
+- Here, `\(m \approx \sqrt{7} \approx 3\)`
+
+
+
+---
+
+## Summary
+
+- Bagging and random forests are methods for improving predictive accuracy
+
+  - Ensemble methods
+  
+  - Random forests (and another method called boosting) are among state-of-the-art for supervised learning, but are less interpretable
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"slideNumberFormat": "%current%"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

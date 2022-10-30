@@ -1,0 +1,151 @@
+---
+title: "Lab: Tree-based methods"
+subtitle: "Due Sunday, 10/23 at 11:59pm"
+output: 
+  tufte::tufte_html:
+    css: "./math218-labs.css"
+    tufte_variant: "envisioned"
+    highlight: tango
+    toc: true
+    toc_depth: 1
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, message=FALSE, warnings = F}
+library(tidyverse)
+```
+
+# Data
+
+We will once again work with the fish data we saw when fitting regular decision trees.
+
+```{r}
+fish <- read.csv("data/fish.csv") %>%
+  mutate(Species = factor(Species))
+set.seed(2)
+n <- nrow(fish)
+train_ids <- sample(1:n, n/2)
+```
+
+Bagging and random forests are implemented using the `randomForest` package in R.
+Recall that bagging is simply a special case of a random forest with $m = p$. Therefore, the `randomForest()` function can be used to perform both random forests and bagging.
+
+# Bagging 
+
+We perform bagging as follows:
+
+```{r message = F, warning = F}
+library(randomForest)
+set.seed(1)
+p <- ncol(fish) - 1
+bag_fish <- randomForest(Weight ~. , data = fish[train_ids,],
+                         mtry = p, importance = T)
+```
+
+In the code above, the `mtry` argument tells the function to consider all $p$ predictors for each split of the tree (i.e. we want to perform bagging).
+
+To see how the bagged model performs on the test data:
+
+```{r}
+ypred_bag <- predict(bag_fish, newdata = fish[-train_ids,])
+mse_bag <- mean((ypred_bag - fish$Weight[-train_ids])^2)
+```
+
+The test set MSE associated with the bagged regression tree is `r round(mse_bag, 3)`, which is about two-thirds of that obtained by the optimal single tree!!!
+
+We could also change the number of trees grown by the function `randomForest()` by specifying the `ntree` argument:
+
+```{r}
+bag_fish <- randomForest(Weight ~. , data = fish[train_ids,],
+                         mtry = p, ntree = 20)
+```
+
+# Random forests
+
+Now it's time to build a random forest!  **By default**, `randomForest()` uses $p/3$ variables when building a random forest of regression trees, and $\sqrt{p}$ when building random forest of classification trees. However, here we will specify `mtry = 2`.
+
+```{r}
+set.seed(1)
+rf_fish <- randomForest(Weight ~. , data = fish[train_ids,],
+                        mtry = 2, importance = T)
+ypred_rf <- predict(rf_fish, newdata = fish[-train_ids,])
+mse_rf <- mean((ypred_rf - fish$Weight[-train_ids])^2)
+```
+
+Here, our test set MSE under this random forest is `r round(mse_rf, 2)`, which is an improvement over bagging in this case!
+
+You may have notice we kept on passing in the argument `importance = T`. That's so we can view the importance of the each variable in the tree using the `importance()` function:
+
+```{r}
+importance(rf_fish)
+```
+
+You see there are two variable importance measures reported from the function. The first is based upon the mean decrease of accuracy in predictions on the out-of-bag samples when a given variable is permuted. The second is a measure of the total decrease in *node impurity* that results from splits over that variable, averaged over all trees. In the case of regression trees, the node impurity is measured by the training RSS, and for classification trees by the Gini index. Plots of these importance measures can be produced using the `varImpPlot()` function.
+
+```{r}
+varImpPlot(rf_fish)
+```
+
+The plot shows that `Width`, `TotalLength`, and `BodyLength` appears to be the most important variables of the five considered.
+
+# YOUR TURN!
+
+```{marginfigure}
+I'm pretty positive you will need to install this package! Once installed, type ?palmerpenguins to get a description of this very fun data!! I highly recommend you click on the first link under "Useful links".
+```
+
+```{r}
+library(tree)
+library(palmerpenguins)
+data("penguins")
+penguins <- penguins %>%
+  na.omit()
+```
+
+```{marginfigure}
+Cape Town, South Africa has penguins that are nicknamed "jackass" penguins because they bray like a donkey!
+```
+
+We will build some classification trees for the three penguin `species`: Adelie, Chinstrap, and Gentoo. 
+
+
+## Exercise 1: Random Forests
+
+a) Create a training set containing 200 random samples of observations, and a test set containing the remaining observations. I suggest setting your own seed!
+
+```{r}
+set.seed(10)
+n <- nrow(penguins)
+train_ids <- sample(1:n, 200)
+penguins_train <- penguins[train_ids,]
+penguins_test <- penguins[-train_ids,]
+```
+
+b) Continuing with your same test and train sets of the penguin data, fit a random forest to the train data. Use the same predictors as before, and only let the model consider 3 predictors at every split. Also keep track of the importance. Don't forget to set a seed!
+
+```{r message = F, warning = F}
+library(randomForest)
+set.seed(1)
+rf_penguins <- randomForest(species ~ . - year - island, data = penguins_train,
+                         mtry = 3, importance = T)
+```
+
+c) What test error rate do you obtain from this random forest? How does the random forest model compare to your best tree in Exercise 1?
+
+```{r}
+ypred_rf <- predict(rf_penguins, newdata = penguins_test)
+err_rate <- mean(ypred_rf != penguins_test$species)
+```
+
+The error rate from this random forest on the test data is `r round(err_rate, 3)`, which is lower than the best tree in Exercise 1.
+
+d) Using the `varImpPlot()` function, determine which variable is the most important in this random forest.
+
+```{r}
+varImpPlot(rf_penguins)
+```
+
+Based on my random forest, it appears that bill length is the most important variable.
+
+
