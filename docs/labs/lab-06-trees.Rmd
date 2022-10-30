@@ -192,86 +192,39 @@ We will build some classification trees for the three penguin `species`: Adelie,
 
 a) Create a training set containing 200 random samples of observations, and a test set containing the remaining observations. I suggest setting your own seed!
 
-```{r}
-set.seed(10)
-n <- nrow(penguins)
-train_ids <- sample(1:n, 200)
-penguins_train <- penguins[train_ids,]
-penguins_test <- penguins[-train_ids,]
-```
+
+b) Fit a decision classification tree to the training data, using `species` as the response variable. For predictors, use everything except `year` and `island`. Then use the `summary()` function to produce summary statistics about the tree. Describe the results obtained: What is the training error rate? How many terminal nodes does the tree have? Which predictors did the tree end up using?
 
 
-b) Fit a regular decision classification tree to the training data, using `species` as the response variable. For predictors, use everything except `year` and `island`. Then use the `summary()` function to produce summary statistics about the tree. Describe the results obtained: What is the training error rate? How many terminal nodes does the tree have? Which predictors did the tree end up using?
+c) Type in the name of the tree object and run that line in order to get a detailed text output. Pick one of the terminal nodes and interpret the information displayed.
 
-```{r}
-tree_penguins <- tree(species ~ . - year - island, data= penguins_train)
-summary(tree_penguins)
-```
 
-Under my seed, the decision tree ended up using the predictors: flipper length, bill length, bill depth, and body mass. There are 6 terminal nodes, the the training error rate is 0.04.
+d) Create a plot of the tree and (generally) interpret the results. Don't forget to show the decision splits.
 
-c) Type in the name of the tree object in order to get a detailed text output. Pick one of the terminal nodes and interpret the information displayed.
 
-```{r}
-tree_penguins
-```
+e) Predict the response on the test data and produce a contingency table comparing the true test labels to the predictions. What is the test misclassification error rate?
 
-Example: at (7), we see that an observation with a bill depth greater than 17.65 mm will be classified as a Chinstrap species.
 
-d) Create a plot of the tree and (generally) interpret the results.
 
-```{r}
-plot(tree_penguins)
-text(tree_penguins, pretty = 0)
-```
+f) Time to determine the optimal tree size. Use the `cv.tree()` function on the training penguin data. Specify that the classification error rate should guide the cross-validation and pruning process. Don't forget to set a seed!
 
-Example: It appears that penguins with smaller flipper and beak physical characteristics are more likely to be classified as the Adelie species. 
 
-e) Predict the response on the test data and produce a contingency table comparing the true test labels to the predictions. What is the misclassification error rate?
-
-```{r}
-tree_preds <- predict(tree_penguins, newdata = penguins_test, type = "class")
-table(preds = tree_preds, true = penguins_test$species)
-```
-
-(5+1) / 133 = `r round((nrow(penguins_test) -sum(diag(table(preds = tree_preds, true = penguins_test$species))))/nrow(penguins_test), 3)`.
-
-f) Time to determine the optimal tree size. Use the `cv.tree()` function on the training penguin data. Don't forget to set a seed!
-
-```{r}
-set.seed(21)
-cv_penguins <- cv.tree(tree_penguins, FUN = prune.misclass)
-```
 
 g) Create a plot with the tree size on the $x$-axis and the cross-validated classification error rate on the $y$-axis.
 
-```{r}
-data.frame(size = cv_penguins$size, error = cv_penguins$dev) %>%
-  ggplot(., aes(x = size, y = error))+
-  geom_point() + 
-  geom_line()
-```
 
-h) Which tree size corresponds to the lowest cross-validated classification error rate? 
+
+h) Which tree size corresponds to the lowest cross-validated classification error rate? Use code to answer this question (i.e. do not just look at the plot in g).
  
-Based on the plot, a tree with 4 terminal nodes results in the lowest cross-validated classification error rate.
 
-i) Produce a pruned tree corresponding to the optimal tree size obtained using cross-validation. If cross-validation does not lead to selection of a pruned tree, then create a pruned tree with five terminal nodes. Plot it!
+i) Produce a pruned tree corresponding to the optimal tree size obtained using cross-validation. If cross-validation does not lead to selection of a pruned tree, then create a pruned tree with five terminal nodes. Plot it and show the splitting conditions!
 
-```{r}
-prune_penguins <- prune.misclass(tree_penguins, best = 4)
-plot(prune_penguins)
-text(prune_penguins, pretty = 0)
-```
 
-j) Compare the misclassification rates on the TEST data between the prune and unpruned trees. Which tree appears to be better?
+j) Create a contingency table comparing the predictions on the test data using your pruned tree versus the true classes. 
 
-```{r}
-prune_preds <- predict(prune_penguins, newdata = penguins_test, type = "class")
-table(preds = prune_preds, true = penguins_test$species)
-```
 
-(3 + 1) / 133 = `r round((nrow(penguins_test) -sum(diag(table(preds = prune_preds, true = penguins_test$species))))/nrow(penguins_test), 3)`. The pruned tree performs just slightly better on the test data compared to the original tree.
+k) Compare the misclassification rates on the test data between the pruned and unpruned trees. Which tree appears to be better?
+
 
 
 
