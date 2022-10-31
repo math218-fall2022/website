@@ -50,9 +50,19 @@ diabetes <- as.data.frame(z) %>%
         "total_chol" = "tc") 
 ```
 
-class: center, middle
 
-# Housekeeping
+## Housekeeping
+
+- Happy halloween!
+
+- Lab 05 due this Thursday, 11:59pm
+
+- Second job candidate is giving talk on Wednesday, 12:30-1:30pm in 75 Shannon Street Room 224
+  
+  - Candidate: Adam Waterbury
+  
+  - Talk title: “Reinforced Chains, Stochastic Approximation, and Coexistence in Ecological Systems.”
+
 
 ---
 
