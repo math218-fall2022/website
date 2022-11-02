@@ -38,6 +38,8 @@ knitr::include_graphics(c("img/trees.png"))
 
 <!-- b) Where does the "random" in random forests come from? That is, during which part(s) of the algorithm are we including randomization? -->
 
+\clearpage
+
 ### Exercise 2
 
 In this exercise, we will step through an example of the greedy approach for classification tree using Gini index. Suppose we are trying to classify a person's undergraduate `major` into either `"CS"`, `"Econ"`, or `"Math`", based on two predictors: their preferred programming `language` and their `salary` two years post-graduation (in $10,000s). Our data is as follows:
@@ -48,7 +50,8 @@ language <- c("R", "Python", "Python", "Python", "R", "Python", "R", "Python")
 major <- c("Econ", "CS", "Math", "CS", "Econ", "Math", "Econ", "CS")
 ex2_tab <- data.frame(salary, language, major) %>%
   mutate(language = factor(language),
-         major = factor(major))
+         major = factor(major)) %>%
+  arrange(salary)
 knitr::kable(ex2_tab)
 ```
 
@@ -69,10 +72,11 @@ text(degree_tree, pretty = 0)
 
 For quantitative $X_{j}$, we typically consider a range of $s$ values to segment the predictor and choose the $s$ that yields the lowest impurity. For the purposes of this homework, we will not take this approach. Instead, let $s$ be the median value in the current segment of the predictor space. If you have an even number of observations $n$, let the $s$ be the average of the two middle values. Example: if the predictor values for $X_{j}$ are `1, 4, 3, 2`, then `s = 2.5`. If the predictor values for $X_{j}$ are  `3, 2, 5, 4, 1`, then `s = 3`.
 
-a) We will begin by constructing the root node. Calculate the the weighted Gini indices for each of the splits `salary < s` (where `s` is defined above) and `language = "Python`. 
+a) We will begin by constructing the root node. Calculate the weighted Gini indices for each of the candidate splits `salary < s` (where `s` is defined above) and `language = "Python`. 
 
 b) Based on your weighted Gini indices in (a), what is the first split (root node) in your decision tree?
 
 c) Finish building your tree. Once you are finished, draw your resulting tree. Don't forget to add the predicted classes for each of the terminal nodes.
 
+d) Why do you think we took a weighted average of the Gini indices of child nodes here, but we didn't take a weighted average of the RSS of the child nodes in the regression tree?
 

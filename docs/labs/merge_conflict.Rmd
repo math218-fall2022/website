@@ -1,0 +1,55 @@
+---
+title: "Dealing with Merge Conflicts"
+author: ""
+date: "Fall 2022"
+output: 
+  html_document: 
+    fig_height: 4
+    fig_width: 9
+---
+
+<style>
+ul{
+  padding: 10pt;
+}
+
+ol{
+padding: 15pt;
+}
+</style>
+
+```{r load-packages, include=FALSE}
+library(tidyverse)
+```
+
+<font color = "blue">**Step 0**</font>: **Everyone**: Come up with a team name.
+
+<font color = "blue">**Step 1**</font>: **Everyone**: Clone your project repo in from the course GitHub website 
+and open the R Markdown file called `project-proposal.Rmd`. 
+
+
+<br>
+
+<font color = "blue">**Step 2**</font>: Assign the numbers 1 and 2 to each of the team members. If applicable, assign the number 3 to the third member.
+
+
+<font color = "blue">**Step 3**</font>: Take turns in completing the steps below exactly as written, only <u>**one member**</u> at a time:
+
+- **<i>Member 1</i>**: Change the team name to something *different* from your team name. Knit, commit, and push.
+
+- **<i>Member 2</i>**: Change the team name to your team name. Knit, commit, push. You will get an error. 
+
+  - Pull and review the document with the merge conflict. Show the error to your partner.
+  - A merge conflict occurred because you edited the same part of the document as Member 1. Resolve the conflict with whichever name you want to keep. 
+  - Knit, commit and push.
+
+- **<i>Member 1 (or Member 3, if team of three)</i>**: Change the date to the date the proposal is due (11/13/2022).
+
+  - Knit, commit, push. You will get an error, read it, and pull.  Show the error to your partner.
+  - No merge conflicts should occur, since you edited a different part of the document from Member 2.
+  - Knit, commit, and push. 
+
+
+<font color = "blue">**Step 4**</font>: **<i>All members</i>:** Pull, and observe the changes in your document.
+<br><br>
+

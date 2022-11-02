@@ -12,7 +12,7 @@
 
 
 
-<title>Lab: Tree-based methods</title>
+<title>Lab 06: Tree-based methods</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -462,14 +462,23 @@ font-size: 10pt;
 
 
 
-<h1 class="title toc-ignore">Lab: Tree-based methods</h1>
-<h3 class="subtitle">Due Sunday, 10/23 at 11:59pm</h3>
+<h1 class="title toc-ignore">Lab 06: Tree-based methods</h1>
+<h3 class="subtitle">Due Thursday, 11/19 at 11:59pm</h3>
 
 
+<div id="TOC">
+<ul>
+<li><a href="#classification-trees" id="toc-classification-trees">Classification Trees</a></li>
+<li><a href="#pruning" id="toc-pruning">Pruning</a></li>
+<li><a href="#regression-trees" id="toc-regression-trees">Regression
+Trees</a></li>
+<li><a href="#your-turn" id="toc-your-turn">YOUR TURN!</a></li>
+</ul>
+</div>
 
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<div id="classification-trees" class="section level2">
-<h2>Classification Trees</h2>
+<div id="classification-trees" class="section level1">
+<h1>Classification Trees</h1>
 <p><label for="tufte-mn-1" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-1" class="margin-toggle"><span class="marginnote"><span style="display: block;">The <code>tree()</code>
 function requires all your categorical predictors and response to be
 coded as factor variables!</span></span></p>
@@ -565,6 +574,9 @@ randomly choose one of the classes to output.</span></span></p>
 <p>In the contingency table above, we see that we do a great job of
 predicting the classes! We make correct predictions for 0.7647059 of the
 observations in the test data set.</p>
+</div>
+<div id="pruning" class="section level1">
+<h1>Pruning</h1>
 <p>Maybe we think this tree is too complex and might want to prune it to
 improve results. We can use <code>cv.tree()</code> to perform
 cross-validation in order to determine the optimal level of tree
@@ -629,8 +641,8 @@ predictions!</span></span></p>
 interpretable, but also increased our correct classification rate to
 0.8941176!</p>
 </div>
-<div id="regression-trees" class="section level2">
-<h2>Regression Trees</h2>
+<div id="regression-trees" class="section level1">
+<h1>Regression Trees</h1>
 <p>Regression trees are coded very similarly to classification trees
 using the <code>tree()</code> function.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>fish <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/fish.csv&quot;</span>) <span class="sc">%&gt;%</span></span>
@@ -686,8 +698,8 @@ make predictions:</p>
 <p>Our test set MSE associated with the regression tree is
 1.254^{4}.</p>
 </div>
-<div id="your-turn" class="section level2">
-<h2>YOUR TURN!</h2>
+<div id="your-turn" class="section level1">
+<h1>YOUR TURN!</h1>
 <p><label for="tufte-mn-4" class="margin-toggle">⊕</label><input type="checkbox" id="tufte-mn-4" class="margin-toggle"><span class="marginnote"><span style="display: block;">I’m pretty positive you
 will need to install this package! Once installed, type ?palmerpenguins
 to get a description of this very fun data!! I highly recommend you
@@ -702,7 +714,6 @@ has penguins that are nicknamed “jackass” penguins because they bray
 like a donkey!</span></span></p>
 <p>We will build some classification trees for the three penguin
 <code>species</code>: Adelie, Chinstrap, and Gentoo.</p>
-</div>
 <div id="exercise-1-decision-trees" class="section level2">
 <h2>Exercise 1: Decision Trees</h2>
 <ol style="list-style-type: lower-alpha">
@@ -742,6 +753,7 @@ data using your pruned tree versus the true classes.</p></li>
 <li><p>Compare the misclassification rates on the test data between the
 pruned and unpruned trees. Which tree appears to be better?</p></li>
 </ol>
+</div>
 </div>
 
 

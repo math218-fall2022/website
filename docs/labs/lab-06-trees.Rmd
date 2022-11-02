@@ -1,6 +1,6 @@
 ---
-title: "Lab: Tree-based methods"
-subtitle: "Due Sunday, 10/23 at 11:59pm"
+title: "Lab 06: Tree-based methods"
+subtitle: "Due Thursday, 11/19 at 11:59pm"
 output: 
   tufte::tufte_html:
     css: "./math218-labs.css"
@@ -16,7 +16,7 @@ editor_options:
 library(tidyverse)
 ```
 
-## Classification Trees
+# Classification Trees
 
 ```{marginfigure}
 The `tree()` function requires all your categorical predictors and response to be coded as factor variables!
@@ -85,6 +85,8 @@ table(preds = tree_preds, true = bmd_dat_test$fracture)
 
 In the contingency table above, we see that we do a great job of predicting the classes! We make correct predictions for `r sum(diag(table(preds = tree_preds, true = bmd_dat_test$fracture)))/nrow(bmd_dat_test)` of the observations in the test data set.
 
+# Pruning
+
 Maybe we think this tree is too complex and might want to prune it to improve results. We can use `cv.tree()` to perform cross-validation in order to determine the optimal level of tree complexity. This function uses cost-complexity pruning. 
 We use the argument `FUN = prune.misclass` in order to indicate that we want the classification error rate to guide the cross-validation and pruning process, rather than the default for the `cv.tree()` function, which is deviance. The `cv.tree()` function will report the number of terminal nodes of each tree considered (`size`) as well as the corresponding error rate and the value of the cost-complexity parameter used (`k`, which corresponds to $\alpha$).
 
@@ -127,7 +129,7 @@ table(preds = tree_pred, bmd_dat_test$fracture)
 
 Pruning really helped! Not only does it make our tree more interpretable, but also increased our correct classification rate to `r sum(diag(table(preds = tree_pred, true = bmd_dat_test$fracture)))/nrow(bmd_dat_test)`!
 
-## Regression Trees
+# Regression Trees
 
 Regression trees are coded very similarly to classification trees using the `tree()` function.
 
@@ -168,7 +170,7 @@ mse <- mean( (ypred - fish$Weight[-train_ids])^2)
 
 Our test set MSE associated with the regression tree is `r round(mse)`.
 
-## YOUR TURN!
+# YOUR TURN!
 
 ```{marginfigure}
 I'm pretty positive you will need to install this package! Once installed, type ?palmerpenguins to get a description of this very fun data!! I highly recommend you click on the first link under "Useful links".
