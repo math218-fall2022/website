@@ -53,11 +53,14 @@ diabetes <- as.data.frame(z) %>%
 
 ## Housekeeping
 
-- Happy halloween!
 
-- Lab 05 due this Thursday, 11:59pm
+- Lab 05 due tomorrow Thursday, 11:59pm
 
-- Second job candidate is giving talk on Wednesday, 12:30-1:30pm in 75 Shannon Street Room 224
+- Office hours today 3-5 pm
+
+- E-mail me about project partners by Saturday 11:59pm
+
+- Second job candidate is giving talk on TODAY at 12:30-1:30pm in 75 Shannon Street Room 224
   
   - Candidate: Adam Waterbury
   
