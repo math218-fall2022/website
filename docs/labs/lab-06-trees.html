@@ -463,7 +463,7 @@ font-size: 10pt;
 
 
 <h1 class="title toc-ignore">Lab 06: Tree-based methods</h1>
-<h3 class="subtitle">Due Thursday, 11/19 at 11:59pm</h3>
+<h3 class="subtitle">Due Thursday, 11/10 at 11:59pm</h3>
 
 
 <div id="TOC">
@@ -580,17 +580,19 @@ observations in the test data set.</p>
 <p>Maybe we think this tree is too complex and might want to prune it to
 improve results. We can use <code>cv.tree()</code> to perform
 cross-validation in order to determine the optimal level of tree
-complexity. This function uses cost-complexity pruning. We use the
-argument <code>FUN = prune.misclass</code> in order to indicate that we
-want the classification error rate to guide the cross-validation and
-pruning process, rather than the default for the <code>cv.tree()</code>
-function, which is deviance. The <code>cv.tree()</code> function will
-report the number of terminal nodes of each tree considered
-(<code>size</code>) as well as the corresponding error rate and the
-value of the cost-complexity parameter used (<code>k</code>, which
-corresponds to <span class="math inline">\(\alpha\)</span>).</p>
+complexity. This function uses cost-complexity pruning, and defaults to
+<span class="math inline">\(K = 10\)</span> for the k-fold CV. I will
+still set it explicitly here.</p>
+<p>We use the argument <code>FUN = prune.misclass</code> in order to
+indicate that we want the classification error rate to guide the
+cross-validation and pruning process, rather than the default for the
+<code>cv.tree()</code> function, which is deviance. The
+<code>cv.tree()</code> function will report the number of terminal nodes
+of each tree considered (<code>size</code>) as well as the corresponding
+error rate and the value of the cost-complexity parameter used
+(<code>k</code>, which corresponds to <span class="math inline">\(\alpha\)</span> in our lecture slides).</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">21</span>)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>cv_bmd <span class="ot">&lt;-</span> <span class="fu">cv.tree</span>(tree_bmd, <span class="at">FUN =</span> prune.misclass)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>cv_bmd <span class="ot">&lt;-</span> <span class="fu">cv.tree</span>(tree_bmd, <span class="at">FUN =</span> prune.misclass, <span class="at">K =</span> <span class="dv">10</span>)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>cv_bmd</span></code></pre></div>
 <pre><code>## $size
 ## [1] 7 4 2 1
@@ -674,13 +676,13 @@ squared errors for the tree. Plotting the tree:</p>
 <p>Not surprisingly, the tree shows us that bigger fish tend to
 correspond to heavier fish.</p>
 <p>Does pruning improve performance?</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cv_tree <span class="ot">&lt;-</span> <span class="fu">cv.tree</span>(tree_fish)</span>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cv_tree <span class="ot">&lt;-</span> <span class="fu">cv.tree</span>(tree_fish, <span class="at">K =</span> <span class="dv">5</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>cv_tree</span></code></pre></div>
 <pre><code>## $size
 ## [1] 5 4 3 2 1
 ## 
 ## $dev
-## [1]  2241038  2247353  4679668  4972069 11275535
+## [1]  1680920  1721020  4521159  4669362 11319148
 ## 
 ## $k
 ## [1]    -Inf  114727 1068364 1299850 6940300
@@ -738,7 +740,8 @@ test misclassification error rate?</p></li>
 <li><p>Time to determine the optimal tree size. Use the
 <code>cv.tree()</code> function on the training penguin data. Specify
 that the classification error rate should guide the cross-validation and
-pruning process. Don’t forget to set a seed!</p></li>
+pruning process. Choose an appropriate <span class="math inline">\(K\)</span> value, and don’t forget to set a
+seed!</p></li>
 <li><p>Create a plot with the tree size on the <span class="math inline">\(x\)</span>-axis and the cross-validated
 classification error rate on the <span class="math inline">\(y\)</span>-axis.</p></li>
 <li><p>Which tree size corresponds to the lowest cross-validated

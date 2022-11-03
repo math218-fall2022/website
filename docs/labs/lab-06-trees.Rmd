@@ -1,6 +1,6 @@
 ---
 title: "Lab 06: Tree-based methods"
-subtitle: "Due Thursday, 11/19 at 11:59pm"
+subtitle: "Due Thursday, 11/10 at 11:59pm"
 output: 
   tufte::tufte_html:
     css: "./math218-labs.css"
@@ -87,12 +87,13 @@ In the contingency table above, we see that we do a great job of predicting the 
 
 # Pruning
 
-Maybe we think this tree is too complex and might want to prune it to improve results. We can use `cv.tree()` to perform cross-validation in order to determine the optimal level of tree complexity. This function uses cost-complexity pruning. 
-We use the argument `FUN = prune.misclass` in order to indicate that we want the classification error rate to guide the cross-validation and pruning process, rather than the default for the `cv.tree()` function, which is deviance. The `cv.tree()` function will report the number of terminal nodes of each tree considered (`size`) as well as the corresponding error rate and the value of the cost-complexity parameter used (`k`, which corresponds to $\alpha$).
+Maybe we think this tree is too complex and might want to prune it to improve results. We can use `cv.tree()` to perform cross-validation in order to determine the optimal level of tree complexity. This function uses cost-complexity pruning, and defaults to $K = 10$ for the k-fold CV. I will still set it explicitly here.
+
+We use the argument `FUN = prune.misclass` in order to indicate that we want the classification error rate to guide the cross-validation and pruning process, rather than the default for the `cv.tree()` function, which is deviance. The `cv.tree()` function will report the number of terminal nodes of each tree considered (`size`) as well as the corresponding error rate and the value of the cost-complexity parameter used (`k`, which corresponds to $\alpha$ in our lecture slides).
 
 ```{r}
 set.seed(21)
-cv_bmd <- cv.tree(tree_bmd, FUN = prune.misclass)
+cv_bmd <- cv.tree(tree_bmd, FUN = prune.misclass, K = 10)
 cv_bmd
 ```
 
@@ -157,7 +158,7 @@ Not surprisingly, the tree shows us that bigger fish tend to correspond to heavi
 Does pruning improve performance?
 
 ```{r}
-cv_tree <- cv.tree(tree_fish)
+cv_tree <- cv.tree(tree_fish, K = 5)
 cv_tree
 ```
 
@@ -208,7 +209,7 @@ e) Predict the response on the test data and produce a contingency table compari
 
 
 
-f) Time to determine the optimal tree size. Use the `cv.tree()` function on the training penguin data. Specify that the classification error rate should guide the cross-validation and pruning process. Don't forget to set a seed!
+f) Time to determine the optimal tree size. Use the `cv.tree()` function on the training penguin data. Specify that the classification error rate should guide the cross-validation and pruning process. Choose an appropriate $K$ value, and don't forget to set a seed!
 
 
 
