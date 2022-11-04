@@ -1,0 +1,104 @@
+---
+title: "Case study: unsupervised learning"
+output: html_document
+date: "2022-11-03"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ISLR2)
+library(ggdendro)
+```
+
+# Real example
+
+Unsupervised techniques are often used in the analysis of genomic data. Here, we will analyze the `NCI60` data from the `ISLR2` package. These are cancer cell line microarray data, which consists of 6,830 gene expression measurements on 64 cancer cell lines.
+
+```{r}
+library(ISLR2)
+nci_labs <- NCI60$labs
+nci_data <- NCI60$data
+```
+
+The data are technically labeled with a cancer type, given in `nci_labs`. However, we will not use them in our clustering because we are performing unsupervised analysis! 
+
+In total, there are 14 true clusters or cancer types in the data:
+
+```{r}
+table(nci_labs)
+```
+
+## K-means clustering
+
+We will first perform $K$-means clustering. Begin by standardizing the variables to have mean zero and standard deviation of one using the `scale()` function. Then we will run $K$-means with $K=4$:
+
+
+```{r}
+std_data <- scale(nci_data)
+set.seed(1)
+km_out <- kmeans(std_data, 4, nstart = 20)
+km_out$cluster
+```
+
+Here, it seems like one cluster contains many more observations then there others.
+
+We can examine if there are patterns by utilizing the true labels:
+
+```{r}
+table(cluster = km_out$cluster,  cancer = nci_labs)
+```
+
+What if we run the algorithm using the true number of clusters?
+
+```{r}
+set.seed(1)
+km_out <- kmeans(std_data, 14, nstart = 20)
+```
+
+Ideally, we would want each type of cancer to land into a unique cluster. By creating a table of true labels and cluster assignments, this does not appear to be the case:
+
+```{r}
+table(cluster = km_out$cluster, cancer = nci_labs)
+```
+
+## Hierarchical clustering
+
+We return to the `NCI60` data from the `ISLR2` package. These are cancer cell line microarray data, which consists of 6,830 gene expression measurements on 64 cancer cell lines. We first standardize the data. For the purposes of displaying the true cancer type, I will name the observations according to the cancer type: 
+
+```{r}
+library(ISLR2)
+nci_labs <- NCI60$labs
+nci_data <- NCI60$data
+std_data <- scale(nci_data)
+rownames(std_data) <- nci_labs
+```
+
+Using complete linkage: 
+
+```{r}
+data_dist <- dist(std_data)
+hc_out <- hclust(data_dist, method = "complete")
+ggdendrogram(hc_out)
+```
+
+Cutting the tree into 4 clusters and comparing to the truth:
+
+```{r}
+hc_clusters <- cutree(hc_out, 4)
+table(hc_clusters, nci_labs)
+```
+
+We see that all of the Leukemia cancer cell lines fall into one cluster (cluster 3), whereas the breast cancer cell lines are spread out over three different clusters. If you recall, this same pattern was found when we used $K$-means with $K=4$ last week! However, these two methods will not agree perfectly.
+
+The following code perform $K$-means clustering with $K=4$, then we compare the clusters to those of hierarchical clustering:
+
+```{r}
+set.seed(2)
+km_out <- kmeans(std_data, 4, nstart = 20)
+km_clusters <- km_out$cluster
+table(km_clusters, hc_clusters)
+```
+
+We see that the four clusters obtained using hierarchical clustering and K- means clustering are somewhat different.  Cluster 4 in K-means clustering is identical to cluster 3 in hierarchical clustering. However, the other clusters differ: for instance, cluster 2 in K-means clustering contains a portion of the observations assigned to cluster 1 by hierarchical clustering, as well as all of the observations assigned to cluster 2 by hierarchical clustering.
+

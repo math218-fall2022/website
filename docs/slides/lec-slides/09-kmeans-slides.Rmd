@@ -57,13 +57,13 @@ library(ggdendro)
 
   - **Clustering**: broad class of methods to discover unknown subgroups in your data
   
-  - **Principal components analysis (PCA)**:  , a tool used for data
+  - **Principal components analysis (PCA)**: a tool used for data
 visualization or data pre-processing, often before supervised
 techniques are applied
 
 --
 
-- PCA is beyond the scope of this course (but you can try using it for your final project if you understand eigenvectors!)
+  - PCA is beyond the scope of this course (but you can try using it for your final project if you understand eigenvectors!)
 
 ---
 
@@ -116,22 +116,24 @@ class: center, middle
 
 --
 
-- Just like in $k$-fold CV or $KNN$, we first specify $K$. Then the algorithm will assign each observation to exactly one of the $K$ clusters
+- Just like in $k$-fold CV or KNN, we first specify $K$. 
+
+  - Then the algorithm will assign each observation to exactly one of the $K$ clusters
 
 ---
 
-## Example data: US Arrests
+## Example 1: US Arrests
 
-- We consider a subset of the `USArrests` data. Contains  statistics, in arrests per 100,000 residents for $\color{blue}{\text{Murder}}$ in each of the 50 US states in 1973. Also given is the percent of the population living in urban areas $(\color{blue}{\text{UrbanPop}})$.
+- We consider a subset of the `USArrests` data. Contains  statistics about arrests per 100,000 residents for $\color{blue}{\text{Murder}}$ in each of the 50 US states in 1973. Also given is the percent of the population living in urban areas $(\color{blue}{\text{UrbanPop}})$.
 
 - Apply $K$-means clustering with different values of $K$ to group the observations (states)
 
 - Color of each observation indicates the cluster to which each state was assigned (coloring is arbitrary)
 
 ---
-## Example data: US Arrests
+## Example 1: US Arrests
 
-```{r fig.width=9, fig.height=6, cache = T}
+```{r fig.width=10, fig.height=6, cache = T}
 set.seed(1)
 data("USArrests")
 df <- na.omit(USArrests)
@@ -158,9 +160,9 @@ df %>%
 
 ---
 
-## Simulated data
+## Example 2: simulated data
 
-- Simulated data with $n = 60$ observations in 3-dimensional space
+- Simulated data with $n = 60$ observations in 3-dimensional space, with three true clusters
 
 - The following plots show the results of applying $K$-means clustering with different $K$ 
 
@@ -226,7 +228,11 @@ plotly::plot_ly( data = plot_df, x = ~X1, y = ~X2, z = ~X3,
 
 - Let $C_{1}, \ldots, C_{K}$ be the sets containing the indices of the observation in each cluster. These sets satisfy two properties:
 
+--
+
   1. $C_{1} \cup C_{2} \cup \ldots \cup C_{K} = \{1, \ldots, n\}$, i.e. each observation belong to at least one of the $K$ clusters
+  
+--
   
   2. $C_{k} \cap C_{k'} = \emptyset$ for all $k \neq k'$, i.e. the clusters are non-overlapping
   
@@ -242,11 +248,15 @@ plotly::plot_ly( data = plot_df, x = ~X1, y = ~X2, z = ~X3,
 
 - **Good** clustering is at the heart of $K$-means clustering procedure: we want the *within-cluster variation* to be as small as possible
 
+--
+
 - Let $\text{WCV}(C_{k})$ denote the within-cluster variation for cluster $C_{k}$. Tells us the amount by which observations within a cluster are different from each other
 
 - $K$-means clustering solves the problem:
 
 $$\min_{C_{1}, \ldots, C_{K}}\left\{\sum_{k=1}^{K}\text{WCV}(C_{k})  \right\}$$
+
+--
 
   - What does this mean in words?
   
@@ -258,21 +268,19 @@ $$\min_{C_{1}, \ldots, C_{K}}\left\{\sum_{k=1}^{K}\text{WCV}(C_{k})  \right\}$$
 
 - Once again, need to define 
 
-- Most common choice is *Euclidean distance*:
+- Most common choice is *squared* Euclidean distance:
 
 $$\text{WCV}(C_{k}) = \frac{1}{|C_{k}|} \sum_{i, i' \in C_{k}} \sum_{j=1}^{p} (x_{ij} - x_{i'j})^2$$
 
 where $|C_{k}|$ is the number of observations in the $k$-th cluster
 
---
 
-- Let's do an example!
 
 ---
 
 ## K-means clustering: Algorithm
 
-1. Randomly assign a number from 1 to $K$ to each of the observations. This is how we *initialize* the cluster assignments.
+1. Randomly assign each observation to one of the $K$ clusters. This is how we *initialize* the cluster assignments.
 
 --
 
@@ -284,7 +292,9 @@ where $|C_{k}|$ is the number of observations in the $k$-th cluster
   
 ---
 
-## In-class example
+class: center, middle
+
+In-class example
 
 ---
 
@@ -309,9 +319,9 @@ where $|C_{k}|$ is the number of observations in the $k$-th cluster
 
 ---
 
-## Example 2: Simulated data
+## Example 3: Simulated data
 
-- Generated `n=50` observations with two features, evenly split between two true clusters
+- Generated $n=50$ observations with two features, evenly split between two true clusters
 
 - Perform K-means clustering performed four times on the same data with $K = 3$, each time with different random initialization.
 
@@ -346,7 +356,7 @@ gridExtra::grid.arrange(grobs = plot_ls, ncol = 2)
 
 ---
 
-## Example 2: Simulated data
+## Example 3: Simulated data
 
 - Three different local optima were obtained (three unique objective values)
 
@@ -356,7 +366,7 @@ gridExtra::grid.arrange(grobs = plot_ls, ncol = 2)
 
 ---
 
-## Example 3: seeds data
+## Example 4: seeds data
 
 - Recall the `seeds` data with three varieties: Kama, Rosa, and Canadian
 
@@ -386,7 +396,7 @@ seeds_df %>%
 
 - Popular heuristic to determine the optimal value of $K$
 
-- Fit $k$-means several times with different $k$ values, and plot the objectives values against the number of clusters $K$
+- Fit $K$-means several times with different $K$ values, and plot the objective values against the number of clusters $K$
 
 ```{r}
 set.seed(1)
@@ -401,9 +411,12 @@ data.frame(K = 1:KK, objective = tot.withinss) %>%
   geom_point() +
   geom_line() +
   scale_x_continuous(breaks = 1:KK) +
-  ggtitle("Elbow curve")
+  ggtitle("Elbow curve for seeds data")
 ```
 
+---
+
+## Elbow method (cont.)
 
 - Graph will (hopefully) rapidly change at a point and thus create the elbow shape. The $K$ value where elbow "bends" and begins to run parallel to x-axis is taken to be optimal
 
@@ -411,7 +424,7 @@ data.frame(K = 1:KK, objective = tot.withinss) %>%
 
 ---
 
-## Example 3: iris data
+## Example 5: iris data
 
 - Standardize predictors
 
@@ -425,9 +438,11 @@ table(kmeans2$cluster, iris$Species)
 
 - Clearly identifies two clusters: one of species `setosa`, and the other of species `versicolor` and `virginica` combined
 
---
+---
 
-- Run k-means with $k = 3$, and compare to true classes:
+## Example 5: iris data (cont.)
+
+- Now run $K$-means with $K = 3$, and compare to true classes:
 
 ```{r}
 kmeans3 <- kmeans(scale(iris[,1:4]), 3, nstart = 20)
@@ -439,7 +454,7 @@ table(kmeans3$cluster, iris$Species)
 
 ---
 
-## Example 4: spherical data
+## Example 6: spherical data
 
 - Generated the following data:
 
@@ -462,7 +477,7 @@ df %>%
 
 ---
 
-## Example 4: spherical data
+## Example 6: spherical data
 
 - Running $K$-means with $K=2$
 
@@ -481,7 +496,7 @@ df %>%
 
 ---
 
-## Example 5: differing densities
+## Example 7: differing densities
 
 - Generated three clusters with differing densities (number of observations), $n = 20, 100, 500$
 
@@ -500,7 +515,7 @@ df %>%
 
 ---
 
-## Example 5: differing densities
+## Example 7: differing densities
 
 - Fit $K$-means with $K = 3$
 
@@ -528,7 +543,7 @@ df %>%
 
   - $k$-medoids chooses one of the observation points to be the center
   
-  - Like mean vs median
+  - Like mean vs. median
   
 --
 

@@ -86,45 +86,6 @@ ggdendrogram(hc_single) +
 
 Typically, single linkage will yield *trailing* clusters: very large clusters onto which individual observations attach one-by-one.
 
-# Real example
-
-We return to the `NCI60` data from the `ISLR2` package. These are cancer cell line microarray data, which consists of 6,830 gene expression measurements on 64 cancer cell lines. We first standardize the data. For the purposes of displaying the true cancer type, I will name the observations according to the cancer type: 
-
-```{r}
-library(ISLR2)
-nci_labs <- NCI60$labs
-nci_data <- NCI60$data
-std_data <- scale(nci_data)
-rownames(std_data) <- nci_labs
-```
-
-Using complete linkage: 
-
-```{r}
-data_dist <- dist(std_data)
-hc_out <- hclust(data_dist, method = "complete")
-ggdendrogram(hc_out)
-```
-
-Cutting the tree into 4 clusters and comparing to the truth:
-
-```{r}
-hc_clusters <- cutree(hc_out, 4)
-table(hc_clusters, nci_labs)
-```
-
-We see that all of the Leukemia cancer cell lines fall into one cluster (cluster 3), whereas the breast cancer cell lines are spread out over three different clusters. If you recall, this same pattern was found when we used $K$-means with $K=4$ last week! However, these two methods will not agree perfectly.
-
-The following code perform $K$-means clustering with $K=4$, then we compare the clusters to those of hierarchical clustering:
-
-```{r}
-set.seed(2)
-km_out <- kmeans(std_data, 4, nstart = 20)
-km_clusters <- km_out$cluster
-table(km_clusters, hc_clusters)
-```
-
-We see that the four clusters obtained using hierarchical clustering and K- means clustering are somewhat different.  Cluster 4 in K-means clustering is identical to cluster 3 in hierarchical clustering. However, the other clusters differ: for instance, cluster 2 in K-means clustering contains a portion of the observations assigned to cluster 1 by hierarchical clustering, as well as all of the observations assigned to cluster 2 by hierarchical clustering.
 
 # YOUR TURN!
 
@@ -142,14 +103,15 @@ a) Using hierarchical clustering with complete linkage and Euclidean distance, c
 hc_out <- hclust(dist(USArrests), method = "complete")
 ```
 
-b) Cut the dendrogram at a height that results into four distinct clusters. Which states belong to which clusters?
+b) Cut the dendrogram at a height that results into four distinct clusters. What do you notice about the resulting clusters?
 
 ```{r}
 clusts <- cutree(hc_out, 4)
+table(clusts)
 
-USArrests %>%
-  mutate(cluster = clusts) %>%
-  arrange(cluster)
+# USArrests %>%
+#   mutate(cluster = clusts) %>%
+#   arrange(cluster)
 ```
 
 c) Hierarchically cluster the states using complete linkage and Euclidean distance, after scaling the variables to have standard deviation one.
@@ -159,14 +121,31 @@ arrests_std <- scale(USArrests)
 hc_std <- hclust(dist(arrests_std), method = 'complete')
 ```
 
-d) What effect does scaling the variables have on the hierarchical clustering obtained? In your opinion, should the variables be scaled before the inter-observation dissimilarities are computed? Provide a justification for your answer.
+d) Cut the dendrogram from (c) to yield four distinct clusters. What effect does scaling the variables have on the hierarchical clustering obtained? In your opinion, should the variables be scaled before the inter-observation dissimilarities are computed? Provide a justification for your answer.
 
 ```{r}
 clusts_std <- cutree(hc_std, 4)
+table(clusts_std)
 
-data.frame(arrests_std) %>%
-  mutate(cluster = clusts_std) %>%
-  arrange(cluster)
+# data.frame(arrests_std) %>%
+#   mutate(cluster = clusts_std) %>%
+#   arrange(cluster)
+```
+
+e) Now continuing to use the standardized data, hierarchically cluster the states use a correlation-based distance with complete linkage. Cut the dendrogram to yield four distinct clusters. 
+
+```{r}
+cor_x <- cor(t(arrests_std))
+dd <- as.dist(1-cor_x)
+hc_cor <- hclust(dd, method = "complete")
+clusts_cor <- cutree(hc_cor, 4)
+
+```
+
+f) Using the `table()` function, compare the clusters obtained when using the two different distance metrics on the standardized data. Based on the table, do the distance metrics result in similar clusters? Why or why not? *Note: Be careful here! The cluster numbers themselves are arbitrary. That is, cluster 1 could also be, say, cluster 4*.
+
+```{r}
+table(cor_dist = clusts_cor, euc_dist =clusts_std)
 ```
 
 ## Exercise 2: Building visualizations
@@ -175,34 +154,34 @@ data.frame(arrests_std) %>%
 
 Thus far, we have been using the `ggdendrogram()` function to visualize our dendrograms. This is a basic wrapper function that makes our life easy, but doesn't allow for much customization. Here, we will use more functions from the `ggdendro` library to make cooler dendrograms!
 
-a) Using the `hclust()` output from the standardized data,  in Exercise 1, convert the output into "dendrogram data" format using the following code. Replace the underscores with your `hclust` object. Make sure to remove `eval = F` before knitting!
+a) Using the `hclust()` output obtained using the standardized data and Euclidean distance in Exercise 1c, convert the output into "dendrogram data" format using the following code. Replace the underscores with your `hclust` object. Make sure to remove `eval = F` before knitting!
 
-```{r eval  = F}
+```{r eval  = T}
 dd <- dendro_data(hc_std, type = "rectangle")
 ```
 
-b) Next, we will create a data frame for plotting purposes, which contains the following two columns:
+b) Next, you will create a data frame called `cluster_df` for plotting purposes, which contains the following two columns:
 
   - `label`: the state 
   - `cluster`: the assigned cluster
   
-Make sure to set `cluster` to be a factor. Call the resulting data frame `cluster_df`. 
+Make sure to set `cluster` to be a factor. 
 
-```{r eval = F}
+```{r eval = T}
 cluster_df <- data.frame(label = rownames(USArrests),
                          cluster = clusts_std) %>%
   mutate(cluster = factor(cluster))
 ```
 
-Once you have done so, your code, run the following code *once* (don't forget to remove `eval = F` before knitting). *Note*: if you try running the code more than once, will unfortunately make unncessarily columns. If that happens, go back and re-run starting from where we created the `dd` object! 
+Once you have created `cluster_df`, run the following code *once* (don't forget to remove `eval = F` before knitting). *Note*: if you try running the code more than once, you will unfortunately make unncessary columns. If that happens, go back and re-run code chunks starting from where we created the `dd` object! 
 
-```{r eval = F}
+```{r eval = T}
 dd[["labels"]] <- merge(dd[["labels"]],cluster_df, by="label")
 ```
 
-c) Time to plot the dendrogram! Replace the underscores with the appropriate values. Note that we want to *color* the labels by the cluster assignment, and that we want to *label* each observation by the state name. Look at the `label(dd)` to see what you should pass in for these values! *Note*: making pretty visualizations usually requires lots of ugly/customized code...
+c) Time to plot the dendrogram! Replace the underscores with the appropriate values. Note that we want to *color* the labels by the cluster assignment, and that we want to *label* each observation by the state name. Run `label(dd)` to see what you should pass in for these values! *Note*: making pretty visualizations usually requires lots of ugly/customized code...
 
-```{r eval = F}
+```{r eval = T}
 ggplot() +
   geom_segment(data = segment(dd), 
                aes(x = x, y = y, xend = xend, yend = yend)) +
@@ -210,7 +189,7 @@ ggplot() +
             aes(x = x, y = y, label = label, color = cluster),
             hjust = 0, size = 2) + # hjust = 0 will left-align text
   coord_flip() + # flip the coordinate axes to have horizontal tree
-  scale_y_reverse(limits=c(6.1, -1)) + # make axis go from 6.1 to -1; larger range to accomodate text 
+  scale_y_reverse(limits=c(6.1, -1)) + # make axis go from 6.1 to -1; larger range to accommodate text 
   theme(axis.line.y=element_blank(),
     axis.ticks.y=element_blank(),
     axis.text.y=element_blank(),
@@ -224,138 +203,138 @@ ggplot() +
 
 d) To your plot above, add a dashed line in orange indicating where we might cut the tree to obtain the four clusters. 
 
-Rather than hard-coding a value, try using outputed heights from the algorithm. The heights of each fusion can be found by accessing the `height` of your `hclust()` output. Example, if `hc` is the name of my object, then I would access the heights using `hc$height`. *Note*: you might want a bit of a "fudge factor" to make the graphic more aesthetically, i.e. cut the tree at the fusion height plus/minus a small amount.
+Rather than hard-coding a value, try using the outputted heights from the algorithm. The heights of each fusion can be found by accessing the `height` of your `hclust()` output. Example, if `hc` is the name of my object, then I would access the heights using `hc$height`. *Note: you might want a bit of a "fudge factor" to make the graphic more aesthetically, i.e. cut the tree at the fusion height plus/minus a small amount.*
+
+e) From your finished plot, try to describe the sorts of states that are clustered together. You might discuss geography, political leanings, size, etc.
+
+<!-- ## Exercise 3 -->
+
+<!-- We will implement one method to evaluate the cluster assignments when we know the true classes (which is rarely the case in real applications).  The metrics we use will feel very similar to FPR and FNR in binary classification. -->
+
+<!-- Suppose my data are: -->
+
+<!-- a) Returning to the iris data, use hierarchical clustering with complete linkage and Euclidean distance. Cut the tree to obtain three clusters. Then create a $3 \times 3$ table of the assigned clusters (rows) and the true species classes (columns). -->
+
+<!-- ```{r eval  = F} -->
+<!-- data("iris") -->
+<!-- set.seed(15) -->
+<!-- B <- 5000 -->
+<!-- n<- nrow(iris) -->
+<!-- match_mat2 <- match_mat3 <- match_mat4 <- counts2 <- counts3 <- counts4 <-  matrix(0, nrow= n, ncol = n) -->
+<!-- # .632 bootstrap -->
+<!-- for(b in 1:B){ -->
+<!--   ids <- sample(1:n, round((1-1/exp(1))*n), replace = F) -->
+<!--   dat<- iris[ids,1:4]  -->
+<!--   hc_out <- hclust(dist(dat), method = "complete") -->
+<!--   clusts2 <- cutree(hc_out, 2) -->
+<!--   clusts3 <- cutree(hc_out, 3) -->
+<!--   clusts4 <- cutree(hc_out, 4) -->
+<!--   for(i in 1:(n-1)){ -->
+<!--     if(i %in% ids){ -->
+<!--       i_id <- which(ids == i);  -->
+<!--       for(j in (i+1):n){ -->
+<!--         if(j %in% ids){ -->
+<!--           j_id <- which(ids == j) -->
+<!--           match_mat2[i,j] <- match_mat2[i,j] + 1*(clusts2[j_id] == clusts2[i_id]) -->
+<!--           counts2[i,j] <- counts2[i,j] + 1 -->
+<!--           match_mat3[i,j] <- match_mat3[i,j] + 1*(clusts3[j_id] == clusts3[i_id]) -->
+<!--           counts3[i,j] <- counts3[i,j] + 1 -->
+<!--           match_mat4[i,j] <- match_mat4[i,j] + 1*(clusts4[j_id] == clusts4[i_id]) -->
+<!--           counts4[i,j] <- counts4[i,j] + 1           -->
+<!--         } -->
+
+<!--       } -->
+<!--     } -->
+
+<!--   } -->
+<!-- } -->
+
+<!-- par(mfrow= c(1,1)) -->
+<!-- M2 <-  match_mat2/counts2 -->
+<!-- M3 <- match_mat3/counts3 -->
+<!-- M4 <- match_mat4/counts4 -->
+<!-- e2 <- ecdf(M2[upper.tri(M2)]) -->
+<!-- e3 <- ecdf(M3[upper.tri(M3)]) -->
+<!-- e4 <- ecdf(M4[upper.tri(M4)]) -->
+<!-- plot(e3, col = "red", verticals = T) -->
+<!-- lines(e2, verticals = T) -->
+<!-- lines(e4, col = "blue", verticals = T) -->
+
+<!-- M2_sort <- sort(M2[upper.tri(M2)]) -->
+<!-- M3_sort <- sort(M3[upper.tri(M3)]) -->
+<!-- M4_sort <- sort(M4[upper.tri(M4)]) -->
+
+<!-- auc_mat <- matrix(0, nrow = length(M2_sort), ncol = 3) -->
+<!-- for(i in 2:length(M2_sort)){ -->
+<!--   auc_mat[i,] <- c((M2_sort[i] - M2_sort[i-1])*e2(M2_sort[i]), -->
+<!--                    (M3_sort[i] - M3_sort[i-1])*e3(M3_sort[i]), -->
+<!--                    (M4_sort[i] - M4_sort[i-1])*e4(M4_sort[i])) -->
+<!-- } -->
+<!-- colSums(auc_mat) -->
+
+<!-- ## proportion increase -->
+<!-- colSums(auc_mat)[1] -->
+
+<!-- (colSums(auc_mat)[2] - colSums(auc_mat)[1])/(colSums(auc_mat)[1]) -->
+<!-- (colSums(auc_mat)[3] - colSums(auc_mat)[2])/(colSums(auc_mat)[2]) -->
 
 
-
-## Exercise 3
-
-We will implement one method to evaluate the cluster assignments when we know the true classes (which is rarely the case in real applications).  The metrics we use will feel very similar to FPR and FNR in binary classification.
-
-Suppose my data are:
-
-a) Returning to the iris data, use hierarchical clustering with complete linkage and Euclidean distance. Cut the tree to obtain three clusters. Then create a $3 \times 3$ table of the assigned clusters (rows) and the true species classes (columns).
-
-```{r}
-data("iris")
-set.seed(15)
-B <- 5000
-n<- nrow(iris)
-match_mat2 <- match_mat3 <- match_mat4 <- counts2 <- counts3 <- counts4 <-  matrix(0, nrow= n, ncol = n)
-# .632 bootstrap
-for(b in 1:B){
-  ids <- sample(1:n, round((1-1/exp(1))*n), replace = F)
-  dat<- iris[ids,1:4] 
-  hc_out <- hclust(dist(dat), method = "complete")
-  clusts2 <- cutree(hc_out, 2)
-  clusts3 <- cutree(hc_out, 3)
-  clusts4 <- cutree(hc_out, 4)
-  for(i in 1:(n-1)){
-    if(i %in% ids){
-      i_id <- which(ids == i); 
-      for(j in (i+1):n){
-        if(j %in% ids){
-          j_id <- which(ids == j)
-          match_mat2[i,j] <- match_mat2[i,j] + 1*(clusts2[j_id] == clusts2[i_id])
-          counts2[i,j] <- counts2[i,j] + 1
-          match_mat3[i,j] <- match_mat3[i,j] + 1*(clusts3[j_id] == clusts3[i_id])
-          counts3[i,j] <- counts3[i,j] + 1
-          match_mat4[i,j] <- match_mat4[i,j] + 1*(clusts4[j_id] == clusts4[i_id])
-          counts4[i,j] <- counts4[i,j] + 1          
-        }
-        
-      }
-    }
-
-  }
-}
-
-par(mfrow= c(1,1))
-M2 <-  match_mat2/counts2
-M3 <- match_mat3/counts3
-M4 <- match_mat4/counts4
-e2 <- ecdf(M2[upper.tri(M2)])
-e3 <- ecdf(M3[upper.tri(M3)])
-e4 <- ecdf(M4[upper.tri(M4)])
-plot(e3, col = "red", verticals = T)
-lines(e2, verticals = T)
-lines(e4, col = "blue", verticals = T)
-
-M2_sort <- sort(M2[upper.tri(M2)])
-M3_sort <- sort(M3[upper.tri(M3)])
-M4_sort <- sort(M4[upper.tri(M4)])
-
-auc_mat <- matrix(0, nrow = length(M2_sort), ncol = 3)
-for(i in 2:length(M2_sort)){
-  auc_mat[i,] <- c((M2_sort[i] - M2_sort[i-1])*e2(M2_sort[i]),
-                   (M3_sort[i] - M3_sort[i-1])*e3(M3_sort[i]),
-                   (M4_sort[i] - M4_sort[i-1])*e4(M4_sort[i]))
-}
-colSums(auc_mat)
-
-## proportion increase
-colSums(auc_mat)[1]
-
-(colSums(auc_mat)[2] - colSums(auc_mat)[1])/(colSums(auc_mat)[1])
-(colSums(auc_mat)[3] - colSums(auc_mat)[2])/(colSums(auc_mat)[2])
+<!-- ``` -->
 
 
-```
+<!-- ```{r eval = F} -->
+<!-- data("iris") -->
 
+<!-- B <- 5000 -->
+<!-- n<- nrow(iris) -->
+<!-- match_mat2 <- match_mat3 <- match_mat4 <- matrix(0, nrow= n, ncol = n) -->
 
-```{r}
-data("iris")
+<!-- # semiparametric bootstrap -->
+<!-- for(b in 1:B){ -->
+<!--   # dat_jitter <- scale(iris[,1:4]) + rnorm(50*4, 0, 0.05) -->
+<!--     dat_jitter <- iris[,1:4] + rnorm(50*4, 0, 0.05) -->
+<!--   hc_out <- hclust(dist(dat_jitter), method = "complete") -->
+<!--   clusts2 <- cutree(hc_out, 2) -->
+<!--   clusts3 <- cutree(hc_out, 3) -->
+<!--   clusts4 <- cutree(hc_out, 4) -->
+<!--   for(i in 1:(n-1)){ -->
+<!--       for(j in (i+1):n){ -->
+<!--         match_mat2[i,j] <- match_mat2[i,j] + 1*(clusts2[i] == clusts2[j]) -->
+<!--         match_mat3[i,j] <- match_mat3[i,j] + 1*(clusts3[i] == clusts3[j]) -->
+<!--         match_mat4[i,j] <- match_mat4[i,j] + 1*(clusts4[i] == clusts4[j]) -->
 
-B <- 5000
-n<- nrow(iris)
-match_mat2 <- match_mat3 <- match_mat4 <- matrix(0, nrow= n, ncol = n)
+<!--       } -->
+<!--   } -->
+<!-- } -->
 
-# semiparametric bootstrap
-for(b in 1:B){
-  # dat_jitter <- scale(iris[,1:4]) + rnorm(50*4, 0, 0.05)
-    dat_jitter <- iris[,1:4] + rnorm(50*4, 0, 0.05)
-  hc_out <- hclust(dist(dat_jitter), method = "complete")
-  clusts2 <- cutree(hc_out, 2)
-  clusts3 <- cutree(hc_out, 3)
-  clusts4 <- cutree(hc_out, 4)
-  for(i in 1:(n-1)){
-      for(j in (i+1):n){
-        match_mat2[i,j] <- match_mat2[i,j] + 1*(clusts2[i] == clusts2[j])
-        match_mat3[i,j] <- match_mat3[i,j] + 1*(clusts3[i] == clusts3[j])
-        match_mat4[i,j] <- match_mat4[i,j] + 1*(clusts4[i] == clusts4[j])
+<!-- M2<- match_mat2/B -->
+<!-- M3 <- match_mat3/B -->
+<!-- M4 <- match_mat4/B -->
+<!-- e2 <- ecdf(M2[upper.tri(M2)]) -->
+<!-- e3 <- ecdf(M3[upper.tri(M3)]) -->
+<!-- e4 <- ecdf(M4[upper.tri(M4)]) -->
+<!-- plot(e3, col = "red", verticals = T) -->
+<!-- lines(e2, verticals = T) -->
+<!-- lines(e4, col = "blue", verticals = T) -->
 
-      }
-  }
-}
+<!-- M2_sort <- sort(M2[upper.tri(M2)]) -->
+<!-- M3_sort <- sort(M3[upper.tri(M3)]) -->
+<!-- M4_sort <- sort(M4[upper.tri(M4)]) -->
 
-M2<- match_mat2/B
-M3 <- match_mat3/B
-M4 <- match_mat4/B
-e2 <- ecdf(M2[upper.tri(M2)])
-e3 <- ecdf(M3[upper.tri(M3)])
-e4 <- ecdf(M4[upper.tri(M4)])
-plot(e3, col = "red", verticals = T)
-lines(e2, verticals = T)
-lines(e4, col = "blue", verticals = T)
+<!-- auc_mat <- matrix(0, nrow = length(M2_sort), ncol = 3) -->
+<!-- for(i in 2:length(M2_sort)){ -->
+<!--   auc_mat[i,] <- c((M2_sort[i] - M2_sort[i-1])*e2(M2_sort[i]), -->
+<!--                    (M3_sort[i] - M3_sort[i-1])*e3(M3_sort[i]), -->
+<!--                    (M4_sort[i] - M4_sort[i-1])*e4(M4_sort[i])) -->
+<!-- } -->
+<!-- colSums(auc_mat) -->
 
-M2_sort <- sort(M2[upper.tri(M2)])
-M3_sort <- sort(M3[upper.tri(M3)])
-M4_sort <- sort(M4[upper.tri(M4)])
+<!-- ## proportion increase -->
+<!-- colSums(auc_mat)[1] -->
 
-auc_mat <- matrix(0, nrow = length(M2_sort), ncol = 3)
-for(i in 2:length(M2_sort)){
-  auc_mat[i,] <- c((M2_sort[i] - M2_sort[i-1])*e2(M2_sort[i]),
-                   (M3_sort[i] - M3_sort[i-1])*e3(M3_sort[i]),
-                   (M4_sort[i] - M4_sort[i-1])*e4(M4_sort[i]))
-}
-colSums(auc_mat)
+<!-- (colSums(auc_mat)[2] - colSums(auc_mat)[1])/(colSums(auc_mat)[1]) -->
+<!-- (colSums(auc_mat)[3] - colSums(auc_mat)[2])/(colSums(auc_mat)[2]) -->
 
-## proportion increase
-colSums(auc_mat)[1]
-
-(colSums(auc_mat)[2] - colSums(auc_mat)[1])/(colSums(auc_mat)[1])
-(colSums(auc_mat)[3] - colSums(auc_mat)[2])/(colSums(auc_mat)[2])
-
-```
+<!-- ``` -->
 
 

@@ -26,7 +26,7 @@ The function `kmeans()` performs $K$-means clustering in `R`. I will generate so
 
 ```{r}
 set.seed(2)
-x <- matrix(rnorm(50 * 2), ncol = 2)
+x <- matrix(rnorm(50 * 2, 0, 3), ncol = 2)
 x[1:25, 1] <- x[1:25, 1] + 3
 x[1:25, 2] <- x[1:25, 2] - 4
 ```
@@ -78,108 +78,75 @@ km_out$tot.withinss
 
 `tot.withinss` is the total within-cluster sum of squares, which we seek to minimize by performing K-means clustering. Thus, we can clearly see that by running the algorithm with many different initial assignments and reporting the best one, we can do a much better job at making sure the observations within a cluster are similar. 
 
-# Real example
+# Standardizing features
 
-Unsupervised techniques are often used in the analysis of genomic data.
-While hierarchical clustering (which we will see next week) is more popular, we can still use $K$-means clustering here.
-
-We use the `NCI60` data from the `ISLR2` package. These are cancer cell line microarray data, which consists of 6,830 gene expression measurements on 64 cancer cell lines.
+As mentioned in lecture, one decision that you need to make is to standardize the features such that each feature has standard deviation 1. We can use the `scale()` function, which both centers (yields a mean of 0) and standardizes (yields a standard deviation of 1). If you didn't want to center, you could specify `center = F` in the function call.
 
 ```{r}
-library(ISLR2)
-nci_labs <- NCI60$labs
-nci_data <- NCI60$data
+std_x <- scale(x)
 ```
 
-The data are technically labeled with a cancer type, given in `nci_labs`. However, we will not use them in our clustering because we are performing unsupervised analysis! 
+We can confirm that the resulting `std_x` does in fact have columns with mean 0 and standard deviation 1:
 
-In total, there are 14 true clusters or cancer types across in the data:
-
+```{marginfigure}
+Notice that we don't get the mean to be exactly 0, but it's close enough!
+```
 ```{r}
-table(nci_labs)
+apply(std_x, 2, mean)
+apply(std_x, 2, sd)
 ```
 
-We will choose to standardize the variables to have mean zero and standard deviation of one using the `scale()` function. Then we will run $K$-means with $K=4$:
-
-```{r}
-std_data <- scale(nci_data)
-set.seed(1)
-km_out <- kmeans(std_data, 4, nstart = 20)
-km_out$cluster
-```
-
-Here, it seems like one cluster contains many more observations then there others.
-
-We can examine if there are patterns by utilizing the true labels:
-
-```{r}
-table(km_out$cluster, nci_labs)
-
-```
-
-What if we run the algorithm using the true number of clusters?
-
-```{r}
-set.seed(1)
-km_out <- kmeans(std_data, 14, nstart = 20)
-```
-
-Ideally, we would want each type of cancer to land into a unique cluster. By creating a table of true labels and cluster assignments, this does not appear to be the case:
-
-```{r}
-table(km_out$cluster, nci_labs)
-```
 
 # Your turn!
 
+<!-- ## Exercise 1 -->
+
+<!-- You will generate simulated data and then perform $K$-means clustering on the data. -->
+
+<!-- a) Generate a simulated data set with 20 observations in each of three classes (i.e. 60 observations total), and 50 variables. Set a seed for reproducibility. -->
+
+<!-- *Hint: you may use the `rnorm()` or `runif()` functions to generate data. To generate distinct classes, add a mean shift to the observations in each class like we did above.* -->
+
+<!-- ```{r} -->
+<!-- n <- 60 -->
+<!-- p <- 50 -->
+<!-- set.seed(2) -->
+<!-- x <- matrix(rnorm(p * n), ncol = p) -->
+<!-- x[1:20, 1] <- x[1:20, 1] + 3 -->
+<!-- x[21:40, 2] <- x[21:40, 2] - 4 -->
+<!-- x[41:60, 3] <- x[41:50, 2] + 1.5 -->
+<!-- ``` -->
+
+<!-- **Answer**: *Note: answers will vary based on simulated data!* -->
+
+<!-- b) Perform $K$-means clustering with $K= 3$. Don't forget to set a seed! How well do the clusters that you obtained in K-means clustering compare to the true class labels? -->
+
+<!-- *Hint: use the `table()` function to compare the true class labels to the class labels obtained by clustering. Be careful how you interpret the results: K-means clustering will arbitrarily number the clusters, so you cannot simply check whether the true class labels and clustering labels are the same.* -->
+
+
+<!-- ```{r} -->
+<!-- km_out <- kmeans(x, centers = 3, nstart = 20) -->
+<!-- table(assign = km_out$cluster, true = rep(c(1:3), each = 20)) -->
+<!-- ``` -->
+
+<!-- c) Perform $K$-means clustering with $K = 2$. Describe your results. -->
+
+<!-- ```{r} -->
+<!-- km_out <- kmeans(x, centers = 2, nstart = 20) -->
+<!-- table(assign = km_out$cluster, true = rep(c(1:3), each = 20) ) -->
+<!-- ``` -->
+
+
+<!-- d) Perform $K$-means clustering with $K = 4$. Describe your results. -->
+
+<!-- ```{r} -->
+<!-- km_out <- kmeans(x, centers = 4, nstart = 20) -->
+<!-- table(assign = km_out$cluster, true = rep(c(1:3), each = 20) ) -->
+<!-- ``` -->
+
 ## Exercise 1
 
-You will generate simulated data and then perform $K$-means clustering on the data.
-
-a) Generate a simulated data set with 20 observations in each of three classes (i.e. 60 observations total), and 50 variables. Set a seed for reproducibility.
-
-*Hint: you may use the `rnorm()` or `runif()` functions to generate data. To generate distinct classes, add a mean shift to the observations in each class like we did above.*
-
-```{r}
-n <- 60
-p <- 50
-set.seed(2)
-x <- matrix(rnorm(p * n), ncol = p)
-x[1:20, 1] <- x[1:20, 1] + 3
-x[21:40, 2] <- x[21:40, 2] - 4
-x[41:60, 3] <- x[41:50, 2] + 1.5
-```
-
-**Answer**: *Note: answers will vary based on simulated data!*
-
-b) Perform $K$-means clustering with $K= 3$. Don't forget to set a seed! How well do the clusters that you obtained in K-means clustering compare to the true class labels?
-
-*Hint: use the `table()` function to compare the true class labels to the class labels obtained by clustering. Be careful how you interpret the results: K-means clustering will arbitrarily number the clusters, so you cannot simply check whether the true class labels and clustering labels are the same.*
-
-
-```{r}
-km_out <- kmeans(x, centers = 3, nstart = 20)
-table(assign = km_out$cluster, true = rep(c(1:3), each = 20))
-```
-
-c) Perform $K$-means clustering with $K = 2$. Describe your results.
-
-```{r}
-km_out <- kmeans(x, centers = 2, nstart = 20)
-table(assign = km_out$cluster, true = rep(c(1:3), each = 20) )
-```
-
-
-d) Perform $K$-means clustering with $K = 4$. Describe your results.
-
-```{r}
-km_out <- kmeans(x, centers = 4, nstart = 20)
-table(assign = km_out$cluster, true = rep(c(1:3), each = 20) )
-```
-
-## Exercise 2
-
-We will now perform a customer segmentation analysis on some simple, fake data. We have information about the `Gender`, `Age`, `AnnualIncome` ($1000s), and `SpendingScore` for customers at a mall. `SpendingScore` is a value between 1 and 100 that is generated based on each customer's spending history, preferences, etc.  The additional column `CustomerID` is just an index for each customer.
+We will perform a customer segmentation analysis on some simple, fake data. We have information about the `Gender`, `Age`, `AnnualIncome` ($1000s), and `SpendingScore` for customers at a mall. `SpendingScore` is a value between 1 and 100 that is generated based on each customer's spending history, preferences, etc.  The additional column `CustomerID` is just an index for each customer.
 
 We will perform $K$-means clustering using all the pertinent quantitative features. 
 
@@ -187,7 +154,7 @@ We will perform $K$-means clustering using all the pertinent quantitative featur
 dat <- read.csv("data/Mall_Customers.csv")
 ```
 
-a) We will wrangle the data here. As we know, $k$-means cannot handle categorical features. Create a new data frame called `mall_std` which only contains male customers AND standardizes each of the continuous features.
+a) We will wrangle the data here. As we know, $K$-means cannot handle categorical features. Create a new data frame called `mall_std` which only contains male customers AND standardizes each of the continuous features.
 
 ```{r}
 mall_std <- dat %>% 
@@ -195,7 +162,7 @@ mall_std <- dat %>%
   mutate_if(is.numeric, scale)
 ```
 
-b) Using a `for()` loop, fit the $K$-means algorithm to this data for $K = 1, 2, \ldots, 10$. For each $K$, obtain and store the value of the objective. Don't forget to set a seed!
+b) Using a `for()` loop, fit the $K$-means algorithm to this data for $K = 1, 2, \ldots, 10$. For each $K$, obtain and store the value of the objective. Use a seed of 2.
 
 ```{r}
 set.seed(2)
@@ -234,20 +201,20 @@ mall_std %>%
 
 ```
 
-f) Based on your visualization in (e), try describing the types of customers within each cluster. Even though the features are standardized, we interpret positive values as being greater than average and negative values as lower. E.g. a standardized `Age` of 2 would correspond to a customer of old age.
+f) Based on your visualization in (e), try describing the types of customers within each cluster. Even though the features are standardized, we interpret positive values as being greater than average and negative values as lower. E.g. a standardized `Age` of 2 would correspond to a customer of older age.
 
-## Exercise 3
+## Exercise 2
 
-Here, we will look at the same mall customer data, but this time perform $K$-means on the original, non-standardized data.
+Here, we will look at the same mall customer data, but this time perform $K$-means on the original, *non-standardized* data.
 
-a) Create a new data frame called `mall` that only contains male customers, but does NOT standardize the features. 
+a) Create a new data frame called `mall_dat` that only contains male customers, but does NOT standardize the features. 
 
 ```{r}
 mall_dat <- dat %>% 
   filter(Gender == "Male") 
 ```
 
-b) Repeat steps (b)-(e) from Exercise 2. 
+b) Repeat steps (b)-(e) from Exercise 2. Use a seed of 2.
 
 ```{r}
 set.seed(2)
@@ -270,7 +237,7 @@ mall_dat %>%
              pch = 4)
 ```
 
-c) Discuss the differences that occurred when you ran $K$-means with standardized versus non-standardized data. You may want to discuss choosing an optimal $K$ and separation/interpretation of the resulting cluster assignments.
+c) Discuss the differences (if any) that occurred when you ran $K$-means with standardized versus non-standardized data. You may want to discuss choosing an optimal $K$ and separation/interpretation of the resulting cluster assignments.
 
 
 
