@@ -45,7 +45,8 @@ library(rvest)
 1. What are merge conflicts?
 2. Practice dealing with merge conflicts
 3. Project proposal details
-4. Work!
+4. Practice adding data
+5. Work!
 
 
 ---
@@ -167,5 +168,77 @@ knitr::include_graphics("img/merge-conflicts/1-push-error.png")
 
 - If you find yourself in a situation that is difficult to resolve, ask questions ASAP, don't let it linger and get bigger.
 
+---
 
+class: middle, center
+
+# Project proposal details
+
+
+---
+
+## Requirements
+
+- Pick a dataset and come up with at least two research questions, motivated by some EDA
+
+  - Upload the selected dataset to your GitHub repository
+
+- Must be completed in the `project-proposal.Rmd` file
+
+  - The R markdown file has guidance in the structure of the project proposal
+
+- Submit PDF of project proposal to Canvas by Sunday, 11/13 at 11:59pm
+
+
+---
+
+class: middle, center
+
+# Practice adding data
+
+---
+
+## Adding data
+
+.question[JUST ONE TEAM MEMBER SHOULD DO THIS]
+
+
+- Go to Canvas $\Rightarrow$ Files and download the file called `wines.csv`. Locate this file on your local computer, usually found in your `Downloads` folder.
+
+- From your `Math 218` folder you created for this course, find the `final-project` project folder corresponding to your team's final project. Now create a new `data/` folder *within* this folder.
+
+```{r data-folder, echo = FALSE, eval=TRUE, fig.width=5}
+knitr::include_graphics("img/instructions/create_folder.png")
+```
+
+---
+
+## Adding data (cont.)
+
+- Within your new `data/` folder, upload the `wines.csv` file.  
+
+```{r data-upload, echo = FALSE, eval=TRUE, fig.width=3}
+knitr::include_graphics("img/instructions/add_data.png")
+```
+
+--
+
+- You may now load in the data with the following code as per usual. For example:
+
+```{r eval=FALSE, echo = T}
+library(tidyverse)
+wines <- read.csv("data/wines.csv")
+```
+
+---
+
+## Adding data (cont.)
+
+.question[Once you have selected a dataset, simply delete the `wines.csv` file and add your new dataset.]
+
+- If you encounter a type of file that you don't recognize and have trouble loading it in:
+
+  - Try Google
+  
+  - Ask me!
 
