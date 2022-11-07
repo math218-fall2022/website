@@ -1,7 +1,7 @@
 ---
 title: "Math 218: Statistical Learning"
 author: "Unupervised learning: k-means"
-date: "11/7/2022"
+date: "11/9/2022"
 output: 
    xaringan::moon_reader:
     css: "math218-slides.css"
@@ -130,9 +130,9 @@ class: center, middle
 
 ## Example 1: US Arrests
 
-- We consider a subset of the `USArrests` data. Contains  statistics about arrests per 100,000 residents for $\color{blue}{\text{Murder}}$ in each of the 50 US states in 1973. Also given is the percent of the population living in urban areas $(\color{blue}{\text{UrbanPop}})$.
+- `USArrests` data in `R` contains  statistics about arrests per 100,000 residents for $\color{blue}{\text{Murder}}$ in each of the 50 US states in 1973. Also given is the percent of the population living in urban areas $(\color{blue}{\text{UrbanPop}})$.
 
-- Apply $K$-means clustering with different values of $K$ to group the observations (states)
+- In the following slide, I apply $K$-means clustering with different values of $K$ to group the observations (states)
 
 - Color of each observation indicates the cluster to which each state was assigned (coloring is arbitrary)
 
@@ -368,7 +368,7 @@ gridExtra::grid.arrange(grobs = plot_ls, ncol = 2)
 
 - One of the local optima resulted in a smaller value of the objective, and therefore provides better separation between the clusters
 
-  - Two of the initializations results in ties for best solution, with object value of 58.145
+  - Two of the initializations results in ties for best solution, with objective value of 58.145
 
 ---
 
@@ -376,14 +376,14 @@ gridExtra::grid.arrange(grobs = plot_ls, ncol = 2)
 
 - Recall the `seeds` data with three varieties: Kama, Rosa, and Canadian
 
-- Run $K$-means with $K = 4$, using features `compactness`, and `area`
+- Run $K$-means with $K = 3$, using features `compactness`, and `area`
 
 ```{r} 
 seeds <- read.table("data/seeds_dataset.txt", header = T) %>%
   mutate(variety = factor(variety))
 seeds_df <- seeds %>%
   dplyr::select(variety,compactness, area) 
-km_out <- kmeans(seeds_df[, -1], 4)
+km_out <- kmeans(seeds_df[, -1], 3)
 seeds_df %>% 
   mutate(cluster = factor(km_out$cluster)) %>%
   ggplot(., aes(x = compactness, area, col = cluster)) +
@@ -417,7 +417,8 @@ data.frame(K = 1:KK, objective = tot.withinss) %>%
   geom_point() +
   geom_line() +
   scale_x_continuous(breaks = 1:KK) +
-  ggtitle("Elbow curve for seeds data")
+  ggtitle("Elbow curve for seeds data") +
+  theme(text=element_text(size = 20))
 ```
 
 ---
@@ -426,7 +427,12 @@ data.frame(K = 1:KK, objective = tot.withinss) %>%
 
 - Graph will (hopefully) rapidly change at a point and thus create the elbow shape. The $K$ value where elbow "bends" and begins to run parallel to x-axis is taken to be optimal
 
-  - Unfortunately, it is not always obvious where the curve bends
+  - .question[What is the optimal $K$ for the seeds data?]
+  
+--
+
+  
+- Unfortunately, it is not always obvious where the curve bends
 
 ---
 
@@ -434,13 +440,16 @@ data.frame(K = 1:KK, objective = tot.withinss) %>%
 
 - Standardize predictors
 
-- Run k-means with $k = 2$, and compare to true classes:
+- Run $K$-means with $K = 2$, and compare to true classes:
 
 ```{r echo = T}
 set.seed(1)
-kmeans2 <- kmeans(scale(iris[,1:4]), 2, nstart = 20)
-table(kmeans2$cluster, iris$Species)
+# arguments: features, K, number of random initailizations to try
+kmeans2 <- kmeans(scale(iris[,1:4]), centers = 2, nstart = 20)
+table(assigned_cluster = kmeans2$cluster, species = iris$Species)
 ```
+
+--
 
 - Clearly identifies two clusters: one of species `setosa`, and the other of species `versicolor` and `virginica` combined
 
@@ -452,7 +461,7 @@ table(kmeans2$cluster, iris$Species)
 
 ```{r}
 kmeans3 <- kmeans(scale(iris[,1:4]), 3, nstart = 20)
-table(kmeans3$cluster, iris$Species)
+table(assigned_cluster = kmeans3$cluster, species = iris$Species)
 ```
 
 - Two of the three clusters contain both `versicolor` and `virginica`
@@ -539,31 +548,31 @@ df %>%
 ---
 
 
-## Similar model: k-medoids
+## Similar model: K-medoids
 
-- $k$-medoids: very similar to $k$-means clustering
+- $K$-medoids: very similar to $K$-means clustering
 
-  - $k$-means chooses centers of clusters as the average between the points in the cluster, thus the centroid usually is not one of the observed points
+  - $K$-means chooses centers of clusters as the average between the points in the cluster, thus the centroid is usually *not* one of the observed points
   
 --
 
-  - $k$-medoids chooses one of the observation points to be the center
+  - $K$-medoids chooses one of the observation points to be the center
   
   - Like mean vs. median
   
 --
 
-- Allows for greater interpretability of the center clusters than $k$-means 
+- Allows for greater interpretability of the center clusters compared to $K$-means 
 
 ---
 
-## k-medoids vs k-means
+## K-medoids vs K-means
 
-- $k$-medoids can be used with arbitrary dissimilarity measures, whereas $k$-means generally requires Euclidean distance for efficient solutions
+- $K$-medoids can be used with arbitrary dissimilarity measures, whereas $K$-means generally requires Euclidean distance for efficient solutions
 
-- $k$-medoids minimizes the sum of pairwise dissimilarities, whereas $k$-means attempts minimizes sum of (squared) Euclidean distances
+- $K$-medoids minimizes the sum of pairwise dissimilarities, whereas $K$-means attempts minimizes sum of (squared) Euclidean distances
 
-  - Thus, $k$-medoids is more robust to noise and outliers
+  - Thus, $K$-medoids is more robust to noise and outliers
 
 
 
@@ -589,6 +598,8 @@ df %>%
 ## Summary: considerations 
 
 - Should the features be standardized?
+
+  - This is always a question when distances are involved!
 
 - What should $K$ be?
   
