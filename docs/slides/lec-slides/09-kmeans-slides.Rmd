@@ -108,6 +108,12 @@ class: center, middle
   
 ---
 
+class: center, middle
+
+# K-Means clustering
+
+---
+
 ## K-Means clustering
 
 - We seek to partition/divide the observations into a pre-specified number of clusters $K$
@@ -575,6 +581,7 @@ df %>%
 
 - Lack of interpretation of clusters 
 
+- Can be slow for large $n$
 
 ---
 
