@@ -26,6 +26,16 @@ library(ggdendro)
 
 ## Houskeeping
 
+- Third job candidate is giving talk TODAY from 12:30-1:30pm in 75 Shannon Street Room 224
+  
+  - Candidate: Taylor Okonek
+  
+  - Talk title: "Child Mortality Estimation in a Low- and Middle-Income Country Context"
+
+- Lab 06 and HW 05 due tomorrow 11:59pm
+
+- Project proposals due to Canvas this Sunday 11/13 at 11:59pm
+  
 ---
 
 ## Unsupervised learning
@@ -274,7 +284,7 @@ $$\min_{C_{1}, \ldots, C_{K}}\left\{\sum_{k=1}^{K}\text{WCV}(C_{k})  \right\}$$
 
 - Once again, need to define 
 
-- Most common choice is *squared* Euclidean distance:
+- Most common choice is (pairwise) *squared* Euclidean distance:
 
 $$\text{WCV}(C_{k}) = \frac{1}{|C_{k}|} \sum_{i, i' \in C_{k}} \sum_{j=1}^{p} (x_{ij} - x_{i'j})^2$$
 
