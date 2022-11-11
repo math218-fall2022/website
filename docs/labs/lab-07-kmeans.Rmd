@@ -1,6 +1,6 @@
 ---
 title: "Lab 07 - K-means clustering"
-subtitle: "Due Sunday, 11/17 at 11:59pm"
+subtitle: "Due Thursday, 12/1 at 11:59pm"
 output: 
   tufte::tufte_html:
     css: "./math218-labs.css"
@@ -239,6 +239,23 @@ mall_dat %>%
 
 c) Discuss the differences (if any) that occurred when you ran $K$-means with standardized versus non-standardized data. You may want to discuss choosing an optimal $K$ and separation/interpretation of the resulting cluster assignments.
 
+
+
+<!-- ```{r} -->
+<!-- n <- 100 -->
+<!-- p <- 3 -->
+<!-- set.seed(2) -->
+<!-- library(mvtnorm) -->
+<!-- clust1 <- rmvnorm(20, c(1,5), diag(2)) -->
+<!-- clust2 <-  rmvnorm(100, c(6,6), diag(2)) -->
+<!-- clust3 <-  rmvnorm(500, c(3,0), diag(2)) -->
+<!-- df <- data.frame(rbind(clust1,clust2,clust3)) %>% -->
+<!--   mutate(cluster = c(rep(1,20), rep(2, 100), rep(3,500))) -->
+
+<!-- km_out <- kmeans(df, 3, nstart = 20) -->
+<!-- table(km_out$cluster, df$cluster) -->
+<!-- kmeanspp -->
+<!-- ``` -->
 
 
 

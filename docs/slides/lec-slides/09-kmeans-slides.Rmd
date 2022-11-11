@@ -1,6 +1,6 @@
 ---
 title: "Math 218: Statistical Learning"
-author: "Unupervised learning: k-means"
+author: "Unsupervised learning: k-means"
 date: "11/9/2022"
 output: 
    xaringan::moon_reader:
@@ -26,13 +26,6 @@ library(ggdendro)
 
 ## Houskeeping
 
-- Third job candidate is giving talk TODAY from 12:30-1:30pm in 75 Shannon Street Room 224
-  
-  - Candidate: Taylor Okonek
-  
-  - Talk title: "Child Mortality Estimation in a Low- and Middle-Income Country Context"
-
-- Lab 06 and HW 05 due tomorrow 11:59pm
 
 - Project proposals due to Canvas this Sunday 11/13 at 11:59pm
   
@@ -40,7 +33,7 @@ library(ggdendro)
 
 ## Unsupervised learning
 
-- Shifting gears: instead of *supervised* learning (e.g. regression and classification), we will now t turn to *unsupervised* learning
+- Shifting gears: instead of *supervised* learning (e.g. regression and classification), we will now turn to *unsupervised* learning
 
 - We only observe the features $X_{1}, X_{2},\ldots, X_{p}$
 
@@ -580,11 +573,35 @@ df %>%
 
 - $K$-medoids can be used with arbitrary dissimilarity measures, whereas $K$-means generally requires Euclidean distance for efficient solutions
 
-- $K$-medoids minimizes the sum of pairwise dissimilarities, whereas $K$-means attempts minimizes sum of (squared) Euclidean distances
+- $K$-medoids minimizes the sum of pairwise dissimilarities, whereas $K$-means attempts to minimize sum of (squared) Euclidean distances
 
   - Thus, $K$-medoids is more robust to noise and outliers
 
 
+
+---
+
+## Better initialization?
+
+.alert[Is randomly initializing the most intelligent way to run the algorithm?]
+
+- What are some possible issues of randomly initializing?
+
+--
+
+- Minimizing the objective (smallest $\sum_{k=1}^{K}\text{WCV}(C_{k})$) gets at the goal of observations within a cluster being as similar as possible
+
+  - But it doesn't do much for the goal of making sure the each cluster is distinct
+
+---
+
+## Better initialization!
+
+.question[How might we encode this notion of "far away" clusters when we initialize?]
+
+--
+
+- More commonly used initialization method: .vocab[k-means++]
 
 ---
 
