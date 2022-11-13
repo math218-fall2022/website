@@ -26,35 +26,49 @@ The function `kmeans()` performs $K$-means clustering in `R`. I will generate so
 
 ```{r}
 set.seed(2)
-x <- matrix(rnorm(50 * 2, 0, 3), ncol = 2)
+x <- cbind(rnorm(50, 0, 2), rnorm(50, 0, 0.5))
 x[1:25, 1] <- x[1:25, 1] + 3
-x[1:25, 2] <- x[1:25, 2] - 4
+x[25+1:25, 2] <- x[25+1:25, 2] - 4
 ```
 
 
 
-The `kmeans()` function requires three inputs: the matrix of features, the number of clusters $K$, and and `nstart` argument. Because the algorithm initializes with random assignment of observations to clusters, it is good practice to try many different initializations. Thus, `nstart` tells `kmeans()` how many to try, and the function will output the results from best one. Here, "best" is in terms of minimizing the objective.
+The `kmeans()` function requires a minimum of two inputs: the matrix of features and the number of clusters $K$. You can (and will) specify other optional arguments including:
 
-Due to the random initial cluster assignments, we should always set a seed for reproducibility! Also, while unlikely, it is possible that observations might tie when we calculate the distances between an observations and each centroid. In these instances, `kmeans()` will randomly choose one of the centroid clusters. Another good reason to set a seed!
-
+  - `nstart`: the number of random initializations for repeated $K$-means. Default is 1.
+  - `iter.max`: the maximum number of iterations allowed to run the algorithm. Default is 10.
+  - `algorithm`: the algorithm to run $K$-means. Defaults to "Hartigan-Wong"
+  
 ```{marginfigure}
 The default for `nstart` is 1, but that is not good practice!
 ```
+  
+If you specify `nstart` $>1$, the function will output the results from best initailization. Here, "best" is in terms of minimizing the objective.
+
+```{marginfigure}
+Note: you make get a warning from the `kmeans()` function stating that the alogirhm has failed to converge. In that case, you will need to increase `iter.max`!
+```
+
+Because $K$-means is an iterative algorithm, it should run until convergence. However, due to computation resources, the writers of the `kmeans()` function do not allow the algorithm to be run indefinitely until convergence. Instead, they make it so that the algorithm as up to `iter.max` iterations to run. If convergence is achieved prior to the `iter.max`-th iteration, great! If not, the function will return the clusters associated with that last iteration.
+
+Due to the random initial cluster assignments, we should always set a seed for reproducibility! Also, while unlikely, it is possible that observations might tie when we calculate the distances between an observations and each centroid. In these instances, `kmeans()` will randomly choose one of the centroid clusters. Another good reason to set a seed!
+
+Lastly, because we only learned the Lloyd algorithm in class, we will use that algorithm in our lab.
 
 ```{r}
-set.seed(2)
-km_out <- kmeans(x, 2, nstart = 20)
+set.seed(4)
+km_out <- kmeans(x, centers = 2, nstart = 20, algorithm = "Lloyd")
 km_out
 ```
 
-The final cluster centroids and assignments can be accessed as follows:
+The final cluster centroids (`centers`) and assignments (`cluster`) can be accessed as follows:
 
 ```{r}
 km_out$centers
 km_out$cluster
 ```
 
-We see that the algorithm separated the observations into two clusters even though we did not supply any group information! We can plot the data because our features are in 2D space. We will color each point by the cluster it was assigned to:
+We can plot the data because our features are in 2D space. We will color each point by the cluster it was assigned to:
 
 ```{r}
 data.frame(x) %>%
@@ -68,15 +82,15 @@ data.frame(x) %>%
 Why should we use `nstart` $> 1$? The code below runs the $K$-means clustering algorithm twice: once with just 1 random assignment, and a second time with 20 different assignments. We then obtain the value of the best (smallest) objective value from each of runs by using the code `km_out$tot.withinss`. 
 
 ```{r}
-set.seed(4)
-km_out <- kmeans(x, 3, nstart = 1)
+set.seed(6)
+km_out <- kmeans(x, 3, nstart = 1, algorithm = "Lloyd")
 km_out$tot.withinss
-km_out <- kmeans(x, 3, nstart = 20)
+km_out <- kmeans(x, 3, nstart = 20,  algorithm = "Lloyd")
 km_out$tot.withinss
-
 ```
 
-`tot.withinss` is the total within-cluster sum of squares, which we seek to minimize by performing K-means clustering. Thus, we can clearly see that by running the algorithm with many different initial assignments and reporting the best one, we can do a much better job at making sure the observations within a cluster are similar. 
+
+`tot.withinss` is the total within-cluster sum of squares, which we seek to minimize by performing K-means clustering. Thus, we can clearly see that by running the algorithm with many different initial assignments and reporting the best one, we can do a better job at making sure the observations within a cluster are similar. 
 
 # Standardizing features
 
@@ -162,13 +176,13 @@ mall_std <- dat %>%
   mutate_if(is.numeric, scale)
 ```
 
-b) Using a `for()` loop, fit the $K$-means algorithm to this data for $K = 1, 2, \ldots, 10$. For each $K$, obtain and store the value of the objective. Use a seed of 2.
+b) Using a `for()` loop, fit $K$-means using Lloyd's algorithm to this data for $K = 1, 2, \ldots, 10$. For each $K$, obtain and store the value of the objective. Use a seed of 2, and multiple starts!
 
 ```{r}
 set.seed(2)
 tot.withinss <- rep(NA, 10)
 for (i in 1:10){
-  cluster <- kmeans(mall_std[,3:5], center=i, nstart=20)
+  cluster <- kmeans(mall_std[,3:5], centers=i, iter.max = 20, nstart=20, algorithm = "Lloyd")
   tot.withinss[i] <- cluster$tot.withinss
 }
 ```
@@ -187,13 +201,14 @@ d) Using your optimal $K$, fit the $K$-means algorithm to the data, obtain the c
 
 ```{r}
 km_out <- kmeans(mall_std[,3:5], 4)
+km_out_clusts <- km_out$cluster
 ```
 
 e) Create a visualization of the cluster assignments plotted in predictor space. Choose two features of your choice for the axes, and color the points by cluster assignment. *Stretch goal*: show on your plot where the cluster centroids are!
 
 ```{r}
 mall_std %>%
-  mutate(cluster = factor(km_out$cluster)) %>%
+  mutate(cluster = factor(km_out_clusts)) %>%
   ggplot(., aes(x = Age, y = SpendingScore)) +
   geom_point(aes(col  = cluster)) +
   geom_point(data = data.frame(km_out$centers), aes(x = Age, y = SpendingScore),
@@ -214,13 +229,13 @@ mall_dat <- dat %>%
   filter(Gender == "Male") 
 ```
 
-b) Repeat steps (b)-(e) from Exercise 2. Use a seed of 2.
+b) Repeat steps (b)-(e) from Exercise 1 using this `mall_dat` data frame. Use a seed of 2.
 
 ```{r}
 set.seed(2)
 tot.withinss <- rep(NA, 10)
 for (i in 1:10){
-  cluster <- kmeans(mall_dat[,3:5], center=i, nstart=20)
+  cluster <- kmeans(mall_dat[,3:5], centers=i, iter.max = 20, nstart=20, algorithm = "Lloyd")
   tot.withinss[i] <- cluster$tot.withinss
 }
 data.frame(K = 1:10, objective = tot.withinss) %>%
@@ -238,24 +253,3 @@ mall_dat %>%
 ```
 
 c) Discuss the differences (if any) that occurred when you ran $K$-means with standardized versus non-standardized data. You may want to discuss choosing an optimal $K$ and separation/interpretation of the resulting cluster assignments.
-
-
-
-<!-- ```{r} -->
-<!-- n <- 100 -->
-<!-- p <- 3 -->
-<!-- set.seed(2) -->
-<!-- library(mvtnorm) -->
-<!-- clust1 <- rmvnorm(20, c(1,5), diag(2)) -->
-<!-- clust2 <-  rmvnorm(100, c(6,6), diag(2)) -->
-<!-- clust3 <-  rmvnorm(500, c(3,0), diag(2)) -->
-<!-- df <- data.frame(rbind(clust1,clust2,clust3)) %>% -->
-<!--   mutate(cluster = c(rep(1,20), rep(2, 100), rep(3,500))) -->
-
-<!-- km_out <- kmeans(df, 3, nstart = 20) -->
-<!-- table(km_out$cluster, df$cluster) -->
-<!-- kmeanspp -->
-<!-- ``` -->
-
-
-
