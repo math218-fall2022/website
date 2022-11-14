@@ -1371,23 +1371,17 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before {
-content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "\e259";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "";
-border: none;
-}
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "";
+content: "\e258";
 font-family: 'Glyphicons Halflings';
-display: inline-block;
-padding: 10px;
-border-right: 1px solid #ddd;
+border: none;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -1498,7 +1492,8 @@ border-radius: 0px;
 November 5 at 11:59pm</strong></p>
 <p>Project proposals due <strong>Sunday, November 13 at
 11:59pm</strong></p>
-<p>Project plans due <strong>Sunday, November 20 at 11:59pm</strong></p>
+<p>Project plans due <strong>Tuesday, November 22 at
+11:59pm</strong></p>
 <p>Report, slides, and repository due <strong>Thursday, December 8 at
 11:59pm</strong></p>
 <p>Presentations will occur on <strong>Friday, December 9 and Monday,
