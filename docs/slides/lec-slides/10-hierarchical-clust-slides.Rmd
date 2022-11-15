@@ -28,26 +28,6 @@ library(ggdendro)
 
 ---
 
-## Unsupervised learning goals
-
-- Discover interesting things about the predictors/features
-  
-  - Can we discover subgroups among the variables or among the observations?
-  
-  - Is there an informative way to visualize the data?
-
-  
---
-
-- Two common methods: 
-
-  - **Clustering**: broad class of methods to discover unknown subgroups in your data
-  
-  - **Principal components analysis (PCA)**:  
-
-
----
-
 ## Clustering
 
 - We want to find *subgroups* or *clusters* in a data set
@@ -59,13 +39,12 @@ library(ggdendro)
   - observation across groups are different
   
 
---
 
 - How to define "similar" and "different"?
 
 --
 
-- Two main methods: **K-means clustering** (last week) and **hierarchical clustering** (this week)
+- Two main methods: **K-means clustering** (before break) and **hierarchical clustering** (this week)
 
 
 ---
@@ -85,11 +64,9 @@ class: center, middle
 
 - Specifically focus on *bottom-up* hierarchical clustering, by constructing leaves first and then the trunk
 
----
+--
 
-## Intuition/idea
-
-- Rather than clustering everything at beginning, we will build iteratively 
+- Intuition/idea: rather than clustering everything at beginning, why don't we build iteratively 
 
 
 ---
@@ -193,19 +170,19 @@ The approach in words:
 
 ## Common linkage types
 
-- Complete: maximal intercluster dissimilarity. Compute all pairwise dissimilarities between observations in cluster $A$ and observations in cluster $B$. Record the *largest* of these dissimilarities.
+- .vocab[Complete]: maximal intercluster dissimilarity. Compute all pairwise dissimilarities between observations in cluster $A$ and observations in cluster $B$. Record the *largest* of these dissimilarities.
 
 --
 
-- Single: minimal intercluster dissimilarity.  Compute all pairwise dissimilarities between observations in cluster $A$ and observations in cluster $B$. Record the *smallest* of these dissimilarities. 
+- .vocab[Single]: minimal intercluster dissimilarity.  Compute all pairwise dissimilarities between observations in cluster $A$ and observations in cluster $B$. Record the *smallest* of these dissimilarities. 
 
 --
 
-- Average: mean intercluster dissimilarity.  Compute all pairwise dissimilarities between observations in cluster $A$ and observations in cluster $B$. Record the *average* of these dissimilarities.
+- .vocab[Average]: mean intercluster dissimilarity.  Compute all pairwise dissimilarities between observations in cluster $A$ and observations in cluster $B$. Record the *average* of these dissimilarities.
 
 --
 
-- Centroid: dissimilarity between the centroid for cluster $A$ and the centroid for cluster $B$
+- .vocab[Centroid]: dissimilarity between the centroid for cluster $A$ and the centroid for cluster $B$
 
 ---
 
