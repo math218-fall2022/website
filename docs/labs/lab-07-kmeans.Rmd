@@ -43,10 +43,10 @@ The `kmeans()` function requires a minimum of two inputs: the matrix of features
 The default for `nstart` is 1, but that is not good practice!
 ```
   
-If you specify `nstart` $>1$, the function will output the results from best initailization. Here, "best" is in terms of minimizing the objective.
+If you specify `nstart` $>1$, the function will output the results from best initialization. Here, "best" is in terms of minimizing the objective.
 
 ```{marginfigure}
-Note: you make get a warning from the `kmeans()` function stating that the alogirhm has failed to converge. In that case, you will need to increase `iter.max`!
+Note: you may get a warning from the `kmeans()` function stating that the alogirhm has failed to converge. In that case, you will need to increase `iter.max`!
 ```
 
 Because $K$-means is an iterative algorithm, it should run until convergence. However, due to computation resources, the writers of the `kmeans()` function do not allow the algorithm to be run indefinitely until convergence. Instead, they make it so that the algorithm as up to `iter.max` iterations to run. If convergence is achieved prior to the `iter.max`-th iteration, great! If not, the function will return the clusters associated with that last iteration.
