@@ -164,57 +164,23 @@ We will perform a customer segmentation analysis on some simple, fake data. We h
 
 We will perform $K$-means clustering using all the pertinent quantitative features. 
 
-```{r}
+```{r load-data}
 dat <- read.csv("data/Mall_Customers.csv")
 ```
 
 a) We will wrangle the data here. As we know, $K$-means cannot handle categorical features. Create a new data frame called `mall_std` which only contains male customers AND standardizes each of the continuous features.
 
-```{r}
-mall_std <- dat %>% 
-  filter(Gender == "Male") %>%
-  mutate_if(is.numeric, scale)
-```
-
 b) Using a `for()` loop, fit $K$-means using Lloyd's algorithm to this data for $K = 1, 2, \ldots, 10$. For each $K$, obtain and store the value of the objective. Use a seed of 2, and multiple starts!
 
-```{r}
-set.seed(2)
-tot.withinss <- rep(NA, 10)
-for (i in 1:10){
-  cluster <- kmeans(mall_std[,3:5], centers=i, iter.max = 20, nstart=20, algorithm = "Lloyd")
-  tot.withinss[i] <- cluster$tot.withinss
-}
-```
 
 c) Now we will use the elbow method to choose a $K$. Plot the objectives values against the number of clusters $K$, using both points and lines. Make it so that the x-axis displays whole numbers. Based on your plot, what is the optimal $K$?
 
-```{r}
-data.frame(K = 1:10, objective = tot.withinss) %>%
-  ggplot(., aes(x = K, y = objective)) +
-  geom_point() +
-  geom_line() +
-  scale_x_continuous(breaks = 1:10)
-```
 
 d) Using your optimal $K$, fit the $K$-means algorithm to the data, obtain the cluster assignments, and store them.
 
-```{r}
-km_out <- kmeans(mall_std[,3:5], 4)
-km_out_clusts <- km_out$cluster
-```
 
 e) Create a visualization of the cluster assignments plotted in predictor space. Choose two features of your choice for the axes, and color the points by cluster assignment. *Stretch goal*: show on your plot where the cluster centroids are!
 
-```{r}
-mall_std %>%
-  mutate(cluster = factor(km_out_clusts)) %>%
-  ggplot(., aes(x = Age, y = SpendingScore)) +
-  geom_point(aes(col  = cluster)) +
-  geom_point(data = data.frame(km_out$centers), aes(x = Age, y = SpendingScore),
-             pch = 4)
-
-```
 
 f) Based on your visualization in (e), try describing the types of customers within each cluster. Even though the features are standardized, we interpret positive values as being greater than average and negative values as lower. E.g. a standardized `Age` of 2 would correspond to a customer of older age.
 
@@ -224,32 +190,8 @@ Here, we will look at the same mall customer data, but this time perform $K$-mea
 
 a) Create a new data frame called `mall_dat` that only contains male customers, but does NOT standardize the features. 
 
-```{r}
-mall_dat <- dat %>% 
-  filter(Gender == "Male") 
-```
 
 b) Repeat steps (b)-(e) from Exercise 1 using this `mall_dat` data frame. Use a seed of 2.
 
-```{r}
-set.seed(2)
-tot.withinss <- rep(NA, 10)
-for (i in 1:10){
-  cluster <- kmeans(mall_dat[,3:5], centers=i, iter.max = 20, nstart=20, algorithm = "Lloyd")
-  tot.withinss[i] <- cluster$tot.withinss
-}
-data.frame(K = 1:10, objective = tot.withinss) %>%
-  ggplot(., aes(x = K, y = objective)) +
-  geom_point() +
-  geom_line() +
-  scale_x_continuous(breaks = 1:10)
-km_out <- kmeans(mall_dat[,3:5], 5)
-mall_dat %>%
-  mutate(cluster = factor(km_out$cluster)) %>%
-  ggplot(., aes(x = Age, y = SpendingScore)) +
-  geom_point(aes(col  = cluster)) +
-  geom_point(data = data.frame(km_out$centers), aes(x = Age, y = SpendingScore),
-             pch = 4)
-```
 
 c) Discuss the differences (if any) that occurred when you ran $K$-means with standardized versus non-standardized data. You may want to discuss choosing an optimal $K$ and separation/interpretation of the resulting cluster assignments.
