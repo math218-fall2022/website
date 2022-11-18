@@ -141,7 +141,7 @@ lessons:
    project: "project.html"
  - date: "Friday, Nov. 18"
    title: "Lab: k-means clustering"
-   lab: "labs/lab-07-kmeans.html"
+   lab: "lab-07-kmeans.html"
  - date: "Sunday, Nov. 20"
  - date: "Week of Nov. 21"
    title: "Thanksgiving break"
