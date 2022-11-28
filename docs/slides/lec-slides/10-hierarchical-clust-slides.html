@@ -4,6 +4,7 @@
     <title>Math 218: Statistical Learning</title>
     <meta charset="utf-8" />
     <meta name="author" content="Unupervised learning: Hierarchical clustering" />
+    <meta name="date" content="2022-11-30" />
     <script src="10-hierarchical-clust-slides_files/header-attrs-2.17/header-attrs.js"></script>
     <link rel="stylesheet" href="math218-slides.css" type="text/css" />
   </head>
@@ -18,7 +19,7 @@ class: center, middle, inverse, title-slide
 ### Unupervised learning: Hierarchical clustering
 ]
 .date[
-### 9/14/2022
+### 11/30/2022
 ]
 
 ---
@@ -95,7 +96,7 @@ The approach in words:
 
   - These correspond to observations that similar to each other
 
-- Branches and/or leaves will fuse as we move the tree
+- Branches and/or leaves will fuse as we move up the tree
 
 
 
@@ -123,6 +124,7 @@ The approach in words:
 
 - Distinct sets of observations beneath the cut are interpreted as clusters
 
+--
 
 - This makes hierarchical clustering attractive: one single dendrogram can be used to obtain *any* number of clusters
 
@@ -132,7 +134,7 @@ The approach in words:
 
 ## "Hierarchical"
 
-- Clusters obtained by cutting at a given are *nested* within the clusters obtained by cutting at any greater height
+- Clusters obtained by cutting at a given height are *nested* within the clusters obtained by cutting at any greater height
 
 - Is this realistic?
 
@@ -140,9 +142,7 @@ The approach in words:
 
 ### Hierarchical clustering algorithm
 
-- Need to define some sort of *dissimilarity* measure between pairs of observations
-
-  - e.g. Euclidean distance
+- Need to define some sort of *dissimilarity* measure between pairs of observations (e.g. Euclidean distance)
 
 --
 
@@ -172,19 +172,19 @@ The approach in words:
 
 ## Common linkage types
 
-- Complete: maximal intercluster dissimilarity. Compute all pairwise dissimilarities between observations in cluster `\(A\)` and observations in cluster `\(B\)`. Record the *largest* of these dissimilarities.
+- .vocab[Complete]: maximal intercluster dissimilarity. Compute all pairwise dissimilarities between observations in cluster `\(A\)` and observations in cluster `\(B\)`. Record the *largest* of these dissimilarities.
 
 --
 
-- Single: minimal intercluster dissimilarity.  Compute all pairwise dissimilarities between observations in cluster `\(A\)` and observations in cluster `\(B\)`. Record the *smallest* of these dissimilarities. 
+- .vocab[Single]: minimal intercluster dissimilarity.  Compute all pairwise dissimilarities between observations in cluster `\(A\)` and observations in cluster `\(B\)`. Record the *smallest* of these dissimilarities. 
 
 --
 
-- Average: mean intercluster dissimilarity.  Compute all pairwise dissimilarities between observations in cluster `\(A\)` and observations in cluster `\(B\)`. Record the *average* of these dissimilarities.
+- .vocab[Average]: mean intercluster dissimilarity.  Compute all pairwise dissimilarities between observations in cluster `\(A\)` and observations in cluster `\(B\)`. Record the *average* of these dissimilarities.
 
 --
 
-- Centroid: dissimilarity between the centroid for cluster `\(A\)` and the centroid for cluster `\(B\)`
+- .vocab[Centroid]: dissimilarity between the centroid for cluster `\(A\)` and the centroid for cluster `\(B\)`
 
 ---
 
@@ -198,6 +198,12 @@ The approach in words:
 
   - Drawback of inversion, where two clusters are fused at a height *below* either of the individual clusters
   
+---
+
+class: center, middle
+
+## Your turn!
+
 ---
 
 ## Example
@@ -234,31 +240,149 @@ hc_complete &lt;- hclust(d = dist(X), method = "complete")
 
 
 ```r
-cutree(hc_complete, 4)
+c &lt;- 4
+cutree(hc_complete, c)
 ```
 
 ```
-##  [1] 1 2 1 1 3 2 3 1 1 1 1 3 1 1 1 3 1 2 1 1 1 1 1 1 1 3 3 3 4 4 4 3 3 4 4 3 4 1
-## [39] 3 3 4 3 3 2 3 2 3 3 3 3
-```
-
-```r
-cutree(hc_avg, 4)
-```
-
-```
-##  [1] 1 2 1 3 3 2 3 1 3 1 1 3 1 1 1 3 1 2 1 1 1 1 1 1 3 3 3 3 4 3 3 3 3 3 3 3 3 3
-## [39] 3 3 3 3 3 2 3 2 3 3 3 3
+##  [1] 1 1 2 1 1 3 2 1 2 1 3 1 1 1 2 4 3 1 2 1 2 1 2 2 1 4 1 4 1 3 1 3 3 3 3 1 4 4
+## [39] 4 4 1 4 3 3 3 3 1 4 3 4
 ```
 
 ```r
-cutree(hc_single, 4)
+cutree(hc_avg, c)
 ```
 
 ```
-##  [1] 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1 1 1 1 1 1 1 1 4 1 1 1 1 1 1 1 1 1
-## [39] 1 1 1 1 1 1 1 3 1 1 1 1
+##  [1] 1 2 2 1 1 3 2 1 2 2 3 2 1 1 2 1 3 1 2 1 2 1 2 2 1 4 1 4 1 4 1 4 3 4 4 1 4 4
+## [39] 4 4 1 1 4 3 4 3 1 4 4 4
 ```
+
+```r
+cutree(hc_single, c)
+```
+
+```
+##  [1] 1 2 1 1 1 1 1 2 1 2 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 3 1 1 1
+## [39] 1 1 1 1 1 4 1 4 1 1 1 1
+```
+
+---
+
+
+
+
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+## Example: circle data again
+
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+.pull-left[
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+]
+--
+
+.pull-right[
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+## Considerations
+
+- We have mostly seen Euclidean distance as the choice of dissimilarity measure
+
+- *Correlation-based distance* considers two observations to be similar if their features are highly correlated (will see in lab)
+
+  - Focuses on the shapes of observation profiles, rather than their magnitudes
+  
+--
+
+- Choice of dissimilarity measure has strong effect on resulting dendrogram!
+
+  - Therefore, must think critically about the type of data being clustered AND the scientific question at hand
+  
+--
+
+- Should we scale the variables?
+
+---
+
+## Discuss
+
+.question[Discuss: Which (if any) of the linkage methods do you believe are sensitive to outliers?]
+
+--
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/plots-1.png" style="display: block; margin: auto;" /&gt;&lt;img src="10-hierarchical-clust-slides_files/figure-html/plots-2.png" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+
+## Summary: decisions
+
+- Should the features be standardized?
+
+
+- What dissimilarity measured should we use?
+
+- What type of linkage should we use?
+
+- Where should we cut the dendrogram?
+
+---
+
+## Summary: ongoing considerations
+
+- How do we validate the clusters we obtained?
+
+  - Are we truly discovering subgroups, or are we simply clustering the noise?
+
+- Do all observations belong in a cluster? Or are some actually "outliers"
+
+- Clustering methods generally not robust to small changes in data
+
+---
+
+## Summary: recommendations
+
+- Small decisions can lead to large changes!
+
+- Recommend performing clustering with different choices of these parameters/options, and looking to see if/which patterns consistently appear
+
+- Because clustering not robust, maybe we consider clustering subsets of the data 
+
+- Caution: be careful about how the results of a clustering analysis are reported. These results should not be taken as the absolute truth about a data set!!!
+
+---
+
+class: middle, center
+
+## Extra: consensus clustering
 
 
 
@@ -322,7 +446,7 @@ not be radically different
 
 
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -330,7 +454,7 @@ not be radically different
 
 ---
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -341,82 +465,12 @@ not be radically different
 
 
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-## Example: circle data again
-
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
----
-
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-## Considerations
-
-- We have mostly seen Euclidean distance as the choice of dissimilarity measure
-
-- *Correlation-based distance* considers two observations to be similar if their features are highly correlated (will see in lab)
-
-  - Focuses on the shapes of observation profiles, rather than their magnitudes
-  
---
-
-- Choice of dissimilarity measure has strong effect on resulting dendrogram!
-
-  - Therefore, must think critically about the type of data being clustered AND the scientific question at hand
-  
---
-
-- Should we scale the variables?
-
----
-
-## Summary: decisions
-
-- Should the features be standardized?
-
-
-- What dissimilarity measured should we use?
-
-- What type of linkage should we use?
-
-- Where should we cut the dendrogram?
-
----
-
-## Summary: ongoing considerations
-
-- How do we validate the clusters we obtained?
-
-  - Are we truly discovering subgroups, or are we simply clustering the noise?
-
-- Do all observations belong in a cluster? Or are some actually "outliers"
-
-- Clustering methods generally not robust to small changes in data
-
----
-
-## Summary: recommendations
-
-- Small decisions can lead to large changes!
-
-- Recommend performing clustering with different choices of these parameters/options, and looking to see if/which patterns consistently appear
-
-- Because clustering not robust, maybe we consider clustering subsets of the data 
-
-- Caution: be careful about how the results of a clustering analysis are reported. These results should not be taken as the absolute truth about a data set!!!
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

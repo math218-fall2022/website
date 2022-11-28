@@ -1,7 +1,7 @@
 ---
 title: "Math 218: Statistical Learning"
 author: "Unupervised learning: Hierarchical clustering"
-date: "9/14/2022"
+date: "11/30/2022"
 output: 
    xaringan::moon_reader:
     css: "math218-slides.css"
@@ -93,7 +93,7 @@ The approach in words:
 
   - These correspond to observations that similar to each other
 
-- Branches and/or leaves will fuse as we move the tree
+- Branches and/or leaves will fuse as we move up the tree
 
 
 
@@ -121,6 +121,7 @@ The approach in words:
 
 - Distinct sets of observations beneath the cut are interpreted as clusters
 
+--
 
 - This makes hierarchical clustering attractive: one single dendrogram can be used to obtain *any* number of clusters
 
@@ -130,7 +131,7 @@ The approach in words:
 
 ## "Hierarchical"
 
-- Clusters obtained by cutting at a given are *nested* within the clusters obtained by cutting at any greater height
+- Clusters obtained by cutting at a given height are *nested* within the clusters obtained by cutting at any greater height
 
 - Is this realistic?
 
@@ -138,9 +139,7 @@ The approach in words:
 
 ### Hierarchical clustering algorithm
 
-- Need to define some sort of *dissimilarity* measure between pairs of observations
-
-  - e.g. Euclidean distance
+- Need to define some sort of *dissimilarity* measure between pairs of observations (e.g. Euclidean distance)
 
 --
 
@@ -198,16 +197,22 @@ The approach in words:
   
 ---
 
+class: center, middle
+
+## Your turn!
+
+---
+
 ## Example
 
 - Generated `n=50` observations, evenly split between two true clusters
 
 ```{r}
-set.seed(22)
+set.seed(2)
 n <- 50
 X <- matrix(rnorm(n*2), ncol = 2) 
 X[1:25, 1] <- X[1:25, 1] + 1
-X[1:25, 2] <- X[1:25, 2] - 2
+X[25+1:25, 2] <- X[25+1:25, 2] - 2
 ```
 
 - `hclust()` performed hierarchical clustering. Requires a dissimilarity structure `d` for the features obtained by `dist()`, and the `method` of linkage
@@ -219,7 +224,7 @@ hc_complete <- hclust(d = dist(X), method = "complete")
 
 ---
 
-```{r fig.align = "center", fig.width = 9, fig.height=7, cache = T}
+```{r fig.align = "center", fig.width = 9, fig.height=7}
 library(ggdendro)
 set.seed(1)
 hc_complete <- hclust(dist(X), method = "complete")
@@ -255,10 +260,223 @@ ggdendrogram(hc_single, rotate = FALSE, size = 2)+
 ## Cutting dendrogram
 
 ```{r echo = T}
-cutree(hc_complete, 4)
-cutree(hc_avg, 4)
-cutree(hc_single, 4)
+c <- 4
+cutree(hc_complete, c)
+cutree(hc_avg, c)
+cutree(hc_single, c)
 ```
+
+---
+
+```{r fig.align="center", fig.width=5, fig.height=5}
+p_ls <- list()
+hc_ls <- list(hc_complete, hc_avg, hc_single)
+titles <- c("Complete", "Average", "Single")
+for(i in 1:3){
+  obj <- hc_ls[[i]]
+  dd <- dendro_data(obj, type = "rectangle")
+clusts <- cutree(obj, c)
+cluster_df <- data.frame(label = 1:n,
+                         cluster = clusts) %>%
+  mutate(cluster = factor(cluster))
+dd[["labels"]] <- merge(dd[["labels"]],cluster_df, by="label")
+p_ls[[i]] <- ggplot() +
+  geom_segment(data = segment(dd), 
+               aes(x = x, y = y, xend = xend, yend = yend)) +
+  geom_text(data = label(dd), 
+            aes(x = x, y = y, label = label, color = cluster),
+            hjust = 0, size = 5) + # hjust = 0 will left-align text
+  coord_flip() + # flip the coordinate axes to have horizontal tree
+  scale_y_reverse(limits=c(obj$height[n] + 0.1, -0.1)) + # larger range to accommodate text 
+  theme(axis.line.y=element_blank(),
+    axis.ticks.y=element_blank(),
+    axis.text.y=element_blank(),
+    axis.title.y=element_blank(),
+    panel.background=element_rect(fill="white"),
+    panel.grid=element_blank(), text = element_text(size = 16)) +
+  guides(color = "none") + # remove legend for color
+  labs(y = "dissimilarity") + 
+  geom_hline(yintercept = obj$height[n - c] + 0.1, col = "orange", lty = "dashed") +
+  ggtitle(titles[i])
+}
+```
+
+
+```{r fig.align="center", fig.width=8, fig.height=8}
+p_ls[[1]]
+```
+
+---
+
+```{r fig.align="center", fig.width=8, fig.height=8}
+p_ls[[2]]
+```
+
+---
+
+```{r fig.align="center", fig.width=8, fig.height=8}
+p_ls[[3]]
+```
+
+---
+
+```{r fig.align="center", fig.width=10, fig.height=7}
+plot(gridExtra::arrangeGrob(grobs = p_ls, nrow = 1))
+```
+
+
+---
+
+## Example: circle data again
+
+```{r}
+set.seed(3)
+n <- 200
+r <- 3
+alpha <- 2 * pi * runif(n)
+x1 <- r * cos(alpha) + 0 + rnorm(n, 0, 0.2)
+y1 <- r * sin(alpha) + 0 + rnorm(n, 0, 0.2)
+r <- 0.5
+alpha <- 2 * pi * runif(n)
+x2 <- r * cos(alpha) + 0 + rnorm(n, 0, 0.2)
+y2 <- r * sin(alpha) + 0 + rnorm(n, 0, 0.2)
+df <- data.frame(x = c(x1,x2), y = c(y1,y2))
+df %>%
+  ggplot(., aes(x=x,y=y)) +
+  geom_point()
+```
+
+---
+
+.pull-left[
+```{r fig.align="center", fig.width=5, fig.height=5}
+hc_out <- hclust(dist(df[,1:2]), method = "complete")
+df %>%
+  mutate(cluster = factor(cutree(hc_out, 2))) %>%
+  ggplot(., aes(x =x, y=y)) +
+  geom_point(aes(col = cluster)) +
+  guides(col = "none") +
+  ggtitle("Complete Linkage")+
+  theme(text = element_text(size = 20))
+```
+]
+--
+
+.pull-right[
+```{r fig.align="center", fig.width=5, fig.height=5}
+hc_out <- hclust(dist(df[,1:2]), method = "single")
+df %>%
+  mutate(cluster = factor(cutree(hc_out, 2))) %>%
+  ggplot(., aes(x =x, y=y)) +
+  geom_point(aes(col = cluster)) +
+  # geom_point(data = data.frame(km_out$centers), mapping = aes(x = x, y = y),
+  #            pch = 4, size = 4) +
+  guides(col = "none") +
+  ggtitle("Single Linkage") +
+  theme(text = element_text(size = 20))
+```
+]
+
+---
+
+## Considerations
+
+- We have mostly seen Euclidean distance as the choice of dissimilarity measure
+
+- *Correlation-based distance* considers two observations to be similar if their features are highly correlated (will see in lab)
+
+  - Focuses on the shapes of observation profiles, rather than their magnitudes
+  
+--
+
+- Choice of dissimilarity measure has strong effect on resulting dendrogram!
+
+  - Therefore, must think critically about the type of data being clustered AND the scientific question at hand
+  
+--
+
+- Should we scale the variables?
+
+---
+
+## Discuss
+
+.question[Discuss: Which (if any) of the linkage methods do you believe are sensitive to outliers?]
+
+--
+```{r fig.width=6, fig.height=6}
+# df <- data.frame(x1 = c(1.3, 3.6, 3.5, 3.4, 3.3,2.5),
+#                  x2 = c(2, 3, 2.6, 2.25, 2.8, 1.1))
+df <- data.frame(x1 = c(1.3, 3.6, 3.5, 3.4, 3,2.5),
+                 x2 = c(2, 3, 2.6, 2.25, 2.8, 1.1))
+n <- nrow(df)
+ggplot(df %>% mutate(id = 1:n), aes(x= x1, y = x2, label = id)) + 
+  geom_text(size = 6) +
+  theme(text = element_text(size = 20))
+rownames(df) <- 1:n
+```
+
+---
+
+```{r}
+plot_ls <- list()
+ms <- c("complete", "average", "single")
+for(i in 1:3){
+  hc_complete <- hclust(dist(df), method = ms[i])
+  plot_ls[[i]] <- ggdendrogram(hc_complete, rotate = F, size = 2)+
+     theme(text =element_text(size = 20)) +
+     labs(title = paste(ms[i], "linkage"))
+}
+```
+
+```{r plots, fig.width = 10, fig.height=8}
+plot(gridExtra::grid.arrange(grobs = plot_ls, nrow = 1))
+```
+
+
+
+---
+
+## Summary: decisions
+
+- Should the features be standardized?
+
+
+- What dissimilarity measured should we use?
+
+- What type of linkage should we use?
+
+- Where should we cut the dendrogram?
+
+---
+
+## Summary: ongoing considerations
+
+- How do we validate the clusters we obtained?
+
+  - Are we truly discovering subgroups, or are we simply clustering the noise?
+
+- Do all observations belong in a cluster? Or are some actually "outliers"
+
+- Clustering methods generally not robust to small changes in data
+
+---
+
+## Summary: recommendations
+
+- Small decisions can lead to large changes!
+
+- Recommend performing clustering with different choices of these parameters/options, and looking to see if/which patterns consistently appear
+
+- Because clustering not robust, maybe we consider clustering subsets of the data 
+
+- Caution: be careful about how the results of a clustering analysis are reported. These results should not be taken as the absolute truth about a data set!!!
+
+---
+
+class: middle, center
+
+## Extra: consensus clustering
 
 
 
@@ -320,7 +538,7 @@ not be radically different
 
 - Also known as semiparametric bootstrapping
 
-```{r cache = T}
+```{r iris_perturb, cache = T}
 data("iris")
 
 B <- 3000
@@ -407,7 +625,7 @@ colSums(auc_mat)[1]
 
 ## Example: 0.632 bootstrap
 
-```{r cache = T}
+```{r iris_632, cache = T}
 set.seed(15)
 B <- 3000
 match_mat2 <- match_mat3 <- match_mat4 <- counts2 <- counts3 <- counts4 <-  matrix(0, nrow= n, ncol = n)
@@ -483,106 +701,3 @@ ggplot(df, aes(x = proportion, col = K)) +
   annotate("text", x=0.75, y=0.4, label= "Area under curve:")+
    theme(text =element_text(size=20))
 ```
-
----
-
-## Example: circle data again
-
-```{r}
-set.seed(3)
-n <- 200
-r <- 3
-alpha <- 2 * pi * runif(n)
-x1 <- r * cos(alpha) + 0 + rnorm(n, 0, 0.2)
-y1 <- r * sin(alpha) + 0 + rnorm(n, 0, 0.2)
-r <- 0.5
-alpha <- 2 * pi * runif(n)
-x2 <- r * cos(alpha) + 0 + rnorm(n, 0, 0.2)
-y2 <- r * sin(alpha) + 0 + rnorm(n, 0, 0.2)
-df <- data.frame(x = c(x1,x2), y = c(y1,y2))
-df %>%
-  ggplot(., aes(x=x,y=y)) +
-  geom_point()
-```
-
----
-
-```{r}
-hc_out <- hclust(dist(df[,1:2]), method = "complete")
-df %>%
-  mutate(cluster = factor(cutree(hc_out, 2))) %>%
-  ggplot(., aes(x =x, y=y)) +
-  geom_point(aes(col = cluster)) +
-  guides(col = "none") +
-  ggtitle("Complete Linkage")
-```
----
-
-```{r}
-hc_out <- hclust(dist(df[,1:2]), method = "single")
-df %>%
-  mutate(cluster = factor(cutree(hc_out, 2))) %>%
-  ggplot(., aes(x =x, y=y)) +
-  geom_point(aes(col = cluster)) +
-  # geom_point(data = data.frame(km_out$centers), mapping = aes(x = x, y = y),
-  #            pch = 4, size = 4) +
-  guides(col = "none") +
-  ggtitle("Single Linkage")
-```
-
----
-
-## Considerations
-
-- We have mostly seen Euclidean distance as the choice of dissimilarity measure
-
-- *Correlation-based distance* considers two observations to be similar if their features are highly correlated (will see in lab)
-
-  - Focuses on the shapes of observation profiles, rather than their magnitudes
-  
---
-
-- Choice of dissimilarity measure has strong effect on resulting dendrogram!
-
-  - Therefore, must think critically about the type of data being clustered AND the scientific question at hand
-  
---
-
-- Should we scale the variables?
-
----
-
-## Summary: decisions
-
-- Should the features be standardized?
-
-
-- What dissimilarity measured should we use?
-
-- What type of linkage should we use?
-
-- Where should we cut the dendrogram?
-
----
-
-## Summary: ongoing considerations
-
-- How do we validate the clusters we obtained?
-
-  - Are we truly discovering subgroups, or are we simply clustering the noise?
-
-- Do all observations belong in a cluster? Or are some actually "outliers"
-
-- Clustering methods generally not robust to small changes in data
-
----
-
-## Summary: recommendations
-
-- Small decisions can lead to large changes!
-
-- Recommend performing clustering with different choices of these parameters/options, and looking to see if/which patterns consistently appear
-
-- Because clustering not robust, maybe we consider clustering subsets of the data 
-
-- Caution: be careful about how the results of a clustering analysis are reported. These results should not be taken as the absolute truth about a data set!!!

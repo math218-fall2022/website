@@ -7,15 +7,24 @@ output:
      fig_caption: false
 ---
 
-Partner choices (selected or random) emailed by **Saturday, November 5 at 11:59pm**
+# Important dates and links
 
-Project proposals due **Sunday, November 13 at 11:59pm**
 
-Project plans due **Tuesday, November 22 at 11:59pm**
+### Dates
 
-Report, slides, and repository due **Thursday, December 8 at 11:59pm**
+- Partner choices (selected or random) emailed by **Saturday, November 5 at 11:59pm**
 
-Presentations will occur on **Friday, December 9 and Monday, December 12 during class**
+- Project proposals due **Sunday, November 13 at 11:59pm**
+
+- Project plans due **Tuesday, November 22 at 11:59pm**
+
+- Report, slides, and repository due **Thursday, December 8 at 11:59pm**
+
+- Presentations will occur on **Friday, December 9 and Monday, December 12 during class**
+
+### Links
+
+Sign up for 15-minute meetings via Calendly here. If you need more time, book consecutive meetings: https://calendly.com/beckytang/project-meeting
 
 # Introduction
 

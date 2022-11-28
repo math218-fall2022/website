@@ -4,8 +4,7 @@
     <title>Math 218: Statistical Learning</title>
     <meta charset="utf-8" />
     <meta name="author" content="Tree-Based Methods: Part 2" />
-    <meta name="date" content="2022-10-31" />
-    <script src="08-trees-2-slides_files/header-attrs-2.16/header-attrs.js"></script>
+    <script src="08-trees-2-slides_files/header-attrs-2.17/header-attrs.js"></script>
     <link rel="stylesheet" href="math218-slides.css" type="text/css" />
   </head>
   <body>
@@ -19,7 +18,7 @@ class: center, middle, inverse, title-slide
 ### Tree-Based Methods: Part 2
 ]
 .date[
-### 10/31/2022
+### 12/5/2022
 ]
 
 ---
@@ -78,7 +77,7 @@ class: middle, center
 
 - **Bagging**:
 
- 1. Generate `\(B\)` different bootstrapped training datasets
+ 1. Generate `\(B\)` (e.g. `\(B = 100\)`) different bootstrapped training datasets
  
  2. Train our model on the `\(b\)`-th bootstrapped training set in order to get `\(\hat{f}^{*b}(x)\)` for `\(b = 1,\ldots, B\)`
  
@@ -110,6 +109,14 @@ class: middle, center
  
 ---
 
+## Details
+
+- Each of the `\(B\)` trees are grown deep, and are not pruned. Why?
+
+- The only parameters when bagging decision trees is the number of trees to include
+
+---
+
 ## Out-of-bag error estimation
 
 - Estimating test error of bagged model is quite easy without performing CV
@@ -125,6 +132,10 @@ class: middle, center
 --
 
   - Average or majority vote for OOB prediction for `\(i\)`
+  
+--
+
+.question[Why is the resulting OOB error is a valid estimate of the test error for the bagged model?]
   
 --
 
@@ -146,10 +157,12 @@ class: middle, center
 - Bagging can result in difficulty in interpretation
 
   - No longer clear which predictors are most important to the procedure
+  
+- But one main attraction of decision trees is their intrepretability! 
 
 --
 
-- Overall summary of important of each predictor using RSS or Gini index
+- Can obtain an overall summary of importance of each predictor using RSS or Gini index
 
   - Bagging regression trees: record total amount that RSS is decreased due to splits over a given predictor, averaged over B
   
