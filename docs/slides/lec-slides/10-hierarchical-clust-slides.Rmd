@@ -77,6 +77,18 @@ class: center, middle
 
 ---
 
+### Example
+
+- Dendrogram of hierarchically clustered `USArrests` data using number of `Murder` arrests (per 100,000) and percent urban population 
+
+```{r echo = F, fig.width=9, fig.height=7}
+data("USArrests")
+ggdendrogram(hclust(dist(USArrests[,c(1,3)]))) +
+  theme(text = element_text(size = 20))
+```
+
+---
+
 ### Hierarchical clustering "algorithm"
 
 The approach in words:

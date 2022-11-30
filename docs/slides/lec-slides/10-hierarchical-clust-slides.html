@@ -80,6 +80,14 @@ class: center, middle
 
 ---
 
+### Example
+
+- Dendrogram of hierarchically clustered `USArrests` data using number of `Murder` arrests (per 100,000) and percent urban population 
+
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
 ### Hierarchical clustering "algorithm"
 
 The approach in words:
@@ -228,17 +236,17 @@ hc_complete &lt;- hclust(d = dist(X), method = "complete")
 
 ---
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
-
 &lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
 
 &lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -278,10 +286,6 @@ cutree(hc_single, c)
 
 
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
-
----
-
 &lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
@@ -292,22 +296,26 @@ cutree(hc_single, c)
 
 &lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
 
+---
+
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+
 
 ---
 
 ## Example: circle data again
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
 .pull-left[
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
 ]
 --
 
 .pull-right[
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -337,7 +345,7 @@ cutree(hc_single, c)
 .question[Discuss: Which (if any) of the linkage methods do you believe are sensitive to outliers?]
 
 --
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -452,7 +460,7 @@ not be radically different
 
 
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 --
 
@@ -460,7 +468,7 @@ not be radically different
 
 ---
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 
 
@@ -471,12 +479,12 @@ not be radically different
 
 
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
 
-&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="10-hierarchical-clust-slides_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
