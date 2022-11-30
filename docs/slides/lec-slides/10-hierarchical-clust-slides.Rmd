@@ -26,6 +26,12 @@ library(ggdendro)
 
 ## Houskeeping
 
+- Sign-up for project meetings via Calendly, found on project description page
+
+- K-means lab due tomorrow at 11:59pm
+
+- Office hours today 3-5pm
+
 ---
 
 ## Clustering

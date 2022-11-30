@@ -156,6 +156,7 @@ lessons:
    title: "Project work day. No in-person class."
  - date: "Wednesday, Nov. 30"
    title: "Hierarchical clustering"
+   slides: "lec-slides/10-hierarchical-clust-slides.html"
  - date: "Friday, Dec. 2"
    title: "Hierarchical clustering (cont.)"
  - date: "Week 12"
