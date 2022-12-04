@@ -163,6 +163,7 @@ lessons:
  - date: "Week 12"
  - date: "Monday, Dec. 5"
    title: "Hierarchical clustering (cont.)"
+   slides: "lec-slides/10-hierarchical-clust-slides.html"
  - date: "Wednesday, Dec. 7"
    title: "Project work day"
  - title: "Course reponse forms!"
