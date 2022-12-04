@@ -55,7 +55,7 @@ The five deliverables for the final project are:
 - A written plan of analysis that briefly describes exactly how you will implement the methods to answer the question(s) of interest
 - A written, reproducible report detailing your analysis
 - A GitHub repository corresponding to your report
-- A brief set of slides that correspond to your intended oral presentation
+- A brief set of slides that correspond to your intended oral presentation (5 minutes)
 
 **No late projects are accepted.**
 
@@ -250,7 +250,7 @@ for content and quality. They can also be used for your Presentation. For submis
 
 ## Presentation
 
-On the last two days of class everyone will present their projects. There will be a six-minute time limit for each presentation followed by two minutes for questions, for a total of eight-minutes per presentation. You may, and should, use the slides as detailed in the previous section during your presentation.
+On the last two days of class everyone will present their projects. There will be a five-minute time limit for each presentation followed by two minutes for questions, for a total of seven-minutes per presentation. You may, and should, use the slides as detailed in the previous section during your presentation.
 
 ## Participation
 
