@@ -419,7 +419,7 @@ df %>%
 
 - We have mostly seen Euclidean distance as the choice of dissimilarity measure
 
-- *Correlation-based distance* considers two observations to be similar if their features are highly correlated (will see in lab)
+- *Correlation-based distance* considers two observations to be similar if their features are highly correlated
 
   - Focuses on the shapes of observation profiles, rather than their magnitudes
   
@@ -466,7 +466,7 @@ for(i in 1:3){
 ```
 
 ```{r plots, fig.width = 10, fig.height=8}
-plot(gridExtra::grid.arrange(grobs = plot_ls, nrow = 1))
+gridExtra::grid.arrange(grobs = plot_ls, nrow = 1)
 ```
 
 
