@@ -24,7 +24,9 @@ output:
 
 ### Links
 
-Sign up for 15-minute meetings via Calendly here. If you need more time, book consecutive meetings: https://calendly.com/beckytang/project-meeting
+- Sign up for 15-minute meetings via Calendly here. If you need more time, book consecutive meetings: https://calendly.com/beckytang/project-meeting
+
+- Project presentation [order](https://docs.google.com/spreadsheets/d/1Z6lJBMX1F-DGNQRPD6-KsvwCTD6v4Iyta-d9oNTR9R0/edit?usp=sharing)
 
 # Introduction
 
