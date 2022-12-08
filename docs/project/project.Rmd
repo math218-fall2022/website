@@ -230,8 +230,8 @@ included.
 In addition to your Gradescope submissions, I will be checking your GitHub 
 repository. This repository should include:
 
-- RMarkdown files (formatted to clearly present all of your code and results)
-that will output the proposal, plan of analysis, and final write-up in two separate documents
+- Two separate RMarkdown files (formatted to clearly present all of your code and results)
+that will output: (1) the proposal and (2) final write-up 
 - Meaningful README file on the GitHub repository that contains a *codebook*
 for relevant variables
 - Dataset(s) (in csv or RData format, in a `/data` folder)

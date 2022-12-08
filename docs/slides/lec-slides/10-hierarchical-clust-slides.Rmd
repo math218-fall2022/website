@@ -45,7 +45,7 @@ library(ggdendro)
 - For your final report, please set the argument `echo = F` in your code chunks such that when you knit, you only see the output of the code by not the code itself.
 
 ````markdown
-`r ''````{r eval = F}
+`r ''````{r echo = F}
 # your code here
 ```
 ````
